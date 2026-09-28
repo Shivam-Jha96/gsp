@@ -26,7 +26,7 @@ def score_sentiment(text: str, region_context: str) -> dict:
         
         # You mentioned having a Gemini Pro account, so we'll target the Pro model
         model = genai.GenerativeModel(
-            model_name="gemini-1.5-flash",
+            model_name="gemini-3.5-flash-lite",
             generation_config={"response_mime_type": "application/json", "temperature": 0.1}
         )
         
