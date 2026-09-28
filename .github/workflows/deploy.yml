@@ -30,5 +30,6 @@ jobs:
           ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE_URL: ${{ secrets.HF_SPACE_URL }}
         run: |
           python src/main.py

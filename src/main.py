@@ -7,13 +7,39 @@ import uuid
 # Ingestion
 from ingestion.poller import FeedPoller, FEEDS
 
-# AI Engine
-try:
-    from ai_engine.inference import score_sentiment
-except ImportError:
-    logging.warning("HuggingFace 'spaces' library or model not found. AI scoring will be mocked.")
-    def score_sentiment(text, region_context):
-        return {"Choice": "Neutral", "Score": 0.5, "Noul": "Mocked response due to missing GPU/spaces."}
+# AI Engine (Hugging Face Microservice API)
+import requests
+
+def score_sentiment(text: str, region_context: str) -> dict:
+    """
+    Sends the text and context to our dedicated Hugging Face Space API.
+    Expects HF_SPACE_URL environment variable (e.g., https://username-spacename.hf.space).
+    """
+    hf_url = os.environ.get("HF_SPACE_URL")
+    hf_token = os.environ.get("HF_TOKEN")
+    
+    if not hf_url:
+        logging.warning("HF_SPACE_URL not set. AI scoring will be mocked.")
+        return {"Choice": "Neutral", "Score": 0.5, "Noul": "Mocked response due to missing HF_SPACE_URL."}
+        
+    try:
+        # Gradio automatically creates a /api/predict endpoint
+        api_endpoint = f"{hf_url.rstrip('/')}/api/predict"
+        headers = {"Authorization": f"Bearer {hf_token}"} if hf_token else {}
+        
+        # The Gradio API expects a list of inputs matching the function signature
+        payload = {"data": [text, region_context]}
+        
+        response = requests.post(api_endpoint, json=payload, headers=headers)
+        response.raise_for_status()
+        
+        # Gradio returns {"data": ["{...JSON string...}"]}
+        result_str = response.json()["data"][0]
+        return json.loads(result_str)
+        
+    except Exception as e:
+        logging.error(f"Failed to reach HF API: {e}")
+        return {"Choice": "Neutral", "Score": 0.5, "Noul": f"API Error: {e}"}
 
 # Database
 from database.client import get_db_client
