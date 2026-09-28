@@ -7,38 +7,53 @@ import uuid
 # Ingestion
 from ingestion.poller import FeedPoller, FEEDS
 
-# AI Engine (Hugging Face Microservice API)
+# AI Engine (Groq Cloud API)
 import requests
 
 def score_sentiment(text: str, region_context: str) -> dict:
     """
-    Sends the text and context to our dedicated Hugging Face Space API.
-    Expects HF_SPACE_URL environment variable (e.g., https://username-spacename.hf.space).
+    Sends the text and context to the Groq Cloud API for lightning-fast Llama-3 inference.
+    Expects GROQ_API_KEY environment variable.
     """
-    hf_url = os.environ.get("HF_SPACE_URL")
-    hf_token = os.environ.get("HF_TOKEN")
+    groq_api_key = os.environ.get("GROQ_API_KEY")
     
-    if not hf_url:
-        logging.warning("HF_SPACE_URL not set. AI scoring will be mocked.")
-        return {"Choice": "Neutral", "Score": 0.5, "Noul": "Mocked response due to missing HF_SPACE_URL."}
+    if not groq_api_key:
+        logging.warning("GROQ_API_KEY not set. AI scoring will be mocked.")
+        return {"Choice": "Neutral", "Score": 0.5, "Noul": "Mocked response due to missing GROQ_API_KEY."}
         
     try:
-        # Gradio automatically creates a /api/predict endpoint
-        api_endpoint = f"{hf_url.rstrip('/')}/api/predict"
-        headers = {"Authorization": f"Bearer {hf_token}"} if hf_token else {}
+        api_endpoint = "https://api.groq.com/openai/v1/chat/completions"
+        headers = {
+            "Authorization": f"Bearer {groq_api_key}",
+            "Content-Type": "application/json"
+        }
         
-        # The Gradio API expects a list of inputs matching the function signature
-        payload = {"data": [text, region_context]}
+        system_prompt = f"""You are an AI financial analyst. Analyze the text based on the provided regional macro rules.
+Regional Context (OKF Rules):
+{region_context}
+
+Output EXACTLY and ONLY a JSON object in this format, with no markdown formatting or extra text:
+{{"Choice": "Bullish", "Score": 0.85, "Noul": "Explanation here"}}
+(Choice must be Bullish, Bearish, or Neutral. Score must be between 0.0 and 1.0)"""
+
+        payload = {
+            "model": "llama3-8b-8192",
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": f"Text to analyze: {text}"}
+            ],
+            "temperature": 0.1,
+            "response_format": {"type": "json_object"}
+        }
         
         response = requests.post(api_endpoint, json=payload, headers=headers)
         response.raise_for_status()
         
-        # Gradio returns {"data": ["{...JSON string...}"]}
-        result_str = response.json()["data"][0]
+        result_str = response.json()["choices"][0]["message"]["content"]
         return json.loads(result_str)
         
     except Exception as e:
-        logging.error(f"Failed to reach HF API: {e}")
+        logging.error(f"Failed to reach Groq API: {e}")
         return {"Choice": "Neutral", "Score": 0.5, "Noul": f"API Error: {e}"}
 
 # Database
