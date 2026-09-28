@@ -11,3 +11,7 @@ psycopg2-binary>=2.9.10
 # AI Layer (For local/Action execution if needed, otherwise hosted on Spaces)
 # transformers
 # torch
+
+# Presentation Layer
+streamlit>=1.30.0
+plotly>=5.18.0
