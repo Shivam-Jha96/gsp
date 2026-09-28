@@ -7,13 +7,51 @@ import uuid
 # Ingestion
 from ingestion.poller import FeedPoller, FEEDS
 
-# AI Engine
-try:
-    from ai_engine.inference import score_sentiment
-except ImportError:
-    logging.warning("HuggingFace 'spaces' library or model not found. AI scoring will be mocked.")
-    def score_sentiment(text, region_context):
-        return {"Choice": "Neutral", "Score": 0.5, "Noul": "Mocked response due to missing GPU/spaces."}
+# AI Engine (Google Gemini API)
+import requests
+
+def score_sentiment(text: str, region_context: str) -> dict:
+    """
+    Sends the text and context to the Gemini API for ultra-fast, intelligent inference.
+    Expects GEMINI_API_KEY environment variable.
+    """
+    gemini_api_key = os.environ.get("GEMINI_API_KEY")
+    
+    if not gemini_api_key:
+        logging.warning("GEMINI_API_KEY not set. AI scoring will be mocked.")
+        return {"Choice": "Neutral", "Score": 0.5, "Noul": "Mocked response due to missing GEMINI_API_KEY."}
+        
+    try:
+        api_endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={gemini_api_key}"
+        headers = {"Content-Type": "application/json"}
+        
+        prompt = f"""You are an AI financial analyst. Analyze the text based on the provided regional macro rules.
+Regional Context (OKF Rules):
+{region_context}
+
+Text to analyze: {text}
+
+Output EXACTLY and ONLY a JSON object in this format, with no extra text:
+{{"Choice": "Bullish", "Score": 0.85, "Noul": "Explanation here"}}
+(Choice must be Bullish, Bearish, or Neutral. Score must be between 0.0 and 1.0)"""
+
+        payload = {
+            "contents": [{"parts": [{"text": prompt}]}],
+            "generationConfig": {
+                "temperature": 0.1,
+                "responseMimeType": "application/json"
+            }
+        }
+        
+        response = requests.post(api_endpoint, json=payload, headers=headers)
+        response.raise_for_status()
+        
+        result_str = response.json()["candidates"][0]["content"]["parts"][0]["text"]
+        return json.loads(result_str)
+        
+    except Exception as e:
+        logging.error(f"Failed to reach Gemini API: {e}")
+        return {"Choice": "Neutral", "Score": 0.5, "Noul": f"API Error: {e}"}
 
 # Database
 from database.client import get_db_client
