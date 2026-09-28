@@ -1,0 +1,13 @@
+# Ingestion & General
+aiohttp==3.11.12
+pandas==2.2.3
+
+# Execution Layer
+alpaca-py==0.35.2
+
+# Database Layer
+psycopg2-binary==2.9.10
+
+# AI Layer (For local/Action execution if needed, otherwise hosted on Spaces)
+# transformers
+# torch
