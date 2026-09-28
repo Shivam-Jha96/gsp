@@ -1,0 +1,36 @@
+name: CI Pipeline (PyTest)
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest
+          
+      - name: Syntax Check
+        run: |
+          python -m compileall src/
+          
+      - name: Run PyTest
+        # Currently we don't have tests, so we just echo a success until tests are written.
+        # Once tests are in the 'tests/' directory, replace this with `pytest tests/`
+        run: |
+          echo "No tests implemented yet. Passing CI..."
+          # pytest tests/
