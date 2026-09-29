@@ -13,11 +13,14 @@ st.set_page_config(page_title="Digital Dashboard", layout="wide", initial_sideba
 # --- CSS to match the provided screenshot without breaking layout ---
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700;800&display=swap');
+    
     html, body, [class*="css"], .stApp, [data-testid="stAppViewContainer"] {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Trebuchet MS", Roboto, Ubuntu, sans-serif;
-        background-color: #F8F9FD !important;
+        font-family: 'IBM Plex Sans', sans-serif;
+        background-color: #020617 !important;
+        color: #f8fafc;
     }
+    
     .block-container {
         padding-top: 1.5rem !important;
         padding-bottom: 1.5rem !important;
@@ -26,61 +29,61 @@ st.markdown("""
     }
     
     /* Professional Headers */
-    .main-header {
-        font-size: 1.75rem;
+    .main-header, .section-header {
+        font-family: 'Montserrat', sans-serif;
         font-weight: 700;
-        color: #131722;
-        letter-spacing: -0.02em;
-        margin-bottom: 15px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid #E0E3EB;
+        color: #f8fafc;
     }
     .section-header {
         font-size: 1.1rem;
-        font-weight: 600;
-        color: #131722;
         margin-bottom: 15px;
     }
     
-    /* TradingView Style Dense Cards */
+    /* Enviro Style Glass Cards */
     .white-card {
-        background-color: #FFFFFF;
-        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.03) !important;
+        border-radius: 8px;
         padding: 16px;
         margin-bottom: 16px;
-        border: 1px solid #E0E3EB;
-        transition: border-color 0.2s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .white-card:hover {
-        border-color: #B2B5BE;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border-color: rgba(255, 255, 255, 0.2) !important;
     }
-    .bg-blue { border-left: 3px solid #2962FF !important; background-color: #F0F4FF !important; }
-    .bg-green { border-left: 3px solid #089981 !important; background-color: #E6F5F2 !important; }
-    .bg-purple { border-left: 3px solid #7B1FA2 !important; background-color: #F3E5F5 !important; }
-    .bg-orange { border-left: 3px solid #FF9800 !important; background-color: #FFF3E0 !important; }
-    .bg-indigo { border-left: 3px solid #2962FF !important; background-color: #F0F4FF !important; }
+    
+    /* Override top borders for glass cards - make them subtle neon borders */
+    .bg-blue { border-left: 3px solid #3b82f6 !important; }
+    .bg-green { border-left: 3px solid #10b981 !important; }
+    .bg-purple { border-left: 3px solid #8b5cf6 !important; }
+    .bg-orange { border-left: 3px solid #f59e0b !important; }
+    .bg-indigo { border-left: 3px solid #6366f1 !important; }
     
     /* Override Streamlit native container border */
     [data-testid="stVerticalBlockBorderWrapper"] {
-        background-color: #FFFFFF !important;
-        border-radius: 4px !important;
-        border: 1px solid #E0E3EB !important;
+        background: rgba(255, 255, 255, 0.02) !important;
+        border-radius: 8px !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
         box-shadow: none !important;
     }
     
     /* Metrics */
     .metric-title {
+        font-family: 'Montserrat', sans-serif;
         font-size: 0.8rem;
         font-weight: 600;
-        color: #787B86;
+        color: #94a3b8; /* text-muted */
         text-transform: uppercase;
         letter-spacing: 0.03em;
         margin-bottom: 6px;
     }
     .metric-value {
+        font-family: 'Montserrat', sans-serif;
         font-size: 2.1rem;
         font-weight: 700;
-        color: #131722;
+        color: #f8fafc;
         letter-spacing: -0.01em;
         margin-bottom: 2px;
     }
@@ -88,14 +91,14 @@ st.markdown("""
         font-size: 0.85rem;
         font-weight: 600;
     }
-    .green { color: #089981 !important; } /* TV Profit Green */
-    .red { color: #F23645 !important; } /* TV Loss Red */
-    .gray { color: #787B86 !important; }
+    .green { color: #10b981 !important; } /* Emerald */
+    .red { color: #ef4444 !important; } 
+    .gray { color: #94a3b8 !important; }
     
     .metric-footer {
         font-size: 0.75rem;
-        color: #B2B5BE;
-        border-top: 1px solid #E0E3EB;
+        color: #64748b;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
         padding-top: 8px;
         margin-top: 8px;
     }
@@ -157,11 +160,11 @@ if not df_signals.empty:
     df_signals['sentiment_index'] = df_signals['sentiment_score'] * 100
     df_payloads['sentiment_index'] = df_payloads['sentiment_score'] * 100
     st.markdown("""
-    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 30px; border-bottom: 1px solid #E0E3EB; padding-bottom: 15px;">
-        <div style="background-color: #2962FF; color: white; padding: 4px 8px; border-radius: 4px; font-weight: 800; font-size: 1.1rem; letter-spacing: 1px;">GSP</div>
-        <div style="font-size: 1.4rem; font-weight: 700; color: #131722; letter-spacing: -0.01em;">Macro-Sentiment Terminal</div>
-        <div style="margin-left: auto; font-size: 0.75rem; color: #089981; font-weight: 700; letter-spacing: 0.05em; display: flex; align-items: center; gap: 6px; background: rgba(8, 153, 129, 0.1); padding: 4px 10px; border-radius: 4px;">
-            <span style="height: 6px; width: 6px; background-color: #089981; border-radius: 50%; display: inline-block; box-shadow: 0 0 0 2px rgba(8, 153, 129, 0.2);"></span> PIPELINE ACTIVE
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">
+        <div style="background-color: #3b82f6; color: white; padding: 4px 8px; border-radius: 4px; font-weight: 800; font-size: 1.1rem; letter-spacing: 1px; font-family: 'Montserrat', sans-serif;">GSP</div>
+        <div style="font-size: 1.4rem; font-weight: 700; color: #f8fafc; letter-spacing: -0.01em; font-family: 'Montserrat', sans-serif;">Macro-Sentiment Terminal</div>
+        <div style="margin-left: auto; font-size: 0.75rem; color: #10b981; font-weight: 700; letter-spacing: 0.05em; display: flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.1); padding: 4px 10px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
+            <span style="height: 6px; width: 6px; background-color: #10b981; border-radius: 50%; display: inline-block; box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);"></span> PIPELINE ACTIVE
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -299,12 +302,12 @@ if not df_signals.empty:
             # --- Large Area Chart at the top of the right column ---
             with st.container(border=True):
                 st.markdown("""
-                <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid #E0E3EB; margin-bottom: 12px;">
-                    <div style="font-size: 1.1rem; font-weight: 700; color: #131722; display: flex; align-items: center; gap: 8px;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2962FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 12px;">
+                    <div style="font-size: 1.1rem; font-weight: 700; color: #f8fafc; font-family: 'Montserrat', sans-serif; display: flex; align-items: center; gap: 8px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
                         Aggregate Market Optimism
                     </div>
-                    <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: #787B86; background: #F8F9FD; padding: 4px 10px; border-radius: 4px; border: 1px solid #E0E3EB; text-transform: uppercase;">
+                    <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: #94a3b8; background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); text-transform: uppercase;">
                         AI Sentiment Engine
                     </div>
                 </div>
@@ -338,29 +341,29 @@ if not df_signals.empty:
                 fig_area.add_trace(go.Scatter(
                     x=df_trend['timestamp'], y=df_trend['EMA_Index'],
                     mode='lines+markers',
-                    line=dict(color='#131722', width=2.5, shape='linear'), # TV Dark for main trend
-                    marker=dict(size=6, color='#131722', line=dict(color='white', width=1)),
+                    line=dict(color='#f8fafc', width=2.5, shape='linear'), 
+                    marker=dict(size=6, color='#f8fafc', line=dict(color='#020617', width=1)),
                     name=f'{selected_region} Mean (EMA)'
                 ))
                 
                 fig_area.update_layout(
                     height=450, margin=dict(l=0, r=0, t=5, b=0),
-                    plot_bgcolor="#FFFFFF", paper_bgcolor="#FFFFFF",
+                    plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
                     hovermode="x unified",
-                    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, font=dict(color="#131722", size=11, family="Inter")),
+                    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, font=dict(color="#f8fafc", size=11, family="IBM Plex Sans")),
                     xaxis=dict(
-                        showgrid=True, gridcolor='#E0E3EB',
-                        title=dict(text="Timeline (UTC)", font=dict(size=11, color="#787B86", family="Inter")),
-                        tickfont=dict(size=11, color="#787B86", family="Inter")
+                        showgrid=True, gridcolor='rgba(255,255,255,0.05)',
+                        title=dict(text="Timeline (UTC)", font=dict(size=11, color="#94a3b8", family="IBM Plex Sans")),
+                        tickfont=dict(size=11, color="#94a3b8", family="IBM Plex Sans")
                     ),
                     yaxis=dict(
-                        showgrid=True, gridcolor='#E0E3EB',
+                        showgrid=True, gridcolor='rgba(255,255,255,0.05)',
                         range=[-100, 100],
-                        zeroline=True, zerolinecolor='#B2B5BE', zerolinewidth=2,
+                        zeroline=True, zerolinecolor='rgba(255,255,255,0.2)', zerolinewidth=2,
                         tickmode='array', tickvals=[-100, -50, 0, 50, 100],
-                        title=dict(text="Optimism Score", font=dict(size=11, color="#787B86", family="Inter")),
-                        tickfont=dict(size=11, color="#131722", family="Inter", weight="bold"),
-                        side="right"  # Iconic TradingView Y-axis placement!
+                        title=dict(text="Optimism Score", font=dict(size=11, color="#94a3b8", family="IBM Plex Sans")),
+                        tickfont=dict(size=11, color="#f8fafc", family="IBM Plex Sans", weight="bold"),
+                        side="right"
                     )
                 )
                 st.plotly_chart(fig_area, use_container_width=True)
@@ -389,12 +392,12 @@ if not df_signals.empty:
 
             # --- Regional News Feeds at the Bottom (Inside Right Col) ---
             st.markdown(f"""
-            <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid #E0E3EB; margin-top: 30px; margin-bottom: 12px;">
-                <div style="font-size: 1.1rem; font-weight: 700; color: #131722; display: flex; align-items: center; gap: 8px;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF9800" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-top: 30px; margin-bottom: 12px;">
+                <div style="font-size: 1.1rem; font-weight: 700; color: #f8fafc; font-family: 'Montserrat', sans-serif; display: flex; align-items: center; gap: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg>
                     {selected_region} Live Intelligence Feed
                 </div>
-                <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: #FF9800; background: #FFF3E0; padding: 4px 10px; border-radius: 4px; border: 1px solid #FF9800; text-transform: uppercase;">
+                <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: #f59e0b; background: rgba(245, 158, 11, 0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(245, 158, 11, 0.2); text-transform: uppercase;">
                     {len(display_payloads[display_payloads['market_region'] == selected_region])} Events Detected
                 </div>
             </div>
@@ -407,20 +410,20 @@ if not df_signals.empty:
                 
                 region_payloads = display_payloads[display_payloads['market_region'] == selected_region]
                 for _, row in region_payloads.iterrows():
-                    color = "#089981" if row['sentiment_index'] > 0 else "#F23645" if row['sentiment_index'] < 0 else "#787B86"
+                    color = "#10b981" if row['sentiment_index'] > 0 else "#ef4444" if row['sentiment_index'] < 0 else "#94a3b8"
                     time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
                     ticker_label = row.get('index_ticker', 'Macro')
                     
                     html_feed += f'''
-<div style="border-bottom: 1px solid #E0E3EB; padding-bottom: 12px; margin-bottom: 12px;">
-    <div style="font-size: 0.8rem; color: #787B86; display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+<div style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 12px;">
+    <div style="font-size: 0.8rem; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
         <div style="display: flex; align-items: center; gap: 8px;">
             <span>{time_str}</span>
-            <span style="background: #FFFFFF; border: 1px solid #E0E3EB; color: #131722; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em;">{ticker_label}</span>
+            <span style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #f8fafc; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em;">{ticker_label}</span>
         </div>
         <span style="color: {color}; font-weight: 700; font-size: 0.9rem;">{row['sentiment_index']:+.1f}</span>
     </div>
-    <div style="font-size: 0.95rem; color: #131722; line-height: 1.5; font-weight: 500;">{row['raw_text']}</div>
+    <div style="font-size: 0.95rem; color: #f8fafc; line-height: 1.5; font-weight: 500;">{row['raw_text']}</div>
 </div>
 '''
                 html_feed += "</div>"
