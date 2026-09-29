@@ -147,7 +147,7 @@ if not df_signals.empty:
         filtered_signals.sort_values('timestamp', inplace=True)
         
         # Calculate EMA by grouping into active hours (dropna prevents month-long flatlines)
-        df_trend = filtered_signals.groupby(pd.Grouper(key='timestamp', freq='1H'))['sentiment_index'].mean().dropna().reset_index()
+        df_trend = filtered_signals.groupby(pd.Grouper(key='timestamp', freq='h'))['sentiment_index'].mean().dropna().reset_index()
         df_trend['EMA_Index'] = df_trend['sentiment_index'].ewm(span=ema_window, adjust=False).mean()
         
         # Merge the EMA back to the latest point for KPIs
