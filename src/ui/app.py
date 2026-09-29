@@ -147,72 +147,81 @@ if not df_signals.empty:
         st.markdown("<br>", unsafe_allow_html=True)
 
         # --- Main Dashboard Area ---
-        chart_col, feed_col = st.columns([2.2, 1])
+        st.subheader("📈 Macro-Sentiment Trajectory")
+        
+        # Polished Plotly Chart (Full Width)
+        fig = go.Figure()
+        
+        # Scatter for raw sentiment
+        fig.add_trace(go.Scatter(
+            x=filtered_signals['timestamp'], y=filtered_signals['sentiment_score'],
+            mode='markers', name='Raw Sentiment',
+            marker=dict(color='rgba(150, 150, 150, 0.4)', size=8)
+        ))
+        
+        # Line for EMA
+        fig.add_trace(go.Scatter(
+            x=filtered_signals['timestamp'], y=filtered_signals['EMA'],
+            mode='lines', name=f'{ema_window}-Period EMA',
+            line=dict(color='#00CC96' if current_ema >= 0 else '#EF553B', width=4)
+        ))
+        
+        # Zero Baseline
+        fig.add_hline(y=0, line_dash="dash", line_color="rgba(255,255,255,0.2)", annotation_text="Neutral Baseline")
+        
+        fig.update_layout(
+            plot_bgcolor="rgba(0,0,0,0)",
+            paper_bgcolor="rgba(0,0,0,0)",
+            xaxis_title="Time",
+            yaxis_title="Sentiment Score (-1.0 to +1.0)",
+            hovermode="x unified",
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+            margin=dict(l=0, r=0, t=30, b=0)
+        )
+        st.plotly_chart(fig, use_container_width=True)
 
-        with chart_col:
-            st.subheader("📈 Macro-Sentiment Trajectory")
-            
-            # Polished Plotly Chart
-            fig = go.Figure()
-            
-            # Scatter for raw sentiment
-            fig.add_trace(go.Scatter(
-                x=filtered_signals['timestamp'], y=filtered_signals['sentiment_score'],
-                mode='markers', name='Raw Sentiment',
-                marker=dict(color='rgba(150, 150, 150, 0.4)', size=8)
-            ))
-            
-            # Line for EMA
-            fig.add_trace(go.Scatter(
-                x=filtered_signals['timestamp'], y=filtered_signals['EMA'],
-                mode='lines', name=f'{ema_window}-Period EMA',
-                line=dict(color='#00CC96' if current_ema >= 0 else '#EF553B', width=4)
-            ))
-            
-            # Zero Baseline
-            fig.add_hline(y=0, line_dash="dash", line_color="rgba(255,255,255,0.2)", annotation_text="Neutral Baseline")
-            
-            fig.update_layout(
-                plot_bgcolor="rgba(0,0,0,0)",
-                paper_bgcolor="rgba(0,0,0,0)",
-                xaxis_title="Time",
-                yaxis_title="Sentiment Score (-1.0 to +1.0)",
-                hovermode="x unified",
-                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-                margin=dict(l=0, r=0, t=30, b=0)
-            )
-            st.plotly_chart(fig, use_container_width=True)
+        st.markdown("<hr/>", unsafe_allow_html=True)
+        st.subheader("📰 Regional News Feeds")
 
-        with feed_col:
-            st.subheader("📰 Live News Feed")
-            if not df_payloads.empty:
-                filtered_payloads = df_payloads[df_payloads['market_region'].isin(selected_region)]
-                
-                # Create a scrolling container
-                st.markdown('<div style="height: 500px; overflow-y: auto; padding-right: 10px;">', unsafe_allow_html=True)
-                
-                for _, row in filtered_payloads.iterrows():
-                    score = row['sentiment_score']
-                    if score > 0.1: theme = "bullish"
-                    elif score < -0.1: theme = "bearish"
-                    else: theme = "neutral"
+        # --- Region-wise Columnar Feeds ---
+        if not df_payloads.empty:
+            # Create a dynamic number of columns based on how many regions are selected
+            num_regions = len(selected_region)
+            cols = st.columns(num_regions)
+            
+            for idx, region in enumerate(selected_region):
+                with cols[idx]:
+                    st.markdown(f"#### {region} Feed")
                     
-                    # Format time nicely
-                    time_str = pd.to_datetime(row['timestamp']).strftime('%b %d, %H:%M')
+                    region_payloads = df_payloads[df_payloads['market_region'] == region]
                     
-                    st.markdown(f"""
-                    <div class="news-card {theme}">
-                        <div class="news-header">
-                            <span class="region-badge">{row['market_region']}</span>
-                            <span>{time_str} | Score: {score:.2f}</span>
-                        </div>
-                        <div class="news-body">{row['raw_text']}</div>
-                    </div>
-                    """, unsafe_allow_html=True)
-                    
-                st.markdown('</div>', unsafe_allow_html=True)
-            else:
-                st.info("No recent news events.")
+                    if not region_payloads.empty:
+                        # Create a scrolling container for each region
+                        st.markdown('<div style="height: 500px; overflow-y: auto; padding-right: 10px;">', unsafe_allow_html=True)
+                        
+                        for _, row in region_payloads.iterrows():
+                            score = row['sentiment_score']
+                            if score > 0.1: theme = "bullish"
+                            elif score < -0.1: theme = "bearish"
+                            else: theme = "neutral"
+                            
+                            time_str = pd.to_datetime(row['timestamp']).strftime('%b %d, %H:%M')
+                            
+                            st.markdown(f"""
+                            <div class="news-card {theme}">
+                                <div class="news-header">
+                                    <span>{time_str}</span>
+                                    <span style="font-weight: bold;">Score: {score:.2f}</span>
+                                </div>
+                                <div class="news-body">{row['raw_text']}</div>
+                            </div>
+                            """, unsafe_allow_html=True)
+                            
+                        st.markdown('</div>', unsafe_allow_html=True)
+                    else:
+                        st.info(f"No recent news available for {region}.")
+        else:
+            st.info("No recent news events.")
     else:
         st.warning("No data found for the selected regions.")
 else:
