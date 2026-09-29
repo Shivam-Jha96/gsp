@@ -302,7 +302,7 @@ if not df_signals.empty:
                 fig_area = go.Figure()
                 
                 # Plot overlapping filled areas for each specific Index
-                colors = px.colors.qualitative.Pastel
+                colors = ["#2962FF", "#E91E63", "#FF9800", "#9C27B0", "#00BCD4"] # Sharp terminal colors
                 tickers = [c for c in pivot_df.columns if c != 'timestamp']
                 
                 for i, ticker in enumerate(tickers):
@@ -317,33 +317,34 @@ if not df_signals.empty:
                     fig_area.add_trace(go.Scatter(
                         x=pivot_df['timestamp'], y=pivot_df[ticker],
                         mode='lines+markers', name=f'{ticker} Sentiment',
-                        line=dict(width=1, color=colors[i % len(colors)]),
+                        line=dict(width=1.5, color=colors[i % len(colors)]),
                         marker=dict(size=4),
                         fill='tozeroy',
-                        opacity=0.5
+                        opacity=0.3
                     ))
                 
                 # Add smooth thick line for Global EMA Trend on top
                 fig_area.add_trace(go.Scatter(
                     x=df_trend['timestamp'], y=df_trend['EMA_Index'],
                     mode='lines+markers',
-                    line=dict(color='#64748B', width=2, shape='linear'),
-                    marker=dict(size=6, color='#64748B', line=dict(color='white', width=1)),
+                    line=dict(color='#131722', width=2.5, shape='linear'), # TV Dark for main trend
+                    marker=dict(size=6, color='#131722', line=dict(color='white', width=1)),
                     name=f'{selected_region} Mean (EMA)'
                 ))
                 
                 fig_area.update_layout(
                     height=450, margin=dict(l=0, r=0, t=10, b=0),
-                    plot_bgcolor="white", paper_bgcolor="white",
+                    plot_bgcolor="#FFFFFF", paper_bgcolor="#FFFFFF",
                     xaxis_title="", yaxis_title="Optimism Index",
                     hovermode="x unified",
-                    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color="#4B5563")),
-                    xaxis=dict(showgrid=True, gridcolor='#F0F0F0'),
+                    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color="#131722", size=10)),
+                    xaxis=dict(showgrid=True, gridcolor='#E0E3EB'),
                     yaxis=dict(
-                        showgrid=True, gridcolor='#F0F0F0',
+                        showgrid=True, gridcolor='#E0E3EB',
                         range=[-100, 100],
-                        zeroline=True, zerolinecolor='#AAAAAA', zerolinewidth=2,
-                        tickmode='array', tickvals=[-100, -50, 0, 50, 100]
+                        zeroline=True, zerolinecolor='#B2B5BE', zerolinewidth=2,
+                        tickmode='array', tickvals=[-100, -50, 0, 50, 100],
+                        tickfont=dict(color="#787B86")
                     )
                 )
                 st.plotly_chart(fig_area, use_container_width=True)
