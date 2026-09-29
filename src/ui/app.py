@@ -234,19 +234,19 @@ if not df_signals.empty:
                 
                 fig_area = go.Figure()
                 
-                # Plot Stacked Area for each region
+                # Plot overlapping filled areas for each region
                 colors = px.colors.qualitative.Pastel
                 for i, region in enumerate(selected_region):
                     if region in pivot_df.columns:
                         fig_area.add_trace(go.Scatter(
                             x=pivot_df['timestamp'], y=pivot_df[region],
-                            mode='lines', name=f'{region} Mass',
-                            line=dict(width=0), # Hide borders for a clean stacked block look
-                            marker=dict(color=colors[i % len(colors)]),
-                            stackgroup='one' # This enforces the stacked area logic
+                            mode='lines', name=f'{region} Sentiment',
+                            line=dict(width=1, color=colors[i % len(colors)]),
+                            fill='tozeroy',
+                            opacity=0.6
                         ))
                 
-                # Add smooth thick line for Global EMA Trend on top of the stack
+                # Add smooth thick line for Global EMA Trend on top
                 fig_area.add_trace(go.Scatter(
                     x=df_trend['timestamp'], y=df_trend['EMA_Index'],
                     mode='lines',
@@ -257,11 +257,16 @@ if not df_signals.empty:
                 fig_area.update_layout(
                     height=450, margin=dict(l=0, r=0, t=20, b=0),
                     plot_bgcolor="white", paper_bgcolor="white",
-                    xaxis_title="", yaxis_title="Index Score",
+                    xaxis_title="", yaxis_title="Optimism Index",
                     hovermode="x unified",
                     legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color="#4B5563")),
                     xaxis=dict(showgrid=True, gridcolor='#F0F0F0'),
-                    yaxis=dict(showgrid=True, gridcolor='#F0F0F0')
+                    yaxis=dict(
+                        showgrid=True, gridcolor='#F0F0F0',
+                        range=[-100, 100],
+                        zeroline=True, zerolinecolor='#AAAAAA', zerolinewidth=2,
+                        tickmode='array', tickvals=[-100, -50, 0, 50, 100]
+                    )
                 )
                 st.plotly_chart(fig_area, use_container_width=True)
 
