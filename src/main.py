@@ -145,6 +145,10 @@ async def run_ingestion_pipeline():
                     """, (signal_id, text, context, json.dumps(item)))
                 conn.commit()
                 
+        # Mandatory 4.2-second delay to enforce ~14 requests per minute, respecting Gemini's 15 RPM free tier limit
+        logger.info("Sleeping for 4.2s to respect AI rate limits...")
+        await asyncio.sleep(4.2)
+                
     logger.info("--- Ingestion Pipeline Complete ---\n")
 
 def run_signal_engine():
