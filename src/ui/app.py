@@ -176,17 +176,47 @@ df_signals, df_payloads = load_data()
 if not df_signals.empty:
     df_signals['sentiment_index'] = df_signals['sentiment_score'] * 100
     df_payloads['sentiment_index'] = df_payloads['sentiment_score'] * 100
-    st.markdown("""
-    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">
-        <div style="background-color: #3b82f6; color: white; padding: 4px 8px; border-radius: 4px; font-weight: 800; font-size: 1.1rem; letter-spacing: 1px; font-family: 'Montserrat', sans-serif;">GSP</div>
-        <div style="font-size: 1.4rem; font-weight: 700; color: #f8fafc; letter-spacing: -0.01em; font-family: 'Montserrat', sans-serif;">Macro-Sentiment Terminal</div>
-        <div style="margin-left: auto; font-size: 0.75rem; color: #10b981; font-weight: 700; letter-spacing: 0.05em; display: flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.1); padding: 4px 10px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
-            <span style="height: 6px; width: 6px; background-color: #10b981; border-radius: 50%; display: inline-block; box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);"></span> PIPELINE ACTIVE
+    # --- Page Header with Inline Timezone ---
+    header_left, header_right = st.columns([4, 1.2])
+    with header_left:
+        st.markdown("""
+        <div style="display: flex; align-items: center; gap: 12px; padding-bottom: 15px;">
+            <div style="background-color: #3b82f6; color: white; padding: 4px 8px; border-radius: 4px; font-weight: 800; font-size: 1.1rem; letter-spacing: 1px; font-family: 'Montserrat', sans-serif;">GSP</div>
+            <div style="font-size: 1.4rem; font-weight: 700; color: #f8fafc; letter-spacing: -0.01em; font-family: 'Montserrat', sans-serif;">Macro-Sentiment Terminal</div>
+            <div style="margin-left: auto; font-size: 0.75rem; color: #10b981; font-weight: 700; letter-spacing: 0.05em; display: flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.1); padding: 4px 10px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
+                <span style="height: 6px; width: 6px; background-color: #10b981; border-radius: 50%; display: inline-block; box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);"></span> PIPELINE ACTIVE
+            </div>
         </div>
-    </div>
-    """, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
+    with header_right:
+        # Timezone selector styled distinctly via CSS class
+        st.markdown("""
+        <style>
+        div[data-testid="stVerticalBlock"]:has(> div.tz-header-select) label {
+            color: #22d3ee !important;
+            font-family: 'Montserrat', sans-serif !important;
+            font-weight: 700 !important;
+            font-size: 0.75rem !important;
+            letter-spacing: 0.05em !important;
+            text-transform: uppercase !important;
+        }
+        </style>
+        <div class="tz-header-select"></div>
+        """, unsafe_allow_html=True)
+        tz_options = {
+            "Asia/Kolkata (IST)": "Asia/Kolkata",
+            "UTC": "UTC",
+            "America/New_York (EST)": "America/New_York",
+            "Europe/London (GMT)": "Europe/London",
+            "Asia/Tokyo (JST)": "Asia/Tokyo"
+        }
+        display_tz = st.selectbox("Timezone", list(tz_options.keys()), index=0, label_visibility="visible")
+        target_tz = tz_options[display_tz]
+    
+    st.markdown('<div style="border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;"></div>', unsafe_allow_html=True)
+    
     # --- Top Row: Filters Using Native Labels ---
-    filter_col1, filter_col2, filter_col3, filter_col4, filter_col5 = st.columns([1, 1, 1, 1.2, 1.2])
+    filter_col1, filter_col2, filter_col3, filter_col4 = st.columns([1, 1, 1, 1.2])
     
     with filter_col1:
         date_range = st.selectbox("Timeframe", ["24H", "12H", "6H", "4H", "7D", "1M", "1Y", "All"], index=0)
@@ -197,16 +227,6 @@ if not df_signals.empty:
     with filter_col3:
         ema_window = st.selectbox("EMA Window (Periods)", [4, 8, 12, 24], index=0)
     with filter_col4:
-        tz_options = {
-            "Asia/Kolkata (IST)": "Asia/Kolkata",
-            "UTC": "UTC",
-            "America/New_York (EST)": "America/New_York",
-            "Europe/London (GMT)": "Europe/London",
-            "Asia/Tokyo (JST)": "Asia/Tokyo"
-        }
-        display_tz = st.selectbox("Timezone", list(tz_options.keys()), index=0)
-        target_tz = tz_options[display_tz]
-    with filter_col5:
         # Dynamically fetch available indices for the chosen region
         active_indices = df_signals[df_signals['market_region'] == selected_region]['index_ticker'].unique().tolist()
         active_indices = [x for x in active_indices if x != 'UNKNOWN']
