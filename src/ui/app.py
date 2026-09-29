@@ -54,12 +54,21 @@ st.markdown("""
         border-color: rgba(255, 255, 255, 0.2) !important;
     }
     
-    /* Override top borders for glass cards - make them subtle neon borders */
-    .bg-blue { border-left: 3px solid #3b82f6 !important; }
-    .bg-green { border-left: 3px solid #10b981 !important; }
-    .bg-purple { border-left: 3px solid #8b5cf6 !important; }
-    .bg-orange { border-left: 3px solid #f59e0b !important; }
-    .bg-indigo { border-left: 3px solid #6366f1 !important; }
+    /* Colored Glass Cards (Deep Translucent Tints) */
+    .bg-blue { border-left: 3px solid #3b82f6 !important; background: rgba(59, 130, 246, 0.1) !important; }
+    .bg-blue:hover { background: rgba(59, 130, 246, 0.15) !important; border-color: rgba(59, 130, 246, 0.3) !important; }
+    
+    .bg-green { border-left: 3px solid #10b981 !important; background: rgba(16, 185, 129, 0.1) !important; }
+    .bg-green:hover { background: rgba(16, 185, 129, 0.15) !important; border-color: rgba(16, 185, 129, 0.3) !important; }
+    
+    .bg-purple { border-left: 3px solid #8b5cf6 !important; background: rgba(139, 92, 246, 0.1) !important; }
+    .bg-purple:hover { background: rgba(139, 92, 246, 0.15) !important; border-color: rgba(139, 92, 246, 0.3) !important; }
+    
+    .bg-orange { border-left: 3px solid #f59e0b !important; background: rgba(245, 158, 11, 0.1) !important; }
+    .bg-orange:hover { background: rgba(245, 158, 11, 0.15) !important; border-color: rgba(245, 158, 11, 0.3) !important; }
+    
+    .bg-indigo { border-left: 3px solid #6366f1 !important; background: rgba(99, 102, 241, 0.1) !important; }
+    .bg-indigo:hover { background: rgba(99, 102, 241, 0.15) !important; border-color: rgba(99, 102, 241, 0.3) !important; }
     
     /* Override Streamlit native container border */
     [data-testid="stVerticalBlockBorderWrapper"] {
