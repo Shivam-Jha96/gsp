@@ -46,6 +46,15 @@ st.markdown("""
         border: 1px solid #EAEAEA;
     }
     
+    /* Override Streamlit native container border to match white-card */
+    [data-testid="stVerticalBlockBorderWrapper"] {
+        background-color: #FFFFFF !important;
+        border-radius: 8px !important;
+        box-shadow: 0px 2px 5px rgba(0,0,0,0.05) !important;
+        border: 1px solid #EAEAEA !important;
+        padding: 5px !important;
+    }
+    
     /* Left Column Metrics */
     .metric-title {
         font-size: 0.85rem;
@@ -75,6 +84,7 @@ st.markdown("""
         font-size: 0.9rem;
         color: #777777;
         margin-bottom: 15px;
+        padding: 10px 10px 0 10px;
     }
     
     /* Hide Streamlit native UI elements including the white top header bar */
@@ -207,31 +217,30 @@ if not df_signals.empty:
 
         with right_col:
             # --- Large Area Chart at the top of the right column ---
-            st.markdown('<div class="white-card">', unsafe_allow_html=True)
-            st.markdown('<div class="chart-title">Aggregate Market Optimism Over Time</div>', unsafe_allow_html=True)
-            
-            # Smooth Filled Area Chart (like the screenshot)
-            fig_area = go.Figure()
-            
-            # Add smooth filled area for EMA
-            fig_area.add_trace(go.Scatter(
-                x=filtered_signals['timestamp'], y=filtered_signals['EMA_Index'],
-                mode='lines',
-                line=dict(color='#70AD47', width=2, shape='spline'),
-                fill='tozeroy',
-                fillcolor='rgba(112, 173, 71, 0.3)',
-                name='Global EMA'
-            ))
-            
-            fig_area.update_layout(
-                height=450, margin=dict(l=0, r=0, t=10, b=0),
-                plot_bgcolor="white", paper_bgcolor="white",
-                xaxis_title="", yaxis_title="",
-                xaxis=dict(showgrid=True, gridcolor='#F0F0F0'),
-                yaxis=dict(showgrid=True, gridcolor='#F0F0F0')
-            )
-            st.plotly_chart(fig_area, use_container_width=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+            with st.container(border=True):
+                st.markdown('<div class="chart-title" style="margin-bottom: -10px;">Aggregate Market Optimism Over Time</div>', unsafe_allow_html=True)
+                
+                # Smooth Filled Area Chart (like the screenshot)
+                fig_area = go.Figure()
+                
+                # Add smooth filled area for EMA
+                fig_area.add_trace(go.Scatter(
+                    x=filtered_signals['timestamp'], y=filtered_signals['EMA_Index'],
+                    mode='lines',
+                    line=dict(color='#70AD47', width=3, shape='spline'),
+                    fill='tozeroy',
+                    fillcolor='rgba(112, 173, 71, 0.2)',
+                    name='Global EMA'
+                ))
+                
+                fig_area.update_layout(
+                    height=450, margin=dict(l=0, r=0, t=20, b=0),
+                    plot_bgcolor="white", paper_bgcolor="white",
+                    xaxis_title="", yaxis_title="",
+                    xaxis=dict(showgrid=True, gridcolor='#F0F0F0'),
+                    yaxis=dict(showgrid=True, gridcolor='#F0F0F0')
+                )
+                st.plotly_chart(fig_area, use_container_width=True)
 
         # --- Regional News Feeds at the Bottom ---
         st.markdown('<div class="main-header" style="margin-top: 20px; font-size: 1.2rem;">Regional News Ingestion</div>', unsafe_allow_html=True)
