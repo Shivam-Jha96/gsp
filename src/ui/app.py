@@ -155,9 +155,15 @@ df_signals, df_payloads = load_data()
 if not df_signals.empty:
     df_signals['sentiment_index'] = df_signals['sentiment_score'] * 100
     df_payloads['sentiment_index'] = df_payloads['sentiment_score'] * 100
-
-    st.markdown('<div class="main-header">Macro-Sentiment Dashboard</div>', unsafe_allow_html=True)
-    
+    st.markdown("""
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 30px; border-bottom: 1px solid #E0E3EB; padding-bottom: 15px;">
+        <div style="background-color: #2962FF; color: white; padding: 4px 8px; border-radius: 4px; font-weight: 800; font-size: 1.1rem; letter-spacing: 1px;">GSP</div>
+        <div style="font-size: 1.4rem; font-weight: 700; color: #131722; letter-spacing: -0.01em;">Macro-Sentiment Terminal</div>
+        <div style="margin-left: auto; font-size: 0.75rem; color: #089981; font-weight: 700; letter-spacing: 0.05em; display: flex; align-items: center; gap: 6px; background: rgba(8, 153, 129, 0.1); padding: 4px 10px; border-radius: 4px;">
+            <span style="height: 6px; width: 6px; background-color: #089981; border-radius: 50%; display: inline-block; box-shadow: 0 0 0 2px rgba(8, 153, 129, 0.2);"></span> PIPELINE ACTIVE
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     # --- Top Row: Filters Using Native Labels ---
     filter_col1, filter_col2, filter_col3, filter_col4, filter_col5 = st.columns([1, 1, 1, 1.2, 1.2])
     
