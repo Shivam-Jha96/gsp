@@ -43,8 +43,8 @@ st.markdown("""
     .white-card {
         background: rgba(255, 255, 255, 0.03) !important;
         border-radius: 8px;
-        padding: 16px;
-        margin-bottom: 16px;
+        padding: 12px;
+        margin-bottom: 12px;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
         backdrop-filter: blur(10px);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -89,23 +89,23 @@ st.markdown("""
     /* Metrics */
     .metric-title {
         font-family: 'Montserrat', sans-serif;
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         font-weight: 600;
         color: #94a3b8; /* text-muted */
         text-transform: uppercase;
         letter-spacing: 0.03em;
-        margin-bottom: 6px;
+        margin-bottom: 4px;
     }
     .metric-value {
         font-family: 'Montserrat', sans-serif;
-        font-size: 2.1rem;
+        font-size: 1.6rem;
         font-weight: 700;
         color: #f8fafc;
         letter-spacing: -0.01em;
         margin-bottom: 2px;
     }
     .metric-sub {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         font-weight: 600;
     }
     .green { color: #10b981 !important; } /* Emerald */
@@ -403,10 +403,10 @@ if not df_signals.empty:
                     
                     with index_cols[idx]:
                         st.markdown(f"""
-                        <div class="white-card bg-indigo" style="padding: 15px; min-height: 85px;">
-                            <div class="metric-title" style="font-size: 0.8rem; margin-bottom: 5px;">{ticker}</div>
-                            <div class="metric-value {val_color}" style="font-size: 1.5rem;">{latest_score:+.1f}</div>
-                            <div class="metric-sub {d_color}" style="font-size: 0.75rem; margin-top: 5px;">{d_arrow} {abs(delta_idx):.1f}%</div>
+                        <div class="white-card bg-indigo" style="padding: 12px; min-height: 85px;">
+                            <div class="metric-title" style="font-size: 0.75rem; margin-bottom: 4px;">{ticker}</div>
+                            <div class="metric-value {val_color}" style="font-size: 1.6rem;">{latest_score:+.1f}</div>
+                            <div class="metric-sub {d_color}" style="font-size: 0.8rem; margin-top: 5px;">{d_arrow} {abs(delta_idx):.1f}%</div>
                         </div>
                         """, unsafe_allow_html=True)
 
