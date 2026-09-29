@@ -265,10 +265,11 @@ if not df_signals.empty:
             # 1. Global Index
             delta_color = "green" if delta > 0 else "red" if delta < 0 else "gray"
             arrow = "↑" if delta > 0 else "↓" if delta < 0 else ""
+            val_color = "green" if current_ema > 0 else "red" if current_ema < 0 else ""
             st.markdown(f"""
             <div class="white-card bg-blue">
                 <div class="metric-title">Aggregate Optimism Index</div>
-                <div class="metric-value">{current_ema:+.1f}</div>
+                <div class="metric-value {val_color}">{current_ema:+.1f}</div>
                 <div class="metric-sub {delta_color}">{arrow} {abs(delta):.1f}%</div>
                 <div class="metric-footer">vs previous period</div>
             </div>
@@ -277,10 +278,11 @@ if not df_signals.empty:
             # 2. Market Bias
             bias = "Bullish" if current_ema > 5 else "Bearish" if current_ema < -5 else "Neutral"
             b_color = "green" if bias == "Bullish" else "red" if bias == "Bearish" else "gray"
+            b_val_color = "green" if bias == "Bullish" else "red" if bias == "Bearish" else ""
             st.markdown(f"""
             <div class="white-card bg-purple">
                 <div class="metric-title">Market Bias</div>
-                <div class="metric-value">{bias}</div>
+                <div class="metric-value {b_val_color}">{bias}</div>
                 <div class="metric-sub {b_color}">{ema_window} Period Window</div>
                 <div class="metric-footer">based on moving average</div>
             </div>
@@ -389,12 +391,13 @@ if not df_signals.empty:
                     
                     d_color = "green" if delta_idx > 0 else "red" if delta_idx < 0 else "gray"
                     d_arrow = "↑" if delta_idx > 0 else "↓" if delta_idx < 0 else ""
+                    val_color = "green" if latest_score > 0 else "red" if latest_score < 0 else ""
                     
                     with index_cols[idx]:
                         st.markdown(f"""
                         <div class="white-card bg-indigo" style="padding: 15px; min-height: 85px;">
                             <div class="metric-title" style="font-size: 0.8rem; margin-bottom: 5px;">{ticker}</div>
-                            <div class="metric-value" style="font-size: 1.5rem;">{latest_score:+.1f}</div>
+                            <div class="metric-value {val_color}" style="font-size: 1.5rem;">{latest_score:+.1f}</div>
                             <div class="metric-sub {d_color}" style="font-size: 0.75rem; margin-top: 5px;">{d_arrow} {abs(delta_idx):.1f}%</div>
                         </div>
                         """, unsafe_allow_html=True)
