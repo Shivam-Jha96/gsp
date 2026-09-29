@@ -133,7 +133,7 @@ if not df_signals.empty:
     st.markdown('<div class="main-header">Macro-Sentiment Dashboard</div>', unsafe_allow_html=True)
     
     # --- Top Row: Filters Using Native Labels ---
-    filter_col1, filter_col2, filter_col3, filter_col4, empty_col = st.columns([1, 1, 1, 1.2, 1.8])
+    filter_col1, filter_col2, filter_col3, filter_col4, filter_col5 = st.columns([1, 1, 1, 1.2, 1.2])
     
     with filter_col1:
         date_range = st.selectbox("Timeframe", ["24H", "12H", "1H", "7D", "1M", "1Y", "All"], index=0)
@@ -153,6 +153,11 @@ if not df_signals.empty:
         }
         display_tz = st.selectbox("Timezone", list(tz_options.keys()), index=0)
         target_tz = tz_options[display_tz]
+    with filter_col5:
+        # Dynamically fetch available indices for the chosen region
+        active_indices = df_signals[df_signals['market_region'] == selected_region]['index_ticker'].unique().tolist()
+        active_indices = [x for x in active_indices if x != 'UNKNOWN']
+        chart_display = st.selectbox("Chart Display", ["All Indices"] + active_indices, index=0)
 
     filtered_signals = df_signals[df_signals['market_region'] == selected_region].copy()
     display_payloads = df_payloads.copy()
@@ -274,6 +279,10 @@ if not df_signals.empty:
                     if ticker == 'UNKNOWN': 
                         continue
                         
+                    # Filter based on user's Chart Display selection
+                    if chart_display != "All Indices" and ticker != chart_display:
+                        continue
+                        
                     fig_area.add_trace(go.Scatter(
                         x=pivot_df['timestamp'], y=pivot_df[ticker],
                         mode='lines+markers', name=f'{ticker} Sentiment',
@@ -307,6 +316,28 @@ if not df_signals.empty:
                     )
                 )
                 st.plotly_chart(fig_area, use_container_width=True)
+
+            # --- Mini KPI Tiles for Individual Indices ---
+            st.markdown('<div style="margin-top: 15px;"></div>', unsafe_allow_html=True)
+            valid_tickers = [t for t in tickers if t != 'UNKNOWN']
+            if valid_tickers:
+                index_cols = st.columns(len(valid_tickers))
+                for idx, ticker in enumerate(valid_tickers):
+                    latest_score = pivot_df[ticker].iloc[-1] if len(pivot_df) > 0 else 0
+                    prev_score = pivot_df[ticker].iloc[-2] if len(pivot_df) > 1 else 0
+                    delta_idx = latest_score - prev_score
+                    
+                    d_color = "green" if delta_idx > 0 else "red" if delta_idx < 0 else "gray"
+                    d_arrow = "↑" if delta_idx > 0 else "↓" if delta_idx < 0 else ""
+                    
+                    with index_cols[idx]:
+                        st.markdown(f"""
+                        <div class="white-card" style="padding: 10px; min-height: 85px;">
+                            <div class="metric-title" style="font-size: 0.8rem; margin-bottom: 5px;">{ticker}</div>
+                            <div class="metric-value" style="font-size: 1.3rem;">{latest_score:+.1f}</div>
+                            <div class="metric-sub {d_color}" style="font-size: 0.7rem; margin-top: 5px;">{d_arrow} {abs(delta_idx):.1f}%</div>
+                        </div>
+                        """, unsafe_allow_html=True)
 
         # --- Regional News Feeds at the Bottom ---
         st.markdown(f'<div class="main-header" style="margin-top: 20px; font-size: 1.2rem;">{selected_region} News Ingestion</div>', unsafe_allow_html=True)
