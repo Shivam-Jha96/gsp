@@ -280,22 +280,30 @@ if not df_signals.empty:
             cols = st.columns(len(selected_region))
             for idx, region in enumerate(selected_region):
                 with cols[idx]:
-                    st.markdown(f"""
+                    html_feed = f"""
                     <div class="white-card" style="padding: 15px; height: 350px; overflow-y: auto;">
                         <div class="chart-title" style="margin-bottom: 10px; font-weight: bold; color: #333;">{region} FEED</div>
-                    """, unsafe_allow_html=True)
+                    """
                     
                     region_payloads = df_payloads[df_payloads['market_region'] == region]
                     for _, row in region_payloads.iterrows():
                         color = "#70AD47" if row['sentiment_index'] > 0 else "#ED7D31" if row['sentiment_index'] < 0 else "#888"
                         time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
-                        st.markdown(f"""
-                        <div style="border-bottom: 1px solid #EEE; padding-bottom: 10px; margin-bottom: 10px;">
-                            <div style="font-size: 0.75rem; color: #888; display: flex; justify-content: space-between;">
-                                <span>{time_str}</span>
-                                <span style="color: {color}; font-weight: 600;">{row['sentiment_index']:+.1f}</span>
-                            </div>
-                            <div style="font-size: 0.85rem; color: #444; line-height: 1.4;">{row['raw_text']}</div>
-                        </div>
-                        """, unsafe_allow_html=True)
-                    st.markdown("</div>", unsafe_allow_html=True)
+                        
+                        html_feed += f'''
+<div style="border-bottom: 1px solid #EEE; padding-bottom: 10px; margin-bottom: 10px;">
+    <div style="font-size: 0.75rem; color: #888; display: flex; justify-content: space-between;">
+        <span>{time_str}</span>
+        <span style="color: {color}; font-weight: 600;">{row['sentiment_index']:+.1f}</span>
+    </div>
+    <div style="font-size: 0.85rem; color: #444; line-height: 1.4;">{row['raw_text']}</div>
+</div>
+'''
+                    html_feed += "</div>"
+                    st.markdown(html_feed, unsafe_allow_html=True)
+        else:
+            st.info("No recent news events in database.")
+    else:
+        st.warning("No data found for the selected parameters.")
+else:
+    st.info("Database empty. Run the ingestion engine to populate.")
