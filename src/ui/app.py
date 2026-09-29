@@ -131,7 +131,7 @@ if not df_signals.empty:
     st.markdown('<div class="main-header">Macro-Sentiment Dashboard</div>', unsafe_allow_html=True)
     
     # --- Top Row: Filters Using Native Labels ---
-    filter_col1, filter_col2, filter_col3, filter_col4 = st.columns([1, 1, 1, 3])
+    filter_col1, filter_col2, filter_col3, filter_col4, empty_col = st.columns([1, 1, 1, 1.2, 1.8])
     
     with filter_col1:
         date_range = st.selectbox("Timeframe", ["24H", "12H", "1H", "7D", "1M", "1Y", "All"], index=0)
@@ -140,8 +140,19 @@ if not df_signals.empty:
         selected_region = st.multiselect("Regions", regions, default=regions)
     with filter_col3:
         ema_window = st.selectbox("EMA Window (Periods)", [4, 8, 12, 24], index=0)
+    with filter_col4:
+        tz_options = {
+            "Asia/Kolkata (IST)": "Asia/Kolkata",
+            "UTC": "UTC",
+            "America/New_York (EST)": "America/New_York",
+            "Europe/London (GMT)": "Europe/London",
+            "Asia/Tokyo (JST)": "Asia/Tokyo"
+        }
+        display_tz = st.selectbox("Timezone", list(tz_options.keys()), index=0)
+        target_tz = tz_options[display_tz]
 
     filtered_signals = df_signals[df_signals['market_region'].isin(selected_region)].copy()
+    display_payloads = df_payloads.copy()
     
     # --- Implement Timeframe Filtering ---
     if not filtered_signals.empty and date_range != "All":
@@ -160,6 +171,15 @@ if not df_signals.empty:
         filtered_signals = filtered_signals[filtered_signals['timestamp'] >= cutoff]
     
     if not filtered_signals.empty:
+        # Convert DataFrames to User Selected Timezone
+        if filtered_signals['timestamp'].dt.tz is None:
+            filtered_signals['timestamp'] = filtered_signals['timestamp'].dt.tz_localize('UTC')
+        filtered_signals['timestamp'] = filtered_signals['timestamp'].dt.tz_convert(target_tz)
+        
+        if display_payloads['timestamp'].dt.tz is None:
+            display_payloads['timestamp'] = display_payloads['timestamp'].dt.tz_localize('UTC')
+        display_payloads['timestamp'] = display_payloads['timestamp'].dt.tz_convert(target_tz)
+
         filtered_signals.sort_values('timestamp', inplace=True)
         
         # Calculate EMA by grouping into active hours (dropna prevents month-long flatlines)
@@ -272,7 +292,7 @@ if not df_signals.empty:
 
         # --- Regional News Feeds at the Bottom ---
         st.markdown('<div class="main-header" style="margin-top: 20px; font-size: 1.2rem;">Regional News Ingestion</div>', unsafe_allow_html=True)
-        if not df_payloads.empty:
+        if not display_payloads.empty:
             cols = st.columns(len(selected_region))
             for idx, region in enumerate(selected_region):
                 with cols[idx]:
@@ -281,7 +301,7 @@ if not df_signals.empty:
                         <div class="chart-title" style="margin-bottom: 10px; font-weight: bold; color: #333;">{region} FEED</div>
                     """
                     
-                    region_payloads = df_payloads[df_payloads['market_region'] == region]
+                    region_payloads = display_payloads[display_payloads['market_region'] == region]
                     for _, row in region_payloads.iterrows():
                         color = "#70AD47" if row['sentiment_index'] > 0 else "#ED7D31" if row['sentiment_index'] < 0 else "#888"
                         time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
