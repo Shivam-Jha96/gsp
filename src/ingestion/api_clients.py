@@ -48,4 +48,6 @@ class RSSClient:
                     })
         except Exception as e:
             logger.error(f"Error parsing feed content: {e}")
-        return items
+            
+        # Limit to the top 3 headlines per region to stay under the 15 RPM free tier limit
+        return items[:3]
