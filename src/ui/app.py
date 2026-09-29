@@ -144,18 +144,15 @@ if not df_signals.empty:
     filtered_signals = df_signals[df_signals['market_region'].isin(selected_region)].copy()
     
     if not filtered_signals.empty:
-        # Time-series resampling to fix jagged overlapping lines
         filtered_signals.sort_values('timestamp', inplace=True)
-        filtered_signals.set_index('timestamp', inplace=True)
         
-        # Resample into 10-minute bins and take the mean to create a smooth, strictly chronological line
-        resampled_df = filtered_signals.resample('10min')['sentiment_index'].mean().ffill().reset_index()
+        # Calculate EMA by grouping into active hours (dropna prevents month-long flatlines)
+        df_trend = filtered_signals.groupby(pd.Grouper(key='timestamp', freq='1H'))['sentiment_index'].mean().dropna().reset_index()
+        df_trend['EMA_Index'] = df_trend['sentiment_index'].ewm(span=ema_window, adjust=False).mean()
         
-        # Calculate EMA on the strictly chronological resampled data
-        resampled_df['EMA_Index'] = resampled_df['sentiment_index'].ewm(span=ema_window, adjust=False).mean()
-        
-        current_ema = resampled_df['EMA_Index'].iloc[-1] if len(resampled_df) > 0 else 0
-        previous_ema = resampled_df['EMA_Index'].iloc[-2] if len(resampled_df) > 1 else 0
+        # Merge the EMA back to the latest point for KPIs
+        current_ema = df_trend['EMA_Index'].iloc[-1] if len(df_trend) > 0 else 0
+        previous_ema = df_trend['EMA_Index'].iloc[-2] if len(df_trend) > 1 else 0
         delta = current_ema - previous_ema
         
         # --- Main Layout Split (1 Narrow Left, 1 Wide Right) ---
@@ -181,7 +178,7 @@ if not df_signals.empty:
             <div class="white-card">
                 <div class="metric-title">Market Bias</div>
                 <div class="metric-value">{bias}</div>
-                <div class="metric-sub {b_color}">{ema_window} Period Window</div>
+                <div class="metric-sub {b_color}">{ema_window}H Window</div>
                 <div class="metric-footer">based on moving average</div>
             </div>
             """, unsafe_allow_html=True)
@@ -211,23 +208,34 @@ if not df_signals.empty:
             with st.container(border=True):
                 st.markdown('<div style="font-size: 1rem; color: #777777; font-weight: 600; margin-bottom: 10px;">Aggregate Market Optimism Over Time</div>', unsafe_allow_html=True)
                 
-                # Smooth Filled Area Chart (like the screenshot)
                 fig_area = go.Figure()
                 
-                # Add smooth filled area for EMA using the chronologically ordered and resampled data
+                # Plot Raw Scatter Dots grouped by Region
+                colors = px.colors.qualitative.Prism
+                for i, region in enumerate(selected_region):
+                    region_data = filtered_signals[filtered_signals['market_region'] == region]
+                    fig_area.add_trace(go.Scatter(
+                        x=region_data['timestamp'], y=region_data['sentiment_index'],
+                        mode='markers', name=f'{region} Events',
+                        marker=dict(color=colors[i % len(colors)], size=6, opacity=0.7)
+                    ))
+                
+                # Add smooth filled area for EMA using the active hours trend
                 fig_area.add_trace(go.Scatter(
-                    x=resampled_df['timestamp'], y=resampled_df['EMA_Index'],
+                    x=df_trend['timestamp'], y=df_trend['EMA_Index'],
                     mode='lines',
-                    line=dict(color='#70AD47', width=3, shape='spline'),
+                    line=dict(color='#70AD47', width=3, shape='linear'),
                     fill='tozeroy',
                     fillcolor='rgba(112, 173, 71, 0.2)',
-                    name='Global EMA'
+                    name='Global EMA Trend'
                 ))
                 
                 fig_area.update_layout(
                     height=450, margin=dict(l=0, r=0, t=20, b=0),
                     plot_bgcolor="white", paper_bgcolor="white",
-                    xaxis_title="", yaxis_title="",
+                    xaxis_title="", yaxis_title="Index (-100 to +100)",
+                    hovermode="x unified",
+                    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color="#4B5563")),
                     xaxis=dict(showgrid=True, gridcolor='#F0F0F0'),
                     yaxis=dict(showgrid=True, gridcolor='#F0F0F0')
                 )
