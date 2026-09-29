@@ -14,9 +14,9 @@ st.set_page_config(page_title="Digital Dashboard", layout="wide", initial_sideba
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-    html, body, [class*="css"] {
+    html, body, [class*="css"], .stApp, [data-testid="stAppViewContainer"] {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Trebuchet MS", Roboto, Ubuntu, sans-serif;
-        background-color: #F8F9FD;
+        background-color: #F8F9FD !important;
     }
     .block-container {
         padding-top: 1.5rem !important;

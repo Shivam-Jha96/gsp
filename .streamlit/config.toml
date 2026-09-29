@@ -1,19 +1,6 @@
 [theme]
-# Primary accent color for interactive elements
-primaryColor = "#2563EB"
-
-# Background color for the main content area (Light Gray)
-backgroundColor = "#F3F4F6"
-
-# Background color for sidebar and most interactive widgets (Pure White)
-secondaryBackgroundColor = "#FFFFFF"
-
-# Text color (Dark Slate)
-textColor = "#1F2937"
-
-# Font family for all text in the app
-font = "sans serif"
-
-[layout]
-# Use wide mode by default
-max_width = 1200
+primaryColor="#2962FF"
+backgroundColor="#F8F9FD"
+secondaryBackgroundColor="#FFFFFF"
+textColor="#131722"
+font="sans serif"
