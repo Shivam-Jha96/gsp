@@ -198,10 +198,10 @@ if not df_signals.empty:
         previous_ema = df_trend['EMA_Index'].iloc[-2] if len(df_trend) > 1 else 0
         delta = current_ema - previous_ema
         
-        # Pivot the data onto a strict chronological grid for stacked area plotting
+        # Pivot the data onto a strict chronological grid for plotting
         pivot_df = filtered_signals.pivot_table(
             index=pd.Grouper(key='timestamp', freq=freq_str),
-            columns='market_region',
+            columns='index_ticker',
             values='sentiment_index',
             aggfunc='mean'
         ).fillna(0).reset_index()
@@ -229,7 +229,7 @@ if not df_signals.empty:
             <div class="white-card">
                 <div class="metric-title">Market Bias</div>
                 <div class="metric-value">{bias}</div>
-                <div class="metric-sub {b_color}">{ema_window}H Window</div>
+                <div class="metric-sub {b_color}">{ema_window} Period Window</div>
                 <div class="metric-footer">based on moving average</div>
             </div>
             """, unsafe_allow_html=True)
@@ -261,18 +261,23 @@ if not df_signals.empty:
                 
                 fig_area = go.Figure()
                 
-                # Plot overlapping filled areas for each region
+                # Plot overlapping filled areas for each specific Index
                 colors = px.colors.qualitative.Pastel
-                for i, region in enumerate(selected_region):
-                    if region in pivot_df.columns:
-                        fig_area.add_trace(go.Scatter(
-                            x=pivot_df['timestamp'], y=pivot_df[region],
-                            mode='lines+markers', name=f'{region} Sentiment',
-                            line=dict(width=1, color=colors[i % len(colors)]),
-                            marker=dict(size=4),
-                            fill='tozeroy',
-                            opacity=0.6
-                        ))
+                tickers = [c for c in pivot_df.columns if c != 'timestamp']
+                
+                for i, ticker in enumerate(tickers):
+                    # Ignore the old placeholder data if any still exists
+                    if ticker == 'UNKNOWN': 
+                        continue
+                        
+                    fig_area.add_trace(go.Scatter(
+                        x=pivot_df['timestamp'], y=pivot_df[ticker],
+                        mode='lines+markers', name=f'{ticker} Sentiment',
+                        line=dict(width=1, color=colors[i % len(colors)]),
+                        marker=dict(size=4),
+                        fill='tozeroy',
+                        opacity=0.5
+                    ))
                 
                 # Add smooth thick line for Global EMA Trend on top
                 fig_area.add_trace(go.Scatter(
