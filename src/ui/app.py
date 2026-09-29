@@ -7,11 +7,10 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from database.client import get_db_client
-from signal_engine.ema import calculate_ema
 
 st.set_page_config(page_title="Digital Dashboard", layout="wide", initial_sidebar_state="collapsed")
 
-# --- CSS to match the provided screenshot ---
+# --- CSS to match the provided screenshot without breaking layout ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -30,13 +29,8 @@ st.markdown("""
         color: #333333;
         margin-bottom: 20px;
     }
-    .filter-label {
-        font-size: 0.8rem;
-        color: #888888;
-        margin-bottom: -10px;
-    }
     
-    /* White Card Style for everything */
+    /* White Card Style for Left Column */
     .white-card {
         background-color: #FFFFFF;
         border-radius: 8px;
@@ -46,13 +40,12 @@ st.markdown("""
         border: 1px solid #EAEAEA;
     }
     
-    /* Override Streamlit native container border to match white-card */
+    /* Override Streamlit native container border to match white-card, without breaking padding */
     [data-testid="stVerticalBlockBorderWrapper"] {
         background-color: #FFFFFF !important;
         border-radius: 8px !important;
         box-shadow: 0px 2px 5px rgba(0,0,0,0.05) !important;
         border: 1px solid #EAEAEA !important;
-        padding: 5px !important;
     }
     
     /* Left Column Metrics */
@@ -80,13 +73,6 @@ st.markdown("""
         margin-top: 5px;
     }
     
-    .chart-title {
-        font-size: 0.9rem;
-        color: #777777;
-        margin-bottom: 15px;
-        padding: 10px 10px 0 10px;
-    }
-    
     /* Hide Streamlit native UI elements including the white top header bar */
     header[data-testid="stHeader"] {display: none !important;}
     #MainMenu {display: none !important;}
@@ -100,7 +86,7 @@ def load_data():
     db_url = os.environ.get("DATABASE_URL")
     if not db_url:
         now = pd.Timestamp.utcnow()
-        dates = pd.date_range(end=now, periods=100, freq='h')
+        dates = pd.date_range(end=now, periods=100, freq='10min')
         import numpy as np
         np.random.seed(42)
         scores = np.random.uniform(-1, 1, size=len(dates))
@@ -120,8 +106,9 @@ def load_data():
     try:
         client = get_db_client()
         with client.get_connection() as conn:
-            query_signals = "SELECT timestamp, market_region, sentiment_score FROM event_signals ORDER BY timestamp DESC LIMIT 500"
+            query_signals = "SELECT timestamp, market_region, sentiment_score FROM event_signals ORDER BY timestamp DESC LIMIT 1000"
             df_signals = pd.read_sql(query_signals, conn)
+            df_signals['timestamp'] = pd.to_datetime(df_signals['timestamp'])
             
             query_payloads = """
                 SELECT s.timestamp, s.market_region, s.sentiment_score, p.raw_text
@@ -129,6 +116,7 @@ def load_data():
                 ORDER BY s.timestamp DESC LIMIT 40
             """
             df_payloads = pd.read_sql(query_payloads, conn)
+            df_payloads['timestamp'] = pd.to_datetime(df_payloads['timestamp'])
         return df_signals, df_payloads
     except Exception as e:
         st.error(f"Database error: {e}")
@@ -142,29 +130,32 @@ if not df_signals.empty:
 
     st.markdown('<div class="main-header">Macro-Sentiment Dashboard</div>', unsafe_allow_html=True)
     
-    # --- Top Row: Filters (like the screenshot) ---
+    # --- Top Row: Filters Using Native Labels ---
     filter_col1, filter_col2, filter_col3, filter_col4 = st.columns([1, 1, 1, 3])
     
     with filter_col1:
-        st.markdown('<div class="filter-label">Date Range</div>', unsafe_allow_html=True)
-        date_range = st.selectbox("", ["This Week", "Today", "This Month"], label_visibility="collapsed")
+        date_range = st.selectbox("Date Range", ["This Week", "Today", "This Month"])
     with filter_col2:
-        st.markdown('<div class="filter-label">Regions</div>', unsafe_allow_html=True)
         regions = df_signals['market_region'].unique().tolist()
-        selected_region = st.multiselect("", regions, default=regions, label_visibility="collapsed")
+        selected_region = st.multiselect("Regions", regions, default=regions)
     with filter_col3:
-        st.markdown('<div class="filter-label">EMA Window</div>', unsafe_allow_html=True)
-        ema_window = st.selectbox("", [4, 8, 12, 24], index=0, label_visibility="collapsed")
+        ema_window = st.selectbox("EMA Window (Periods)", [4, 8, 12, 24], index=0)
 
     filtered_signals = df_signals[df_signals['market_region'].isin(selected_region)].copy()
     
     if not filtered_signals.empty:
+        # Time-series resampling to fix jagged overlapping lines
         filtered_signals.sort_values('timestamp', inplace=True)
-        ema_series = calculate_ema(filtered_signals, window=ema_window, column='sentiment_index')
-        filtered_signals['EMA_Index'] = ema_series
+        filtered_signals.set_index('timestamp', inplace=True)
         
-        current_ema = ema_series.iloc[-1] if len(ema_series) > 0 else 0
-        previous_ema = ema_series.iloc[-2] if len(ema_series) > 1 else 0
+        # Resample into 10-minute bins and take the mean to create a smooth, strictly chronological line
+        resampled_df = filtered_signals.resample('10min')['sentiment_index'].mean().ffill().reset_index()
+        
+        # Calculate EMA on the strictly chronological resampled data
+        resampled_df['EMA_Index'] = resampled_df['sentiment_index'].ewm(span=ema_window, adjust=False).mean()
+        
+        current_ema = resampled_df['EMA_Index'].iloc[-1] if len(resampled_df) > 0 else 0
+        previous_ema = resampled_df['EMA_Index'].iloc[-2] if len(resampled_df) > 1 else 0
         delta = current_ema - previous_ema
         
         # --- Main Layout Split (1 Narrow Left, 1 Wide Right) ---
@@ -190,7 +181,7 @@ if not df_signals.empty:
             <div class="white-card">
                 <div class="metric-title">Market Bias</div>
                 <div class="metric-value">{bias}</div>
-                <div class="metric-sub {b_color}">{ema_window}H Window</div>
+                <div class="metric-sub {b_color}">{ema_window} Period Window</div>
                 <div class="metric-footer">based on moving average</div>
             </div>
             """, unsafe_allow_html=True)
@@ -218,14 +209,14 @@ if not df_signals.empty:
         with right_col:
             # --- Large Area Chart at the top of the right column ---
             with st.container(border=True):
-                st.markdown('<div class="chart-title" style="margin-bottom: -10px;">Aggregate Market Optimism Over Time</div>', unsafe_allow_html=True)
+                st.markdown('<div style="font-size: 1rem; color: #777777; font-weight: 600; margin-bottom: 10px;">Aggregate Market Optimism Over Time</div>', unsafe_allow_html=True)
                 
                 # Smooth Filled Area Chart (like the screenshot)
                 fig_area = go.Figure()
                 
-                # Add smooth filled area for EMA
+                # Add smooth filled area for EMA using the chronologically ordered and resampled data
                 fig_area.add_trace(go.Scatter(
-                    x=filtered_signals['timestamp'], y=filtered_signals['EMA_Index'],
+                    x=resampled_df['timestamp'], y=resampled_df['EMA_Index'],
                     mode='lines',
                     line=dict(color='#70AD47', width=3, shape='spline'),
                     fill='tozeroy',
