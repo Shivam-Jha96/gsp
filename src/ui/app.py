@@ -338,9 +338,7 @@ if not df_signals.empty:
         else:
             st.info("No recent news events in database.")
             
-        with st.expander("Developer Debug: Raw Signal Data"):
-            st.write("Latest 20 signals from database:")
-            st.dataframe(filtered_signals.sort_values('timestamp', ascending=False).head(20))
+
     else:
         st.warning("No data found for the selected parameters.")
 else:
