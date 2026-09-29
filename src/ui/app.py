@@ -188,22 +188,24 @@ if not df_signals.empty:
     with header_right:
         st.markdown("""
         <style>
-        /* Force timezone column to lay out horizontally */
-        div:has(> div.tz-inline-marker) {
-            display: flex !important;
-            flex-direction: row !important;
-            align-items: center !important;
-            gap: 10px !important;
-        }
-        div:has(> div.tz-inline-marker) > div[data-testid="stSelectbox"] {
-            flex: 1;
-            min-width: 0;
-        }
-        div:has(> div.tz-inline-marker) > div[data-testid="stSelectbox"] label {
-            display: none !important;
+        /* Hide native label and pull selectbox up */
+        div.tz-inline-marker + div div[data-testid="stSelectbox"] label { display: none !important; }
+        div.tz-inline-marker { position: relative; height: 0; overflow: visible; }
+        div.tz-inline-marker span.tz-lbl {
+            position: absolute;
+            top: 22px;
+            left: 0;
+            color: #22d3ee;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            white-space: nowrap;
+            z-index: 10;
         }
         </style>
-        <div class="tz-inline-marker" style="white-space: nowrap; color: #22d3ee; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; padding-top: 5px;">TIMEZONE</div>
+        <div class="tz-inline-marker"><span class="tz-lbl">TIMEZONE</span></div>
         """, unsafe_allow_html=True)
         tz_options = {
             "Asia/Kolkata (IST)": "Asia/Kolkata",
@@ -212,7 +214,7 @@ if not df_signals.empty:
             "Europe/London (GMT)": "Europe/London",
             "Asia/Tokyo (JST)": "Asia/Tokyo"
         }
-        display_tz = st.selectbox("Timezone", list(tz_options.keys()), index=0, label_visibility="collapsed")
+        display_tz = st.selectbox("tz", list(tz_options.keys()), index=0, label_visibility="collapsed")
         target_tz = tz_options[display_tz]
     
     st.markdown('<div style="border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;"></div>', unsafe_allow_html=True)
