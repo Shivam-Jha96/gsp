@@ -267,8 +267,9 @@ if not df_signals.empty:
                     if region in pivot_df.columns:
                         fig_area.add_trace(go.Scatter(
                             x=pivot_df['timestamp'], y=pivot_df[region],
-                            mode='lines', name=f'{region} Sentiment',
+                            mode='lines+markers', name=f'{region} Sentiment',
                             line=dict(width=1, color=colors[i % len(colors)]),
+                            marker=dict(size=4),
                             fill='tozeroy',
                             opacity=0.6
                         ))
@@ -276,8 +277,9 @@ if not df_signals.empty:
                 # Add smooth thick line for Global EMA Trend on top
                 fig_area.add_trace(go.Scatter(
                     x=df_trend['timestamp'], y=df_trend['EMA_Index'],
-                    mode='lines',
+                    mode='lines+markers',
                     line=dict(color='#2C3E50', width=3, shape='linear'),
+                    marker=dict(size=6, color='#2C3E50'),
                     name='Global Mean (EMA)'
                 ))
                 
