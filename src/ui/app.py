@@ -77,10 +77,11 @@ st.markdown("""
         margin-bottom: 15px;
     }
     
-    /* Hide Streamlit elements */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    [data-testid="collapsedControl"] {display: none;}
+    /* Hide Streamlit native UI elements including the white top header bar */
+    header[data-testid="stHeader"] {display: none !important;}
+    #MainMenu {display: none !important;}
+    footer {display: none !important;}
+    [data-testid="collapsedControl"] {display: none !important;}
 </style>
 """, unsafe_allow_html=True)
 
