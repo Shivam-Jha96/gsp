@@ -180,24 +180,28 @@ if not df_signals.empty:
         )
         st.plotly_chart(fig, use_container_width=True)
 
-        st.markdown("<hr/>", unsafe_allow_html=True)
+        st.markdown("<hr style='margin-top: 10px; margin-bottom: 20px;'/>", unsafe_allow_html=True)
         st.subheader("📰 Regional News Feeds")
 
         # --- Region-wise Columnar Feeds ---
         if not df_payloads.empty:
-            # Create a dynamic number of columns based on how many regions are selected
             num_regions = len(selected_region)
-            cols = st.columns(num_regions)
+            cols = st.columns(num_regions, gap="large")
             
             for idx, region in enumerate(selected_region):
                 with cols[idx]:
-                    st.markdown(f"#### {region} Feed")
+                    # Styled Header for the Region
+                    st.markdown(f"""
+                    <div style="background-color: #2b2b36; padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 15px; border-bottom: 3px solid #636EFA;">
+                        <h4 style="margin: 0; color: #ffffff; letter-spacing: 1px;">{region} MARKET FEED</h4>
+                    </div>
+                    """, unsafe_allow_html=True)
                     
                     region_payloads = df_payloads[df_payloads['market_region'] == region]
                     
                     if not region_payloads.empty:
-                        # Create a scrolling container for each region
-                        st.markdown('<div style="height: 500px; overflow-y: auto; padding-right: 10px;">', unsafe_allow_html=True)
+                        # Concatenate all HTML into a single string for Streamlit to render properly
+                        html_content = '<div style="height: 600px; overflow-y: auto; padding-right: 10px;">'
                         
                         for _, row in region_payloads.iterrows():
                             score = row['sentiment_score']
@@ -207,7 +211,7 @@ if not df_signals.empty:
                             
                             time_str = pd.to_datetime(row['timestamp']).strftime('%b %d, %H:%M')
                             
-                            st.markdown(f"""
+                            html_content += f"""
                             <div class="news-card {theme}">
                                 <div class="news-header">
                                     <span>{time_str}</span>
@@ -215,9 +219,10 @@ if not df_signals.empty:
                                 </div>
                                 <div class="news-body">{row['raw_text']}</div>
                             </div>
-                            """, unsafe_allow_html=True)
+                            """
                             
-                        st.markdown('</div>', unsafe_allow_html=True)
+                        html_content += '</div>'
+                        st.markdown(html_content, unsafe_allow_html=True)
                     else:
                         st.info(f"No recent news available for {region}.")
         else:
