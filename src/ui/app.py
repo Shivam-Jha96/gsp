@@ -205,49 +205,7 @@ if not df_signals.empty:
             """, unsafe_allow_html=True)
 
         with right_col:
-            # --- Top half of right column (2 Bar Charts) ---
-            top_chart1, top_chart2 = st.columns(2)
-            
-            with top_chart1:
-                st.markdown('<div class="white-card" style="height: 380px;">', unsafe_allow_html=True)
-                st.markdown('<div class="chart-title">Average Sentiment By Region</div>', unsafe_allow_html=True)
-                
-                # Bar Chart (Blue bars like screenshot)
-                avg_region = filtered_signals.groupby('market_region')['sentiment_index'].mean().reset_index()
-                fig_bar1 = px.bar(avg_region, x='market_region', y='sentiment_index')
-                fig_bar1.update_traces(marker_color='#5B9BD5', width=0.5)
-                fig_bar1.update_layout(
-                    height=280, margin=dict(l=0, r=0, t=0, b=0),
-                    plot_bgcolor="white", paper_bgcolor="white",
-                    xaxis_title="", yaxis_title="",
-                    xaxis=dict(showgrid=False),
-                    yaxis=dict(showgrid=True, gridcolor='#F0F0F0')
-                )
-                st.plotly_chart(fig_bar1, use_container_width=True)
-                st.markdown('</div>', unsafe_allow_html=True)
-                
-            with top_chart2:
-                st.markdown('<div class="white-card" style="height: 380px;">', unsafe_allow_html=True)
-                st.markdown('<div class="chart-title">Event Volume By Region (Bull vs Bear)</div>', unsafe_allow_html=True)
-                
-                # Stacked Bar Chart (Green/Red like screenshot)
-                filtered_signals['type'] = filtered_signals['sentiment_index'].apply(lambda x: 'Bullish' if x > 0 else 'Bearish')
-                vol_data = filtered_signals.groupby(['market_region', 'type']).size().reset_index(name='count')
-                
-                fig_bar2 = px.bar(vol_data, x='market_region', y='count', color='type',
-                                  color_discrete_map={'Bullish': '#70AD47', 'Bearish': '#ED7D31'})
-                fig_bar2.update_layout(
-                    height=280, margin=dict(l=0, r=0, t=0, b=0),
-                    plot_bgcolor="white", paper_bgcolor="white",
-                    xaxis_title="", yaxis_title="",
-                    showlegend=False,
-                    xaxis=dict(showgrid=False),
-                    yaxis=dict(showgrid=True, gridcolor='#F0F0F0')
-                )
-                st.plotly_chart(fig_bar2, use_container_width=True)
-                st.markdown('</div>', unsafe_allow_html=True)
-                
-            # --- Bottom half of right column (Large Area Chart) ---
+            # --- Large Area Chart at the top of the right column ---
             st.markdown('<div class="white-card">', unsafe_allow_html=True)
             st.markdown('<div class="chart-title">Aggregate Market Optimism Over Time</div>', unsafe_allow_html=True)
             
@@ -265,7 +223,7 @@ if not df_signals.empty:
             ))
             
             fig_area.update_layout(
-                height=350, margin=dict(l=0, r=0, t=10, b=0),
+                height=450, margin=dict(l=0, r=0, t=10, b=0),
                 plot_bgcolor="white", paper_bgcolor="white",
                 xaxis_title="", yaxis_title="",
                 xaxis=dict(showgrid=True, gridcolor='#F0F0F0'),
