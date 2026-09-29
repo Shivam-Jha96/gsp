@@ -134,7 +134,7 @@ if not df_signals.empty:
     filter_col1, filter_col2, filter_col3, filter_col4 = st.columns([1, 1, 1, 3])
     
     with filter_col1:
-        date_range = st.selectbox("Date Range", ["This Week", "Today", "This Month"])
+        date_range = st.selectbox("Timeframe", ["24H", "12H", "1H", "7D", "1M", "1Y", "All"], index=0)
     with filter_col2:
         regions = df_signals['market_region'].unique().tolist()
         selected_region = st.multiselect("Regions", regions, default=regions)
@@ -142,6 +142,22 @@ if not df_signals.empty:
         ema_window = st.selectbox("EMA Window (Periods)", [4, 8, 12, 24], index=0)
 
     filtered_signals = df_signals[df_signals['market_region'].isin(selected_region)].copy()
+    
+    # --- Implement Timeframe Filtering ---
+    if not filtered_signals.empty and date_range != "All":
+        # Ensure timestamp is tz-aware for accurate Timedelta math
+        if filtered_signals['timestamp'].dt.tz is None:
+            filtered_signals['timestamp'] = filtered_signals['timestamp'].dt.tz_localize('UTC')
+            
+        now = pd.Timestamp.utcnow()
+        if date_range == "1H": cutoff = now - pd.Timedelta(hours=1)
+        elif date_range == "12H": cutoff = now - pd.Timedelta(hours=12)
+        elif date_range == "24H": cutoff = now - pd.Timedelta(hours=24)
+        elif date_range == "7D": cutoff = now - pd.Timedelta(days=7)
+        elif date_range == "1M": cutoff = now - pd.Timedelta(days=30)
+        elif date_range == "1Y": cutoff = now - pd.Timedelta(days=365)
+        
+        filtered_signals = filtered_signals[filtered_signals['timestamp'] >= cutoff]
     
     if not filtered_signals.empty:
         filtered_signals.sort_values('timestamp', inplace=True)
