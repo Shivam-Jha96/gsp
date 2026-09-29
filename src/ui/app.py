@@ -136,7 +136,7 @@ if not df_signals.empty:
     filter_col1, filter_col2, filter_col3, filter_col4, filter_col5 = st.columns([1, 1, 1, 1.2, 1.2])
     
     with filter_col1:
-        date_range = st.selectbox("Timeframe", ["24H", "12H", "1H", "7D", "1M", "1Y", "All"], index=0)
+        date_range = st.selectbox("Timeframe", ["24H", "12H", "6H", "4H", "7D", "1M", "1Y", "All"], index=0)
     with filter_col2:
         regions = df_signals['market_region'].unique().tolist()
         default_ix = regions.index("US") if "US" in regions else 0
@@ -169,7 +169,8 @@ if not df_signals.empty:
             filtered_signals['timestamp'] = filtered_signals['timestamp'].dt.tz_localize('UTC')
             
         now = pd.Timestamp.utcnow()
-        if date_range == "1H": cutoff = now - pd.Timedelta(hours=1)
+        if date_range == "4H": cutoff = now - pd.Timedelta(hours=4)
+        elif date_range == "6H": cutoff = now - pd.Timedelta(hours=6)
         elif date_range == "12H": cutoff = now - pd.Timedelta(hours=12)
         elif date_range == "24H": cutoff = now - pd.Timedelta(hours=24)
         elif date_range == "7D": cutoff = now - pd.Timedelta(days=7)
@@ -192,9 +193,7 @@ if not df_signals.empty:
         
         # Dynamically adjust grouping frequency based on zoom level to prevent blank charts
         freq_str = 'h'
-        if date_range == "1H":
-            freq_str = '5min'
-        elif date_range in ["1M", "1Y", "All"]:
+        if date_range in ["1M", "1Y", "All"]:
             freq_str = 'D'
         
         # Calculate EMA by grouping into active periods (dropna prevents flatlines)
