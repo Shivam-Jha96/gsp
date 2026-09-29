@@ -171,6 +171,14 @@ if not df_signals.empty:
         previous_ema = df_trend['EMA_Index'].iloc[-2] if len(df_trend) > 1 else 0
         delta = current_ema - previous_ema
         
+        # Pivot the data onto a strict chronological grid for stacked area plotting
+        pivot_df = filtered_signals.pivot_table(
+            index=pd.Grouper(key='timestamp', freq='h'),
+            columns='market_region',
+            values='sentiment_index',
+            aggfunc='mean'
+        ).fillna(0).reset_index()
+        
         # --- Main Layout Split (1 Narrow Left, 1 Wide Right) ---
         left_col, right_col = st.columns([1.2, 4])
         
@@ -226,30 +234,30 @@ if not df_signals.empty:
                 
                 fig_area = go.Figure()
                 
-                # Plot Raw Scatter Dots grouped by Region
-                colors = px.colors.qualitative.Prism
+                # Plot Stacked Area for each region
+                colors = px.colors.qualitative.Pastel
                 for i, region in enumerate(selected_region):
-                    region_data = filtered_signals[filtered_signals['market_region'] == region]
-                    fig_area.add_trace(go.Scatter(
-                        x=region_data['timestamp'], y=region_data['sentiment_index'],
-                        mode='markers', name=f'{region} Events',
-                        marker=dict(color=colors[i % len(colors)], size=6, opacity=0.7)
-                    ))
+                    if region in pivot_df.columns:
+                        fig_area.add_trace(go.Scatter(
+                            x=pivot_df['timestamp'], y=pivot_df[region],
+                            mode='lines', name=f'{region} Mass',
+                            line=dict(width=0), # Hide borders for a clean stacked block look
+                            marker=dict(color=colors[i % len(colors)]),
+                            stackgroup='one' # This enforces the stacked area logic
+                        ))
                 
-                # Add smooth filled area for EMA using the active hours trend
+                # Add smooth thick line for Global EMA Trend on top of the stack
                 fig_area.add_trace(go.Scatter(
                     x=df_trend['timestamp'], y=df_trend['EMA_Index'],
                     mode='lines',
-                    line=dict(color='#70AD47', width=3, shape='linear'),
-                    fill='tozeroy',
-                    fillcolor='rgba(112, 173, 71, 0.2)',
-                    name='Global EMA Trend'
+                    line=dict(color='#2C3E50', width=3, shape='linear'),
+                    name='Global Mean (EMA)'
                 ))
                 
                 fig_area.update_layout(
                     height=450, margin=dict(l=0, r=0, t=20, b=0),
                     plot_bgcolor="white", paper_bgcolor="white",
-                    xaxis_title="", yaxis_title="Index (-100 to +100)",
+                    xaxis_title="", yaxis_title="Index Score",
                     hovermode="x unified",
                     legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color="#4B5563")),
                     xaxis=dict(showgrid=True, gridcolor='#F0F0F0'),
