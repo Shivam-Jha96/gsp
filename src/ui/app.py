@@ -17,11 +17,16 @@ st.markdown("""
     html, body, [class*="css"], .stApp, [data-testid="stAppViewContainer"] {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Trebuchet MS", Roboto, Ubuntu, sans-serif;
         background-color: #F8F9FD !important;
+        background-image: linear-gradient(rgba(248, 249, 253, 0.88), rgba(248, 249, 253, 0.92)), url("https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=2070&auto=format&fit=crop") !important;
+        background-size: cover !important;
+        background-position: center center !important;
+        background-attachment: fixed !important;
     }
     .block-container {
         padding-top: 1.5rem !important;
         padding-bottom: 1.5rem !important;
         max-width: 1600px;
+        background: transparent !important;
     }
     
     /* Professional Headers */
