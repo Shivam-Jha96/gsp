@@ -180,28 +180,28 @@ if not df_signals.empty:
     header_left, header_right = st.columns([4, 1.2])
     with header_left:
         st.markdown("""
-        <div style="display: flex; align-items: center; gap: 12px; padding-bottom: 15px;">
+        <div style="display: flex; align-items: center; gap: 12px; padding-top: 8px;">
             <div style="background-color: #3b82f6; color: white; padding: 4px 8px; border-radius: 4px; font-weight: 800; font-size: 1.1rem; letter-spacing: 1px; font-family: 'Montserrat', sans-serif;">GSP</div>
             <div style="font-size: 1.4rem; font-weight: 700; color: #f8fafc; letter-spacing: -0.01em; font-family: 'Montserrat', sans-serif;">Macro-Sentiment Terminal</div>
-            <div style="margin-left: auto; font-size: 0.75rem; color: #10b981; font-weight: 700; letter-spacing: 0.05em; display: flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.1); padding: 4px 10px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
-                <span style="height: 6px; width: 6px; background-color: #10b981; border-radius: 50%; display: inline-block; box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);"></span> PIPELINE ACTIVE
-            </div>
         </div>
         """, unsafe_allow_html=True)
     with header_right:
-        # Timezone selector styled distinctly via CSS class
         st.markdown("""
         <style>
-        div[data-testid="stVerticalBlock"]:has(> div.tz-header-select) label {
+        /* Push the header timezone selectbox up to align with title */
+        div.tz-header-wrapper + div[data-testid="stSelectbox"] {
+            margin-top: -5px !important;
+        }
+        div.tz-header-wrapper + div[data-testid="stSelectbox"] label {
             color: #22d3ee !important;
             font-family: 'Montserrat', sans-serif !important;
             font-weight: 700 !important;
-            font-size: 0.75rem !important;
+            font-size: 0.7rem !important;
             letter-spacing: 0.05em !important;
             text-transform: uppercase !important;
         }
         </style>
-        <div class="tz-header-select"></div>
+        <div class="tz-header-wrapper"></div>
         """, unsafe_allow_html=True)
         tz_options = {
             "Asia/Kolkata (IST)": "Asia/Kolkata",
@@ -210,7 +210,7 @@ if not df_signals.empty:
             "Europe/London (GMT)": "Europe/London",
             "Asia/Tokyo (JST)": "Asia/Tokyo"
         }
-        display_tz = st.selectbox("Timezone", list(tz_options.keys()), index=0, label_visibility="visible")
+        display_tz = st.selectbox("Timezone", list(tz_options.keys()), index=0)
         target_tz = tz_options[display_tz]
     
     st.markdown('<div style="border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;"></div>', unsafe_allow_html=True)
