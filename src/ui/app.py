@@ -95,9 +95,11 @@ def load_data():
             "market_region": np.random.choice(["US", "UK", "IN", "JP"], size=len(dates)),
             "sentiment_score": scores
         })
+        mock_signals['index_ticker'] = np.random.choice(["S&P 500", "NASDAQ", "Nifty 50"], size=len(dates))
         mock_payloads = pd.DataFrame({
             "timestamp": dates[-20:],
             "market_region": mock_signals['market_region'].iloc[-20:].values,
+            "index_ticker": mock_signals['index_ticker'].iloc[-20:].values,
             "sentiment_score": mock_signals['sentiment_score'].iloc[-20:].values,
             "raw_text": ["Market opening shows mixed signals..."] * 20
         })
@@ -106,12 +108,12 @@ def load_data():
     try:
         client = get_db_client()
         with client.get_connection() as conn:
-            query_signals = "SELECT timestamp, market_region, sentiment_score FROM event_signals ORDER BY timestamp DESC LIMIT 1000"
+            query_signals = "SELECT timestamp, market_region, index_ticker, sentiment_score FROM event_signals ORDER BY timestamp DESC LIMIT 1000"
             df_signals = pd.read_sql(query_signals, conn)
             df_signals['timestamp'] = pd.to_datetime(df_signals['timestamp'])
             
             query_payloads = """
-                SELECT s.timestamp, s.market_region, s.sentiment_score, p.raw_text
+                SELECT s.timestamp, s.market_region, s.index_ticker, s.sentiment_score, p.raw_text
                 FROM event_signals s JOIN event_payloads p ON s.id = p.id
                 ORDER BY s.timestamp DESC LIMIT 40
             """
