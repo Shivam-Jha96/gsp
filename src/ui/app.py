@@ -188,20 +188,23 @@ if not df_signals.empty:
     with header_right:
         st.markdown("""
         <style>
-        /* Push the header timezone selectbox up to align with title */
-        div.tz-header-wrapper + div[data-testid="stSelectbox"] {
-            margin-top: -5px !important;
+        /* Inline timezone: label + dropdown on same line */
+        div.tz-inline-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-top: 10px;
         }
-        div.tz-header-wrapper + div[data-testid="stSelectbox"] label {
-            color: #22d3ee !important;
-            font-family: 'Montserrat', sans-serif !important;
-            font-weight: 700 !important;
-            font-size: 0.7rem !important;
-            letter-spacing: 0.05em !important;
-            text-transform: uppercase !important;
+        div.tz-inline-wrap + div[data-testid="stSelectbox"] {
+            margin-top: -10px !important;
+        }
+        div.tz-inline-wrap + div[data-testid="stSelectbox"] label {
+            display: none !important;
         }
         </style>
-        <div class="tz-header-wrapper"></div>
+        <div class="tz-inline-wrap">
+            <span style="color: #22d3ee; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap;">Timezone</span>
+        </div>
         """, unsafe_allow_html=True)
         tz_options = {
             "Asia/Kolkata (IST)": "Asia/Kolkata",
@@ -210,7 +213,7 @@ if not df_signals.empty:
             "Europe/London (GMT)": "Europe/London",
             "Asia/Tokyo (JST)": "Asia/Tokyo"
         }
-        display_tz = st.selectbox("Timezone", list(tz_options.keys()), index=0)
+        display_tz = st.selectbox("Timezone", list(tz_options.keys()), index=0, label_visibility="collapsed")
         target_tz = tz_options[display_tz]
     
     st.markdown('<div style="border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;"></div>', unsafe_allow_html=True)
