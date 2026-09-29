@@ -2,8 +2,8 @@ name: Global Macro-Sentiment Pipeline
 
 on:
   schedule:
-    # Run every 4 hours
-    - cron: '0 */4 * * *'
+    # Run every 2 hours (Balances data freshness while staying under GitHub/Gemini Free Tier limits)
+    - cron: '0 */2 * * *'
   workflow_dispatch: # Allows manual trigger from the GitHub UI
 
 jobs:
