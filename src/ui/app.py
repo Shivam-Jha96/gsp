@@ -211,15 +211,16 @@ if not df_signals.empty:
                             
                             time_str = pd.to_datetime(row['timestamp']).strftime('%b %d, %H:%M')
                             
-                            html_content += f"""
-                            <div class="news-card {theme}">
-                                <div class="news-header">
-                                    <span>{time_str}</span>
-                                    <span style="font-weight: bold;">Score: {score:.2f}</span>
-                                </div>
-                                <div class="news-body">{row['raw_text']}</div>
-                            </div>
-                            """
+                            # Remove all leading spaces to prevent Markdown from rendering as a code block
+                            html_content += f'''
+<div class="news-card {theme}">
+    <div class="news-header">
+        <span>{time_str}</span>
+        <span style="font-weight: bold;">Score: {score:.2f}</span>
+    </div>
+    <div class="news-body">{row['raw_text']}</div>
+</div>
+'''
                             
                         html_content += '</div>'
                         st.markdown(html_content, unsafe_allow_html=True)
