@@ -13,64 +13,87 @@ st.set_page_config(page_title="Digital Dashboard", layout="wide", initial_sideba
 # --- CSS to match the provided screenshot without breaking layout ---
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     html, body, [class*="css"] {
         font-family: 'Inter', sans-serif;
-        background-color: #F4F6F8;
+        background-color: #F8FAFC;
     }
     .block-container {
         padding-top: 2rem !important;
         padding-bottom: 2rem !important;
         max-width: 1600px;
     }
+    
+    /* Professional Headers */
     .main-header {
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: #333333;
-        margin-bottom: 20px;
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #0F172A;
+        letter-spacing: -0.03em;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #E2E8F0;
     }
     
-    /* White Card Style for Left Column */
+    /* Modern Card Style with unique color coding */
     .white-card {
         background-color: #FFFFFF;
-        border-radius: 8px;
-        box-shadow: 0px 2px 5px rgba(0,0,0,0.05);
-        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        padding: 24px;
         margin-bottom: 20px;
-        border: 1px solid #EAEAEA;
+        border: 1px solid #F1F5F9;
+        border-top: 4px solid #E2E8F0; /* Default */
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
+    .white-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+    }
+    .border-blue { border-top-color: #3B82F6 !important; }
+    .border-green { border-top-color: #10B981 !important; }
+    .border-purple { border-top-color: #8B5CF6 !important; }
+    .border-orange { border-top-color: #F59E0B !important; }
+    .border-indigo { border-top-color: #6366F1 !important; }
     
-    /* Override Streamlit native container border to match white-card, without breaking padding */
+    /* Override Streamlit native container border */
     [data-testid="stVerticalBlockBorderWrapper"] {
         background-color: #FFFFFF !important;
-        border-radius: 8px !important;
-        box-shadow: 0px 2px 5px rgba(0,0,0,0.05) !important;
-        border: 1px solid #EAEAEA !important;
+        border-radius: 12px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+        border: 1px solid #F1F5F9 !important;
     }
     
-    /* Left Column Metrics */
+    /* Metrics */
     .metric-title {
         font-size: 0.85rem;
-        color: #777777;
+        font-weight: 600;
+        color: #64748B;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
         margin-bottom: 10px;
     }
     .metric-value {
-        font-size: 2.2rem;
-        font-weight: 700;
-        color: #222222;
-        margin-bottom: 5px;
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #1E293B;
+        letter-spacing: -0.02em;
+        margin-bottom: 4px;
     }
     .metric-sub {
-        font-size: 0.85rem;
+        font-size: 0.9rem;
         font-weight: 600;
     }
-    .metric-sub.green { color: #4CAF50; }
-    .metric-sub.red { color: #F44336; }
-    .metric-sub.gray { color: #888888; }
+    .green { color: #10B981 !important; }
+    .red { color: #EF4444 !important; }
+    .gray { color: #94A3B8 !important; }
+    
     .metric-footer {
-        font-size: 0.7rem;
-        color: #AAAAAA;
-        margin-top: 5px;
+        font-size: 0.75rem;
+        color: #94A3B8;
+        border-top: 1px solid #F1F5F9;
+        padding-top: 10px;
+        margin-top: 10px;
     }
     
     /* Hide Streamlit native UI elements including the white top header bar */
@@ -221,7 +244,7 @@ if not df_signals.empty:
             delta_color = "green" if delta > 0 else "red" if delta < 0 else "gray"
             arrow = "↑" if delta > 0 else "↓" if delta < 0 else ""
             st.markdown(f"""
-            <div class="white-card">
+            <div class="white-card border-blue">
                 <div class="metric-title">Aggregate Optimism Index</div>
                 <div class="metric-value">{current_ema:+.1f}</div>
                 <div class="metric-sub {delta_color}">{arrow} {abs(delta):.1f}%</div>
@@ -233,7 +256,7 @@ if not df_signals.empty:
             bias = "Bullish" if current_ema > 5 else "Bearish" if current_ema < -5 else "Neutral"
             b_color = "green" if bias == "Bullish" else "red" if bias == "Bearish" else "gray"
             st.markdown(f"""
-            <div class="white-card">
+            <div class="white-card border-purple">
                 <div class="metric-title">Market Bias</div>
                 <div class="metric-value">{bias}</div>
                 <div class="metric-sub {b_color}">{ema_window} Period Window</div>
@@ -243,7 +266,7 @@ if not df_signals.empty:
             
             # 3. Volume
             st.markdown(f"""
-            <div class="white-card">
+            <div class="white-card border-orange">
                 <div class="metric-title">Total News Volume</div>
                 <div class="metric-value">{len(filtered_signals)}</div>
                 <div class="metric-sub gray">Articles</div>
@@ -254,7 +277,7 @@ if not df_signals.empty:
             # 4. Indices Active
             tracked_count = filtered_signals['index_ticker'].nunique()
             st.markdown(f"""
-            <div class="white-card">
+            <div class="white-card border-green">
                 <div class="metric-title">Tracked Indices</div>
                 <div class="metric-value">{tracked_count}</div>
                 <div class="metric-sub gray">In {selected_region}</div>
@@ -265,7 +288,7 @@ if not df_signals.empty:
         with right_col:
             # --- Large Area Chart at the top of the right column ---
             with st.container(border=True):
-                st.markdown('<div style="font-size: 1rem; color: #777777; font-weight: 600; margin-bottom: 10px;">Aggregate Market Optimism Over Time</div>', unsafe_allow_html=True)
+                st.markdown('<div class="section-header">Aggregate Market Optimism Over Time</div>', unsafe_allow_html=True)
                 
                 fig_area = go.Figure()
                 
@@ -301,7 +324,7 @@ if not df_signals.empty:
                 ))
                 
                 fig_area.update_layout(
-                    height=450, margin=dict(l=0, r=0, t=20, b=0),
+                    height=450, margin=dict(l=0, r=0, t=10, b=0),
                     plot_bgcolor="white", paper_bgcolor="white",
                     xaxis_title="", yaxis_title="Optimism Index",
                     hovermode="x unified",
@@ -331,42 +354,38 @@ if not df_signals.empty:
                     
                     with index_cols[idx]:
                         st.markdown(f"""
-                        <div class="white-card" style="padding: 10px; min-height: 85px;">
+                        <div class="white-card border-indigo" style="padding: 15px; min-height: 85px;">
                             <div class="metric-title" style="font-size: 0.8rem; margin-bottom: 5px;">{ticker}</div>
-                            <div class="metric-value" style="font-size: 1.3rem;">{latest_score:+.1f}</div>
-                            <div class="metric-sub {d_color}" style="font-size: 0.7rem; margin-top: 5px;">{d_arrow} {abs(delta_idx):.1f}%</div>
+                            <div class="metric-value" style="font-size: 1.5rem;">{latest_score:+.1f}</div>
+                            <div class="metric-sub {d_color}" style="font-size: 0.75rem; margin-top: 5px;">{d_arrow} {abs(delta_idx):.1f}%</div>
                         </div>
                         """, unsafe_allow_html=True)
 
-        # --- Regional News Feeds at the Bottom ---
-        st.markdown(f'<div class="main-header" style="margin-top: 20px; font-size: 1.2rem;">{selected_region} News Ingestion</div>', unsafe_allow_html=True)
-        if not display_payloads.empty:
-            cols = st.columns(1) # We only have 1 region now
-            for idx, region in enumerate([selected_region]):
-                with cols[idx]:
-                    html_feed = f"""
-                    <div class="white-card" style="padding: 15px; height: 350px; overflow-y: auto;">
-                        <div class="chart-title" style="margin-bottom: 10px; font-weight: bold; color: #333;">{region} FEED</div>
-                    """
+            # --- Regional News Feeds at the Bottom (Inside Right Col) ---
+            st.markdown(f'<div class="section-header" style="margin-top: 30px;">{selected_region} Live Intelligence Feed</div>', unsafe_allow_html=True)
+            if not display_payloads.empty:
+                html_feed = f"""
+                <div class="white-card border-blue" style="padding: 20px; height: 350px; overflow-y: auto;">
+                """
+                
+                region_payloads = display_payloads[display_payloads['market_region'] == selected_region]
+                for _, row in region_payloads.iterrows():
+                    color = "#10B981" if row['sentiment_index'] > 0 else "#EF4444" if row['sentiment_index'] < 0 else "#64748B"
+                    time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
                     
-                    region_payloads = display_payloads[display_payloads['market_region'] == region]
-                    for _, row in region_payloads.iterrows():
-                        color = "#70AD47" if row['sentiment_index'] > 0 else "#ED7D31" if row['sentiment_index'] < 0 else "#888"
-                        time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
-                        
-                        html_feed += f'''
-<div style="border-bottom: 1px solid #EEE; padding-bottom: 10px; margin-bottom: 10px;">
-    <div style="font-size: 0.75rem; color: #888; display: flex; justify-content: space-between;">
-        <span>{time_str}</span>
-        <span style="color: {color}; font-weight: 600;">{row['sentiment_index']:+.1f}</span>
+                    html_feed += f'''
+<div style="border-bottom: 1px solid #F1F5F9; padding-bottom: 12px; margin-bottom: 12px;">
+    <div style="font-size: 0.8rem; color: #94A3B8; display: flex; justify-content: space-between; margin-bottom: 4px;">
+        <span>{time_str} • <b>{row.get('index_ticker', 'Macro')}</b></span>
+        <span style="color: {color}; font-weight: 700;">{row['sentiment_index']:+.1f}</span>
     </div>
-    <div style="font-size: 0.85rem; color: #444; line-height: 1.4;">{row['raw_text']}</div>
+    <div style="font-size: 0.95rem; color: #334155; line-height: 1.5; font-weight: 500;">{row['raw_text']}</div>
 </div>
 '''
-                    html_feed += "</div>"
-                    st.markdown(html_feed, unsafe_allow_html=True)
-        else:
-            st.info("No recent news events in database.")
+                html_feed += "</div>"
+                st.markdown(html_feed, unsafe_allow_html=True)
+            else:
+                st.info("No recent news events in database.")
             
 
     else:
