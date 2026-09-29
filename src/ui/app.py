@@ -358,7 +358,7 @@ if not df_signals.empty:
                 ))
                 
                 fig_area.update_layout(
-                    height=530, margin=dict(l=0, r=0, t=5, b=0),
+                    height=580, margin=dict(l=0, r=0, t=5, b=0),
                     plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
                     hovermode="x unified",
                     legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, font=dict(color="#f8fafc", size=11, family="IBM Plex Sans")),
@@ -380,7 +380,7 @@ if not df_signals.empty:
                 st.plotly_chart(fig_area, use_container_width=True)
 
             # --- Mini KPI Tiles for Individual Indices ---
-            st.markdown('<div style="margin-top: 15px;"></div>', unsafe_allow_html=True)
+            st.markdown('<div style="margin-top: 30px;"></div>', unsafe_allow_html=True)
             valid_tickers = [t for t in tickers if t != 'UNKNOWN']
             if valid_tickers:
                 index_cols = st.columns(len(valid_tickers))
