@@ -117,17 +117,28 @@ async def run_ingestion_pipeline():
         # Score via ZeroGPU CLM-8B (or Gemini SDK)
         logger.info(f"Scoring [{region}] {ticker} headline: {item['data']['headline'][:50]}...")
         result = score_sentiment(text, context)
-        logger.info(f"AI Verdict: {result['Choice']} | Score: {result['Score']} | Noul: {result['Noul']}")
+        # Extract data robustly to prevent KeyError if the LLM hallucinates lowercase JSON keys
+        choice_val = str(result.get('Choice', result.get('choice', 'Neutral')))
+        score_val_raw = result.get('Score', result.get('score', 0.5))
+        
+        try:
+            score_val = float(score_val_raw)
+        except (ValueError, TypeError):
+            score_val = 0.5
+            
+        noul_val = result.get('Noul', result.get('noul', 'No explanation provided.'))
+            
+        logger.info(f"AI Verdict: {choice_val} | Score: {score_val} | Noul: {noul_val}")
         
         # Insert into DB (Vertical Partitioning)
         if db_client:
             signal_id = str(uuid.uuid4())
             
             # Convert absolute confidence to a directional vector
-            directional_score = result['Score']
-            if result['Choice'].lower() == 'bearish':
+            directional_score = score_val
+            if choice_val.lower() == 'bearish':
                 directional_score = -abs(directional_score)
-            elif result['Choice'].lower() == 'neutral':
+            elif choice_val.lower() == 'neutral':
                 directional_score = 0.0
                 
             with db_client.get_connection() as conn:
