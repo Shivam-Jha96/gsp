@@ -402,31 +402,31 @@ if not df_signals.empty:
                         </div>
                         """, unsafe_allow_html=True)
 
-            # --- Regional News Feeds at the Bottom (Inside Right Col) ---
-            st.markdown(f"""
-            <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-top: 30px; margin-bottom: 12px;">
-                <div style="font-size: 1.1rem; font-weight: 700; color: #f8fafc; font-family: 'Montserrat', sans-serif; display: flex; align-items: center; gap: 8px;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg>
-                    {selected_region} Live Intelligence Feed
-                </div>
-                <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: #f59e0b; background: rgba(245, 158, 11, 0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(245, 158, 11, 0.2); text-transform: uppercase;">
-                    {len(display_payloads[display_payloads['market_region'] == selected_region])} Events Detected
-                </div>
+        # --- Regional News Feeds at the Bottom (Full Width) ---
+        st.markdown(f"""
+        <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-top: 30px; margin-bottom: 12px;">
+            <div style="font-size: 1.1rem; font-weight: 700; color: #f8fafc; font-family: 'Montserrat', sans-serif; display: flex; align-items: center; gap: 8px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg>
+                {selected_region} Live Intelligence Feed
             </div>
-            """, unsafe_allow_html=True)
+            <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: #f59e0b; background: rgba(245, 158, 11, 0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(245, 158, 11, 0.2); text-transform: uppercase;">
+                {len(display_payloads[display_payloads['market_region'] == selected_region])} Events Detected
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if not display_payloads.empty:
+            html_feed = f"""
+            <div class="white-card bg-orange" style="padding: 20px; height: 350px; overflow-y: auto;">
+            """
             
-            if not display_payloads.empty:
-                html_feed = f"""
-                <div class="white-card bg-orange" style="padding: 20px; height: 350px; overflow-y: auto;">
-                """
+            region_payloads = display_payloads[display_payloads['market_region'] == selected_region]
+            for _, row in region_payloads.iterrows():
+                color = "#10b981" if row['sentiment_index'] > 0 else "#ef4444" if row['sentiment_index'] < 0 else "#94a3b8"
+                time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
+                ticker_label = row.get('index_ticker', 'Macro')
                 
-                region_payloads = display_payloads[display_payloads['market_region'] == selected_region]
-                for _, row in region_payloads.iterrows():
-                    color = "#10b981" if row['sentiment_index'] > 0 else "#ef4444" if row['sentiment_index'] < 0 else "#94a3b8"
-                    time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
-                    ticker_label = row.get('index_ticker', 'Macro')
-                    
-                    html_feed += f'''
+                html_feed += f'''
 <div style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 12px;">
     <div style="font-size: 0.8rem; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
         <div style="display: flex; align-items: center; gap: 8px;">
@@ -438,10 +438,10 @@ if not df_signals.empty:
     <div style="font-size: 0.95rem; color: #f8fafc; line-height: 1.5; font-weight: 500;">{row['raw_text']}</div>
 </div>
 '''
-                html_feed += "</div>"
-                st.markdown(html_feed, unsafe_allow_html=True)
-            else:
-                st.info("No recent news events in database.")
+            html_feed += "</div>"
+            st.markdown(html_feed, unsafe_allow_html=True)
+        else:
+            st.info("No recent news events in database.")
             
 
     else:
