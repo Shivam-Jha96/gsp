@@ -15,85 +15,88 @@ st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     html, body, [class*="css"] {
-        font-family: 'Inter', sans-serif;
-        background-color: #F8FAFC;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Trebuchet MS", Roboto, Ubuntu, sans-serif;
+        background-color: #F8F9FD;
     }
     .block-container {
-        padding-top: 2rem !important;
-        padding-bottom: 2rem !important;
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.5rem !important;
         max-width: 1600px;
     }
     
     /* Professional Headers */
     .main-header {
-        font-size: 2.2rem;
-        font-weight: 800;
-        color: #0F172A;
-        letter-spacing: -0.03em;
-        margin-bottom: 25px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid #E2E8F0;
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #131722;
+        letter-spacing: -0.02em;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #E0E3EB;
+    }
+    .section-header {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #131722;
+        margin-bottom: 15px;
     }
     
-    /* Modern Card Style with unique color coding */
+    /* TradingView Style Dense Cards */
     .white-card {
         background-color: #FFFFFF;
-        border-radius: 12px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-        padding: 24px;
-        margin-bottom: 20px;
-        border: 1px solid #F1F5F9;
-        border-top: 4px solid #E2E8F0; /* Default */
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border-radius: 4px;
+        padding: 16px;
+        margin-bottom: 16px;
+        border: 1px solid #E0E3EB;
+        transition: border-color 0.2s ease;
     }
     .white-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+        border-color: #B2B5BE;
     }
-    .border-blue { border-top-color: #3B82F6 !important; }
-    .border-green { border-top-color: #10B981 !important; }
-    .border-purple { border-top-color: #8B5CF6 !important; }
-    .border-orange { border-top-color: #F59E0B !important; }
-    .border-indigo { border-top-color: #6366F1 !important; }
+    .border-blue { border-left: 3px solid #2962FF !important; }
+    .border-green { border-left: 3px solid #089981 !important; }
+    .border-purple { border-left: 3px solid #7B1FA2 !important; }
+    .border-orange { border-left: 3px solid #FF9800 !important; }
+    .border-indigo { border-left: 3px solid #2962FF !important; }
     
     /* Override Streamlit native container border */
     [data-testid="stVerticalBlockBorderWrapper"] {
         background-color: #FFFFFF !important;
-        border-radius: 12px !important;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
-        border: 1px solid #F1F5F9 !important;
+        border-radius: 4px !important;
+        border: 1px solid #E0E3EB !important;
+        box-shadow: none !important;
     }
     
     /* Metrics */
     .metric-title {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         font-weight: 600;
-        color: #64748B;
+        color: #787B86;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-bottom: 10px;
+        letter-spacing: 0.03em;
+        margin-bottom: 6px;
     }
     .metric-value {
-        font-size: 2.5rem;
-        font-weight: 800;
-        color: #1E293B;
-        letter-spacing: -0.02em;
-        margin-bottom: 4px;
+        font-size: 2.1rem;
+        font-weight: 700;
+        color: #131722;
+        letter-spacing: -0.01em;
+        margin-bottom: 2px;
     }
     .metric-sub {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         font-weight: 600;
     }
-    .green { color: #10B981 !important; }
-    .red { color: #EF4444 !important; }
-    .gray { color: #94A3B8 !important; }
+    .green { color: #089981 !important; } /* TV Profit Green */
+    .red { color: #F23645 !important; } /* TV Loss Red */
+    .gray { color: #787B86 !important; }
     
     .metric-footer {
         font-size: 0.75rem;
-        color: #94A3B8;
-        border-top: 1px solid #F1F5F9;
-        padding-top: 10px;
-        margin-top: 10px;
+        color: #B2B5BE;
+        border-top: 1px solid #E0E3EB;
+        padding-top: 8px;
+        margin-top: 8px;
     }
     
     /* Hide Streamlit native UI elements including the white top header bar */
@@ -370,16 +373,16 @@ if not df_signals.empty:
                 
                 region_payloads = display_payloads[display_payloads['market_region'] == selected_region]
                 for _, row in region_payloads.iterrows():
-                    color = "#10B981" if row['sentiment_index'] > 0 else "#EF4444" if row['sentiment_index'] < 0 else "#64748B"
+                    color = "#089981" if row['sentiment_index'] > 0 else "#F23645" if row['sentiment_index'] < 0 else "#787B86"
                     time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
                     
                     html_feed += f'''
-<div style="border-bottom: 1px solid #F1F5F9; padding-bottom: 12px; margin-bottom: 12px;">
-    <div style="font-size: 0.8rem; color: #94A3B8; display: flex; justify-content: space-between; margin-bottom: 4px;">
+<div style="border-bottom: 1px solid #E0E3EB; padding-bottom: 12px; margin-bottom: 12px;">
+    <div style="font-size: 0.8rem; color: #787B86; display: flex; justify-content: space-between; margin-bottom: 4px;">
         <span>{time_str} • <b>{row.get('index_ticker', 'Macro')}</b></span>
         <span style="color: {color}; font-weight: 700;">{row['sentiment_index']:+.1f}</span>
     </div>
-    <div style="font-size: 0.95rem; color: #334155; line-height: 1.5; font-weight: 500;">{row['raw_text']}</div>
+    <div style="font-size: 0.95rem; color: #131722; line-height: 1.5; font-weight: 500;">{row['raw_text']}</div>
 </div>
 '''
                 html_feed += "</div>"
