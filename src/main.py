@@ -109,12 +109,13 @@ async def run_ingestion_pipeline():
     for item in payloads:
         text = f"{item['data']['headline']} - {item['data']['summary']}"
         region = item['region_tag']
+        ticker = item.get('index_ticker', 'UNKNOWN')
         
         # Load context
         context = load_okf_rules(region)
         
-        # Score via ZeroGPU CLM-8B
-        logger.info(f"Scoring [{region}] headline: {item['data']['headline'][:50]}...")
+        # Score via ZeroGPU CLM-8B (or Gemini SDK)
+        logger.info(f"Scoring [{region}] {ticker} headline: {item['data']['headline'][:50]}...")
         result = score_sentiment(text, context)
         logger.info(f"AI Verdict: {result['Choice']} | Score: {result['Score']} | Noul: {result['Noul']}")
         
@@ -135,7 +136,7 @@ async def run_ingestion_pipeline():
                     cur.execute("""
                         INSERT INTO event_signals (id, index_ticker, market_region, timestamp, sentiment_score)
                         VALUES (%s, %s, %s, %s, %s)
-                    """, (signal_id, "UNKNOWN", region, item['data']['timestamp'], directional_score))
+                    """, (signal_id, ticker, region, item['data']['timestamp'], directional_score))
                     
                     # Insert Document Layer
                     cur.execute("""

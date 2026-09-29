@@ -6,12 +6,35 @@ from .api_clients import RSSClient
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Mocked URLs for global RSS feeds
+# Institutional Market Indices for Global Regions
 FEEDS = [
-    {"url": "https://finance.yahoo.com/news/rssindex", "region": "US"},
-    {"url": "https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms", "region": "IN"},
-    {"url": "https://feeds.bbci.co.uk/news/business/rss.xml", "region": "UK"},
-    {"url": "https://www.japantimes.co.jp/feed/business/", "region": "JP"}
+    # United States (US)
+    {"url": "https://news.google.com/rss/search?q=S%26P+500+market", "region": "US", "ticker": "S&P 500"},
+    {"url": "https://news.google.com/rss/search?q=NASDAQ+market", "region": "US", "ticker": "NASDAQ"},
+    {"url": "https://news.google.com/rss/search?q=Dow+Jones+market", "region": "US", "ticker": "Dow Jones"},
+    {"url": "https://news.google.com/rss/search?q=Russell+2000+market", "region": "US", "ticker": "Russell 2000"},
+    {"url": "https://news.google.com/rss/search?q=VIX+volatility+index", "region": "US", "ticker": "VIX"},
+    
+    # India (IN)
+    {"url": "https://news.google.com/rss/search?q=Nifty+50+market", "region": "IN", "ticker": "Nifty 50"},
+    {"url": "https://news.google.com/rss/search?q=Sensex+market", "region": "IN", "ticker": "Sensex"},
+    {"url": "https://news.google.com/rss/search?q=Nifty+Bank+index", "region": "IN", "ticker": "Nifty Bank"},
+    {"url": "https://news.google.com/rss/search?q=Nifty+IT+index", "region": "IN", "ticker": "Nifty IT"},
+    {"url": "https://news.google.com/rss/search?q=BSE+Midcap+market", "region": "IN", "ticker": "BSE Midcap"},
+
+    # United Kingdom (UK)
+    {"url": "https://news.google.com/rss/search?q=FTSE+100+market", "region": "UK", "ticker": "FTSE 100"},
+    {"url": "https://news.google.com/rss/search?q=FTSE+250+market", "region": "UK", "ticker": "FTSE 250"},
+    {"url": "https://news.google.com/rss/search?q=FTSE+All-Share", "region": "UK", "ticker": "FTSE All-Share"},
+    {"url": "https://news.google.com/rss/search?q=FTSE+AIM+UK", "region": "UK", "ticker": "FTSE AIM"},
+    {"url": "https://news.google.com/rss/search?q=UK+Gilt+Yields", "region": "UK", "ticker": "UK Gilts"},
+    
+    # Japan (JP)
+    {"url": "https://news.google.com/rss/search?q=Nikkei+225+market", "region": "JP", "ticker": "Nikkei 225"},
+    {"url": "https://news.google.com/rss/search?q=TOPIX+index", "region": "JP", "ticker": "TOPIX"},
+    {"url": "https://news.google.com/rss/search?q=Mothers+Index+Japan", "region": "JP", "ticker": "JP Mothers"},
+    {"url": "https://news.google.com/rss/search?q=JASDAQ+market", "region": "JP", "ticker": "JASDAQ"},
+    {"url": "https://news.google.com/rss/search?q=JGB+Yields+Japan", "region": "JP", "ticker": "JP Bonds"}
 ]
 
 class FeedPoller:
@@ -23,13 +46,18 @@ class FeedPoller:
         """Poll a single feed and prepare payloads."""
         url = feed['url']
         region = feed['region']
+        ticker = feed.get('ticker', 'UNKNOWN')
         
-        logger.info(f"Polling feed for region {region}: {url}")
+        logger.info(f"Polling feed for [{region}] {ticker}: {url}")
         content = await self.client.fetch_feed(url)
         
         if content:
             parsed_items = self.client.parse_feed(content, region)
-            logger.info(f"Retrieved {len(parsed_items)} items from {region}")
+            # Inject ticker into the payload metadata
+            for item in parsed_items:
+                item['index_ticker'] = ticker
+                
+            logger.info(f"Retrieved {len(parsed_items)} items for {ticker}")
             return parsed_items
         return []
 
@@ -42,6 +70,7 @@ class FeedPoller:
                 "source_system": "RSS_POLLER",
                 "content_type": "news",
                 "region_tag": item["market_region"],
+                "index_ticker": item.get("index_ticker", "UNKNOWN"),
                 "data": {
                     "headline": item["title"],
                     "summary": item["description"],
