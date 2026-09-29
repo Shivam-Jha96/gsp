@@ -297,7 +297,17 @@ if not df_signals.empty:
         with right_col:
             # --- Large Area Chart at the top of the right column ---
             with st.container(border=True):
-                st.markdown('<div class="section-header">Aggregate Market Optimism Over Time</div>', unsafe_allow_html=True)
+                st.markdown("""
+                <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid #E0E3EB; margin-bottom: 12px;">
+                    <div style="font-size: 1.1rem; font-weight: 700; color: #131722; display: flex; align-items: center; gap: 8px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2962FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                        Aggregate Market Optimism
+                    </div>
+                    <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: #787B86; background: #F8F9FD; padding: 4px 10px; border-radius: 4px; border: 1px solid #E0E3EB; text-transform: uppercase;">
+                        AI Sentiment Engine
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
                 
                 fig_area = go.Figure()
                 
@@ -333,18 +343,23 @@ if not df_signals.empty:
                 ))
                 
                 fig_area.update_layout(
-                    height=450, margin=dict(l=0, r=0, t=10, b=0),
+                    height=450, margin=dict(l=0, r=0, t=5, b=0),
                     plot_bgcolor="#FFFFFF", paper_bgcolor="#FFFFFF",
-                    xaxis_title="", yaxis_title="Optimism Index",
                     hovermode="x unified",
-                    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color="#131722", size=10)),
-                    xaxis=dict(showgrid=True, gridcolor='#E0E3EB'),
+                    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, font=dict(color="#131722", size=11, family="Inter")),
+                    xaxis=dict(
+                        showgrid=True, gridcolor='#E0E3EB',
+                        title=dict(text="Timeline (UTC)", font=dict(size=11, color="#787B86", family="Inter")),
+                        tickfont=dict(size=11, color="#787B86", family="Inter")
+                    ),
                     yaxis=dict(
                         showgrid=True, gridcolor='#E0E3EB',
                         range=[-100, 100],
                         zeroline=True, zerolinecolor='#B2B5BE', zerolinewidth=2,
                         tickmode='array', tickvals=[-100, -50, 0, 50, 100],
-                        tickfont=dict(color="#787B86")
+                        title=dict(text="Optimism Score", font=dict(size=11, color="#787B86", family="Inter")),
+                        tickfont=dict(size=11, color="#131722", family="Inter", weight="bold"),
+                        side="right"  # Iconic TradingView Y-axis placement!
                     )
                 )
                 st.plotly_chart(fig_area, use_container_width=True)
