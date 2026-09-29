@@ -358,7 +358,7 @@ if not df_signals.empty:
                 ))
                 
                 fig_area.update_layout(
-                    height=450, margin=dict(l=0, r=0, t=5, b=0),
+                    height=530, margin=dict(l=0, r=0, t=5, b=0),
                     plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
                     hovermode="x unified",
                     legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, font=dict(color="#f8fafc", size=11, family="IBM Plex Sans")),
