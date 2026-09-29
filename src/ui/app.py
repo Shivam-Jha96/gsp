@@ -287,8 +287,8 @@ if not df_signals.empty:
                 fig_area.add_trace(go.Scatter(
                     x=df_trend['timestamp'], y=df_trend['EMA_Index'],
                     mode='lines+markers',
-                    line=dict(color='#64748B', width=2, shape='linear', dash='dash'),
-                    marker=dict(size=5, color='#64748B'),
+                    line=dict(color='#64748B', width=2, shape='linear'),
+                    marker=dict(size=6, color='#64748B', line=dict(color='white', width=1)),
                     name=f'{selected_region} Mean (EMA)'
                 ))
                 
