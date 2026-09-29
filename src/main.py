@@ -121,13 +121,21 @@ async def run_ingestion_pipeline():
         # Insert into DB (Vertical Partitioning)
         if db_client:
             signal_id = str(uuid.uuid4())
+            
+            # Convert absolute confidence to a directional vector
+            directional_score = result['Score']
+            if result['Choice'].lower() == 'bearish':
+                directional_score = -abs(directional_score)
+            elif result['Choice'].lower() == 'neutral':
+                directional_score = 0.0
+                
             with db_client.get_connection() as conn:
                 with conn.cursor() as cur:
                     # Insert Math Layer
                     cur.execute("""
                         INSERT INTO event_signals (id, index_ticker, market_region, timestamp, sentiment_score)
                         VALUES (%s, %s, %s, %s, %s)
-                    """, (signal_id, "UNKNOWN", region, item['data']['timestamp'], result['Score']))
+                    """, (signal_id, "UNKNOWN", region, item['data']['timestamp'], directional_score))
                     
                     # Insert Document Layer
                     cur.execute("""
