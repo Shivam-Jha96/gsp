@@ -177,7 +177,7 @@ if not df_signals.empty:
     df_signals['sentiment_index'] = df_signals['sentiment_score'] * 100
     df_payloads['sentiment_index'] = df_payloads['sentiment_score'] * 100
     # --- Page Header with Inline Timezone ---
-    header_left, header_right = st.columns([4, 1.2])
+    header_left, tz_label_col, tz_select_col = st.columns([3.5, 0.4, 1.2])
     with header_left:
         st.markdown("""
         <div style="display: flex; align-items: center; gap: 12px; padding-top: 8px;">
@@ -185,28 +185,11 @@ if not df_signals.empty:
             <div style="font-size: 1.4rem; font-weight: 700; color: #f8fafc; letter-spacing: -0.01em; font-family: 'Montserrat', sans-serif;">Macro-Sentiment Terminal</div>
         </div>
         """, unsafe_allow_html=True)
-    with header_right:
+    with tz_label_col:
         st.markdown("""
-        <style>
-        /* Hide native label and pull selectbox up */
-        div.tz-inline-marker + div div[data-testid="stSelectbox"] label { display: none !important; }
-        div.tz-inline-marker { position: relative; height: 0; overflow: visible; }
-        div.tz-inline-marker span.tz-lbl {
-            position: absolute;
-            top: 22px;
-            left: 0;
-            color: #22d3ee;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            font-size: 0.7rem;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            white-space: nowrap;
-            z-index: 10;
-        }
-        </style>
-        <div class="tz-inline-marker"><span class="tz-lbl">TIMEZONE</span></div>
+        <div style="padding-top: 14px; text-align: right; color: #22d3ee; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap;">TIMEZONE</div>
         """, unsafe_allow_html=True)
+    with tz_select_col:
         tz_options = {
             "Asia/Kolkata (IST)": "Asia/Kolkata",
             "UTC": "UTC",
