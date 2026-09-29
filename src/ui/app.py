@@ -139,7 +139,8 @@ if not df_signals.empty:
         date_range = st.selectbox("Timeframe", ["24H", "12H", "1H", "7D", "1M", "1Y", "All"], index=0)
     with filter_col2:
         regions = df_signals['market_region'].unique().tolist()
-        selected_region = st.multiselect("Regions", regions, default=regions)
+        default_ix = regions.index("US") if "US" in regions else 0
+        selected_region = st.selectbox("Region", regions, index=default_ix)
     with filter_col3:
         ema_window = st.selectbox("EMA Window (Periods)", [4, 8, 12, 24], index=0)
     with filter_col4:
@@ -153,7 +154,7 @@ if not df_signals.empty:
         display_tz = st.selectbox("Timezone", list(tz_options.keys()), index=0)
         target_tz = tz_options[display_tz]
 
-    filtered_signals = df_signals[df_signals['market_region'].isin(selected_region)].copy()
+    filtered_signals = df_signals[df_signals['market_region'] == selected_region].copy()
     display_payloads = df_payloads.copy()
     
     # --- Implement Timeframe Filtering ---
@@ -217,7 +218,7 @@ if not df_signals.empty:
             arrow = "↑" if delta > 0 else "↓" if delta < 0 else ""
             st.markdown(f"""
             <div class="white-card">
-                <div class="metric-title">Global Optimism Index</div>
+                <div class="metric-title">Aggregate Optimism Index</div>
                 <div class="metric-value">{current_ema:+.1f}</div>
                 <div class="metric-sub {delta_color}">{arrow} {abs(delta):.1f}%</div>
                 <div class="metric-footer">vs previous period</div>
@@ -242,16 +243,17 @@ if not df_signals.empty:
                 <div class="metric-title">Total News Volume</div>
                 <div class="metric-value">{len(filtered_signals)}</div>
                 <div class="metric-sub gray">Articles</div>
-                <div class="metric-footer">in selected regions</div>
+                <div class="metric-footer">in selected region</div>
             </div>
             """, unsafe_allow_html=True)
             
-            # 4. Regions Active
+            # 4. Indices Active
+            tracked_count = filtered_signals['index_ticker'].nunique()
             st.markdown(f"""
             <div class="white-card">
-                <div class="metric-title">Active Markets</div>
-                <div class="metric-value">{len(selected_region)}</div>
-                <div class="metric-sub gray">Regions</div>
+                <div class="metric-title">Tracked Indices</div>
+                <div class="metric-value">{tracked_count}</div>
+                <div class="metric-sub gray">In {selected_region}</div>
                 <div class="metric-footer">currently monitored</div>
             </div>
             """, unsafe_allow_html=True)
@@ -287,7 +289,7 @@ if not df_signals.empty:
                     mode='lines+markers',
                     line=dict(color='#2C3E50', width=3, shape='linear'),
                     marker=dict(size=6, color='#2C3E50'),
-                    name='Global Mean (EMA)'
+                    name=f'{selected_region} Mean (EMA)'
                 ))
                 
                 fig_area.update_layout(
@@ -307,10 +309,10 @@ if not df_signals.empty:
                 st.plotly_chart(fig_area, use_container_width=True)
 
         # --- Regional News Feeds at the Bottom ---
-        st.markdown('<div class="main-header" style="margin-top: 20px; font-size: 1.2rem;">Regional News Ingestion</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="main-header" style="margin-top: 20px; font-size: 1.2rem;">{selected_region} News Ingestion</div>', unsafe_allow_html=True)
         if not display_payloads.empty:
-            cols = st.columns(len(selected_region))
-            for idx, region in enumerate(selected_region):
+            cols = st.columns(1) # We only have 1 region now
+            for idx, region in enumerate([selected_region]):
                 with cols[idx]:
                     html_feed = f"""
                     <div class="white-card" style="padding: 15px; height: 350px; overflow-y: auto;">
