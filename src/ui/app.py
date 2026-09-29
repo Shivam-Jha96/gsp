@@ -53,11 +53,11 @@ st.markdown("""
     .white-card:hover {
         border-color: #B2B5BE;
     }
-    .border-blue { border-left: 3px solid #2962FF !important; }
-    .border-green { border-left: 3px solid #089981 !important; }
-    .border-purple { border-left: 3px solid #7B1FA2 !important; }
-    .border-orange { border-left: 3px solid #FF9800 !important; }
-    .border-indigo { border-left: 3px solid #2962FF !important; }
+    .bg-blue { border-left: 3px solid #2962FF !important; background-color: #F0F4FF !important; }
+    .bg-green { border-left: 3px solid #089981 !important; background-color: #E6F5F2 !important; }
+    .bg-purple { border-left: 3px solid #7B1FA2 !important; background-color: #F3E5F5 !important; }
+    .bg-orange { border-left: 3px solid #FF9800 !important; background-color: #FFF3E0 !important; }
+    .bg-indigo { border-left: 3px solid #2962FF !important; background-color: #F0F4FF !important; }
     
     /* Override Streamlit native container border */
     [data-testid="stVerticalBlockBorderWrapper"] {
@@ -253,7 +253,7 @@ if not df_signals.empty:
             delta_color = "green" if delta > 0 else "red" if delta < 0 else "gray"
             arrow = "↑" if delta > 0 else "↓" if delta < 0 else ""
             st.markdown(f"""
-            <div class="white-card border-blue">
+            <div class="white-card bg-blue">
                 <div class="metric-title">Aggregate Optimism Index</div>
                 <div class="metric-value">{current_ema:+.1f}</div>
                 <div class="metric-sub {delta_color}">{arrow} {abs(delta):.1f}%</div>
@@ -265,7 +265,7 @@ if not df_signals.empty:
             bias = "Bullish" if current_ema > 5 else "Bearish" if current_ema < -5 else "Neutral"
             b_color = "green" if bias == "Bullish" else "red" if bias == "Bearish" else "gray"
             st.markdown(f"""
-            <div class="white-card border-purple">
+            <div class="white-card bg-purple">
                 <div class="metric-title">Market Bias</div>
                 <div class="metric-value">{bias}</div>
                 <div class="metric-sub {b_color}">{ema_window} Period Window</div>
@@ -275,7 +275,7 @@ if not df_signals.empty:
             
             # 3. Volume
             st.markdown(f"""
-            <div class="white-card border-orange">
+            <div class="white-card bg-orange">
                 <div class="metric-title">Total News Volume</div>
                 <div class="metric-value">{len(filtered_signals)}</div>
                 <div class="metric-sub gray">Articles</div>
@@ -286,7 +286,7 @@ if not df_signals.empty:
             # 4. Indices Active
             tracked_count = filtered_signals['index_ticker'].nunique()
             st.markdown(f"""
-            <div class="white-card border-green">
+            <div class="white-card bg-green">
                 <div class="metric-title">Tracked Indices</div>
                 <div class="metric-value">{tracked_count}</div>
                 <div class="metric-sub gray">In {selected_region}</div>
@@ -364,7 +364,7 @@ if not df_signals.empty:
                     
                     with index_cols[idx]:
                         st.markdown(f"""
-                        <div class="white-card border-indigo" style="padding: 15px; min-height: 85px;">
+                        <div class="white-card bg-indigo" style="padding: 15px; min-height: 85px;">
                             <div class="metric-title" style="font-size: 0.8rem; margin-bottom: 5px;">{ticker}</div>
                             <div class="metric-value" style="font-size: 1.5rem;">{latest_score:+.1f}</div>
                             <div class="metric-sub {d_color}" style="font-size: 0.75rem; margin-top: 5px;">{d_arrow} {abs(delta_idx):.1f}%</div>
@@ -375,7 +375,7 @@ if not df_signals.empty:
             st.markdown(f'<div class="section-header" style="margin-top: 30px;">{selected_region} Live Intelligence Feed</div>', unsafe_allow_html=True)
             if not display_payloads.empty:
                 html_feed = f"""
-                <div class="white-card border-blue" style="padding: 20px; height: 350px; overflow-y: auto;">
+                <div class="white-card bg-blue" style="padding: 20px; height: 350px; overflow-y: auto;">
                 """
                 
                 region_payloads = display_payloads[display_payloads['market_region'] == selected_region]
