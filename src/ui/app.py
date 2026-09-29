@@ -182,8 +182,15 @@ if not df_signals.empty:
 
         filtered_signals.sort_values('timestamp', inplace=True)
         
-        # Calculate EMA by grouping into active hours (dropna prevents month-long flatlines)
-        df_trend = filtered_signals.groupby(pd.Grouper(key='timestamp', freq='h'))['sentiment_index'].mean().dropna().reset_index()
+        # Dynamically adjust grouping frequency based on zoom level to prevent blank charts
+        freq_str = 'h'
+        if date_range == "1H":
+            freq_str = '5min'
+        elif date_range in ["1M", "1Y", "All"]:
+            freq_str = 'D'
+        
+        # Calculate EMA by grouping into active periods (dropna prevents flatlines)
+        df_trend = filtered_signals.groupby(pd.Grouper(key='timestamp', freq=freq_str))['sentiment_index'].mean().dropna().reset_index()
         df_trend['EMA_Index'] = df_trend['sentiment_index'].ewm(span=ema_window, adjust=False).mean()
         
         # Merge the EMA back to the latest point for KPIs
@@ -193,7 +200,7 @@ if not df_signals.empty:
         
         # Pivot the data onto a strict chronological grid for stacked area plotting
         pivot_df = filtered_signals.pivot_table(
-            index=pd.Grouper(key='timestamp', freq='h'),
+            index=pd.Grouper(key='timestamp', freq=freq_str),
             columns='market_region',
             values='sentiment_index',
             aggfunc='mean'
