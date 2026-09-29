@@ -188,23 +188,22 @@ if not df_signals.empty:
     with header_right:
         st.markdown("""
         <style>
-        /* Inline timezone: label + dropdown on same line */
-        div.tz-inline-wrap {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding-top: 10px;
+        /* Force timezone column to lay out horizontally */
+        div:has(> div.tz-inline-marker) {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            gap: 10px !important;
         }
-        div.tz-inline-wrap + div[data-testid="stSelectbox"] {
-            margin-top: -10px !important;
+        div:has(> div.tz-inline-marker) > div[data-testid="stSelectbox"] {
+            flex: 1;
+            min-width: 0;
         }
-        div.tz-inline-wrap + div[data-testid="stSelectbox"] label {
+        div:has(> div.tz-inline-marker) > div[data-testid="stSelectbox"] label {
             display: none !important;
         }
         </style>
-        <div class="tz-inline-wrap">
-            <span style="color: #22d3ee; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap;">Timezone</span>
-        </div>
+        <div class="tz-inline-marker" style="white-space: nowrap; color: #22d3ee; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; padding-top: 5px;">TIMEZONE</div>
         """, unsafe_allow_html=True)
         tz_options = {
             "Asia/Kolkata (IST)": "Asia/Kolkata",
