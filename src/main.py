@@ -7,28 +7,22 @@ import uuid
 # Ingestion
 from ingestion.poller import FeedPoller, FEEDS
 
-# AI Engine (Google Gemini Pro SDK)
-import google.generativeai as genai
+# AI Engine (Groq SDK - Llama 3 8B CLM)
+from groq import Groq
 
 def score_sentiment(text: str, region_context: str) -> dict:
     """
-    Sends the text and context to the Gemini Pro model using the robust official SDK.
-    Expects GEMINI_API_KEY environment variable.
+    Sends the text and context to the Llama 3 8B CLM running on Groq LPUs.
+    Expects GROQ_API_KEY environment variable.
     """
-    gemini_api_key = os.environ.get("GEMINI_API_KEY")
+    groq_api_key = os.environ.get("GROQ_API_KEY")
     
-    if not gemini_api_key:
-        logging.warning("GEMINI_API_KEY not set. AI scoring will be mocked.")
-        return {"Choice": "Neutral", "Score": 0.5, "Noul": "Mocked response due to missing GEMINI_API_KEY."}
+    if not groq_api_key:
+        logging.warning("GROQ_API_KEY not set. AI scoring will be mocked.")
+        return {"Choice": "Neutral", "Score": 0.5, "Noul": "Mocked response due to missing GROQ_API_KEY."}
         
     try:
-        genai.configure(api_key=gemini_api_key.strip())
-        
-        # You mentioned having a Gemini Pro account, so we'll target the Pro model
-        model = genai.GenerativeModel(
-            model_name="gemini-3.5-flash-lite",
-            generation_config={"response_mime_type": "application/json", "temperature": 0.1}
-        )
+        client = Groq(api_key=groq_api_key.strip())
         
         prompt = f"""You are an AI financial analyst. Analyze the text based on the provided regional macro rules.
 Regional Context (OKF Rules):
@@ -40,13 +34,20 @@ Output EXACTLY and ONLY a JSON object in this format, with no extra text:
 {{"Choice": "Bullish", "Score": 0.85, "Noul": "Explanation here"}}
 (Choice must be Bullish, Bearish, or Neutral. Score must be between 0.0 and 1.0)"""
 
-        response = model.generate_content(prompt)
+        response = client.chat.completions.create(
+            messages=[
+                {"role": "system", "content": "You are a financial parsing engine. Always respond in valid JSON format."},
+                {"role": "user", "content": prompt}
+            ],
+            model="llama3-8b-8192",
+            temperature=0.1,
+            response_format={"type": "json_object"}
+        )
         
-        # The SDK cleanly extracts the text response
-        return json.loads(response.text)
+        return json.loads(response.choices[0].message.content)
         
     except Exception as e:
-        logging.error(f"Failed to reach Gemini SDK API: {e}")
+        logging.error(f"Failed to reach Groq API: {e}")
         return {"Choice": "Neutral", "Score": 0.5, "Noul": f"API Error: {e}"}
 
 # Database
