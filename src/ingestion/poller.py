@@ -6,36 +6,52 @@ from .api_clients import RSSClient
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Institutional Market Indices for Global Regions
-FEEDS = [
+# Base tracking queries for global indices
+BASE_QUERIES = [
     # United States (US)
-    {"url": "https://news.google.com/rss/search?q=S%26P+500+market", "region": "US", "ticker": "S&P 500"},
-    {"url": "https://news.google.com/rss/search?q=NASDAQ+market", "region": "US", "ticker": "NASDAQ"},
-    {"url": "https://news.google.com/rss/search?q=Dow+Jones+market", "region": "US", "ticker": "Dow Jones"},
-    {"url": "https://news.google.com/rss/search?q=Russell+2000+market", "region": "US", "ticker": "Russell 2000"},
-    {"url": "https://news.google.com/rss/search?q=VIX+volatility+index", "region": "US", "ticker": "VIX"},
+    ("US", "S&P 500", "S%26P+500+market"),
+    ("US", "NASDAQ", "NASDAQ+market"),
+    ("US", "Dow Jones", "Dow+Jones+market"),
+    ("US", "Russell 2000", "Russell+2000+market"),
+    ("US", "VIX", "VIX+volatility+index"),
     
     # India (IN)
-    {"url": "https://news.google.com/rss/search?q=Nifty+50+market", "region": "IN", "ticker": "Nifty 50"},
-    {"url": "https://news.google.com/rss/search?q=Sensex+market", "region": "IN", "ticker": "Sensex"},
-    {"url": "https://news.google.com/rss/search?q=Nifty+Bank+index", "region": "IN", "ticker": "Nifty Bank"},
-    {"url": "https://news.google.com/rss/search?q=Nifty+IT+index", "region": "IN", "ticker": "Nifty IT"},
-    {"url": "https://news.google.com/rss/search?q=BSE+Midcap+market", "region": "IN", "ticker": "BSE Midcap"},
+    ("IN", "Nifty 50", "Nifty+50+market"),
+    ("IN", "Sensex", "Sensex+market"),
+    ("IN", "Nifty Bank", "Nifty+Bank+index"),
+    ("IN", "Nifty IT", "Nifty+IT+index"),
+    ("IN", "BSE Midcap", "BSE+Midcap+market"),
 
     # United Kingdom (UK)
-    {"url": "https://news.google.com/rss/search?q=FTSE+100+market", "region": "UK", "ticker": "FTSE 100"},
-    {"url": "https://news.google.com/rss/search?q=FTSE+250+market", "region": "UK", "ticker": "FTSE 250"},
-    {"url": "https://news.google.com/rss/search?q=FTSE+All-Share", "region": "UK", "ticker": "FTSE All-Share"},
-    {"url": "https://news.google.com/rss/search?q=FTSE+AIM+UK", "region": "UK", "ticker": "FTSE AIM"},
-    {"url": "https://news.google.com/rss/search?q=UK+Gilt+Yields", "region": "UK", "ticker": "UK Gilts"},
+    ("UK", "FTSE 100", "FTSE+100+market"),
+    ("UK", "FTSE 250", "FTSE+250+market"),
+    ("UK", "FTSE All-Share", "FTSE+All-Share"),
+    ("UK", "FTSE AIM", "FTSE+AIM+UK"),
+    ("UK", "UK Gilts", "UK+Gilt+Yields"),
     
     # Japan (JP)
-    {"url": "https://news.google.com/rss/search?q=Nikkei+225+market", "region": "JP", "ticker": "Nikkei 225"},
-    {"url": "https://news.google.com/rss/search?q=TOPIX+index", "region": "JP", "ticker": "TOPIX"},
-    {"url": "https://news.google.com/rss/search?q=Mothers+Index+Japan", "region": "JP", "ticker": "JP Mothers"},
-    {"url": "https://news.google.com/rss/search?q=JASDAQ+market", "region": "JP", "ticker": "JASDAQ"},
-    {"url": "https://news.google.com/rss/search?q=JGB+Yields+Japan", "region": "JP", "ticker": "JP Bonds"}
+    ("JP", "Nikkei 225", "Nikkei+225+market"),
+    ("JP", "TOPIX", "TOPIX+index"),
+    ("JP", "JP Mothers", "Mothers+Index+Japan"),
+    ("JP", "JASDAQ", "JASDAQ+market"),
+    ("JP", "JP Bonds", "JGB+Yields+Japan")
 ]
+
+# Dynamically generate FEEDS to include both General News and Reuters-specific news
+FEEDS = []
+for region, ticker, query in BASE_QUERIES:
+    # 1. General Global News Aggregation
+    FEEDS.append({
+        "url": f"https://news.google.com/rss/search?q={query}",
+        "region": region, 
+        "ticker": ticker
+    })
+    # 2. Strict Reuters-Only Aggregation
+    FEEDS.append({
+        "url": f"https://news.google.com/rss/search?q={query}+site:reuters.com",
+        "region": region, 
+        "ticker": ticker
+    })
 
 class FeedPoller:
     def __init__(self, feeds: List[Dict[str, str]]):
