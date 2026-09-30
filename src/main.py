@@ -39,7 +39,7 @@ Output EXACTLY and ONLY a JSON object in this format, with no extra text:
                 {"role": "system", "content": "You are a financial parsing engine. Always respond in valid JSON format."},
                 {"role": "user", "content": prompt}
             ],
-            model="llama3-8b-8192",
+            model="llama-3.1-8b-instant",
             temperature=0.1,
             response_format={"type": "json_object"}
         )
