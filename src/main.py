@@ -25,7 +25,7 @@ def score_sentiment(text: str, region_context: str) -> dict:
         # Connect to the free JEV API gateway (via beatapi.io)
         client = TypeSafeClient(
             api_key=typesafe_api_key.strip(),
-            base_url="https://api.beatapi.io/v1/",
+            base_url="https://api.beatapi.io/",
             model="jev-1.13-free"
         )
         
