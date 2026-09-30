@@ -117,6 +117,14 @@ async def run_ingestion_pipeline():
         # Score via ZeroGPU CLM-8B (or Gemini SDK)
         logger.info(f"Scoring [{region}] {ticker} headline: {item['data']['headline'][:50]}...")
         result = score_sentiment(text, context)
+        
+        # Guard against LLM formatting hallucinations (e.g., returning a list instead of a dict)
+        if isinstance(result, list) and len(result) > 0:
+            result = result[0]
+        if not isinstance(result, dict):
+            logger.warning(f"Unexpected AI output format: {type(result)}. Falling back to neutral.")
+            result = {}
+
         # Extract data robustly to prevent KeyError if the LLM hallucinates lowercase JSON keys
         choice_val = str(result.get('Choice', result.get('choice', 'Neutral')))
         score_val_raw = result.get('Score', result.get('score', 0.5))
