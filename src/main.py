@@ -7,74 +7,58 @@ import uuid
 # Ingestion
 from ingestion.poller import FeedPoller, FEEDS
 
-# AI Engine (Groq SDK - Llama 3 8B CLM)
-from groq import Groq
+# AI Engine (TypeSafe AI - Jev System-One Model)
+from typesafe_sdk import TypeSafeClient, Choice, Score
 
 def score_sentiment(text: str, region_context: str) -> dict:
     """
-    Sends the text and context to the Llama 3 8B CLM running on Groq LPUs.
-    Expects GROQ_API_KEY environment variable.
+    Sends the text and context to TypeSafe AI's Jev model using the official SDK.
+    Expects TYPESAFE_API_KEY environment variable.
     """
-    groq_api_key = os.environ.get("GROQ_API_KEY")
+    typesafe_api_key = os.environ.get("TYPESAFE_API_KEY")
     
-    if not groq_api_key:
-        logging.warning("GROQ_API_KEY not set. AI scoring will be mocked.")
-        return {"Choice": "Neutral", "Score": 0.5, "Noul": "Mocked response due to missing GROQ_API_KEY."}
+    if not typesafe_api_key:
+        logging.warning("TYPESAFE_API_KEY not set. AI scoring will be mocked.")
+        return {"Choice": "Neutral", "Score": 0.5, "Noul": "Mocked response due to missing TYPESAFE_API_KEY."}
         
     try:
-        client = Groq(api_key=groq_api_key.strip())
+        client = TypeSafeClient(api_key=typesafe_api_key.strip())
         
-        prompt = f"""You are an AI financial analyst. Analyze the text based on the provided regional macro rules.
-Regional Context (OKF Rules):
+        # We define a structured State using our text and OKF Rules
+        state_content = f"""Regional Context (OKF Rules):
 {region_context}
 
-Text to analyze: {text}
+Text to analyze: {text}"""
 
-Output EXACTLY and ONLY a JSON object in this format, with no extra text:
-{{"Choice": "Bullish", "Score": 0.85, "Noul": "Explanation here"}}
-(Choice must be Bullish, Bearish, or Neutral. Score must be between 0.0 and 1.0)"""
-
-        # Dynamically discover an active model to prevent deprecation crashes
-        active_models = [m.id for m in client.models.list().data]
-        
-        # Preferred fallback order (Updated for late-2026 Groq model ecosystem)
-        preferred = [
-            "llama-3.3-70b-versatile",
-            "openai/gpt-oss-20b",
-            "openai/gpt-oss-120b",
-            "llama-3.1-8b-instant",
-            "llama3-8b-8192",
-            "mixtral-8x7b-32768"
-        ]
-        
-        target_model = None
-        for p in preferred:
-            if p in active_models:
-                target_model = p
-                break
-                
-        if not target_model:
-            # Fallback to a safe text model if all preferred are missing
-            safe_models = [m for m in active_models if not any(x in m.lower() for x in ['whisper', 'guard', 'orpheus'])]
-            # Sort for deterministic fallback
-            safe_models.sort()
-            target_model = safe_models[0] if safe_models else "llama-3.3-70b-versatile"
-            logger.warning(f"Preferred models not found. Safely falling back to: {target_model}")
-            
-        response = client.chat.completions.create(
-            messages=[
-                {"role": "system", "content": "You are a financial parsing engine. Always respond in valid JSON format."},
-                {"role": "user", "content": prompt}
-            ],
-            model=target_model,
-            temperature=0.1,
-            response_format={"type": "json_object"}
+        # Jev evaluates states purely via predefined Choices and Scores (No prompt engineering required!)
+        result = client.system_one(
+            state=state_content,
+            questions={
+                "direction": Choice(
+                    instructions="Determine the market direction implied by the text according to the OKF Rules.",
+                    criteria={"Bullish": None, "Bearish": None, "Neutral": None}
+                ),
+                "confidence": Score(
+                    instructions="Confidence in the market direction.",
+                    criteria=["0.0 means completely uncertain, 1.0 means highly confident"]
+                )
+            }
         )
         
-        return json.loads(response.choices[0].message.content)
+        # Extract the structured decisions natively
+        choice_str = result.choices["direction"].choice.capitalize()
+        score_val = result.scores["confidence"].score
+        
+        # TypeSafe's Jev is a true System-One model (it computes probabilities rather than generating text),
+        # so we don't have a prose 'explanation' (Noul text). We just map the output.
+        return {
+            "Choice": choice_str,
+            "Score": score_val,
+            "Noul": f"Evaluated via TypeSafe Jev (Confidence: {score_val})"
+        }
         
     except Exception as e:
-        logging.error(f"Failed to reach Groq API: {e}")
+        logging.error(f"Failed to reach TypeSafe API: {e}")
         return {"Choice": "Neutral", "Score": 0.5, "Noul": f"API Error: {e}"}
 
 # Database
