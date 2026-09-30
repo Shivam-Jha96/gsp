@@ -37,13 +37,13 @@ Output EXACTLY and ONLY a JSON object in this format, with no extra text:
         # Dynamically discover an active model to prevent deprecation crashes
         active_models = [m.id for m in client.models.list().data]
         
-        # Preferred fallback order
+        # Preferred fallback order (Updated for late-2026 Groq model ecosystem)
         preferred = [
+            "llama-3.3-70b-versatile",
+            "openai/gpt-oss-20b",
+            "openai/gpt-oss-120b",
             "llama-3.1-8b-instant",
-            "llama3-8b-8192", 
-            "llama-3.2-3b-preview",
-            "llama-3.2-1b-preview",
-            "llama3-70b-8192",
+            "llama3-8b-8192",
             "mixtral-8x7b-32768"
         ]
         
@@ -54,9 +54,12 @@ Output EXACTLY and ONLY a JSON object in this format, with no extra text:
                 break
                 
         if not target_model:
-            # Fallback to whatever the first model is if none match
-            target_model = active_models[0] if active_models else "llama-3.1-8b-instant"
-            logger.warning(f"Preferred models not found. Falling back to: {target_model}")
+            # Fallback to a safe text model if all preferred are missing
+            safe_models = [m for m in active_models if not any(x in m.lower() for x in ['whisper', 'guard', 'orpheus'])]
+            # Sort for deterministic fallback
+            safe_models.sort()
+            target_model = safe_models[0] if safe_models else "llama-3.3-70b-versatile"
+            logger.warning(f"Preferred models not found. Safely falling back to: {target_model}")
             
         response = client.chat.completions.create(
             messages=[
