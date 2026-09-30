@@ -436,18 +436,23 @@ if not df_signals.empty:
             
             region_payloads = display_payloads[display_payloads['market_region'] == selected_region]
             for _, row in region_payloads.iterrows():
-                color = "#10b981" if row['sentiment_index'] > 0 else "#ef4444" if row['sentiment_index'] < 0 else "#94a3b8"
+                sentiment = row['sentiment_index']
+                color = "#10b981" if sentiment > 0 else "#ef4444" if sentiment < 0 else "#94a3b8"
                 time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
                 ticker_label = row.get('index_ticker', 'Macro')
+                
+                noise_tag = ""
+                if sentiment == 0:
+                    noise_tag = '<span style="background: rgba(148, 163, 184, 0.15); border: 1px solid rgba(148, 163, 184, 0.3); color: #94a3b8; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; margin-left: 8px;">NOISE</span>'
                 
                 html_feed += f'''
 <div style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 12px;">
     <div style="font-size: 0.8rem; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
         <div style="display: flex; align-items: center; gap: 8px;">
             <span>{time_str}</span>
-            <span style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #f8fafc; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em;">{ticker_label}</span>
+            <span style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #f8fafc; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em;">{ticker_label}</span>{noise_tag}
         </div>
-        <span style="color: {color}; font-weight: 700; font-size: 0.9rem;">{row['sentiment_index']:+.1f}</span>
+        <span style="color: {color}; font-weight: 700; font-size: 0.9rem;">{sentiment:+.1f}</span>
     </div>
     <div style="font-size: 0.95rem; color: #f8fafc; line-height: 1.5; font-weight: 500;">{row['raw_text']}</div>
 </div>
