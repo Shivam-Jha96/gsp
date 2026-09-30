@@ -426,13 +426,11 @@ if not df_signals.empty:
                     d_arrow = "↑" if delta_idx > 0 else "↓" if delta_idx < 0 else ""
                     val_color = "green" if latest_score > 0 else "red" if latest_score < 0 else ""
                     
-                    kpi_html += f"""
-                    <div class="white-card bg-indigo" style="flex: 1 1 130px; padding: 12px; min-height: 85px; margin-bottom: 0;">
-                        <div class="metric-title" style="font-size: 0.75rem; margin-bottom: 4px;">{ticker}</div>
-                        <div class="metric-value {val_color}" style="font-size: clamp(1.2rem, 2vw, 1.6rem);">{latest_score:+.1f}</div>
-                        <div class="metric-sub {d_color}" style="font-size: 0.8rem; margin-top: 5px;">{d_arrow} {abs(delta_idx):.1f}%</div>
-                    </div>
-                    """
+                    kpi_html += f"""<div class="white-card bg-indigo" style="flex: 1 1 130px; padding: 12px; min-height: 85px; margin-bottom: 0;">
+    <div class="metric-title" style="font-size: 0.75rem; margin-bottom: 4px;">{ticker}</div>
+    <div class="metric-value {val_color}" style="font-size: clamp(1.2rem, 2vw, 1.6rem);">{latest_score:+.1f}</div>
+    <div class="metric-sub {d_color}" style="font-size: 0.8rem; margin-top: 5px;">{d_arrow} {abs(delta_idx):.1f}%</div>
+</div>"""
                 
                 kpi_html += '</div>'
                 st.markdown(kpi_html, unsafe_allow_html=True)
