@@ -22,7 +22,12 @@ def score_sentiment(text: str, region_context: str) -> dict:
         return {"Choice": "Neutral", "Score": 0.5, "Noul": "Mocked response due to missing TYPESAFE_API_KEY."}
         
     try:
-        client = TypeSafeClient(api_key=typesafe_api_key.strip())
+        # Connect to the free JEV API gateway (via beatapi.io)
+        client = TypeSafeClient(
+            api_key=typesafe_api_key.strip(),
+            base_url="https://api.beatapi.io/v1/",
+            model="jev-1.13-free"
+        )
         
         # We define a structured State using our text and OKF Rules
         state_content = f"""Regional Context (OKF Rules):
