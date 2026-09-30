@@ -34,12 +34,36 @@ Output EXACTLY and ONLY a JSON object in this format, with no extra text:
 {{"Choice": "Bullish", "Score": 0.85, "Noul": "Explanation here"}}
 (Choice must be Bullish, Bearish, or Neutral. Score must be between 0.0 and 1.0)"""
 
+        # Dynamically discover an active model to prevent deprecation crashes
+        active_models = [m.id for m in client.models.list().data]
+        
+        # Preferred fallback order
+        preferred = [
+            "llama-3.1-8b-instant",
+            "llama3-8b-8192", 
+            "llama-3.2-3b-preview",
+            "llama-3.2-1b-preview",
+            "llama3-70b-8192",
+            "mixtral-8x7b-32768"
+        ]
+        
+        target_model = None
+        for p in preferred:
+            if p in active_models:
+                target_model = p
+                break
+                
+        if not target_model:
+            # Fallback to whatever the first model is if none match
+            target_model = active_models[0] if active_models else "llama-3.1-8b-instant"
+            logger.warning(f"Preferred models not found. Falling back to: {target_model}")
+            
         response = client.chat.completions.create(
             messages=[
                 {"role": "system", "content": "You are a financial parsing engine. Always respond in valid JSON format."},
                 {"role": "user", "content": prompt}
             ],
-            model="llama-3.1-8b-instant",
+            model=target_model,
             temperature=0.1,
             response_format={"type": "json_object"}
         )
