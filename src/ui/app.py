@@ -120,6 +120,23 @@ st.markdown("""
         margin-top: 8px;
     }
     
+    /* Responsive Design Adjustments */
+    @media (max-width: 1024px) {
+        .metric-value { font-size: 1.4rem; }
+        .block-container { padding: 1rem !important; }
+    }
+    
+    @media (max-width: 768px) {
+        .metric-value { font-size: 1.2rem; }
+        .metric-title { font-size: 0.7rem; }
+        .white-card { padding: 10px; margin-bottom: 10px; }
+        /* Disable vertical stretching on mobile so items stack cleanly */
+        [data-testid="column"] > div[data-testid="stVerticalBlock"] {
+            height: auto;
+            justify-content: flex-start;
+        }
+    }
+
     /* Hide Streamlit native UI elements including the white top header bar */
     header[data-testid="stHeader"] {display: none !important;}
     #MainMenu {display: none !important;}
@@ -394,11 +411,13 @@ if not df_signals.empty:
                 )
                 st.plotly_chart(fig_area, use_container_width=True)
 
-            # --- Mini KPI Tiles for Individual Indices ---
+            # --- Mini KPI Tiles for Individual Indices (Responsive Flexbox) ---
             valid_tickers = [t for t in tickers if t != 'UNKNOWN']
             if valid_tickers:
-                index_cols = st.columns(len(valid_tickers))
-                for idx, ticker in enumerate(valid_tickers):
+                # Use a CSS flexbox container instead of rigid Streamlit columns so they wrap naturally
+                kpi_html = '<div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px;">'
+                
+                for ticker in valid_tickers:
                     latest_score = pivot_df[ticker].iloc[-1] if len(pivot_df) > 0 else 0
                     prev_score = pivot_df[ticker].iloc[-2] if len(pivot_df) > 1 else 0
                     delta_idx = latest_score - prev_score
@@ -407,14 +426,16 @@ if not df_signals.empty:
                     d_arrow = "↑" if delta_idx > 0 else "↓" if delta_idx < 0 else ""
                     val_color = "green" if latest_score > 0 else "red" if latest_score < 0 else ""
                     
-                    with index_cols[idx]:
-                        st.markdown(f"""
-                        <div class="white-card bg-indigo" style="padding: 12px; min-height: 85px;">
-                            <div class="metric-title" style="font-size: 0.75rem; margin-bottom: 4px;">{ticker}</div>
-                            <div class="metric-value {val_color}" style="font-size: 1.6rem;">{latest_score:+.1f}</div>
-                            <div class="metric-sub {d_color}" style="font-size: 0.8rem; margin-top: 5px;">{d_arrow} {abs(delta_idx):.1f}%</div>
-                        </div>
-                        """, unsafe_allow_html=True)
+                    kpi_html += f"""
+                    <div class="white-card bg-indigo" style="flex: 1 1 130px; padding: 12px; min-height: 85px; margin-bottom: 0;">
+                        <div class="metric-title" style="font-size: 0.75rem; margin-bottom: 4px;">{ticker}</div>
+                        <div class="metric-value {val_color}" style="font-size: clamp(1.2rem, 2vw, 1.6rem);">{latest_score:+.1f}</div>
+                        <div class="metric-sub {d_color}" style="font-size: 0.8rem; margin-top: 5px;">{d_arrow} {abs(delta_idx):.1f}%</div>
+                    </div>
+                    """
+                
+                kpi_html += '</div>'
+                st.markdown(kpi_html, unsafe_allow_html=True)
 
         # --- Regional News Feeds at the Bottom (Full Width) ---
         st.markdown(f"""
