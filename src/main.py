@@ -10,26 +10,11 @@ from ingestion.poller import FeedPoller, FEEDS
 # AI Engine (TypeSafe AI - Jev System-One Model)
 from typesafe_sdk import TypeSafeClient, Choice, Score
 
-def score_sentiment(text: str, region_context: str) -> dict:
+def score_sentiment(client, text: str, region_context: str) -> dict:
     """
     Sends the text and context to TypeSafe AI's Jev model using the official SDK.
-    Expects TYPESAFE_API_KEY environment variable.
     """
-    typesafe_api_key = os.environ.get("TYPESAFE_API_KEY")
-    
-    if not typesafe_api_key:
-        logging.warning("TYPESAFE_API_KEY not set. AI scoring will be mocked.")
-        return {"Choice": "Neutral", "Score": 0.5, "Noul": "Mocked response due to missing TYPESAFE_API_KEY."}
-        
     try:
-        # Connect to the custom serverless Modal deployment running Contrastive-LM
-        client = TypeSafeClient(
-            api_key=typesafe_api_key.strip() if typesafe_api_key else "empty_key_allowed",
-            base_url="https://shivam-jha96--clm-macro-engine-clm-server.modal.run",
-            model="clm-latest",
-            timeout=120.0
-        )
-        
         # We define a structured State using our text and OKF Rules
         state_content = f"""Regional Context (OKF Rules):
 {region_context}
