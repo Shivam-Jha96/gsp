@@ -229,7 +229,7 @@ if not df_signals.empty:
         default_ix = regions.index("US") if "US" in regions else 0
         selected_region = st.selectbox("Region", regions, index=default_ix)
     with filter_col3:
-        ema_window = st.selectbox("EMA Window (Periods)", [4, 8, 12, 24], index=0)
+        ema_window = st.selectbox("Exponential Moving Average (Periods)", [4, 8, 12, 24], index=0)
     with filter_col4:
         # Dynamically fetch available indices for the chosen region
         active_indices = df_signals[df_signals['market_region'] == selected_region]['index_ticker'].unique().tolist()
