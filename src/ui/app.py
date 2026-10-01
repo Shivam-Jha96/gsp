@@ -248,6 +248,8 @@ if not df_signals.empty:
         # Ensure timestamp is tz-aware for accurate Timedelta math
         if filtered_signals['timestamp'].dt.tz is None:
             filtered_signals['timestamp'] = filtered_signals['timestamp'].dt.tz_localize('UTC')
+        if display_payloads['timestamp'].dt.tz is None:
+            display_payloads['timestamp'] = display_payloads['timestamp'].dt.tz_localize('UTC')
             
         now = pd.Timestamp.utcnow()
         if date_range == "4H": cutoff = now - pd.Timedelta(hours=4)
@@ -259,6 +261,7 @@ if not df_signals.empty:
         elif date_range == "1Y": cutoff = now - pd.Timedelta(days=365)
         
         filtered_signals = filtered_signals[filtered_signals['timestamp'] >= cutoff]
+        display_payloads = display_payloads[display_payloads['timestamp'] >= cutoff]
     
     if not filtered_signals.empty:
         # Convert DataFrames to User Selected Timezone
