@@ -15,7 +15,7 @@ if not api_key:
     exit(1)
 
 client = genai.Client(api_key=api_key.strip())
-MODEL_ID = "gemini-2.5-flash"
+MODEL_ID = "gemini-3.8-flash"
 
 REGIONS = {
     "US": {
