@@ -301,8 +301,8 @@ if not df_signals.empty:
             st.markdown(f"""
             <div class="white-card bg-blue">
                 <div class="metric-title">Aggregate Optimism Index</div>
-                <div class="metric-value {val_color}">{current_ema:+.1f}</div>
-                <div class="metric-sub {delta_color}">{arrow} {abs(delta):.1f}%</div>
+<div class="metric-value {val_color}">{current_ema:+.1f}</div>
+<div class="metric-sub {delta_color}">{arrow} {abs(delta):.1f}%</div>
                 <div class="metric-footer">vs previous period</div>
             </div>
             """, unsafe_allow_html=True)
@@ -314,8 +314,8 @@ if not df_signals.empty:
             st.markdown(f"""
             <div class="white-card bg-purple">
                 <div class="metric-title">Market Bias</div>
-                <div class="metric-value {b_val_color}">{bias}</div>
-                <div class="metric-sub {b_color}">{ema_window} Period Window</div>
+<div class="metric-value {b_val_color}">{bias}</div>
+<div class="metric-sub {b_color}">{ema_window} Period Window</div>
                 <div class="metric-footer">based on moving average</div>
             </div>
             """, unsafe_allow_html=True)
@@ -324,8 +324,8 @@ if not df_signals.empty:
             st.markdown(f"""
             <div class="white-card bg-orange">
                 <div class="metric-title">Total News Volume</div>
-                <div class="metric-value">{len(filtered_signals)}</div>
-                <div class="metric-sub gray">Articles</div>
+<div class="metric-value">{len(filtered_signals)}</div>
+<div class="metric-sub gray">Articles</div>
                 <div class="metric-footer">in selected region</div>
             </div>
             """, unsafe_allow_html=True)
@@ -335,8 +335,8 @@ if not df_signals.empty:
             st.markdown(f"""
             <div class="white-card bg-green">
                 <div class="metric-title">Tracked Indices</div>
-                <div class="metric-value">{tracked_count}</div>
-                <div class="metric-sub gray">In {selected_region}</div>
+<div class="metric-value">{tracked_count}</div>
+<div class="metric-sub gray">In {selected_region}</div>
                 <div class="metric-footer">currently monitored</div>
             </div>
             """, unsafe_allow_html=True)
@@ -427,9 +427,9 @@ if not df_signals.empty:
                     val_color = "green" if latest_score > 0 else "red" if latest_score < 0 else ""
                     
                     kpi_html += f"""<div class="white-card bg-indigo" style="flex: 1 1 130px; padding: 12px; min-height: 85px; margin-bottom: 0;">
-    <div class="metric-title" style="font-size: 0.75rem; margin-bottom: 4px;">{ticker}</div>
-    <div class="metric-value {val_color}" style="font-size: clamp(1.2rem, 2vw, 1.6rem);">{latest_score:+.1f}</div>
-    <div class="metric-sub {d_color}" style="font-size: 0.8rem; margin-top: 5px;">{d_arrow} {abs(delta_idx):.1f}%</div>
+<div class="metric-title" style="font-size: 0.75rem; margin-bottom: 4px;">{ticker}</div>
+<div class="metric-value {val_color}" style="font-size: clamp(1.2rem, 2vw, 1.6rem);">{latest_score:+.1f}</div>
+<div class="metric-sub {d_color}" style="font-size: 0.8rem; margin-top: 5px;">{d_arrow} {abs(delta_idx):.1f}%</div>
 </div>"""
                 
                 kpi_html += '</div>'
