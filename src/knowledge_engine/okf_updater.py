@@ -15,7 +15,8 @@ if not api_key:
     exit(1)
 
 client = genai.Client(api_key=api_key.strip())
-MODEL_ID = "gemini-3.8-flash"
+# Ordered list of models to try (fallback on 503 high-demand errors)
+MODEL_FALLBACKS = ["gemini-3.8-flash", "gemini-2.5-flash-lite-preview-06-17", "gemini-2.0-flash"]
 
 REGIONS = {
     "US": {
@@ -125,27 +126,44 @@ Output ONLY raw Markdown text. Do NOT wrap it in code blocks.
 
 (continue for all rules)
 """
-    try:
-        response = client.models.generate_content(
-            model=MODEL_ID,
-            contents=prompt
-        )
-        new_content = response.text
-        
-        # Strip potential markdown fencing the LLM might hallucinate
-        if new_content.startswith("```markdown"):
-            new_content = new_content.replace("```markdown", "", 1)
-        if new_content.startswith("```"):
-            new_content = new_content.replace("```", "", 1)
-        if new_content.endswith("```"):
-            new_content = new_content[:-3]
-            
-        # 4. Save to disk
-        write_okf(region_data["file"], new_content)
-        logger.info(f"Successfully updated {region_data['file']}.")
-        
-    except Exception as e:
-        logger.error(f"Failed to update OKF for {region_data['name']}: {e}")
+    # Try each fallback model with retries
+    for model_id in MODEL_FALLBACKS:
+        for attempt in range(3):
+            try:
+                logger.info(f"  Trying model={model_id} (attempt {attempt + 1}/3)...")
+                response = client.models.generate_content(
+                    model=model_id,
+                    contents=prompt
+                )
+                new_content = response.text
+                
+                # Strip potential markdown fencing the LLM might hallucinate
+                if new_content.startswith("```markdown"):
+                    new_content = new_content.replace("```markdown", "", 1)
+                if new_content.startswith("```"):
+                    new_content = new_content.replace("```", "", 1)
+                if new_content.endswith("```"):
+                    new_content = new_content[:-3]
+                    
+                # Save to disk
+                write_okf(region_data["file"], new_content)
+                logger.info(f"Successfully updated {region_data['file']} using {model_id}.")
+                return  # Success, exit the function
+                
+            except Exception as e:
+                error_str = str(e)
+                if "503" in error_str or "UNAVAILABLE" in error_str:
+                    wait = 5 * (attempt + 1)  # 5s, 10s, 15s backoff
+                    logger.warning(f"  {model_id} unavailable (attempt {attempt + 1}), retrying in {wait}s...")
+                    await asyncio.sleep(wait)
+                elif "404" in error_str:
+                    logger.warning(f"  {model_id} not found, trying next model...")
+                    break  # Skip to next model
+                else:
+                    logger.error(f"  Unexpected error with {model_id}: {e}")
+                    break  # Skip to next model
+    
+    logger.error(f"All models failed for {region_data['name']}. OKF not updated.")
 
 async def main():
     logger.info("=== Starting Dynamic OKF Updater ===")
