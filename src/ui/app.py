@@ -217,7 +217,11 @@ if not df_signals.empty:
         display_tz = st.selectbox("tz", list(tz_options.keys()), index=0, label_visibility="collapsed")
         target_tz = tz_options[display_tz]
     
-    st.markdown('<div style="border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;"></div>', unsafe_allow_html=True)
+    st.markdown("""
+    <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-left: 3px solid #3b82f6; border-radius: 6px; padding: 14px 18px; margin: 16px 0 24px 0; color: #94a3b8; font-family: 'IBM Plex Sans', sans-serif; font-size: 0.9rem; line-height: 1.6; font-weight: 400;">
+        <strong style="color: #f8fafc; font-weight: 600; font-family: 'Montserrat', sans-serif; letter-spacing: 0.02em;">THE EDGE:</strong> Solving global information overload. By parsing breaking financial news through a localized Objective Knowledge Framework (OKF) using our custom System-One AI model, this terminal instantly converts qualitative macroeconomic events into a pure, mathematical momentum vector—filtering out the noise to power automated algorithmic execution.
+    </div>
+    """, unsafe_allow_html=True)
     
     # --- Top Row: Filters Using Native Labels ---
     filter_col1, filter_col2, filter_col3, filter_col4 = st.columns([1, 1, 1, 1.2])
