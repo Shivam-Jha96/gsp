@@ -1,0 +1,48 @@
+name: Dynamic OKF Knowledge Updater
+
+on:
+  schedule:
+    # Run once daily at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allows manual trigger
+
+permissions:
+  contents: write # Needed to commit and push changes back to the repository
+
+jobs:
+  update-okf:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          
+      - name: Run OKF Updater
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PYTHONPATH: src
+        run: |
+          python src/knowledge_engine/okf_updater.py
+          
+      - name: Commit and Push Updated OKF Rules
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add knowledge/
+          
+          # Only commit if there are changes
+          if git diff --staged --quiet; then
+            echo "No changes to OKF rules detected."
+          else
+            git commit -m "Auto-update Objective Knowledge Framework (OKF) via Gemini AI"
+            git push
+          fi
