@@ -219,7 +219,7 @@ if not df_signals.empty:
     
     st.markdown("""
     <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-left: 3px solid #3b82f6; border-radius: 6px; padding: 14px 18px; margin: 16px 0 24px 0; color: #94a3b8; font-family: 'IBM Plex Sans', sans-serif; font-size: 0.9rem; line-height: 1.6; font-weight: 400;">
-        <strong style="color: #f8fafc; font-weight: 600; font-family: 'Montserrat', sans-serif; letter-spacing: 0.02em;">THE EDGE:</strong> Solving global information overload. By parsing breaking financial news through a localized Objective Knowledge Framework (OKF) using our custom System-One AI model, this terminal instantly converts qualitative macroeconomic events into a pure, mathematical momentum vector—filtering out the noise to power automated algorithmic execution.
+        <strong style="color: #f8fafc; font-weight: 600; font-family: 'Montserrat', sans-serif; letter-spacing: 0.02em;">THE EDGE:</strong> We solve information overload for modern investors. Our AI reads thousands of breaking global news events in real-time, instantly analyzes their market impact, and converts the chaos into a single, easy-to-read momentum score—cutting through the noise to show you exactly where the market is heading.
     </div>
     """, unsafe_allow_html=True)
     
