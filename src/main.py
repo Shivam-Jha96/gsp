@@ -25,9 +25,9 @@ def score_sentiment(text: str, region_context: str) -> dict:
         # Connect to the custom serverless Modal deployment running Contrastive-LM
         client = TypeSafeClient(
             api_key=typesafe_api_key.strip() if typesafe_api_key else "empty_key_allowed",
-            base_url="https://shivam-jha96--clm-macro-engine-clm-server.modal.run/",
+            base_url="https://shivam-jha96--clm-macro-engine-clm-server.modal.run",
             model="clm-latest",
-            timeout=600.0
+            timeout=120.0
         )
         
         # We define a structured State using our text and OKF Rules
