@@ -98,6 +98,10 @@ async def run_ingestion_pipeline():
         logger.info("No new payloads fetched.")
         return
 
+    # Connect to the custom serverless Modal deployment running Contrastive-LM
+    typesafe_api_key = os.environ.get('TYPESAFE_API_KEY')
+    client = TypeSafeClient(api_key=typesafe_api_key.strip() if typesafe_api_key else 'empty_key_allowed', base_url='https://shivam-jha96--clm-macro-engine-clm-server.modal.run', model='clm-latest', timeout=120.0)
+
     # Initialize DB (Requires DATABASE_URL environment variable)
     db_client = None
     if os.environ.get("DATABASE_URL"):
@@ -119,7 +123,7 @@ async def run_ingestion_pipeline():
         
         # Score via ZeroGPU CLM-8B (or Gemini SDK)
         logger.info(f"Scoring [{region}] {ticker} headline: {item['data']['headline'][:50]}...")
-        result = score_sentiment(text, context)
+        result = score_sentiment(client, text, context)
         
         # Guard against LLM formatting hallucinations (e.g., returning a list instead of a dict)
         if isinstance(result, list) and len(result) > 0:
