@@ -16,7 +16,7 @@ if not api_key:
 
 client = genai.Client(api_key=api_key.strip())
 # Ordered list of models to try (fallback on 503 high-demand errors)
-MODEL_FALLBACKS = ["gemini-3.8-flash", "gemini-2.5-flash-lite-preview-06-17", "gemini-2.0-flash"]
+MODEL_FALLBACKS = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.5-flash-lite"]
 
 REGIONS = {
     "US": {
