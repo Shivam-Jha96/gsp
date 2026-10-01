@@ -401,9 +401,7 @@ if not df_signals.empty:
                     ),
                     yaxis=dict(
                         showgrid=True, gridcolor='rgba(255,255,255,0.05)',
-                        range=[-100, 100],
                         zeroline=True, zerolinecolor='rgba(255,255,255,0.2)', zerolinewidth=2,
-                        tickmode='array', tickvals=[-100, -50, 0, 50, 100],
                         title=dict(text="Optimism Score", font=dict(size=11, color="#94a3b8", family="IBM Plex Sans")),
                         tickfont=dict(size=11, color="#f8fafc", family="IBM Plex Sans", weight="bold"),
                         side="right"
