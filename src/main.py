@@ -22,11 +22,11 @@ def score_sentiment(text: str, region_context: str) -> dict:
         return {"Choice": "Neutral", "Score": 0.5, "Noul": "Mocked response due to missing TYPESAFE_API_KEY."}
         
     try:
-        # Connect to the free JEV API gateway (via beatapi.io)
+        # Connect to the custom serverless Modal deployment running Contrastive-LM
         client = TypeSafeClient(
-            api_key=typesafe_api_key.strip(),
-            base_url="https://api.beatapi.io/",
-            model="jev-1.13-free"
+            api_key=typesafe_api_key.strip() if typesafe_api_key else "empty_key_allowed",
+            base_url="https://shivam-jha96--clm-macro-engine-clm-server.modal.run/",
+            model="clm-latest"
         )
         
         # We define a structured State using our text and OKF Rules
@@ -182,8 +182,8 @@ async def run_ingestion_pipeline():
                 conn.commit()
                 
         # Mandatory 4.2-second delay to enforce ~14 requests per minute, respecting Gemini's 15 RPM free tier limit
-        logger.info("Sleeping for 4.2s to respect AI rate limits...")
-        await asyncio.sleep(4.2)
+        # No strict rate limit since we host our own Modal API!
+        await asyncio.sleep(0.1)
                 
     logger.info("--- Ingestion Pipeline Complete ---\n")
 
