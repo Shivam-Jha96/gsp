@@ -26,7 +26,7 @@ app = modal.App("clm-macro-engine")
     gpu="A10G", 
     image=image, 
     min_containers=0,
-    container_idle_timeout=30,
+    scaledown_window=30,
     timeout=3600
 )
 @modal.web_server(port=8700, startup_timeout=300)
