@@ -2,8 +2,12 @@ name: Global Macro-Sentiment Pipeline
 
 on:
   schedule:
-    # Run every 2 hours (Balances data freshness while staying under GitHub/Gemini Free Tier limits)
+    # Run every 2 hours
     - cron: '0 */2 * * *'
+  workflow_run:
+    # Auto-trigger after the OKF updater finishes (prevents cron desync from bot commits)
+    workflows: ["Dynamic OKF Knowledge Updater"]
+    types: [completed]
   workflow_dispatch: # Allows manual trigger from the GitHub UI
 
 jobs:
