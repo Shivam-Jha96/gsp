@@ -26,16 +26,16 @@ app = modal.App("clm-macro-engine")
     gpu="A10G", 
     image=image, 
     min_containers=0,
-    scaledown_window=30,
+    scaledown_window=120,
     timeout=3600
 )
-@modal.web_server(port=8700, startup_timeout=300)
-
+@modal.asgi_app()
 def clm_server():
     """
-    Spawns both the vLLM embedding server and the CLM System-One router 
-    inside the same Modal container.
+    Mounts the official CLM ASGI app natively inside Modal to bypass TCP proxy deadlocks.
     """
+    import subprocess, time, urllib.request, urllib.error
+    
     print("Starting vLLM Embedding Backbone...")
     vllm_process = subprocess.Popen([
         "vllm", "serve", "Qwen/Qwen3-8B", 
@@ -58,17 +58,22 @@ def clm_server():
             pass
         time.sleep(2)
         
-    print("vLLM is ready! Starting CLM System-One Server...")
-    clm_process = subprocess.Popen([
-        "clm-serve", 
-        "--port", "8700", 
-        "--emb-url", "http://127.0.0.1:8090/v1/embeddings",
-        "--emb-model", "qwen3-8b"
-    ])
+    print("vLLM is ready! Loading CLM Engine...")
     
-    # Keep the main process alive so Modal doesn't kill the container
-    try:
-        vllm_process.wait()
-    except KeyboardInterrupt:
-        vllm_process.terminate()
-        clm_process.terminate()
+    from clm.server import create_app, download
+    from clm import Engine
+    from clm.embedder import Embedder
+    
+    # Download the default Jev model weights if not present
+    ckpt = download()
+    
+    # Initialize the embedder (pointing to our local vLLM instance)
+    embedder = Embedder("http://127.0.0.1:8090/v1/embeddings", "qwen3-8b", max_tokens=2048)
+    
+    # Initialize the Engine
+    engine = Engine(embedder, checkpoint=ckpt, device="cuda")
+    
+    # Create the official FastAPI app and return it to Modal
+    fastapi_app = create_app(engine, api_key=None, ui=False, cors=True)
+    
+    return fastapi_app

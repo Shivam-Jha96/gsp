@@ -31,7 +31,7 @@ Text to analyze: {text}"""
                 ),
                 "confidence": Score(
                     instructions="Confidence in the market direction.",
-                    criteria=["0.0 means completely uncertain, 1.0 means highly confident"]
+                    criteria=["0.0 completely uncertain", "1.0 highly confident"]
                 )
             }
         )
