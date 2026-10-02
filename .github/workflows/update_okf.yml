@@ -6,12 +6,17 @@ on:
     - cron: '0 0 * * *'
   workflow_dispatch: # Allows manual trigger
 
+concurrency:
+  group: okf-updater
+  cancel-in-progress: false
+
 permissions:
   contents: write # Needed to commit and push changes back to the repository
 
 jobs:
   update-okf:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     
     steps:
       - name: Checkout Repository
@@ -21,6 +26,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
+          cache: 'pip'
           
       - name: Install Dependencies
         run: |
@@ -43,6 +49,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes to OKF rules detected."
           else
-            git commit -m "Auto-update Objective Knowledge Framework (OKF) via Gemini AI"
-            git push
+            git commit -m "Auto-update Objective Knowledge Framework (OKF) via Gemini AI [skip ci]"
+            git pull --rebase origin master
+            git push origin master
           fi

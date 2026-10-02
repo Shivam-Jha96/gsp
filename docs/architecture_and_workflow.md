@@ -532,8 +532,8 @@ Each rule maintains a concise, institutional-grade format (1–2 sentence condit
 ### Layer 7: CI/CD & Orchestration Layer
 * **Source Files:** [`.github/workflows/deploy.yml`](file:///d:/Dev/repos/gsp/.github/workflows/deploy.yml), [`.github/workflows/update_okf.yml`](file:///d:/Dev/repos/gsp/.github/workflows/update_okf.yml), [`.github/workflows/ci.yml`](file:///d:/Dev/repos/gsp/.github/workflows/ci.yml)
 
-#### 1. Workflow Dependency Graph
-GitHub Actions orchestrates all recurring pipeline tasks:
+#### 1. Workflow Architecture & Decoupled Execution Graph
+GitHub Actions orchestrates all recurring pipelines on isolated, non-blocking schedules with dedicated concurrency groups:
 
 ```
 +-------------------------------------------------------+
@@ -544,20 +544,29 @@ GitHub Actions orchestrates all recurring pipeline tasks:
 
 +-------------------------------------------------------+
 |  .github/workflows/update_okf.yml                     |
-|  - Triggers on: Cron '0 0 * * *' (Daily 00:00 UTC)    |
+|  - Triggers on: Cron '0 0 * * *' (Daily at 00:00 UTC) |
+|                 workflow_dispatch (Manual trigger)    |
+|  - Concurrency: 'okf-updater'                         |
+|  - Timeout: 15 minutes                                |
 |  - Tasks: Run okf_updater.py, commit updated rules    |
-+---------------------------+---------------------------+
-                            | triggers on completion
-                            v
+|           with [skip ci] and git pull --rebase        |
++-------------------------------------------------------+
+
 +-------------------------------------------------------+
 |  .github/workflows/deploy.yml                         |
 |  - Triggers on: Cron '0 */2 * * *' (Every 2 hours)   |
-|                 workflow_run from update_okf.yml      |
 |                 workflow_dispatch (Manual trigger)    |
+|  - Concurrency: 'sentiment-pipeline'                  |
+|  - Timeout: 15 minutes                                |
 |  - Tasks: Execute full Ingestion -> Inference -> DB  |
 |           -> Alpaca Paper Trade pipeline              |
 +-------------------------------------------------------+
 ```
+
+* **Independent Decoupled Schedules:** The sentiment pipeline (`deploy.yml`) runs strictly on its 2-hour schedule without `workflow_run` coupling, preventing redundant runs or execution desynchronization when the daily knowledge updater finishes.
+* **Isolated Concurrency Lanes:** `sentiment-pipeline` and `okf-updater` run under separate concurrency namespaces (`concurrency.group`), guaranteeing that one workflow never blocks, cancels, or waits on the other.
+* **Runaway Process Safeguards:** Both jobs enforce `timeout-minutes: 15` and pip caching (`cache: 'pip'`), preventing hung jobs from monopolizing runner minutes.
+* **Git Race Condition Elimination:** The bot commit step in `update_okf.yml` uses `[skip ci]` and `git pull --rebase origin master` to prevent trigger loops in `ci.yml` and eliminate non-fast-forward push rejections.
 
 #### 2. Environment Secrets Management
 Pipelines operate in headless containerized environments using repository-level GitHub Actions secrets:

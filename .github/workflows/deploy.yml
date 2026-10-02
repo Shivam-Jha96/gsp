@@ -2,17 +2,18 @@ name: Global Macro-Sentiment Pipeline
 
 on:
   schedule:
-    # Run every 2 hours
+    # Run every 2 hours independently
     - cron: '0 */2 * * *'
-  workflow_run:
-    # Auto-trigger after the OKF updater finishes (prevents cron desync from bot commits)
-    workflows: ["Dynamic OKF Knowledge Updater"]
-    types: [completed]
   workflow_dispatch: # Allows manual trigger from the GitHub UI
+
+concurrency:
+  group: sentiment-pipeline
+  cancel-in-progress: false
 
 jobs:
   run-pipeline:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     
     steps:
       - name: Checkout Repository
@@ -22,6 +23,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
+          cache: 'pip'
           
       - name: Install Dependencies
         run: |
