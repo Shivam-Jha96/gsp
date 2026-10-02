@@ -110,10 +110,21 @@ LATEST MACROECONOMIC NEWS:
 {news_context}
 
 TASK:
-Analyze the latest macroeconomic news to identify any major shifts in Central Bank policy (interest rates, QE/QT), inflation trends, or structural economic shifts.
-If the news implies a paradigm shift (e.g. the Central Bank is pivoting from hawkish to dovish), UPDATE the existing rules or ADD new rules to reflect this.
-If the news confirms the existing rules, keep them but add more nuance or detail.
-Always aim for 4-6 rules per region.
+1. Analyze the latest macroeconomic news to identify any major shifts in Central Bank policy (interest rates, QE/QT), inflation trends, sovereign debt & yield curves, currency dynamics, trade tariffs, commodities, or structural economic shifts.
+2. Maintain comprehensive coverage across all active, distinct macroeconomic transmission channels for this region:
+   - Monetary Policy & Liquidity (Interest rates, QE/QT, banking reserve ratios)
+   - Inflation Dynamics (Core vs. headline, wage pressure, supply bottlenecks)
+   - Sovereign Debt & Fiscal Policy (Yield curves, deficit expansion, bond issuance)
+   - Currency & External Balance (FX depreciation/appreciation, central bank intervention)
+   - Trade, Tariffs & Geopolitical Friction (Import/export levies, sanctions, supply chains)
+   - Commodity & Energy Dynamics (Crude oil, food baskets, monsoon/agricultural cycles)
+   - Capital Flows & Institutional Liquidity (FPI/FII flows, credit spreads, corporate earnings)
+   - Structural & Secular Drivers (Technology/AI investment, corporate governance reforms)
+3. DO NOT artificially restrict or cap the number of rules. Generate as many rules as necessary to fully capture the active macroeconomic landscape without arbitrary ceilings.
+4. Ensure each rule is mutually exclusive, concise, and institutional-grade:
+   - Keep Conditions focused on clear catalysts, economic thresholds, or policy triggers (1-2 sentences).
+   - Keep Actions focused on direct directional market reactions: Bullish on Asset A, Bearish on Asset B.
+5. If the news implies a paradigm shift (e.g. Central Bank pivot, new tariff regime), update or add rules to reflect this. If existing rules are confirmed or unchanged, preserve them with necessary nuance. Prune any truly obsolete or superseded rules, but never discard an active transmission channel just to meet a target count.
 
 OUTPUT FORMAT:
 Output ONLY raw Markdown text. Do NOT wrap it in code blocks.

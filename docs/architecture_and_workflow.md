@@ -511,6 +511,19 @@ MODEL_FALLBACKS = [
 * **Retry Strategy:** Up to 3 retry attempts per model with linear backoff delays (5s, 10s, 15s) upon receiving `503 Service Unavailable` or transient capacity errors.
 * **Rate-Limit Throttling:** Introduces an explicit 5-second pause between regional assessments to respect Google Gemini's 15 requests-per-minute (RPM) free-tier limit.
 
+#### 3. Dynamic Regime-Driven Rule Synthesis (Unconstrained Transmission Channels)
+To eliminate artificial information bottlenecks, the OKF generation prompt does not restrict rules to an arbitrary numerical ceiling (e.g., 4–6 rules). Instead, Gemini is instructed to comprehensively span all active, independent macroeconomic transmission channels:
+* **Monetary Policy & Liquidity:** Central bank interest rates, balance sheet runoff (QT), policy forward guidance.
+* **Inflation Dynamics:** Core vs. headline CPI, wage inflation, energy/supply bottlenecks.
+* **Sovereign Debt & Fiscal Policy:** Bond yield curves, fiscal deficits, government debt issuance.
+* **Currency & External Balance:** FX depreciation/appreciation, central bank market intervention, basis spreads.
+* **Trade, Tariffs & Geopolitical Friction:** Import duties, export restrictions, cross-border supply chain shocks.
+* **Commodity & Energy Dynamics:** Crude oil price volatility, agricultural basket trends, seasonal weather/monsoon patterns.
+* **Capital Flows & Institutional Liquidity:** FPI/FII equity & debt reallocation, domestic institutional investor flows.
+* **Structural & Secular Drivers:** Tech/AI private capital expenditure, national corporate governance initiatives.
+
+Each rule maintains a concise, institutional-grade format (1–2 sentence condition, direct directional action), preserving high semantic density and ensuring the total prompt context remains comfortably within the serverless CLM model's 2,048-token context window (`max_tokens=2048`).
+
 ---
 
 ### Layer 7: CI/CD & Orchestration Layer
