@@ -412,9 +412,9 @@ order = trading_client.submit_order(order_data=order_data)
 |  - Total Ingested Volume |  +---------------------------------------------------+  |
 |  - Active Universe Count |  - Mini Asset Tiles (S&P, NASDAQ, Dow, Russell, VIX)    |
 +--------------------------+---------------------------------------------------------+
-|  LIVE INTELLIGENCE STREAM (BOTTOM FULL-WIDTH)                                      |
-|  - Filterable by Bullish, Bearish, Noise                                            |
-|  - Sanitized headlines, publisher tags, sentiment confidence chips                 |
+|  LIVE INTELLIGENCE STREAM (COLLAPSIBLE ACCORDION CONTAINER)                        |
+|  - Collapsed state: Summary Bar (Title, Chevron, Total / Bullish / Bearish / Noise)|
+|  - Expanded state: Individual news cards with timestamps, sources & sentiment chips|
 +------------------------------------------------------------------------------------+
 ```
 
@@ -452,11 +452,14 @@ if clm_damped_mask_sig.any():
     df_signals.loc[clm_damped_mask_sig, 'sentiment_score'] = df_signals.loc[clm_damped_mask_sig, 'sentiment_score'] * 8.0
 ```
 
-#### 5. Feed Sanitization & Noise Classification
-Headlines undergo regex processing in `clean_news_item()` to strip HTML markup, remove trailing publisher signatures, and classify each entry into one of three sentiment buckets:
-* **Bullish Event:** Sentiment Score $\ge +0.5$ (Emerald badge)
-* **Bearish Event:** Sentiment Score $\le -0.5$ (Rose badge)
-* **Market Noise:** $-0.5 < \text{Sentiment Score} < +0.5$ (Slate badge)
+#### 5. Collapsible Live Feed & Accordion Architecture
+The Live Intelligence Feed uses a native HTML `<details>` and `<summary>` accordion architecture:
+* **Collapsed Executive State (Default):** Shows only the high-level regional header bar containing the interactive rotating SVG chevron, region pulse dot, and real-time count badges (`Total`, `Bullish`, `Bearish`, `Noise`).
+* **Expanded State:** Revealing the underlying news container when clicked, with zero page reloads, zero Streamlit re-renders, and full client-side 60fps interaction.
+* **Feed Sanitization & Noise Classification:** Headlines undergo regex processing in `clean_news_item()` to strip HTML markup, remove trailing publisher signatures, and classify each entry into one of three sentiment buckets:
+  * **Bullish Event:** Sentiment Score $\ge +0.5$ (Emerald badge)
+  * **Bearish Event:** Sentiment Score $\le -0.5$ (Rose badge)
+  * **Market Noise:** $-0.5 < \text{Sentiment Score} < +0.5$ (Slate badge)
 
 #### 6. Deep Multi-Timeframe Query Synchronization
 To guarantee accurate reflection of historical activity across all selectable time horizons (`4H`, `6H`, `12H`, `24H`, `7D`, `1M`, `1Y`, `All`), the document layer query (`event_payloads` joined with `event_signals`) scales to `LIMIT 2000`:

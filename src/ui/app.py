@@ -184,6 +184,42 @@ st.markdown("""
     .news-item-card:last-child {
         margin-bottom: 0;
     }
+    
+    /* Collapsible News Feed Accordion */
+    details.news-feed-accordion {
+        margin-top: 28px;
+        margin-bottom: 14px;
+        background: transparent;
+        border: none;
+    }
+    details.news-feed-accordion summary.news-feed-summary {
+        list-style: none !important;
+        cursor: pointer;
+        user-select: none;
+        outline: none;
+        padding: 6px 0 14px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.2s ease;
+    }
+    details.news-feed-accordion summary.news-feed-summary::-webkit-details-marker {
+        display: none !important;
+    }
+    details.news-feed-accordion summary.news-feed-summary::marker {
+        display: none !important;
+    }
+    details.news-feed-accordion summary.news-feed-summary:hover {
+        border-bottom-color: rgba(59, 130, 246, 0.45);
+    }
+    details.news-feed-accordion summary.news-feed-summary:hover .accordion-chevron {
+        stroke: #38bdf8;
+    }
+    details.news-feed-accordion .accordion-chevron {
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        display: inline-block;
+    }
+    details.news-feed-accordion[open] .accordion-chevron {
+        transform: rotate(90deg);
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -678,32 +714,35 @@ if not df_signals.empty:
         bearish_count = int((region_payloads['sentiment_index'] <= -0.5).sum()) if not region_payloads.empty else 0
         noise_count = total_events - bullish_count - bearish_count
         
-        st.markdown(f"""
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-top: 28px; margin-bottom: 14px;">
-            <div style="font-size: 1.15rem; font-weight: 700; color: #f8fafc; font-family: 'Montserrat', sans-serif; display: flex; align-items: center; gap: 10px;">
-                <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 10px #3b82f6;"></span>
-                {selected_region} Live Intelligence Feed
-            </div>
-            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-                <span style="font-size: 0.72rem; font-weight: 700; color: #f8fafc; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
-                    {total_events} Total
-                </span>
-                <span style="font-size: 0.72rem; font-weight: 700; color: #34d399; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
-                    {bullish_count} Bullish
-                </span>
-                <span style="font-size: 0.72rem; font-weight: 700; color: #f87171; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
-                    {bearish_count} Bearish
-                </span>
-                <span style="font-size: 0.72rem; font-weight: 700; color: #cbd5e1; background: rgba(148, 163, 184, 0.18); border: 1px solid rgba(148, 163, 184, 0.4); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
-                    {noise_count} Noise
-                </span>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-        
+        html_feed = f"""
+<details class="news-feed-accordion">
+<summary class="news-feed-summary" title="Click to expand/collapse feed">
+<div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+    <div style="font-size: 1.15rem; font-weight: 700; color: #f8fafc; font-family: 'Montserrat', sans-serif; display: flex; align-items: center; gap: 10px;">
+        <svg class="accordion-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 10px #3b82f6; flex-shrink: 0;"></span>
+        <span>{selected_region} Live Intelligence Feed</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+        <span style="font-size: 0.72rem; font-weight: 700; color: #f8fafc; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
+            {total_events} Total
+        </span>
+        <span style="font-size: 0.72rem; font-weight: 700; color: #34d399; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
+            {bullish_count} Bullish
+        </span>
+        <span style="font-size: 0.72rem; font-weight: 700; color: #f87171; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
+            {bearish_count} Bearish
+        </span>
+        <span style="font-size: 0.72rem; font-weight: 700; color: #cbd5e1; background: rgba(148, 163, 184, 0.18); border: 1px solid rgba(148, 163, 184, 0.4); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
+            {noise_count} Noise
+        </span>
+    </div>
+</div>
+</summary>
+<div class="news-feed-container" style="margin-top: 14px;">
+"""
+
         if not region_payloads.empty:
-            html_feed = '<div class="news-feed-container">'
-            
             for _, row in region_payloads.iterrows():
                 sentiment = row['sentiment_index']
                 if date_range in ["4H", "6H", "12H", "24H"]:
@@ -756,10 +795,18 @@ if not df_signals.empty:
     </div>
 </div>
 """
-            html_feed += "</div>"
-            st.markdown(html_feed, unsafe_allow_html=True)
         else:
-            st.info("No recent news events in database.")
+            html_feed += f"""
+<div style="color: #94a3b8; font-size: 0.88rem; padding: 18px; text-align: center; font-family: 'IBM Plex Sans', sans-serif;">
+    No recent news events for {selected_region} in the selected timeframe.
+</div>
+"""
+
+        html_feed += """
+</div>
+</details>
+"""
+        st.markdown(html_feed, unsafe_allow_html=True)
             
 
     else:
