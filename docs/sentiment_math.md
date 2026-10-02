@@ -62,7 +62,7 @@ Let $f_\theta: \mathcal{V}^N \to \mathbb{R}^{N \times d}$ denote a deep bidirect
 
 $$\mathbf{H} = f_\theta(\mathbf{X}) = [\mathbf{h}_1, \mathbf{h}_2, \dots, \mathbf{h}_N] \in \mathbb{R}^{N \times d}$$
 
-A pooling operator $\text{Pool}(\cdot)$ compresses the variable-length representation into a single sequence vector $\bar{\mathbf{h}} \in \mathbb{R}^d$. We utilize mean pooling weighted across the attention mask $\mathbf{m} \in \{0, 1\}^N$:
+A pooling operator $\text{Pool}(\cdot)$ compresses the variable-length representation into a single sequence vector $\bar{\mathbf{h}} \in \mathbb{R}^d$. We utilize mean pooling weighted across the attention mask $\mathbf{m} \in \lbrace 0, 1 \rbrace^N$:
 
 $$\bar{\mathbf{h}} = \frac{\sum_{i=1}^N m_i \mathbf{h}_i}{\sum_{i=1}^N m_i}$$
 
@@ -70,7 +70,7 @@ The pooled latent vector $\bar{\mathbf{h}}$ is mapped into a metric space of dim
 
 $$\mathbf{e} = g_\phi(\bar{\mathbf{h}}) = \mathbf{W}_2 \ \sigma\left(\mathbf{W}_1 \bar{\mathbf{h}} + \mathbf{b}_1\right) + \mathbf{b}_2$$
 
-where $\mathbf{W}_1 \in \mathbb{R}^{d_{\text{proj}} \times d}$, $\mathbf{W}_2 \in \mathbb{R}^{k \times d_{\text{proj}}}$, and $\sigma(\cdot)$ is the Gaussian Error Linear Unit (GELU) activation. The final normalized representation $\mathbf{z}$ lies on the unit hypersphere $\mathbb{S}^{k-1} = \{\mathbf{u} \in \mathbb{R}^k : \|\mathbf{u}\|_2 = 1\}$:
+where $\mathbf{W}_1 \in \mathbb{R}^{d_{\text{proj}} \times d}$, $\mathbf{W}_2 \in \mathbb{R}^{k \times d_{\text{proj}}}$, and $\sigma(\cdot)$ is the Gaussian Error Linear Unit (GELU) activation. The final normalized representation $\mathbf{z}$ lies on the unit hypersphere $\mathbb{S}^{k-1} = \lbrace \mathbf{u} \in \mathbb{R}^k : \|\mathbf{u}\|_2 = 1 \rbrace$:
 
 $$\mathbf{z} = \frac{\mathbf{e}}{\|\mathbf{e}\|_2}$$
 
@@ -81,7 +81,7 @@ Within the metric hypersphere $\mathbb{S}^{k-1}$, three orthonormal or learned c
 - $\mathbf{a}_{\text{bear}} \in \mathbb{S}^{k-1}$: Canonical representation of stagflation, demand destruction, rate hike shocks, tariff friction, or liquidity contraction.
 - $\mathbf{a}_{\text{neut}} \in \mathbb{S}^{k-1}$: Canonical representation of baseline/in-line statistical prints, uninformative news updates, or balanced macroeconomic forces.
 
-The semantic alignment of the news event with respect to each canonical hypothesis $c \in \mathcal{C} = \{\text{bull}, \text{bear}, \text{neut}\}$ is given by the cosine inner product:
+The semantic alignment of the news event with respect to each canonical hypothesis $c \in \mathcal{C} = \lbrace \text{bull}, \text{bear}, \text{neut} \rbrace$ is given by the cosine inner product:
 
 $$\text{sim}(\mathbf{z}, \mathbf{a}_c) = \langle \mathbf{z}, \mathbf{a}_c \rangle = \cos(\theta_{\mathbf{z}, \mathbf{a}_c}) \in [-1.0, 1.0]$$
 
@@ -107,7 +107,7 @@ Unstructured financial text cannot be scored in a vacuum. A news item stating:
 
 is economically indeterminate without an active monetary policy regime. If the central bank target is $2.0\%$ and nominal rates are restrictive, a sticky $3.4\%$ print implies "higher-for-longer" policy rates (bearish for long-duration equities). Conversely, during a stagflationary recovery from $9.0\%$ inflation, a $3.4\%$ print represents disinflationary normalization (bullish for equities).
 
-The **Ontological Knowledge Framework (OKF)** formalizes this regional macroeconomic regime as a prioritized conditioning context $\mathcal{R}_r = \{R_{r,1}, R_{r,2}, \dots, R_{r,K}\}$ for jurisdiction $r \in \{\text{US}, \text{UK}, \text{IN}, \text{JP}, \text{EU}\}$.
+The **Ontological Knowledge Framework (OKF)** formalizes this regional macroeconomic regime as a prioritized conditioning context $\mathcal{R}_r = \lbrace R_{r,1}, R_{r,2}, \dots, R_{r,K} \rbrace$ for jurisdiction $r \in \lbrace \text{US}, \text{UK}, \text{IN}, \text{JP}, \text{EU} \rbrace$.
 
 ### 3.1 Contextual Fusion Operator
 
@@ -142,19 +142,19 @@ Because the OKF rules $\mathcal{R}_r$ reside within the same attention context w
 
 ## 4. Tri-Partite Probability Extraction
 
-Let $\tau > 0$ denote the learned temperature hyperparameter scaling the metric hypersphere projection. For each canonical hypothesis anchor $c \in \{\text{Bullish}, \text{Bearish}, \text{Neutral}\}$, the scaled similarity logit $u_c$ is:
+Let $\tau > 0$ denote the learned temperature hyperparameter scaling the metric hypersphere projection. For each canonical hypothesis anchor $c \in \lbrace \text{Bullish}, \text{Bearish}, \text{Neutral} \rbrace$, the scaled similarity logit $u_c$ is:
 
 $$u_c = \frac{\langle \mathbf{z}, \mathbf{a}_c \rangle}{\tau}$$
 
 The categorical probability distribution $\mathbf{p} = [p_{\text{bull}}, p_{\text{bear}}, p_{\text{neut}}]^T$ is obtained via the Softmax activation function over the set of discrete hypotheses:
 
-$$P(c) = \frac{\exp\left(u_c\right)}{\sum_{j \in \{\text{bull}, \text{bear}, \text{neut}\}} \exp\left(u_j\right)}, \quad \forall c \in \{\text{Bullish}, \text{Bearish}, \text{Neutral}\}$$
+$$P(c) = \frac{\exp\left(u_c\right)}{\sum_{j \in \lbrace \text{bull}, \text{bear}, \text{neut} \rbrace} \exp\left(u_j\right)}, \quad \forall c \in \lbrace \text{Bullish}, \text{Bearish}, \text{Neutral} \rbrace$$
 
 ### 4.1 Properties of the Tri-Partite Simplex
 
 The output vector $\mathbf{p}$ is strictly constrained to the standard 2-dimensional probability simplex $\Delta^2$:
 
-$$\Delta^2 = \left\{ (p_{\text{bull}}, p_{\text{bear}}, p_{\text{neut}}) \in \mathbb{R}^3_+ \ \middle|\ p_{\text{bull}} + p_{\text{bear}} + p_{\text{neut}} = 1.0, \quad p_c \ge 0 \right\}$$
+$$\Delta^2 = \left\lbrace (p_{\text{bull}}, p_{\text{bear}}, p_{\text{neut}}) \in \mathbb{R}^3_+ \mid p_{\text{bull}} + p_{\text{bear}} + p_{\text{neut}} = 1.0, \quad p_c \ge 0 \right\rbrace$$
 
 ```
                   P(Bullish) = 1.0
@@ -264,9 +264,9 @@ In macro financial news feeds (Reuters, Bloomberg, Dow Jones), $>70\%$ of ingest
 
 ### 7.1 Discrete Verdict Conditioning
 
-Let $C^* \in \{\text{Bullish}, \text{Bearish}, \text{Neutral}\}$ represent the categorical classification verdict delivered by the System-One inference engine:
+Let $C^* \in \lbrace \text{Bullish}, \text{Bearish}, \text{Neutral} \rbrace$ represent the categorical classification verdict delivered by the System-One inference engine:
 
-$$C^* = \arg\max_{c \in \{\text{Bullish}, \text{Bearish}, \text{Neutral}\}} P(c)$$
+$$C^* = \arg\max_{c \in \lbrace \text{Bullish}, \text{Bearish}, \text{Neutral} \rbrace} P(c)$$
 
 ### 7.2 Piecewise Mapping Function ($\mathcal{S}_{\text{dir}}$)
 
@@ -305,7 +305,7 @@ $$\text{Range Interpretation:} \quad \begin{cases}
 
 In production trading environments, news releases arrive as an asynchronous Poisson process. Let $\mathcal{T}_k = [t_k, t_k + \Delta t)$ define a discrete time bucket of width $\Delta t$ (e.g., $\Delta t = 1\text{ hour}$ for intraday equity execution, or $\Delta t = 24\text{ hours}$ for swing positioning).
 
-Let $N_k$ denote the count of discrete news events ingested within timeframe interval $\mathcal{T}_k$, with individual sentiment scores $\{I_{k, 1}, I_{k, 2}, \dots, I_{k, N_k}\}$. The cross-sectional bucket aggregate $\bar{I}_k$ is computed as:
+Let $N_k$ denote the count of discrete news events ingested within timeframe interval $\mathcal{T}_k$, with individual sentiment scores $\lbrace I_{k, 1}, I_{k, 2}, \dots, I_{k, N_k} \rbrace$. The cross-sectional bucket aggregate $\bar{I}_k$ is computed as:
 
 $$\bar{I}_k = \begin{cases}
 \frac{1}{N_k} \sum_{i=1}^{N_k} I_{k, i}, & \text{if } N_k > 0 \\
@@ -402,7 +402,7 @@ Check simplex constraint:
 $$\sum p_c = 0.82 + 0.05 + 0.13 = 1.00 \quad \checkmark$$
 
 Categorical verdict:
-$$C^* = \arg\max \{0.82, 0.05, 0.13\} = \mathbf{Bullish}$$
+$$C^* = \arg\max \lbrace 0.82, 0.05, 0.13 \rbrace = \mathbf{Bullish}$$
 
 #### Step 2: Relative Directional Conviction ($S_{\text{rel}}$)
 $$S_{\text{rel}} = \frac{0.82 - 0.05}{0.82 + 0.05 + 10^{-5}} = \frac{0.77}{0.87001} = +0.885047$$
@@ -439,7 +439,7 @@ Check simplex constraint:
 $$\sum p_c = 0.04 + 0.88 + 0.08 = 1.00 \quad \checkmark$$
 
 Categorical verdict:
-$$C^* = \arg\max \{0.04, 0.88, 0.08\} = \mathbf{Bearish}$$
+$$C^* = \arg\max \lbrace 0.04, 0.88, 0.08 \rbrace = \mathbf{Bearish}$$
 
 #### Step 2: Relative Directional Conviction ($S_{\text{rel}}$)
 $$S_{\text{rel}} = \frac{0.04 - 0.88}{0.04 + 0.88 + 10^{-5}} = \frac{-0.84}{0.92001} = -0.913033$$
@@ -476,7 +476,7 @@ Check simplex constraint:
 $$\sum p_c = 0.18 + 0.12 + 0.70 = 1.00 \quad \checkmark$$
 
 Categorical verdict:
-$$C^* = \arg\max \{0.18, 0.12, 0.70\} = \mathbf{Neutral}$$
+$$C^* = \arg\max \lbrace 0.18, 0.12, 0.70 \rbrace = \mathbf{Neutral}$$
 
 #### Step 2: Comparative Analysis of Gated vs. Ungated Mapping
 
