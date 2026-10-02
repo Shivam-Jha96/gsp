@@ -185,20 +185,27 @@ st.markdown("""
         margin-bottom: 0;
     }
     
-    /* Collapsible News Feed Accordion */
+    /* Collapsible News Feed Card & Accordion */
     details.news-feed-accordion {
         margin-top: 28px;
         margin-bottom: 14px;
-        background: transparent;
-        border: none;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-left: 4px solid #3b82f6;
+        border-radius: 8px;
+        transition: all 0.25s ease;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+    details.news-feed-accordion:hover {
+        border-color: rgba(59, 130, 246, 0.35);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(59, 130, 246, 0.1);
     }
     details.news-feed-accordion summary.news-feed-summary {
         list-style: none !important;
         cursor: pointer;
         user-select: none;
         outline: none;
-        padding: 6px 0 14px 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 12px 18px;
         transition: all 0.2s ease;
     }
     details.news-feed-accordion summary.news-feed-summary::-webkit-details-marker {
@@ -208,17 +215,50 @@ st.markdown("""
         display: none !important;
     }
     details.news-feed-accordion summary.news-feed-summary:hover {
-        border-bottom-color: rgba(59, 130, 246, 0.45);
+        background: rgba(255, 255, 255, 0.025);
     }
-    details.news-feed-accordion summary.news-feed-summary:hover .accordion-chevron {
-        stroke: #38bdf8;
+    details.news-feed-accordion[open] summary.news-feed-summary {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
-    details.news-feed-accordion .accordion-chevron {
-        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        display: inline-block;
+    
+    .expand-action-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(59, 130, 246, 0.18);
+        border: 1px solid rgba(59, 130, 246, 0.45);
+        color: #60a5fa;
+        padding: 4px 12px;
+        border-radius: 5px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        font-family: 'Montserrat', sans-serif;
+        text-transform: uppercase;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
     }
-    details.news-feed-accordion[open] .accordion-chevron {
-        transform: rotate(90deg);
+    details.news-feed-accordion summary.news-feed-summary:hover .expand-action-btn {
+        background: rgba(59, 130, 246, 0.3);
+        border-color: #60a5fa;
+        color: #ffffff;
+        box-shadow: 0 0 12px rgba(59, 130, 246, 0.45);
+    }
+    details.news-feed-accordion .expand-text { display: inline-flex; align-items: center; gap: 5px; }
+    details.news-feed-accordion .collapse-text { display: none; }
+    details.news-feed-accordion[open] .expand-text { display: none; }
+    details.news-feed-accordion[open] .collapse-text { display: inline-flex; align-items: center; gap: 5px; }
+    
+    details.news-feed-accordion[open] .expand-action-btn {
+        background: rgba(148, 163, 184, 0.12);
+        border-color: rgba(148, 163, 184, 0.35);
+        color: #cbd5e1;
+    }
+    details.news-feed-accordion[open] summary.news-feed-summary:hover .expand-action-btn {
+        background: rgba(239, 68, 68, 0.15);
+        border-color: rgba(239, 68, 68, 0.4);
+        color: #f87171;
+        box-shadow: 0 0 12px rgba(239, 68, 68, 0.35);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -716,12 +756,17 @@ if not df_signals.empty:
         
         html_feed = f"""
 <details class="news-feed-accordion">
-<summary class="news-feed-summary" title="Click to expand/collapse feed">
-<div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-    <div style="font-size: 1.15rem; font-weight: 700; color: #f8fafc; font-family: 'Montserrat', sans-serif; display: flex; align-items: center; gap: 10px;">
-        <svg class="accordion-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 10px #3b82f6; flex-shrink: 0;"></span>
-        <span>{selected_region} Live Intelligence Feed</span>
+<summary class="news-feed-summary" title="Click anywhere on this card to expand or collapse feed">
+<div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 10px #3b82f6; flex-shrink: 0;"></span>
+            <span style="font-size: 1.15rem; font-weight: 700; color: #f8fafc; font-family: 'Montserrat', sans-serif;">{selected_region} Live Intelligence Feed</span>
+        </div>
+        <div class="expand-action-btn">
+            <span class="expand-text">EXPAND FEED <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
+            <span class="collapse-text">COLLAPSE FEED <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg></span>
+        </div>
     </div>
     <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
         <span style="font-size: 0.72rem; font-weight: 700; color: #f8fafc; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
@@ -739,7 +784,7 @@ if not df_signals.empty:
     </div>
 </div>
 </summary>
-<div class="news-feed-container" style="margin-top: 14px;">
+<div class="news-feed-container" style="border: none !important; border-top: 1px solid rgba(255,255,255,0.06) !important; border-radius: 0 0 8px 8px; background: transparent !important; padding: 14px 18px; margin-top: 0; max-height: 440px; overflow-y: auto;">
 """
 
         if not region_payloads.empty:
