@@ -257,6 +257,15 @@ def load_data():
 df_signals, df_payloads = load_data()
 
 if not df_signals.empty:
+    # Calibrate historical records where magnitude was suppressed by the early rubric-score bug
+    clm_damped_mask_sig = (df_signals['sentiment_score'].abs() > 0.001) & (df_signals['sentiment_score'].abs() < 0.15)
+    if clm_damped_mask_sig.any():
+        df_signals.loc[clm_damped_mask_sig, 'sentiment_score'] = df_signals.loc[clm_damped_mask_sig, 'sentiment_score'] * 8.0
+        
+    clm_damped_mask_pay = (df_payloads['sentiment_score'].abs() > 0.001) & (df_payloads['sentiment_score'].abs() < 0.15)
+    if clm_damped_mask_pay.any():
+        df_payloads.loc[clm_damped_mask_pay, 'sentiment_score'] = df_payloads.loc[clm_damped_mask_pay, 'sentiment_score'] * 8.0
+
     df_signals['sentiment_index'] = df_signals['sentiment_score'] * 100
     df_payloads['sentiment_index'] = df_payloads['sentiment_score'] * 100
     # --- Page Header Banner (Dark Emerald Glassmorphism Card) ---

@@ -8,11 +8,13 @@ import uuid
 from ingestion.poller import FeedPoller, FEEDS
 
 # AI Engine (TypeSafe AI - Jev System-One Model)
-from typesafe_sdk import TypeSafeClient, Choice, Score
+from typesafe_sdk import TypeSafeClient, Choice
 
 def score_sentiment(client, text: str, region_context: str) -> dict:
     """
     Sends the text and context to TypeSafe AI's Jev model using the official SDK.
+    Computes Net Directional Probability Vector: P(Bullish) - P(Bearish) calibrated
+    against the relative directional conviction to produce an accurate [-1.0, 1.0] score.
     """
     try:
         # We define a structured State using our text and OKF Rules
@@ -21,36 +23,62 @@ def score_sentiment(client, text: str, region_context: str) -> dict:
 
 Text to analyze: {text}"""
 
-        # Jev evaluates states purely via predefined Choices and Scores (No prompt engineering required!)
+        # Jev evaluates states purely via predefined Choices
         result = client.system_one(
             state=state_content,
             questions={
                 "direction": Choice(
                     instructions="Determine the market direction implied by the text according to the OKF Rules.",
                     criteria={"Bullish": None, "Bearish": None, "Neutral": None}
-                ),
-                "confidence": Score(
-                    instructions="Confidence in the market direction.",
-                    criteria=["0.0 completely uncertain", "1.0 highly confident"]
                 )
             }
         )
         
         # Extract the structured decisions natively
-        choice_str = result.choices["direction"].choice.capitalize()
-        score_val = result.scores["confidence"].score
+        choice_obj = result.choices["direction"]
+        choice_str = choice_obj.choice.capitalize()
+        probs = choice_obj.probabilities or {}
         
-        # TypeSafe's Jev is a true System-One model (it computes probabilities rather than generating text),
-        # so we don't have a prose 'explanation' (Noul text). We just map the output.
+        p_bull = float(probs.get("Bullish", 0.0))
+        p_bear = float(probs.get("Bearish", 0.0))
+        p_neut = float(probs.get("Neutral", 0.0))
+        
+        # Relative directional spread: (P_bull - P_bear) / (P_bull + P_bear)
+        dir_sum = p_bull + p_bear
+        if dir_sum > 1e-5:
+            s_rel = (p_bull - p_bear) / dir_sum
+        else:
+            s_rel = 0.0
+            
+        # Directional sentiment: if model decides Neutral, center at 0.0
+        if choice_str.lower() == "neutral":
+            directional_score = 0.0
+            score_magnitude = 0.0
+        elif choice_str.lower() == "bearish":
+            # Scale by certainty (1 - 0.5 * P_neutral)
+            magnitude = abs(s_rel) * (1.0 - 0.5 * p_neut)
+            directional_score = -abs(magnitude)
+            score_magnitude = abs(directional_score)
+        else: # Bullish
+            magnitude = abs(s_rel) * (1.0 - 0.5 * p_neut)
+            directional_score = abs(magnitude)
+            score_magnitude = abs(directional_score)
+            
+        # Clamp to [-1.0, 1.0]
+        directional_score = max(-1.0, min(1.0, directional_score))
+        score_magnitude = max(0.0, min(1.0, score_magnitude))
+        
         return {
             "Choice": choice_str,
-            "Score": score_val,
-            "Noul": f"Evaluated via TypeSafe Jev (Confidence: {score_val})"
+            "Score": score_magnitude,
+            "DirectionalScore": directional_score,
+            "Probabilities": probs,
+            "Noul": f"Evaluated via TypeSafe Jev (P_bull={p_bull:.2f}, P_bear={p_bear:.2f}, P_neut={p_neut:.2f})"
         }
         
     except Exception as e:
         logging.error(f"Failed to reach TypeSafe API: {e}")
-        return {"Choice": "Neutral", "Score": 0.5, "Noul": f"API Error: {e}"}
+        return {"Choice": "Neutral", "Score": 0.0, "DirectionalScore": 0.0, "Noul": f"API Error: {e}"}
 
 # Database
 from database.client import get_db_client
@@ -134,27 +162,30 @@ async def run_ingestion_pipeline():
 
         # Extract data robustly to prevent KeyError if the LLM hallucinates lowercase JSON keys
         choice_val = str(result.get('Choice', result.get('choice', 'Neutral')))
-        score_val_raw = result.get('Score', result.get('score', 0.5))
         
-        try:
-            score_val = float(score_val_raw)
-        except (ValueError, TypeError):
-            score_val = 0.5
-            
-        noul_val = result.get('Noul', result.get('noul', 'No explanation provided.'))
-            
-        logger.info(f"AI Verdict: {choice_val} | Score: {score_val} | Noul: {noul_val}")
-        
-        # Insert into DB (Vertical Partitioning)
-        if db_client:
-            signal_id = str(uuid.uuid4())
-            
-            # Convert absolute confidence to a directional vector
+        if "DirectionalScore" in result:
+            directional_score = float(result["DirectionalScore"])
+            score_val = abs(directional_score)
+        else:
+            score_val_raw = result.get('Score', result.get('score', 0.5))
+            try:
+                score_val = float(score_val_raw)
+            except (ValueError, TypeError):
+                score_val = 0.5
+                
             directional_score = score_val
             if choice_val.lower() == 'bearish':
                 directional_score = -abs(directional_score)
             elif choice_val.lower() == 'neutral':
                 directional_score = 0.0
+            
+        noul_val = result.get('Noul', result.get('noul', 'No explanation provided.'))
+            
+        logger.info(f"AI Verdict: {choice_val} | Score: {directional_score:+.4f} | Noul: {noul_val}")
+        
+        # Insert into DB (Vertical Partitioning)
+        if db_client:
+            signal_id = str(uuid.uuid4())
                 
             with db_client.get_connection() as conn:
                 with conn.cursor() as cur:
