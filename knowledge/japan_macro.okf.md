@@ -1,21 +1,21 @@
 # Japan Macro Trading Rules
 
-## Rule 1: BOJ Monetary Normalization and Quantitative Tightening (QT)
-- **Condition:** BOJ gradually phases out extraordinary monetary easing, hints at reducing JGB purchases, or faces upward pressure on ultra-long bond yields.
-- **Action:** Bullish on JPY, Bearish on long-duration JGBs and high-valuation domestic equities.
+## Rule 1: BOJ Monetary Normalization vs. Ultra-Long Yield Pressures
+- **Condition:** The BOJ advances Quantitative Tightening (QT) and policy rate hikes while ultra-long JGB yields spike to multi-year highs, creating tension between balance sheet reduction and bond market stability.
+- **Action:** Bearish on long-duration and ultra-long JGBs, Bullish on Japanese financial/banking equities, Bullish on JPY over medium horizons.
 
-## Rule 2: Ministry of Finance (MoF) FX Intervention and Verbal Warns
-- **Condition:** Extreme weakness in the Yen (e.g., multi-decade lows) triggers MoF intervention or aggressive verbal defense to curb speculative capital outflows.
-- **Action:** Sharp tactical rallies in JPY, Bearish on export-heavy Nikkei 225 components.
+## Rule 2: Multi-Decade FX Divergence and MoF Intervention Triggers
+- **Condition:** USD/JPY tests multi-decade highs due to wide global interest rate differentials despite BOJ tightening, triggering aggressive Ministry of Finance verbal warnings or direct FX market intervention.
+- **Action:** Bullish on tactical JPY sharp mean-reversion rallies, Bearish on unhedged export-heavy Nikkei momentum in the immediate aftermath of intervention.
 
-## Rule 3: BOJ Rate Hikes Amid Sticky Inflation
-- **Condition:** Core inflation pressures (driven by oil, import costs, or wage growth) prompt the BOJ to raise interest rates from ultra-low or zero levels.
-- **Action:** Bearish on Nikkei 225 growth stocks, Bullish on Japanese Yen and select domestic banking/financial sectors.
+## Rule 3: Inflation Distortions, Energy Subsidies, and Cost-Push Pressures
+- **Condition:** Headline and core CPI data show transient deceleration due to government utility and energy subsidies, but underlying cost-push pressures (oil, import costs, wage growth) keep the BOJ on a tightening path.
+- **Action:** Bullish on value-oriented equities with pricing power, Bearish on rate-sensitive high-valuation growth stocks and margin-squeezed small caps.
 
-## Rule 4: Domestic Demand vs. GDP Growth Disconnect
-- **Condition:** Japanese economic data (such as Q2 annualized GDP or capex) prints below consensus or shows muted consumer demand masked by subsidies.
-- **Action:** Bearish on cyclical sectors and broad domestic equities, Neutral to defensive on JPY depending on global risk sentiment.
+## Rule 4: Domestic Consumption Drag vs. Corporate Capex Resilience
+- **Condition:** Real GDP prints miss consensus due to fragile private household demand and real wage drag, while business fixed investment (capex) and corporate balance sheets show underlying strength.
+- **Action:** Bearish on broad domestic consumer cyclicals and mass retail, Bullish on domestic factory automation, machinery, and capex-beneficiary equities.
 
-## Rule 5: Structural Investment Inflows and Global AI/Tech Cycle
-- **Condition:** Foreign capital inflows target Japanese structural reforms, corporate governance improvements, and AI-driven supply chain beneficiaries despite macro normalisation headwinds.
-- **Action:** Bullish on structurally sound large-cap Japanese equities (Nikkei 225/TOPIX) independent of near-term FX volatility.
+## Rule 5: Structural Equity Inflows and Corporate Governance Reforms
+- **Condition:** Foreign institutional capital flows into Japanese equities driven by TSE governance enhancements (unwinding cross-shareholdings, dividend hikes, buybacks) and exposure to global AI/semiconductor supply chains.
+- **Action:** Bullish on large-cap TOPIX quality/value leaders and semiconductor/hardware supply chain components, decoupled from short-term macro data misses.
