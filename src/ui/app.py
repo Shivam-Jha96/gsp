@@ -4,6 +4,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 import os
 import sys
+import re
+import html
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from database.client import get_db_client
@@ -142,8 +144,72 @@ st.markdown("""
     #MainMenu {display: none !important;}
     footer {display: none !important;}
     [data-testid="collapsedControl"] {display: none !important;}
+    
+    /* Enhanced Live News Feed Styling */
+    .news-feed-container {
+        background: rgba(255, 255, 255, 0.015) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 8px;
+        padding: 14px;
+        max-height: 420px;
+        overflow-y: auto;
+    }
+    .news-feed-container::-webkit-scrollbar {
+        width: 6px;
+    }
+    .news-feed-container::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 4px;
+    }
+    .news-feed-container::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 4px;
+    }
+    .news-feed-container::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.25);
+    }
+    
+    .news-item-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 6px;
+        padding: 12px 14px;
+        margin-bottom: 8px;
+        transition: all 0.2s ease;
+    }
+    .news-item-card:hover {
+        background: rgba(255, 255, 255, 0.04);
+        border-color: rgba(255, 255, 255, 0.12);
+    }
+    .news-item-card:last-child {
+        margin-bottom: 0;
+    }
 </style>
 """, unsafe_allow_html=True)
+
+def clean_news_item(raw_text: str) -> dict:
+    if not raw_text:
+        return {"headline": "Market update", "source": ""}
+    unescaped = html.unescape(str(raw_text))
+    clean = re.sub(r'<[^>]+>', ' ', unescaped)
+    clean = re.sub(r'\s+', ' ', clean).strip()
+    
+    parts = [p.strip() for p in clean.split(' - ') if p.strip()]
+    if not parts:
+        return {"headline": clean, "source": ""}
+    
+    headline = parts[0]
+    source = ""
+    if len(parts) > 1:
+        for p in reversed(parts[1:]):
+            if 1 < len(p) <= 25 and p != headline:
+                source = p
+                break
+                
+    if source and headline.endswith(f" - {source}"):
+        headline = headline[:-len(f" - {source}")].strip()
+        
+    return {"headline": headline, "source": source}
 
 @st.cache_data(ttl=30)
 def load_data():
@@ -447,46 +513,87 @@ if not df_signals.empty:
                 st.markdown(kpi_html, unsafe_allow_html=True)
 
         # --- Regional News Feeds at the Bottom (Full Width) ---
+        region_payloads = display_payloads[display_payloads['market_region'] == selected_region]
+        total_events = len(region_payloads)
+        bullish_count = int((region_payloads['sentiment_index'] >= 0.5).sum()) if not region_payloads.empty else 0
+        bearish_count = int((region_payloads['sentiment_index'] <= -0.5).sum()) if not region_payloads.empty else 0
+        noise_count = total_events - bullish_count - bearish_count
+        
         st.markdown(f"""
-        <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-top: 30px; margin-bottom: 12px;">
-            <div style="font-size: 1.1rem; font-weight: 700; color: #f8fafc; font-family: 'Montserrat', sans-serif; display: flex; align-items: center; gap: 8px;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg>
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-top: 28px; margin-bottom: 14px;">
+            <div style="font-size: 1.15rem; font-weight: 700; color: #f8fafc; font-family: 'Montserrat', sans-serif; display: flex; align-items: center; gap: 10px;">
+                <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 10px #3b82f6;"></span>
                 {selected_region} Live Intelligence Feed
             </div>
-            <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: #f59e0b; background: rgba(245, 158, 11, 0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(245, 158, 11, 0.2); text-transform: uppercase;">
-                {len(display_payloads[display_payloads['market_region'] == selected_region])} Events Detected
+            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                <span style="font-size: 0.72rem; font-weight: 700; color: #f8fafc; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
+                    {total_events} Total
+                </span>
+                <span style="font-size: 0.72rem; font-weight: 700; color: #34d399; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
+                    {bullish_count} Bullish
+                </span>
+                <span style="font-size: 0.72rem; font-weight: 700; color: #f87171; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
+                    {bearish_count} Bearish
+                </span>
+                <span style="font-size: 0.72rem; font-weight: 700; color: #cbd5e1; background: rgba(148, 163, 184, 0.18); border: 1px solid rgba(148, 163, 184, 0.4); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
+                    {noise_count} Noise
+                </span>
             </div>
         </div>
         """, unsafe_allow_html=True)
         
-        if not display_payloads.empty:
-            html_feed = f"""
-            <div class="white-card bg-orange" style="padding: 20px; height: 350px; overflow-y: auto;">
-            """
+        if not region_payloads.empty:
+            html_feed = '<div class="news-feed-container">'
             
-            region_payloads = display_payloads[display_payloads['market_region'] == selected_region]
             for _, row in region_payloads.iterrows():
                 sentiment = row['sentiment_index']
-                color = "#10b981" if sentiment > 0 else "#ef4444" if sentiment < 0 else "#94a3b8"
                 time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
                 ticker_label = row.get('index_ticker', 'Macro')
                 
-                noise_tag = ""
-                if sentiment == 0:
-                    noise_tag = '<span style="background: rgba(148, 163, 184, 0.15); border: 1px solid rgba(148, 163, 184, 0.3); color: #94a3b8; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; margin-left: 8px;">NOISE</span>'
+                parsed = clean_news_item(row['raw_text'])
+                clean_headline = parsed['headline']
+                source = parsed['source']
                 
-                html_feed += f'''
-<div style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 12px;">
-    <div style="font-size: 0.8rem; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-        <div style="display: flex; align-items: center; gap: 8px;">
-            <span>{time_str}</span>
-            <span style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #f8fafc; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em;">{ticker_label}</span>{noise_tag}
+                # Determine Sentiment & Noise status
+                if abs(sentiment) < 0.5:
+                    status_badge = '<span style="background: rgba(148, 163, 184, 0.18); border: 1px solid rgba(148, 163, 184, 0.45); color: #cbd5e1; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">NOISE</span>'
+                    score_color = "#94a3b8"
+                    score_bg = "rgba(148, 163, 184, 0.12)"
+                    score_border = "rgba(148, 163, 184, 0.3)"
+                    card_border = "#64748b"
+                elif sentiment >= 0.5:
+                    status_badge = '<span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BULLISH</span>'
+                    score_color = "#10b981"
+                    score_bg = "rgba(16, 185, 129, 0.12)"
+                    score_border = "rgba(16, 185, 129, 0.3)"
+                    card_border = "#10b981"
+                else:
+                    status_badge = '<span style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BEARISH</span>'
+                    score_color = "#ef4444"
+                    score_bg = "rgba(239, 68, 68, 0.12)"
+                    score_border = "rgba(239, 68, 68, 0.3)"
+                    card_border = "#ef4444"
+                
+                source_badge = f'<span style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: #94a3b8; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">{source}</span>' if source else ""
+                
+                html_feed += f"""
+<div class="news-item-card" style="border-left: 3px solid {card_border};">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;">
+        <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+            <span style="font-family: 'IBM Plex Sans', sans-serif; font-size: 0.75rem; font-weight: 500; color: #94a3b8; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 2px 7px; border-radius: 4px; flex-shrink: 0;">{time_str}</span>
+            <span style="font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 700; color: #f8fafc; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.35); padding: 2px 8px; border-radius: 4px; flex-shrink: 0;">{ticker_label}</span>
+            {source_badge}
+            {status_badge}
         </div>
-        <span style="color: {color}; font-weight: 700; font-size: 0.9rem;">{sentiment:+.1f}</span>
+        <div style="flex-shrink: 0;">
+            <span style="font-family: 'Montserrat', sans-serif; font-size: 0.8rem; font-weight: 700; color: {score_color}; background: {score_bg}; border: 1px solid {score_border}; padding: 3px 9px; border-radius: 4px; letter-spacing: 0.02em;">{sentiment:+.1f}</span>
+        </div>
     </div>
-    <div style="font-size: 0.95rem; color: #f8fafc; line-height: 1.5; font-weight: 500;">{row['raw_text']}</div>
+    <div style="font-size: 0.92rem; color: #f8fafc; font-weight: 500; line-height: 1.5; font-family: 'IBM Plex Sans', sans-serif;">
+        {clean_headline}
+    </div>
 </div>
-'''
+"""
             html_feed += "</div>"
             st.markdown(html_feed, unsafe_allow_html=True)
         else:
