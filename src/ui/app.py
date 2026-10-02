@@ -405,8 +405,8 @@ if not df_signals.empty:
     info_col, tz_col = st.columns([4.2, 1.2])
     with info_col:
         st.markdown("""
-<div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.45) 50%, rgba(15, 23, 42, 0.85) 100%); border: 1px solid rgba(56, 189, 248, 0.22); border-left: 4px solid #38bdf8; border-radius: 8px; padding: 14px 18px; backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), 0 0 15px rgba(56, 189, 248, 0.05); margin-bottom: 12px;">
-<div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;">
+<div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.45) 50%, rgba(15, 23, 42, 0.85) 100%); border: 1px solid rgba(56, 189, 248, 0.22); border-left: 4px solid #38bdf8; border-radius: 8px; padding: 12px 18px; backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), 0 0 15px rgba(56, 189, 248, 0.05); margin-bottom: 12px;">
+<div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
 <span style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; font-family: 'Montserrat', sans-serif; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; padding: 3px 8px; border-radius: 4px; text-transform: uppercase;">THE QUANTITATIVE EDGE</span>
 <span style="font-family: 'Montserrat', sans-serif; font-size: 0.95rem; font-weight: 700; color: #f8fafc; letter-spacing: -0.01em;">Pure Mathematical Sentiment via Contrastive Language Modeling</span>
@@ -417,31 +417,8 @@ if not df_signals.empty:
 <span style="font-size: 0.65rem; font-weight: 700; color: #fbbf24; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">ZERO HALLUCINATION</span>
 </div>
 </div>
-<div style="font-family: 'IBM Plex Sans', sans-serif; font-size: 0.82rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 10px;">
-Generative LLMs suffer from prompt drift, hallucination, and confidence clustering. GSP replaces text generation with a <strong>System-One Contrastive Model (CLM-8B)</strong> that projects global news directly onto native choice probabilities: <span style="color: #34d399; font-weight: 600;">P(Bullish)</span>, <span style="color: #f87171; font-weight: 600;">P(Bearish)</span>, and <span style="color: #94a3b8; font-weight: 600;">P(Neutral)</span>. Headlines are conditioned against regional macroeconomic policy rules (OKF), converting real-time global news into an institutional momentum score [-100, +100].
-</div>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px;">
-<div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 5px; padding: 6px 10px; display: flex; align-items: center; gap: 8px;">
-<span style="color: #38bdf8; font-size: 0.95rem;">⚡</span>
-<div>
-<div style="font-family: 'Montserrat', sans-serif; font-size: 0.72rem; font-weight: 700; color: #f8fafc;">Vector Simplex Math</div>
-<div style="font-family: 'IBM Plex Sans', sans-serif; font-size: 0.68rem; color: #94a3b8;">Deterministic 2-simplex probabilities on unit hypersphere</div>
-</div>
-</div>
-<div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 5px; padding: 6px 10px; display: flex; align-items: center; gap: 8px;">
-<span style="color: #a78bfa; font-size: 0.95rem;">🧠</span>
-<div>
-<div style="font-family: 'Montserrat', sans-serif; font-size: 0.72rem; font-weight: 700; color: #f8fafc;">Macro Regime Context</div>
-<div style="font-family: 'IBM Plex Sans', sans-serif; font-size: 0.68rem; color: #94a3b8;">Autonomous OKF rules condition news against regional policy</div>
-</div>
-</div>
-<div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 5px; padding: 6px 10px; display: flex; align-items: center; gap: 8px;">
-<span style="color: #34d399; font-size: 0.95rem;">🎯</span>
-<div>
-<div style="font-family: 'Montserrat', sans-serif; font-size: 0.72rem; font-weight: 700; color: #f8fafc;">Noise Attenuation Filter</div>
-<div style="font-family: 'IBM Plex Sans', sans-serif; font-size: 0.68rem; color: #94a3b8;">Neutral downweighting eliminates false execution whipsaws</div>
-</div>
-</div>
+<div style="font-family: 'IBM Plex Sans', sans-serif; font-size: 0.82rem; color: #cbd5e1; line-height: 1.55; margin-bottom: 0;">
+Generative LLMs suffer from prompt drift, hallucination, and confidence clustering. GSP replaces text generation with a <strong>System-One Contrastive Model (CLM-8B)</strong> that projects global news directly onto native choice probabilities: <strong style="color: #34d399; font-weight: 700;">P(Bullish)</strong>, <strong style="color: #f87171; font-weight: 700;">P(Bearish)</strong>, and <strong style="color: #cbd5e1; font-weight: 700;">P(Neutral)</strong>. Headlines are conditioned against regional macroeconomic policy rules (OKF), converting real-time global news into an institutional momentum score [-100, +100].
 </div>
 </div>
 """, unsafe_allow_html=True)
