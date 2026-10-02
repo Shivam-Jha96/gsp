@@ -227,25 +227,25 @@ def load_data():
         })
         mock_signals['index_ticker'] = np.random.choice(["S&P 500", "NASDAQ", "Nifty 50"], size=len(dates))
         mock_payloads = pd.DataFrame({
-            "timestamp": dates[-20:],
-            "market_region": mock_signals['market_region'].iloc[-20:].values,
-            "index_ticker": mock_signals['index_ticker'].iloc[-20:].values,
-            "sentiment_score": mock_signals['sentiment_score'].iloc[-20:].values,
-            "raw_text": ["Market opening shows mixed signals..."] * 20
+            "timestamp": dates,
+            "market_region": mock_signals['market_region'].values,
+            "index_ticker": mock_signals['index_ticker'].values,
+            "sentiment_score": mock_signals['sentiment_score'].values,
+            "raw_text": ["Market opening shows mixed signals..."] * len(dates)
         })
         return mock_signals, mock_payloads
 
     try:
         client = get_db_client()
         with client.get_connection() as conn:
-            query_signals = "SELECT timestamp, market_region, index_ticker, sentiment_score FROM event_signals ORDER BY timestamp DESC LIMIT 1000"
+            query_signals = "SELECT timestamp, market_region, index_ticker, sentiment_score FROM event_signals ORDER BY timestamp DESC LIMIT 2000"
             df_signals = pd.read_sql(query_signals, conn)
             df_signals['timestamp'] = pd.to_datetime(df_signals['timestamp'])
             
             query_payloads = """
                 SELECT s.timestamp, s.market_region, s.index_ticker, s.sentiment_score, p.raw_text
                 FROM event_signals s JOIN event_payloads p ON s.id = p.id
-                ORDER BY s.timestamp DESC LIMIT 40
+                ORDER BY s.timestamp DESC LIMIT 2000
             """
             df_payloads = pd.read_sql(query_payloads, conn)
             df_payloads['timestamp'] = pd.to_datetime(df_payloads['timestamp'])
@@ -658,6 +658,8 @@ if not df_signals.empty:
 
         # --- Regional News Feeds at the Bottom (Full Width) ---
         region_payloads = display_payloads[display_payloads['market_region'] == selected_region]
+        if not region_payloads.empty:
+            region_payloads = region_payloads.sort_values('timestamp', ascending=False)
         total_events = len(region_payloads)
         bullish_count = int((region_payloads['sentiment_index'] >= 0.5).sum()) if not region_payloads.empty else 0
         bearish_count = int((region_payloads['sentiment_index'] <= -0.5).sum()) if not region_payloads.empty else 0
@@ -691,7 +693,10 @@ if not df_signals.empty:
             
             for _, row in region_payloads.iterrows():
                 sentiment = row['sentiment_index']
-                time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
+                if date_range in ["4H", "6H", "12H", "24H"]:
+                    time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
+                else:
+                    time_str = pd.to_datetime(row['timestamp']).strftime('%b %d, %H:%M')
                 ticker_label = row.get('index_ticker', 'Macro')
                 
                 parsed = clean_news_item(row['raw_text'])

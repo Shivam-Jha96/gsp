@@ -456,6 +456,12 @@ Headlines undergo regex processing in `clean_news_item()` to strip HTML markup, 
 * **Bearish Event:** Sentiment Score $\le -0.5$ (Rose badge)
 * **Market Noise:** $-0.5 < \text{Sentiment Score} < +0.5$ (Slate badge)
 
+#### 6. Deep Multi-Timeframe Query Synchronization
+To guarantee accurate reflection of historical activity across all selectable time horizons (`4H`, `6H`, `12H`, `24H`, `7D`, `1M`, `1Y`, `All`), the document layer query (`event_payloads` joined with `event_signals`) scales to `LIMIT 2000`:
+* **Chronological Ordering:** Sorted descending (`ORDER BY s.timestamp DESC`) so the freshest catalysts appear at the top of the feed container.
+* **Adaptive Timestamps:** Intraday windows (`4H` through `24H`) render compact hour-minute badges (`%H:%M`), while multi-day windows (`7D`, `1M`, `1Y`, `All`) render full date-time badges (`%b %d, %H:%M`) to provide unambiguous chronological context across multi-day news streams.
+* **KPI Volume Parity:** Ingested news volume displayed on the left KPI card matches the filtered regional headline count.
+
 ---
 
 ### Layer 6: Autonomous Knowledge Engine
