@@ -256,6 +256,19 @@ def load_data():
 
 df_signals, df_payloads = load_data()
 
+# Enforce strict cutoff floor: 12:00 PM IST on September 30, 2026 (06:30 AM UTC)
+DATA_CUTOFF_FLOOR = pd.Timestamp("2026-09-30 06:30:00", tz="UTC")
+
+if not df_signals.empty:
+    if df_signals['timestamp'].dt.tz is None:
+        df_signals['timestamp'] = df_signals['timestamp'].dt.tz_localize('UTC')
+    df_signals = df_signals[df_signals['timestamp'] >= DATA_CUTOFF_FLOOR].copy()
+
+if not df_payloads.empty:
+    if df_payloads['timestamp'].dt.tz is None:
+        df_payloads['timestamp'] = df_payloads['timestamp'].dt.tz_localize('UTC')
+    df_payloads = df_payloads[df_payloads['timestamp'] >= DATA_CUTOFF_FLOOR].copy()
+
 if not df_signals.empty:
     # Calibrate historical records where magnitude was suppressed by the early rubric-score bug
     clm_damped_mask_sig = (df_signals['sentiment_score'].abs() > 0.001) & (df_signals['sentiment_score'].abs() < 0.15)
