@@ -152,19 +152,28 @@ st.markdown("""
     
     /* Responsive Design Adjustments */
     @media (max-width: 1024px) {
-        .metric-value { font-size: 1.4rem; }
+        .metric-value { font-size: 1.35rem; }
         .block-container { padding: 1rem !important; }
     }
     
     @media (max-width: 768px) {
         .metric-value { font-size: 1.2rem; }
         .metric-title { font-size: 0.7rem; }
-        .white-card { padding: 10px; margin-bottom: 10px; }
-        /* Disable vertical stretching on mobile so items stack cleanly */
-        [data-testid="column"] > div[data-testid="stVerticalBlock"] {
-            height: auto;
-            justify-content: flex-start;
+        .white-card { padding: 10px 12px; margin-bottom: 8px; }
+        /* Disable desktop-only vertical stretching on mobile so items stack naturally */
+        div[data-testid="stHorizontalBlock"] {
+            align-items: initial !important;
         }
+        div[data-testid="stHorizontalBlock"] > div[data-testid="column"] > div[data-testid="stVerticalBlock"] {
+            height: auto !important;
+            justify-content: flex-start !important;
+            flex: initial !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .block-container { padding: 0.75rem 0.5rem !important; }
+        .white-card { padding: 8px 10px; margin-bottom: 8px; }
     }
 
     /* Hide Streamlit native UI elements including the white top header bar */
@@ -387,15 +396,15 @@ if not df_signals.empty:
     df_payloads['sentiment_index'] = df_payloads['sentiment_score'] * 100
     # --- Page Header Banner (Dark Emerald Glassmorphism Card) ---
     st.markdown("""
-    <div style="background: rgba(16, 185, 129, 0.07); border: 1px solid rgba(16, 185, 129, 0.22); border-left: 4px solid #10b981; border-radius: 8px; padding: 14px 20px; margin-bottom: 14px; backdrop-filter: blur(10px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), 0 0 15px rgba(16, 185, 129, 0.06); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-        <div style="display: flex; align-items: center; gap: 14px;">
-            <div style="background-color: #10b981; color: #020617; padding: 5px 12px; border-radius: 5px; font-weight: 800; font-size: 1.15rem; letter-spacing: 1.5px; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);">GSP</div>
+    <div style="background: rgba(16, 185, 129, 0.07); border: 1px solid rgba(16, 185, 129, 0.22); border-left: 4px solid #10b981; border-radius: 8px; padding: clamp(10px, 2vw, 14px) clamp(12px, 2.5vw, 20px); margin-bottom: 14px; backdrop-filter: blur(10px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), 0 0 15px rgba(16, 185, 129, 0.06); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <div style="background-color: #10b981; color: #020617; padding: 4px 10px; border-radius: 5px; font-weight: 800; font-size: 1.1rem; letter-spacing: 1.5px; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); flex-shrink: 0;">GSP</div>
             <div>
-                <div style="font-size: 1.35rem; font-weight: 700; color: #f8fafc; letter-spacing: -0.01em; font-family: 'Montserrat', sans-serif;">Global Sentiment Platform of Share Markets</div>
-                <div style="font-size: 0.8rem; font-weight: 500; color: #a7f3d0; font-family: 'IBM Plex Sans', sans-serif;">Real-Time Global Quantitative Intelligence & Execution Engine</div>
+                <div style="font-size: clamp(1.05rem, 2.5vw, 1.35rem); font-weight: 700; color: #f8fafc; letter-spacing: -0.01em; font-family: 'Montserrat', sans-serif;">Global Sentiment Platform of Share Markets</div>
+                <div style="font-size: clamp(0.72rem, 1.6vw, 0.8rem); font-weight: 500; color: #a7f3d0; font-family: 'IBM Plex Sans', sans-serif;">Real-Time Global Quantitative Intelligence & Execution Engine</div>
             </div>
         </div>
-        <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); color: #34d399; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; padding: 4px 10px; border-radius: 12px; text-transform: uppercase;">
+        <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); color: #34d399; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; padding: 4px 10px; border-radius: 12px; text-transform: uppercase; flex-shrink: 0;">
             <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; display: inline-block;"></span>
             SYSTEM ONLINE
         </div>
@@ -405,11 +414,11 @@ if not df_signals.empty:
     info_col, tz_col = st.columns([4.2, 1.2])
     with info_col:
         st.markdown("""
-<div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.45) 50%, rgba(15, 23, 42, 0.85) 100%); border: 1px solid rgba(56, 189, 248, 0.22); border-left: 4px solid #38bdf8; border-radius: 8px; padding: 12px 18px; backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), 0 0 15px rgba(56, 189, 248, 0.05); margin-bottom: 12px;">
+<div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.45) 50%, rgba(15, 23, 42, 0.85) 100%); border: 1px solid rgba(56, 189, 248, 0.22); border-left: 4px solid #38bdf8; border-radius: 8px; padding: clamp(10px, 2vw, 12px) clamp(12px, 2.5vw, 18px); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), 0 0 15px rgba(56, 189, 248, 0.05); margin-bottom: 12px;">
 <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
 <span style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; font-family: 'Montserrat', sans-serif; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; padding: 3px 8px; border-radius: 4px; text-transform: uppercase;">THE QUANTITATIVE EDGE</span>
-<span style="font-family: 'Montserrat', sans-serif; font-size: 0.95rem; font-weight: 700; color: #f8fafc; letter-spacing: -0.01em;">Pure Mathematical Sentiment via Contrastive Language Modeling</span>
+<span style="font-family: 'Montserrat', sans-serif; font-size: clamp(0.82rem, 1.8vw, 0.95rem); font-weight: 700; color: #f8fafc; letter-spacing: -0.01em;">Pure Mathematical Sentiment via Contrastive Language Modeling</span>
 </div>
 <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
 <span style="font-size: 0.65rem; font-weight: 700; color: #34d399; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">DETERMINISTIC</span>
@@ -417,7 +426,7 @@ if not df_signals.empty:
 <span style="font-size: 0.65rem; font-weight: 700; color: #fbbf24; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">ZERO HALLUCINATION</span>
 </div>
 </div>
-<div style="font-family: 'IBM Plex Sans', sans-serif; font-size: 0.82rem; color: #cbd5e1; line-height: 1.55; margin-bottom: 0;">
+<div style="font-family: 'IBM Plex Sans', sans-serif; font-size: clamp(0.78rem, 1.5vw, 0.82rem); color: #cbd5e1; line-height: 1.55; margin-bottom: 0;">
 Generative LLMs suffer from prompt drift, hallucination, and confidence clustering. GSP replaces text generation with a <strong>System-One Contrastive Model (CLM-8B)</strong> that projects global news directly onto native choice probabilities: <strong style="color: #34d399; font-weight: 700;">P(Bullish)</strong>, <strong style="color: #f87171; font-weight: 700;">P(Bearish)</strong>, and <strong style="color: #cbd5e1; font-weight: 700;">P(Neutral)</strong>. Headlines are conditioned against regional macroeconomic policy rules (OKF), converting real-time global news into an institutional momentum score [-100, +100].
 </div>
 </div>
@@ -579,18 +588,18 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
             
             st.markdown(f"""
 <div class="white-card bg-blue">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 4px;">
         <span class="metric-title" style="margin-bottom: 0;">Aggregate Optimism</span>
         <span style="font-size: 0.68rem; font-weight: 700; color: #60a5fa; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">{selected_region}</span>
     </div>
     <div class="metric-value {val_color}">{current_ema:+.1f}</div>
-    <div style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 4px;">
         <span style="font-size: 0.72rem; font-weight: 700; color: {delta_pill_color}; background: {delta_pill_bg}; border: 1px solid {delta_pill_border}; padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
             {arrow} {abs(delta):.1f}%
         </span>
         <span style="font-size: 0.72rem; color: #64748b;">vs previous period</span>
     </div>
-    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: #94a3b8; display: flex; justify-content: space-between;">
+    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: #94a3b8; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
         <span>Confidence Vector</span>
         <span style="color: #cbd5e1; font-weight: 600;">System-One CLM</span>
     </div>
@@ -617,18 +626,18 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
                 
             st.markdown(f"""
 <div class="white-card bg-purple">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 4px;">
         <span class="metric-title" style="margin-bottom: 0;">Market Bias</span>
         <span style="font-size: 0.68rem; font-weight: 700; color: {b_color_hex}; background: {b_pill_bg}; border: 1px solid {b_pill_border}; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">{bias}</span>
     </div>
     <div class="metric-value {b_val_color}">{bias}</div>
-    <div style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 4px;">
         <span style="font-size: 0.72rem; font-weight: 700; color: #c084fc; background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
             {ema_window}-Period Window
         </span>
         <span style="font-size: 0.72rem; color: #64748b;">moving average</span>
     </div>
-    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: #94a3b8; display: flex; justify-content: space-between;">
+    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: #94a3b8; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
         <span>Signal Strategy</span>
         <span style="color: #cbd5e1; font-weight: 600;">EMA Crossover</span>
     </div>
@@ -638,18 +647,18 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
             # 3. Volume
             st.markdown(f"""
 <div class="white-card bg-orange">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 4px;">
         <span class="metric-title" style="margin-bottom: 0;">Total News Volume</span>
         <span style="font-size: 0.68rem; font-weight: 700; color: #fbbf24; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">Live Feed</span>
     </div>
     <div class="metric-value" style="color: #f8fafc;">{len(filtered_signals)}</div>
-    <div style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 4px;">
         <span style="font-size: 0.72rem; font-weight: 700; color: #fbbf24; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
             {date_range} Window
         </span>
         <span style="font-size: 0.72rem; color: #64748b;">articles ingested</span>
     </div>
-    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: #94a3b8; display: flex; justify-content: space-between;">
+    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: #94a3b8; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
         <span>Ingestion Cycle</span>
         <span style="color: #cbd5e1; font-weight: 600;">Every 2 Hours</span>
     </div>
@@ -660,18 +669,18 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
             tracked_count = filtered_signals['index_ticker'].nunique()
             st.markdown(f"""
 <div class="white-card bg-green">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 4px;">
         <span class="metric-title" style="margin-bottom: 0;">Tracked Indices</span>
         <span style="font-size: 0.68rem; font-weight: 700; color: #34d399; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">{selected_region}</span>
     </div>
     <div class="metric-value" style="color: #f8fafc;">{tracked_count}</div>
-    <div style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 4px;">
         <span style="font-size: 0.72rem; font-weight: 700; color: #34d399; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
             100% Active
         </span>
         <span style="font-size: 0.72rem; color: #64748b;">real-time monitored</span>
     </div>
-    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: #94a3b8; display: flex; justify-content: space-between;">
+    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: #94a3b8; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
         <span>Active Universe</span>
         <span style="color: #cbd5e1; font-weight: 600;">20 Global Assets</span>
     </div>
