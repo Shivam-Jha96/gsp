@@ -600,7 +600,7 @@ The table below provides a detailed breakdown of all third-party services and in
   modal app list
   modal container list
   # Test the endpoint directly
-  python test_modal.py
+  python tests/integration/test_modal.py
   ```
 * **Resolution:**
   1. Confirm that `--gpu-memory-utilization 0.9` provides sufficient overhead for CUDA allocations.

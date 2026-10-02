@@ -161,7 +161,6 @@ gsp/
 ├── docs/                       # Quantitative & architectural documentation
 │   ├── architecture_and_workflow.md  # End-to-end architecture & workflows
 │   ├── sentiment_math.md             # CLM quantitative math & scoring proofs
-│   ├── architecture_hld.png          # High-level architecture diagram
 │   └── build_progress.md             # Milestone build progress log
 ├── knowledge/                  # Auto-updated regional trading rules
 │   ├── us_macro.okf.md
