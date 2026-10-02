@@ -95,7 +95,8 @@ def load_okf_rules(region_tag: str) -> str:
     file_map = {
         "US": "us_macro.okf.md",
         "IN": "india_macro.okf.md",
-        # Add others as they are created
+        "UK": "uk_macro.okf.md",
+        "JP": "japan_macro.okf.md",
     }
     
     filename = file_map.get(region_tag)
