@@ -113,7 +113,7 @@ The **Ontological Knowledge Framework (OKF)** formalizes this regional macroecon
 
 Let $\mathcal{P}_t$ denote the real-time ingested payload consisting of headline $H_t$, body text $B_t$, and metadata $\Omega_t$. The contextual fusion operator $\Phi: (\mathcal{R}_r, \mathcal{P}_t) \to \mathbf{X}$ synthesizes the deterministic prompt state:
 
-$$\mathbf{X} = \Phi(\mathcal{R}_r, \mathcal{P}_t) = [\texttt{BOS}] \oplus \mathbf{T}_{\text{prompt\_prefix}} \oplus \mathcal{R}_r \oplus \mathbf{T}_{\text{payload\_prefix}} \oplus (H_t \circ B_t) \oplus [\texttt{EOS}]$$
+$$\mathbf{X} = \Phi(\mathcal{R}_r, \mathcal{P}_t) = [\texttt{BOS}] \oplus \mathbf{T}_{\text{prompt-prefix}} \oplus \mathcal{R}_r \oplus \mathbf{T}_{\text{payload-prefix}} \oplus (H_t \circ B_t) \oplus [\texttt{EOS}]$$
 
 Specifically, the prompt string is formatted as:
 
