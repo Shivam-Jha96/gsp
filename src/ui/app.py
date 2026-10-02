@@ -411,10 +411,8 @@ if not df_signals.empty:
     </div>
     """, unsafe_allow_html=True)
     
-    info_col, tz_col = st.columns([4.2, 1.2])
-    with info_col:
-        st.markdown("""
-<div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.45) 50%, rgba(15, 23, 42, 0.85) 100%); border: 1px solid rgba(56, 189, 248, 0.22); border-left: 4px solid #38bdf8; border-radius: 8px; padding: clamp(10px, 2vw, 12px) clamp(12px, 2.5vw, 18px); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), 0 0 15px rgba(56, 189, 248, 0.05); margin-bottom: 12px;">
+    st.markdown("""
+<div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.45) 50%, rgba(15, 23, 42, 0.85) 100%); border: 1px solid rgba(56, 189, 248, 0.22); border-left: 4px solid #38bdf8; border-radius: 8px; padding: clamp(10px, 2vw, 12px) clamp(12px, 2.5vw, 18px); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), 0 0 15px rgba(56, 189, 248, 0.05); margin-bottom: 14px;">
 <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
 <span style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; font-family: 'Montserrat', sans-serif; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; padding: 3px 8px; border-radius: 4px; text-transform: uppercase;">THE QUANTITATIVE EDGE</span>
@@ -431,28 +429,9 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
 </div>
 </div>
 """, unsafe_allow_html=True)
-    with tz_col:
-        st.markdown("""
-        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 10"></polyline></svg>
-            <span style="font-size: 0.72rem; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">TIMEZONE</span>
-        </div>
-        """, unsafe_allow_html=True)
-        tz_options = {
-            "Asia/Kolkata (IST)": "Asia/Kolkata",
-            "UTC": "UTC",
-            "America/New_York (EST)": "America/New_York",
-            "Europe/London (GMT)": "Europe/London",
-            "Asia/Tokyo (JST)": "Asia/Tokyo"
-        }
-        tz_keys = list(tz_options.keys())
-        default_tz_ix = next((i for i, k in enumerate(tz_keys) if "IST" in k), 0)
-        display_tz = st.selectbox("tz", tz_keys, index=default_tz_ix, label_visibility="collapsed")
-        target_tz = tz_options[display_tz]
-        tz_abbr = display_tz.split('(')[-1].replace(')', '').strip() if '(' in display_tz else display_tz
     
-    # --- Top Row: Styled Filter Dropdowns ---
-    filter_col1, filter_col2, filter_col3, filter_col4 = st.columns([1, 1, 1, 1.2])
+    # --- Top Row: Styled Filter Dropdowns (5 Aligned Controls) ---
+    filter_col1, filter_col2, filter_col3, filter_col4, filter_col5 = st.columns([1.0, 0.85, 1.25, 0.95, 1.15])
     
     with filter_col1:
         st.markdown("""
@@ -479,8 +458,28 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
             regions = ["IN"]
         default_ix = regions.index("IN") if "IN" in regions else 0
         selected_region = st.selectbox("Region", regions, index=default_ix, label_visibility="collapsed")
-        
+
     with filter_col3:
+        st.markdown("""
+        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 10"></polyline></svg>
+            <span style="font-size: 0.72rem; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">TIMEZONE</span>
+        </div>
+        """, unsafe_allow_html=True)
+        tz_options = {
+            "Asia/Kolkata (IST)": "Asia/Kolkata",
+            "UTC": "UTC",
+            "America/New_York (EST)": "America/New_York",
+            "Europe/London (GMT)": "Europe/London",
+            "Asia/Tokyo (JST)": "Asia/Tokyo"
+        }
+        tz_keys = list(tz_options.keys())
+        default_tz_ix = next((i for i, k in enumerate(tz_keys) if "IST" in k), 0)
+        display_tz = st.selectbox("tz", tz_keys, index=default_tz_ix, label_visibility="collapsed")
+        target_tz = tz_options[display_tz]
+        tz_abbr = display_tz.split('(')[-1].replace(')', '').strip() if '(' in display_tz else display_tz
+        
+    with filter_col4:
         st.markdown("""
         <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
@@ -491,7 +490,7 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
         default_ema_ix = ema_options.index(8) if 8 in ema_options else 1
         ema_window = st.selectbox("Exponential Moving Average (Periods)", ema_options, index=default_ema_ix, label_visibility="collapsed")
         
-    with filter_col4:
+    with filter_col5:
         st.markdown("""
         <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>

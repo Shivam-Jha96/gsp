@@ -402,9 +402,11 @@ order = trading_client.submit_order(order_data=order_data)
 +------------------------------------------------------------------------------------+
 |         GLOBAL SENTIMENT PLATFORM OF SHARE MARKETS (GSP) - TERMINAL LAYOUT         |
 +------------------------------------------------------------------------------------+
-|  [HEADER BANNER: System Status Online | Regional Context | Timezone Selector]      |
+|  [HEADER BANNER: System Status Online | GSP Platform Identity]                     |
 +------------------------------------------------------------------------------------+
-|  [FILTERS: Timeframe (1 Day/7 Days/1 Month) | Region (US/IN/UK/JP) | EMA Window | Display]    |
+|  [THE QUANTITATIVE EDGE: Full-Width Contrastive Language Model (CLM) USP Banner]   |
++------------------------------------------------------------------------------------+
+|  [5-COLUMN FILTER BAR: Timeframe | Region | Timezone | EMA Window | Chart Display] |
 +--------------------------+---------------------------------------------------------+
 |  KPI TILES (LEFT COL)    |  CHART & TILES (RIGHT COL)                              |
 |  - Aggregate Optimism    |  +---------------------------------------------------+  |
@@ -422,7 +424,8 @@ order = trading_client.submit_order(order_data=order_data)
 The dashboard implements a financial terminal theme with custom CSS styling:
 * **Background & Typography:** Deep slate canvas (`#020617`), Montserrat for typographic hierarchy, and IBM Plex Sans for tabular readouts.
 * **Glassmorphic Surface Design:** Translucent cards (`rgba(255, 255, 255, 0.03)` with `backdrop-filter: blur(10px)`) accented with directional color borders: Emerald (`#10b981`) for bullish signals, Rose (`#ef4444`) for bearish conditions, and Blue (`#3b82f6`) for aggregate metrics.
-* **Styled Dropdown Filter Headers:** Replaced plain native select labels with high-contrast terminal micro-headers featuring SVG indicators (Clock for `TIMEFRAME`, Globe for `REGION`, Pulse for `EMA WINDOW`, Bar Chart for `CHART DISPLAY`, and Compass for `TIMEZONE`) in bold Montserrat uppercase with distinct category accents.
+* **Full-Width Quantitative Edge USP Banner:** Prominently highlights the CLM mathematical advantage across the full width of the terminal canvas with zero blank voids, fluid typography (`clamp()`), and responsive status badges.
+* **Unified 5-Column Filter Bar:** Positioned `TIMEFRAME`, `REGION`, `TIMEZONE`, `EMA WINDOW`, and `CHART DISPLAY` in a balanced 5-column horizontal control grid (`st.columns([1.0, 0.85, 1.25, 0.95, 1.15])`) with SVG indicators and matching baseline geometry, eliminating awkward whitespace beneath individual dropdowns on PC widescreen monitors.
 * **Flush Column Alignment & Flex Stretch Layout:** Sibling column flex stretch (`div[data-testid="stHorizontalBlock"]`) and calibrated chart geometry (`height=370`) eliminate vertical misalignment between the 4-card left KPI stack and the right chart/mini-tile stack, achieving pixel-perfect baseline parity.
 
 #### 2. Plotly Multi-Index Sentiment Surface
