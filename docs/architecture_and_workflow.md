@@ -439,16 +439,18 @@ The terminal allows seamless switching across five key financial timezones:
 
 Timestamp localization occurs on-the-fly via Pandas `dt.tz_convert(target_tz)` without requiring redundant database roundtrips.
 
-#### 4. Historical Calibration Engine
-To maintain longitudinal data integrity following earlier scoring model refinements, [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py#L260-L268) includes an automated dynamic rescaling filter:
+#### 4. Historical Calibration Engine & Data Floor Cutoff
+To establish a pure Contrastive Language Model (CLM) regime and eliminate legacy model discontinuities, the platform underwent a one-time database purge and maintains an explicit cutoff floor:
+* **Cutoff Baseline:** `2026-09-30 12:00:00+05:30` (06:30 AM UTC).
+* **Database Purge:** All legacy records prior to this timestamp in both `event_signals` and `event_payloads` were permanently excised from Supabase.
+* **Application Floor Filter:** [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py#L258-L270) applies `DATA_CUTOFF_FLOOR = pd.Timestamp("2026-09-30 06:30:00", tz="UTC")` immediately upon ingestion to guarantee all charts, KPI tiles, and news feeds reflect only the modern CLM era.
+* **Dynamic Historical Rescaling:** For transitional records where early CLM confidence was suppressed, a dynamic calibration filter rescales raw scores into the standardized $[-100, +100]$ index scale:
 
 ```python
 clm_damped_mask_sig = (df_signals['sentiment_score'].abs() > 0.001) & (df_signals['sentiment_score'].abs() < 0.15)
 if clm_damped_mask_sig.any():
     df_signals.loc[clm_damped_mask_sig, 'sentiment_score'] = df_signals.loc[clm_damped_mask_sig, 'sentiment_score'] * 8.0
 ```
-
-This normalizes historical baseline values into a standardized $[-100, +100]$ index scale.
 
 #### 5. Feed Sanitization & Noise Classification
 Headlines undergo regex processing in `clean_news_item()` to strip HTML markup, remove trailing publisher signatures, and classify each entry into one of three sentiment buckets:
