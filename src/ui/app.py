@@ -374,63 +374,149 @@ if not df_signals.empty:
         
         with left_col:
             # 1. Global Index
-            delta_color = "green" if delta > 0 else "red" if delta < 0 else "gray"
-            arrow = "↑" if delta > 0 else "↓" if delta < 0 else ""
+            if delta > 0:
+                arrow = "▲"
+                delta_pill_color = "#34d399"
+                delta_pill_bg = "rgba(16, 185, 129, 0.15)"
+                delta_pill_border = "rgba(16, 185, 129, 0.3)"
+            elif delta < 0:
+                arrow = "▼"
+                delta_pill_color = "#f87171"
+                delta_pill_bg = "rgba(239, 68, 68, 0.15)"
+                delta_pill_border = "rgba(239, 68, 68, 0.3)"
+            else:
+                arrow = "▬"
+                delta_pill_color = "#94a3b8"
+                delta_pill_bg = "rgba(148, 163, 184, 0.15)"
+                delta_pill_border = "rgba(148, 163, 184, 0.3)"
+                
             val_color = "green" if current_ema > 0 else "red" if current_ema < 0 else ""
+            
             st.markdown(f"""
-            <div class="white-card bg-blue">
-                <div class="metric-title">Aggregate Optimism Index</div>
-<div class="metric-value {val_color}">{current_ema:+.1f}</div>
-<div class="metric-sub {delta_color}">{arrow} {abs(delta):.1f}%</div>
-                <div class="metric-footer">vs previous period</div>
-            </div>
-            """, unsafe_allow_html=True)
+<div class="white-card bg-blue">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+        <span class="metric-title" style="margin-bottom: 0;">Aggregate Optimism</span>
+        <span style="font-size: 0.68rem; font-weight: 700; color: #60a5fa; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">{selected_region}</span>
+    </div>
+    <div class="metric-value {val_color}">{current_ema:+.1f}</div>
+    <div style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+        <span style="font-size: 0.72rem; font-weight: 700; color: {delta_pill_color}; background: {delta_pill_bg}; border: 1px solid {delta_pill_border}; padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
+            {arrow} {abs(delta):.1f}%
+        </span>
+        <span style="font-size: 0.72rem; color: #64748b;">vs previous period</span>
+    </div>
+    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: #94a3b8; display: flex; justify-content: space-between;">
+        <span>Confidence Vector</span>
+        <span style="color: #cbd5e1; font-weight: 600;">System-One CLM</span>
+    </div>
+</div>
+""", unsafe_allow_html=True)
             
             # 2. Market Bias
             bias = "Bullish" if current_ema > 5 else "Bearish" if current_ema < -5 else "Neutral"
-            b_color = "green" if bias == "Bullish" else "red" if bias == "Bearish" else "gray"
-            b_val_color = "green" if bias == "Bullish" else "red" if bias == "Bearish" else ""
+            if bias == "Bullish":
+                b_color_hex = "#34d399"
+                b_pill_bg = "rgba(16, 185, 129, 0.15)"
+                b_pill_border = "rgba(16, 185, 129, 0.3)"
+                b_val_color = "green"
+            elif bias == "Bearish":
+                b_color_hex = "#f87171"
+                b_pill_bg = "rgba(239, 68, 68, 0.15)"
+                b_pill_border = "rgba(239, 68, 68, 0.3)"
+                b_val_color = "red"
+            else:
+                b_color_hex = "#c084fc"
+                b_pill_bg = "rgba(168, 85, 247, 0.15)"
+                b_pill_border = "rgba(168, 85, 247, 0.3)"
+                b_val_color = ""
+                
             st.markdown(f"""
-            <div class="white-card bg-purple">
-                <div class="metric-title">Market Bias</div>
-<div class="metric-value {b_val_color}">{bias}</div>
-<div class="metric-sub {b_color}">{ema_window} Period Window</div>
-                <div class="metric-footer">based on moving average</div>
-            </div>
-            """, unsafe_allow_html=True)
+<div class="white-card bg-purple">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+        <span class="metric-title" style="margin-bottom: 0;">Market Bias</span>
+        <span style="font-size: 0.68rem; font-weight: 700; color: {b_color_hex}; background: {b_pill_bg}; border: 1px solid {b_pill_border}; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">{bias}</span>
+    </div>
+    <div class="metric-value {b_val_color}">{bias}</div>
+    <div style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+        <span style="font-size: 0.72rem; font-weight: 700; color: #c084fc; background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
+            {ema_window}-Period Window
+        </span>
+        <span style="font-size: 0.72rem; color: #64748b;">moving average</span>
+    </div>
+    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: #94a3b8; display: flex; justify-content: space-between;">
+        <span>Signal Strategy</span>
+        <span style="color: #cbd5e1; font-weight: 600;">EMA Crossover</span>
+    </div>
+</div>
+""", unsafe_allow_html=True)
             
             # 3. Volume
             st.markdown(f"""
-            <div class="white-card bg-orange">
-                <div class="metric-title">Total News Volume</div>
-<div class="metric-value">{len(filtered_signals)}</div>
-<div class="metric-sub gray">Articles</div>
-                <div class="metric-footer">in selected region</div>
-            </div>
-            """, unsafe_allow_html=True)
+<div class="white-card bg-orange">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+        <span class="metric-title" style="margin-bottom: 0;">Total News Volume</span>
+        <span style="font-size: 0.68rem; font-weight: 700; color: #fbbf24; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">Live Feed</span>
+    </div>
+    <div class="metric-value" style="color: #f8fafc;">{len(filtered_signals)}</div>
+    <div style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+        <span style="font-size: 0.72rem; font-weight: 700; color: #fbbf24; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
+            {date_range} Window
+        </span>
+        <span style="font-size: 0.72rem; color: #64748b;">articles ingested</span>
+    </div>
+    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: #94a3b8; display: flex; justify-content: space-between;">
+        <span>Ingestion Cycle</span>
+        <span style="color: #cbd5e1; font-weight: 600;">Every 2 Hours</span>
+    </div>
+</div>
+""", unsafe_allow_html=True)
             
             # 4. Indices Active
             tracked_count = filtered_signals['index_ticker'].nunique()
             st.markdown(f"""
-            <div class="white-card bg-green">
-                <div class="metric-title">Tracked Indices</div>
-<div class="metric-value">{tracked_count}</div>
-<div class="metric-sub gray">In {selected_region}</div>
-                <div class="metric-footer">currently monitored</div>
-            </div>
-            """, unsafe_allow_html=True)
+<div class="white-card bg-green">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+        <span class="metric-title" style="margin-bottom: 0;">Tracked Indices</span>
+        <span style="font-size: 0.68rem; font-weight: 700; color: #34d399; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">{selected_region}</span>
+    </div>
+    <div class="metric-value" style="color: #f8fafc;">{tracked_count}</div>
+    <div style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+        <span style="font-size: 0.72rem; font-weight: 700; color: #34d399; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
+            100% Active
+        </span>
+        <span style="font-size: 0.72rem; color: #64748b;">real-time monitored</span>
+    </div>
+    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: #94a3b8; display: flex; justify-content: space-between;">
+        <span>Active Universe</span>
+        <span style="color: #cbd5e1; font-weight: 600;">20 Global Assets</span>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
         with right_col:
             # --- Large Area Chart at the top of the right column ---
             with st.container(border=True):
-                st.markdown("""
-                <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 12px;">
-                    <div style="font-size: 1.1rem; font-weight: 700; color: #f8fafc; font-family: 'Montserrat', sans-serif; display: flex; align-items: center; gap: 8px;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                        Aggregate Market Optimism
+                st.markdown(f"""
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 10px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.35); padding: 5px; border-radius: 6px; display: flex; align-items: center;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.15rem; font-weight: 700; color: #f8fafc; font-family: 'Montserrat', sans-serif;">Aggregate Market Optimism</div>
+                            <div style="font-size: 0.75rem; color: #94a3b8; font-family: 'IBM Plex Sans', sans-serif;">Multi-Index Sentiment Surface & {selected_region} Moving Average</div>
+                        </div>
                     </div>
-                    <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: #94a3b8; background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); text-transform: uppercase;">
-                        AI Sentiment Engine
+                    <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                        <span style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; color: #60a5fa; background: rgba(59, 130, 246, 0.12); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(59, 130, 246, 0.25); text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
+                            {selected_region} Market
+                        </span>
+                        <span style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; color: #a78bfa; background: rgba(168, 85, 247, 0.12); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(168, 85, 247, 0.25); text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
+                            {ema_window}-Period EMA
+                        </span>
+                        <span style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; color: #34d399; background: rgba(16, 185, 129, 0.12); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.25); text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
+                            AI System-One
+                        </span>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
@@ -480,7 +566,7 @@ if not df_signals.empty:
                     ),
                     yaxis=dict(
                         showgrid=True, gridcolor='rgba(255,255,255,0.05)',
-                        zeroline=True, zerolinecolor='rgba(255,255,255,0.2)', zerolinewidth=2,
+                        zeroline=True, zerolinecolor='rgba(255,255,255,0.25)', zerolinewidth=1.5,
                         title=dict(text="Optimism Score", font=dict(size=11, color="#94a3b8", family="IBM Plex Sans")),
                         tickfont=dict(size=11, color="#f8fafc", family="IBM Plex Sans", weight="bold"),
                         side="right"
@@ -488,10 +574,9 @@ if not df_signals.empty:
                 )
                 st.plotly_chart(fig_area, use_container_width=True)
 
-            # --- Mini KPI Tiles for Individual Indices (Responsive Flexbox) ---
+            # --- Mini KPI Tiles for Individual Indices (Dynamic Sentiment Styling) ---
             valid_tickers = [t for t in tickers if t != 'UNKNOWN']
             if valid_tickers:
-                # Use a CSS flexbox container instead of rigid Streamlit columns so they wrap naturally
                 kpi_html = '<div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px;">'
                 
                 for ticker in valid_tickers:
@@ -499,15 +584,57 @@ if not df_signals.empty:
                     prev_score = pivot_df[ticker].iloc[-2] if len(pivot_df) > 1 else 0
                     delta_idx = latest_score - prev_score
                     
-                    d_color = "green" if delta_idx > 0 else "red" if delta_idx < 0 else "gray"
-                    d_arrow = "↑" if delta_idx > 0 else "↓" if delta_idx < 0 else ""
-                    val_color = "green" if latest_score > 0 else "red" if latest_score < 0 else ""
+                    if abs(latest_score) < 0.5:
+                        ticker_status = "NEUTRAL"
+                        t_status_color = "#94a3b8"
+                        t_status_bg = "rgba(148, 163, 184, 0.12)"
+                        t_status_border = "rgba(148, 163, 184, 0.3)"
+                        t_card_border = "#64748b"
+                        t_val_color = "#cbd5e1"
+                    elif latest_score >= 0.5:
+                        ticker_status = "BULLISH"
+                        t_status_color = "#34d399"
+                        t_status_bg = "rgba(16, 185, 129, 0.15)"
+                        t_status_border = "rgba(16, 185, 129, 0.35)"
+                        t_card_border = "#10b981"
+                        t_val_color = "#10b981"
+                    else:
+                        ticker_status = "BEARISH"
+                        t_status_color = "#f87171"
+                        t_status_bg = "rgba(239, 68, 68, 0.15)"
+                        t_status_border = "rgba(239, 68, 68, 0.35)"
+                        t_card_border = "#ef4444"
+                        t_val_color = "#ef4444"
                     
-                    kpi_html += f"""<div class="white-card bg-indigo" style="flex: 1 1 130px; padding: 12px; min-height: 85px; margin-bottom: 0;">
-<div class="metric-title" style="font-size: 0.75rem; margin-bottom: 4px;">{ticker}</div>
-<div class="metric-value {val_color}" style="font-size: clamp(1.2rem, 2vw, 1.6rem);">{latest_score:+.1f}</div>
-<div class="metric-sub {d_color}" style="font-size: 0.8rem; margin-top: 5px;">{d_arrow} {abs(delta_idx):.1f}%</div>
-</div>"""
+                    if delta_idx > 0:
+                        d_arrow = "▲"
+                        d_pill_color = "#34d399"
+                        d_pill_bg = "rgba(16, 185, 129, 0.12)"
+                        d_pill_border = "rgba(16, 185, 129, 0.25)"
+                    elif delta_idx < 0:
+                        d_arrow = "▼"
+                        d_pill_color = "#f87171"
+                        d_pill_bg = "rgba(239, 68, 68, 0.12)"
+                        d_pill_border = "rgba(239, 68, 68, 0.25)"
+                    else:
+                        d_arrow = "▬"
+                        d_pill_color = "#94a3b8"
+                        d_pill_bg = "rgba(148, 163, 184, 0.12)"
+                        d_pill_border = "rgba(148, 163, 184, 0.25)"
+                    
+                    kpi_html += f"""
+<div class="news-item-card" style="flex: 1 1 130px; padding: 12px 14px; border-left: 3px solid {t_card_border}; margin-bottom: 0;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+        <span style="font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 700; color: #f8fafc; text-transform: uppercase; letter-spacing: 0.03em;">{ticker}</span>
+        <span style="font-family: 'Montserrat', sans-serif; font-size: 0.65rem; font-weight: 800; color: {t_status_color}; background: {t_status_bg}; border: 1px solid {t_status_border}; padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">{ticker_status}</span>
+    </div>
+    <div style="font-family: 'Montserrat', sans-serif; font-size: clamp(1.2rem, 2vw, 1.6rem); font-weight: 800; color: {t_val_color}; margin: 2px 0;">{latest_score:+.1f}</div>
+    <div style="display: flex; align-items: center; gap: 5px; margin-top: 4px;">
+        <span style="font-size: 0.72rem; font-weight: 700; color: {d_pill_color}; background: {d_pill_bg}; border: 1px solid {d_pill_border}; padding: 1px 6px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">{d_arrow} {abs(delta_idx):.1f}%</span>
+        <span style="font-size: 0.7rem; color: #64748b;">momentum</span>
+    </div>
+</div>
+"""
                 
                 kpi_html += '</div>'
                 st.markdown(kpi_html, unsafe_allow_html=True)
