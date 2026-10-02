@@ -193,20 +193,32 @@ df_signals, df_payloads = load_data()
 if not df_signals.empty:
     df_signals['sentiment_index'] = df_signals['sentiment_score'] * 100
     df_payloads['sentiment_index'] = df_payloads['sentiment_score'] * 100
-    # --- Page Header with Inline Timezone ---
-    header_left, tz_label_col, tz_select_col = st.columns([3.5, 0.4, 1.2])
-    with header_left:
+    # --- Page Header Banner (Dark Emerald Glassmorphism Card) ---
+    st.markdown("""
+    <div style="background: rgba(16, 185, 129, 0.07); border: 1px solid rgba(16, 185, 129, 0.22); border-left: 4px solid #10b981; border-radius: 8px; padding: 14px 20px; margin-bottom: 14px; backdrop-filter: blur(10px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), 0 0 15px rgba(16, 185, 129, 0.06); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="background-color: #10b981; color: #020617; padding: 5px 12px; border-radius: 5px; font-weight: 800; font-size: 1.15rem; letter-spacing: 1.5px; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);">GSP</div>
+            <div>
+                <div style="font-size: 1.45rem; font-weight: 700; color: #f8fafc; letter-spacing: -0.01em; font-family: 'Montserrat', sans-serif;">Macro-Sentiment Terminal</div>
+                <div style="font-size: 0.8rem; font-weight: 500; color: #a7f3d0; font-family: 'IBM Plex Sans', sans-serif;">Real-Time Global Quantitative Intelligence & Execution Engine</div>
+            </div>
+        </div>
+        <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); color: #34d399; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; padding: 4px 10px; border-radius: 12px; text-transform: uppercase;">
+            <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; display: inline-block;"></span>
+            SYSTEM ONLINE
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    info_col, tz_col = st.columns([4.2, 1.2])
+    with info_col:
         st.markdown("""
-        <div style="display: flex; align-items: center; gap: 12px; padding-top: 8px;">
-            <div style="background-color: #3b82f6; color: white; padding: 4px 8px; border-radius: 4px; font-weight: 800; font-size: 1.1rem; letter-spacing: 1px; font-family: 'Montserrat', sans-serif;">GSP</div>
-            <div style="font-size: 1.4rem; font-weight: 700; color: #f8fafc; letter-spacing: -0.01em; font-family: 'Montserrat', sans-serif;">Macro-Sentiment Terminal</div>
+        <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-left: 3px solid #10b981; border-radius: 6px; padding: 12px 16px; color: #94a3b8; font-family: 'IBM Plex Sans', sans-serif; font-size: 0.88rem; line-height: 1.55; font-weight: 400;">
+            <strong style="color: #f8fafc; font-weight: 600; font-family: 'Montserrat', sans-serif; letter-spacing: 0.02em;">THE EDGE:</strong> We solve information overload for modern investors. Our AI reads thousands of breaking global news events in real-time, instantly analyzes their market impact, and converts the chaos into a single, easy-to-read momentum score—cutting through the noise to show you exactly where the market is heading.
         </div>
         """, unsafe_allow_html=True)
-    with tz_label_col:
-        st.markdown("""
-        <div style="padding-top: 14px; text-align: right; color: #22d3ee; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap;">TIMEZONE</div>
-        """, unsafe_allow_html=True)
-    with tz_select_col:
+    with tz_col:
+        st.markdown('<div style="font-size: 0.75rem; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; font-family: \'Montserrat\', sans-serif;">Timezone</div>', unsafe_allow_html=True)
         tz_options = {
             "Asia/Kolkata (IST)": "Asia/Kolkata",
             "UTC": "UTC",
@@ -216,12 +228,6 @@ if not df_signals.empty:
         }
         display_tz = st.selectbox("tz", list(tz_options.keys()), index=0, label_visibility="collapsed")
         target_tz = tz_options[display_tz]
-    
-    st.markdown("""
-    <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-left: 3px solid #3b82f6; border-radius: 6px; padding: 14px 18px; margin: 16px 0 24px 0; color: #94a3b8; font-family: 'IBM Plex Sans', sans-serif; font-size: 0.9rem; line-height: 1.6; font-weight: 400;">
-        <strong style="color: #f8fafc; font-weight: 600; font-family: 'Montserrat', sans-serif; letter-spacing: 0.02em;">THE EDGE:</strong> We solve information overload for modern investors. Our AI reads thousands of breaking global news events in real-time, instantly analyzes their market impact, and converts the chaos into a single, easy-to-read momentum score—cutting through the noise to show you exactly where the market is heading.
-    </div>
-    """, unsafe_allow_html=True)
     
     # --- Top Row: Filters Using Native Labels ---
     filter_col1, filter_col2, filter_col3, filter_col4 = st.columns([1, 1, 1, 1.2])
