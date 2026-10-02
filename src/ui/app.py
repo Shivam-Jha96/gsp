@@ -10,7 +10,7 @@ import html
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from database.client import get_db_client
 
-st.set_page_config(page_title="Digital Dashboard", layout="wide", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Global Sentiment Platform of Share Markets", layout="wide", initial_sidebar_state="collapsed", page_icon="📈")
 
 # --- CSS to match the provided screenshot without breaking layout ---
 st.markdown("""
@@ -391,7 +391,7 @@ if not df_signals.empty:
         <div style="display: flex; align-items: center; gap: 14px;">
             <div style="background-color: #10b981; color: #020617; padding: 5px 12px; border-radius: 5px; font-weight: 800; font-size: 1.15rem; letter-spacing: 1.5px; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);">GSP</div>
             <div>
-                <div style="font-size: 1.45rem; font-weight: 700; color: #f8fafc; letter-spacing: -0.01em; font-family: 'Montserrat', sans-serif;">Macro-Sentiment Terminal</div>
+                <div style="font-size: 1.35rem; font-weight: 700; color: #f8fafc; letter-spacing: -0.01em; font-family: 'Montserrat', sans-serif;">Global Sentiment Platform of Share Markets</div>
                 <div style="font-size: 0.8rem; font-weight: 500; color: #a7f3d0; font-family: 'IBM Plex Sans', sans-serif;">Real-Time Global Quantitative Intelligence & Execution Engine</div>
             </div>
         </div>

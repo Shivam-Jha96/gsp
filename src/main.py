@@ -219,7 +219,7 @@ def run_signal_engine():
     logger.info("--- Signal Engine Complete ---\n")
 
 if __name__ == "__main__":
-    logger.info("Starting Global Macro-Sentiment Tracker Pipeline...")
+    logger.info("Starting Global Sentiment Platform of Share Markets (GSP) Pipeline...")
     
     # 1. Run Async Ingestion & Scoring
     asyncio.run(run_ingestion_pipeline())

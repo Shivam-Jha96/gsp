@@ -1,4 +1,4 @@
-# Global Macro-Sentiment Tracker 📊📈
+# Global Sentiment Platform of Share Markets (GSP) 📊📈
 
 [![Pipeline Status](https://github.com/Shivam-Jha96/gsp/actions/workflows/deploy.yml/badge.svg)](https://github.com/Shivam-Jha96/gsp/actions/workflows/deploy.yml)
 [![OKF Updater](https://github.com/Shivam-Jha96/gsp/actions/workflows/update_okf.yml/badge.svg)](https://github.com/Shivam-Jha96/gsp/actions/workflows/update_okf.yml)
@@ -18,7 +18,7 @@ Conventional financial NLP platforms rely on generative Large Language Models (L
 
 ### ⚡ The CLM System-One Solution
 
-The **Global Macro-Sentiment Tracker** eliminates generative token decoding entirely. Instead, our AI Engine uses **Contrastive Language Modeling (CLM-8B)** hosted on a dedicated serverless A10G GPU via Modal. By projecting financial text and macro rules directly into contrastive representation space, the engine evaluates market states using pure mathematical probability vectors:
+The **Global Sentiment Platform of Share Markets (GSP)** eliminates generative token decoding entirely. Instead, our AI Engine uses **Contrastive Language Modeling (CLM-8B)** hosted on a dedicated serverless A10G GPU via Modal. By projecting financial text and macro rules directly into contrastive representation space, the engine evaluates market states using pure mathematical probability vectors:
 
 * **Sub-Second Latency**: Single-pass contrastive scoring runs in **< 250 ms** (>10x faster than generative LLMs).
 * **Zero Hallucination Risk**: No text generation or token sampling; outputs are pure deterministic probability distributions.

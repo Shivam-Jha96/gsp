@@ -2,7 +2,7 @@
 
 ## 1. Executive Summary & Architectural Philosophy
 
-The **Global Macro-Sentiment Tracker (GSP)** is an autonomous, production-grade quantitative intelligence and execution platform. The system continuously digests unstructured global macroeconomic news streams across 20 international asset classes in 4 geopolitical regions (United States, India, United Kingdom, and Japan), evaluates deterministic market sentiment using Contrastive Language Models (**CLM-8B System-One**), stores vertically partitioned time-series signals in PostgreSQL, computes multi-period Exponential Moving Average (**EMA**) momentum indicators, executes automated paper trades via Alpaca's REST API, and renders low-latency telemetry to an institutional Streamlit terminal.
+The **Global Sentiment Platform of Share Markets (GSP)** is an autonomous, production-grade quantitative intelligence and execution platform. The system continuously digests unstructured global macroeconomic news streams across 20 international asset classes in 4 geopolitical regions (United States, India, United Kingdom, and Japan), evaluates deterministic market sentiment using Contrastive Language Models (**CLM-8B System-One**), stores vertically partitioned time-series signals in PostgreSQL, computes multi-period Exponential Moving Average (**EMA**) momentum indicators, executes automated paper trades via Alpaca's REST API, and renders low-latency telemetry to an institutional Streamlit terminal.
 
 ```
 +---------------------------------------------------------------------------------------------------------+
@@ -400,7 +400,7 @@ order = trading_client.submit_order(order_data=order_data)
 
 ```
 +------------------------------------------------------------------------------------+
-|                       GSP MACRO-SENTIMENT TERMINAL (UI LAYOUT)                     |
+|         GLOBAL SENTIMENT PLATFORM OF SHARE MARKETS (GSP) - TERMINAL LAYOUT         |
 +------------------------------------------------------------------------------------+
 |  [HEADER BANNER: System Status Online | Regional Context | Timezone Selector]      |
 +------------------------------------------------------------------------------------+
