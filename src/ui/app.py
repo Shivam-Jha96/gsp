@@ -78,6 +78,30 @@ st.markdown("""
         box-shadow: none !important;
     }
     
+    /* Neon Green Page Header Section */
+    [data-testid="stVerticalBlockBorderWrapper"]:has(.neon-header-marker) {
+        background: linear-gradient(135deg, #00ff88 0%, #00e676 100%) !important;
+        border: 1px solid #00ff88 !important;
+        border-radius: 10px !important;
+        padding: 6px 14px !important;
+        margin-bottom: 16px !important;
+        box-shadow: 0 4px 25px rgba(0, 255, 136, 0.3) !important;
+    }
+    [data-testid="stVerticalBlockBorderWrapper"]:has(.neon-header-marker) .neon-header-marker {
+        display: none !important;
+    }
+    [data-testid="stVerticalBlockBorderWrapper"]:has(.neon-header-marker) [data-baseweb="select"] > div {
+        background-color: #020617 !important;
+        border: 1px solid rgba(2, 6, 23, 0.3) !important;
+        border-radius: 6px !important;
+    }
+    [data-testid="stVerticalBlockBorderWrapper"]:has(.neon-header-marker) [data-baseweb="select"] * {
+        color: #f8fafc !important;
+    }
+    [data-testid="stVerticalBlockBorderWrapper"]:has(.neon-header-marker) svg {
+        fill: #f8fafc !important;
+    }
+    
     /* Force Streamlit Columns to Stretch & Align Bottoms */
     [data-testid="column"] > div[data-testid="stVerticalBlock"] {
         display: flex;
@@ -193,42 +217,41 @@ df_signals, df_payloads = load_data()
 if not df_signals.empty:
     df_signals['sentiment_index'] = df_signals['sentiment_score'] * 100
     df_payloads['sentiment_index'] = df_payloads['sentiment_score'] * 100
-    # --- Page Header with Inline Timezone ---
-    st.markdown("""
-    <div style="height: 2px; background: linear-gradient(90deg, #00ff88 0%, #10b981 35%, rgba(0, 255, 136, 0.2) 75%, transparent 100%); border-radius: 2px; margin-bottom: 12px; box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);"></div>
-    """, unsafe_allow_html=True)
-    header_left, tz_label_col, tz_select_col = st.columns([3.5, 0.4, 1.2])
-    with header_left:
-        st.markdown("""
-        <div style="display: flex; align-items: center; gap: 12px; padding-top: 6px;">
-            <div style="background-color: #00ff88; color: #020617; padding: 4px 10px; border-radius: 4px; font-weight: 800; font-size: 1.1rem; letter-spacing: 1.5px; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 14px rgba(0, 255, 136, 0.45);">GSP</div>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <div style="font-size: 1.45rem; font-weight: 800; color: #00ff88; letter-spacing: -0.01em; font-family: 'Montserrat', sans-serif; text-shadow: 0 0 14px rgba(0, 255, 136, 0.35);">Macro-Sentiment Terminal</div>
-                <div style="display: inline-flex; align-items: center; gap: 5px; background: rgba(0, 255, 136, 0.12); border: 1px solid rgba(0, 255, 136, 0.35); color: #00ff88; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; padding: 2px 8px; border-radius: 12px; text-transform: uppercase;">
-                    <span style="width: 6px; height: 6px; border-radius: 50%; background: #00ff88; box-shadow: 0 0 6px #00ff88; display: inline-block;"></span>
-                    LIVE
+    # --- Page Header Section with Neon Green Background ---
+    with st.container(border=True):
+        st.markdown('<span class="neon-header-marker"></span>', unsafe_allow_html=True)
+        header_left, tz_label_col, tz_select_col = st.columns([3.5, 0.45, 1.2])
+        with header_left:
+            st.markdown("""
+            <div style="display: flex; align-items: center; gap: 14px; padding-top: 4px;">
+                <div style="background-color: #020617; color: #00ff88; padding: 5px 12px; border-radius: 5px; font-weight: 800; font-size: 1.15rem; letter-spacing: 1.5px; font-family: 'Montserrat', sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">GSP</div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="font-size: 1.45rem; font-weight: 800; color: #020617; letter-spacing: -0.01em; font-family: 'Montserrat', sans-serif;">Macro-Sentiment Terminal</div>
+                    <div style="display: inline-flex; align-items: center; gap: 5px; background: rgba(2, 6, 23, 0.12); border: 1px solid rgba(2, 6, 23, 0.25); color: #020617; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.08em; padding: 3px 8px; border-radius: 12px; text-transform: uppercase;">
+                        <span style="width: 6px; height: 6px; border-radius: 50%; background: #020617; display: inline-block;"></span>
+                        LIVE
+                    </div>
                 </div>
             </div>
-        </div>
-        """, unsafe_allow_html=True)
-    with tz_label_col:
-        st.markdown("""
-        <div style="padding-top: 14px; text-align: right; color: #00ff88; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; text-shadow: 0 0 8px rgba(0, 255, 136, 0.3);">TIMEZONE</div>
-        """, unsafe_allow_html=True)
-    with tz_select_col:
-        tz_options = {
-            "Asia/Kolkata (IST)": "Asia/Kolkata",
-            "UTC": "UTC",
-            "America/New_York (EST)": "America/New_York",
-            "Europe/London (GMT)": "Europe/London",
-            "Asia/Tokyo (JST)": "Asia/Tokyo"
-        }
-        display_tz = st.selectbox("tz", list(tz_options.keys()), index=0, label_visibility="collapsed")
-        target_tz = tz_options[display_tz]
+            """, unsafe_allow_html=True)
+        with tz_label_col:
+            st.markdown("""
+            <div style="padding-top: 12px; text-align: right; color: #020617; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap;">TIMEZONE</div>
+            """, unsafe_allow_html=True)
+        with tz_select_col:
+            tz_options = {
+                "Asia/Kolkata (IST)": "Asia/Kolkata",
+                "UTC": "UTC",
+                "America/New_York (EST)": "America/New_York",
+                "Europe/London (GMT)": "Europe/London",
+                "Asia/Tokyo (JST)": "Asia/Tokyo"
+            }
+            display_tz = st.selectbox("tz", list(tz_options.keys()), index=0, label_visibility="collapsed")
+            target_tz = tz_options[display_tz]
     
     st.markdown("""
-    <div style="background: rgba(0, 255, 136, 0.03); border: 1px solid rgba(0, 255, 136, 0.18); border-left: 3px solid #00ff88; border-radius: 6px; padding: 14px 18px; margin: 16px 0 24px 0; color: #cbd5e1; font-family: 'IBM Plex Sans', sans-serif; font-size: 0.9rem; line-height: 1.6; font-weight: 400; box-shadow: 0 2px 14px rgba(0, 255, 136, 0.06);">
-        <strong style="color: #00ff88; font-weight: 700; font-family: 'Montserrat', sans-serif; letter-spacing: 0.03em; text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);">THE EDGE:</strong> We solve information overload for modern investors. Our AI reads thousands of breaking global news events in real-time, instantly analyzes their market impact, and converts the chaos into a single, easy-to-read momentum score—cutting through the noise to show you exactly where the market is heading.
+    <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-left: 3px solid #00ff88; border-radius: 6px; padding: 14px 18px; margin: 16px 0 24px 0; color: #94a3b8; font-family: 'IBM Plex Sans', sans-serif; font-size: 0.9rem; line-height: 1.6; font-weight: 400;">
+        <strong style="color: #f8fafc; font-weight: 600; font-family: 'Montserrat', sans-serif; letter-spacing: 0.02em;">THE EDGE:</strong> We solve information overload for modern investors. Our AI reads thousands of breaking global news events in real-time, instantly analyzes their market impact, and converts the chaos into a single, easy-to-read momentum score—cutting through the noise to show you exactly where the market is heading.
     </div>
     """, unsafe_allow_html=True)
     
