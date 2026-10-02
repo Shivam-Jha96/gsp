@@ -294,6 +294,7 @@ if not df_signals.empty:
         }
         display_tz = st.selectbox("tz", list(tz_options.keys()), index=0, label_visibility="collapsed")
         target_tz = tz_options[display_tz]
+        tz_abbr = display_tz.split('(')[-1].replace(')', '').strip() if '(' in display_tz else display_tz
     
     # --- Top Row: Filters Using Native Labels ---
     filter_col1, filter_col2, filter_col3, filter_col4 = st.columns([1, 1, 1, 1.2])
@@ -368,6 +369,10 @@ if not df_signals.empty:
             values='sentiment_index',
             aggfunc='mean'
         ).fillna(0).reset_index()
+        
+        # Ensure plot timestamps are naive in target_tz so Plotly renders exact wall-clock time
+        plot_trend_x = df_trend['timestamp'].dt.tz_localize(None) if df_trend['timestamp'].dt.tz is not None else df_trend['timestamp']
+        plot_pivot_x = pivot_df['timestamp'].dt.tz_localize(None) if pivot_df['timestamp'].dt.tz is not None else pivot_df['timestamp']
         
         # --- Main Layout Split (1 Narrow Left, 1 Wide Right) ---
         left_col, right_col = st.columns([1.2, 4])
@@ -517,6 +522,9 @@ if not df_signals.empty:
                         <span style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; color: #34d399; background: rgba(16, 185, 129, 0.12); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.25); text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
                             AI System-One
                         </span>
+                        <span style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; color: #38bdf8; background: rgba(56, 189, 248, 0.12); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(56, 189, 248, 0.25); text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
+                            {tz_abbr}
+                        </span>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
@@ -537,7 +545,7 @@ if not df_signals.empty:
                         continue
                         
                     fig_area.add_trace(go.Scatter(
-                        x=pivot_df['timestamp'], y=pivot_df[ticker],
+                        x=plot_pivot_x, y=pivot_df[ticker],
                         mode='lines+markers', name=f'{ticker} Sentiment',
                         line=dict(width=1.5, color=colors[i % len(colors)]),
                         marker=dict(size=4),
@@ -547,7 +555,7 @@ if not df_signals.empty:
                 
                 # Add smooth thick line for Global EMA Trend on top
                 fig_area.add_trace(go.Scatter(
-                    x=df_trend['timestamp'], y=df_trend['EMA_Index'],
+                    x=plot_trend_x, y=df_trend['EMA_Index'],
                     mode='lines+markers',
                     line=dict(color='#f8fafc', width=2.5, shape='linear'), 
                     marker=dict(size=6, color='#f8fafc', line=dict(color='#020617', width=1)),
@@ -561,7 +569,7 @@ if not df_signals.empty:
                     legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, font=dict(color="#f8fafc", size=11, family="IBM Plex Sans")),
                     xaxis=dict(
                         showgrid=True, gridcolor='rgba(255,255,255,0.05)',
-                        title=dict(text="Timeline (UTC)", font=dict(size=11, color="#94a3b8", family="IBM Plex Sans")),
+                        title=dict(text=f"Timeline ({tz_abbr})", font=dict(size=11, color="#94a3b8", family="IBM Plex Sans")),
                         tickfont=dict(size=11, color="#94a3b8", family="IBM Plex Sans")
                     ),
                     yaxis=dict(
