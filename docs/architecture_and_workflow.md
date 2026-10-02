@@ -54,15 +54,15 @@ flowchart TD
         SDK["TypeSafe SDK Client<br/>(Net Directional Probabilities)"]
         MAIN -->|Async Batch Requests| SDK
         SDK --> MODAL_APP
-        MODAL_APP <--> VLLM
-        MODAL_APP <--> CLM_HEAD
+        MODAL_APP --- VLLM
+        MODAL_APP --- CLM_HEAD
     end
 
     subgraph S4["Database Tier (Supabase PostgreSQL)"]
         DB_POOL["SupabasePoolClient<br/>(src/database/client.py)"]
         MATH_LAYER["event_signals Table<br/>(UUID, Ticker, Region, Timestamp, Score)<br/>Composite B-Tree & BRIN Indices"]
         DOC_LAYER["event_payloads Table<br/>(UUID PK-FK, Raw Text, OKF Rules, JSONB)"]
-        MAIN -->|Connection Pool (Port 6543)| DB_POOL
+        MAIN -->|Connection Pool Port 6543| DB_POOL
         DB_POOL -->|Normalized Math Vector| MATH_LAYER
         DB_POOL -->|Unstructured Document Record| DOC_LAYER
     end
@@ -97,13 +97,13 @@ flowchart TD
 
     subgraph S7["Autonomous Knowledge Engine"]
         OKF_UPDATER["Autonomous OKF Updater<br/>(src/knowledge_engine/okf_updater.py)"]
-        GEMINI["Google Gemini API<br/>(gemini-3.8-flash -> 3.7 -> 3.5-lite)"]
+        GEMINI["Google Gemini API<br/>(gemini-3.8-flash, 3.7, 3.5-lite)"]
         GIT_BOT["GitHub Actions Bot<br/>(Auto Commit & Push)"]
         GN -.->|Policy & Macro Queries| OKF_UPDATER
         OKF_UPDATER --> GEMINI
         GEMINI -->|Synthesized Macro Rules| OKF_UPDATER
         OKF_UPDATER --> GIT_BOT
-        GIT_BOT -->|Update knowledge/*.okf.md| OKF_FILES
+        GIT_BOT -->|Update Regional OKF Rules| OKF_FILES
     end
 
     classDef source fill:#1e293b,stroke:#3b82f6,stroke-width:1px,color:#f8fafc;
@@ -129,22 +129,22 @@ The following sequence diagram outlines the chronological interaction flow durin
 sequenceDiagram
     autonumber
     participant GHA as GitHub Actions Runner
-    participant POL as FeedPoller (aiohttp)
-    participant RSS as RSS Endpoints (Google/Reuters)
-    participant CLM as Modal CLM-8B Cluster
-    participant DB as Supabase PostgreSQL
-    participant SIG as Quant Signal Engine
-    participant ALP as Alpaca Brokerage API
+    participant POL as "FeedPoller (aiohttp)"
+    participant RSS as "RSS Endpoints (Google/Reuters)"
+    participant CLM as "Modal CLM-8B Cluster"
+    participant DB as "Supabase PostgreSQL"
+    participant SIG as "Quant Signal Engine"
+    participant ALP as "Alpaca Brokerage API"
 
     GHA->>POL: Trigger run_ingestion_pipeline()
     POL->>RSS: Fetch 40 feeds concurrently (asyncio.gather)
     RSS-->>POL: Return Raw RSS XML Feeds
-    POL->>POL: Parse XML, Deduplicate & Cap Top-3 per Ticker
+    POL->>POL: Parse XML, Deduplicate and Cap Top-3 per Ticker
     loop For Each Ingested Article
-        POL->>POL: Inject Regional OKF Context (knowledge/*.okf.md)
+        POL->>POL: Inject Regional OKF Context
         POL->>CLM: POST /v1/systemone (State + Choice Questions)
         CLM-->>POL: Return Directional Choice & Probabilities
-        POL->>POL: Compute Net Directional Score [-1.0, 1.0]
+        POL->>POL: Compute Net Directional Score
         POL->>DB: INSERT INTO event_signals (Math Layer)
         POL->>DB: INSERT INTO event_payloads (Document Layer)
     end
@@ -152,10 +152,10 @@ sequenceDiagram
     SIG->>DB: SELECT historical scores for active universe
     DB-->>SIG: Return time-series records
     SIG->>SIG: Calculate 4-period EMA using Pandas ewm()
-    alt Bullish Crossover (EMA > Prev AND EMA > 0)
+    alt Bullish Crossover: EMA above Prev and EMA above 0
         SIG->>ALP: submit_order(SPY, Qty=1, Side=BUY, MarketOrder)
         ALP-->>SIG: Confirm Order ID & Execution Fill
-    else Bearish Crossover (EMA < Prev AND EMA < 0)
+    else Bearish Crossover: EMA below Prev and EMA below 0
         SIG->>ALP: submit_order(SPY, Qty=1, Side=SELL, MarketOrder)
         ALP-->>SIG: Confirm Order ID & Execution Fill
     else Neutral / Divergence Undefined
@@ -481,16 +481,16 @@ Macroeconomic regimes evolve through interest rate cycles, inflation surprises, 
 
 ```mermaid
 flowchart LR
-    A["Scheduled Daily Run<br/>(00:00 UTC)"] --> B["Google News Policy Search<br/>(Central Bank & Macro Queries)"]
+    A["Scheduled Daily Run<br/>(00:00 UTC)"] --> B["Google News Policy Search<br/>(Central Bank and Macro Queries)"]
     B --> C["Read Current OKF Rules<br/>(knowledge/*.okf.md)"]
     C --> D["Gemini Synthesis Prompt<br/>(Identify Policy Shifts)"]
     D --> E{"Primary Model<br/>Available?"}
     E -->|Yes| F["Generate Updated Markdown Rules"]
-    E -->|503/404| G["Cascade to Fallback Model Chain"]
+    E -->|503 or 404 Error| G["Cascade to Fallback Model Chain"]
     G --> F
     F --> H["Write to knowledge/*.okf.md"]
     H --> I["Git Diff Check"]
-    I -->|Diff Exists| J["Commit via github-actions[bot]<br/>& Trigger deploy.yml"]
+    I -->|Diff Exists| J["Commit via github-actions bot<br/>and Trigger deploy.yml"]
     I -->|No Diff| K["Exit Cleanly"]
 ```
 

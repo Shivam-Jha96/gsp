@@ -105,35 +105,51 @@ For deep technical derivations and complete architectural workflows, refer to th
 
 ```mermaid
 flowchart TD
-    subgraph "1. Data Ingestion"
-        GN[Global News Feeds] & GR[Reuters Feeds] -->|Poll 20 Indices| Poller[Async RSS Poller]
+    subgraph S1 ["1. Data Ingestion"]
+        GN["Global News Feeds"]
+        GR["Reuters Feeds"]
+        Poller["Async RSS Poller"]
+        GN -->|Poll Feeds| Poller
+        GR -->|Poll Feeds| Poller
     end
     
-    subgraph "2. AI Engine (CLM-8B on Modal)"
-        OKF[(Regional OKF Rules)]
-        Poller -->|Headlines| SDK[TypeSafeClient SDK]
+    subgraph S2 ["2. AI Engine (CLM-8B on Modal)"]
+        OKF[("Regional OKF Rules")]
+        SDK["TypeSafeClient SDK"]
+        GPU["Modal A10G GPU"]
+        CLM["System-One Scorer"]
+        Poller -->|Headlines| SDK
         OKF -.->|Macro Context| SDK
-        SDK -->|API Call| GPU[Modal A10G GPU]
-        GPU --> CLM[System-One Scorer]
+        SDK -->|API Call| GPU
+        GPU --> CLM
     end
 
-    subgraph "3. Database (Supabase)"
-        CLM -->|Score Vector| DB1[(event_signals)]
-        CLM -->|Raw Text| DB2[(event_payloads)]
+    subgraph S3 ["3. Database (Supabase)"]
+        DB1[("event_signals")]
+        DB2[("event_payloads")]
+        CLM -->|Score Vector| DB1
+        CLM -->|Raw Text| DB2
     end
 
-    subgraph "4. Signal Engine"
-        DB1 -->|Time-Series| EMA[4H EMA Crossover]
-        EMA -->|BUY/SELL| Alpaca[Alpaca Paper Trading]
+    subgraph S4 ["4. Signal Engine"]
+        EMA["4H EMA Crossover"]
+        Alpaca["Alpaca Paper Trading"]
+        DB1 -->|Time-Series| EMA
+        EMA -->|BUY or SELL| Alpaca
     end
 
-    subgraph "5. Dashboard"
-        DB1 & DB2 --> Streamlit[Streamlit App]
+    subgraph S5 ["5. Dashboard"]
+        Streamlit["Streamlit App"]
+        DB1 --> Streamlit
+        DB2 --> Streamlit
     end
 
-    subgraph "6. Knowledge Engine (Daily)"
-        NEWS[Macro News RSS] -->|Headlines| GEMINI[Gemini Flash]
-        GEMINI -->|Updated Rules| BOT[GitHub Actions Bot]
+    subgraph S6 ["6. Knowledge Engine (Daily)"]
+        NEWS["Macro News RSS"]
+        GEMINI["Gemini Flash"]
+        BOT["GitHub Actions Bot"]
+        NEWS -->|Headlines| GEMINI
+        GEMINI -->|Updated Rules| BOT
         BOT -->|Auto-Commit| OKF
     end
 ```
