@@ -439,12 +439,6 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
         display_tz = st.selectbox("tz", list(tz_options.keys()), index=0, label_visibility="collapsed")
         target_tz = tz_options[display_tz]
         tz_abbr = display_tz.split('(')[-1].replace(')', '').strip() if '(' in display_tz else display_tz
-        st.markdown(f"""
-        <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 6px; padding: 6px 10px; margin-top: 6px; display: flex; align-items: center; justify-content: space-between;">
-            <span style="font-size: 0.68rem; color: #94a3b8; font-family: 'IBM Plex Sans', sans-serif;">Sync Epoch</span>
-            <span style="font-size: 0.72rem; font-weight: 700; color: #34d399; font-family: 'Montserrat', sans-serif;">{tz_abbr}</span>
-        </div>
-        """, unsafe_allow_html=True)
     
     # --- Top Row: Styled Filter Dropdowns ---
     filter_col1, filter_col2, filter_col3, filter_col4 = st.columns([1, 1, 1, 1.2])
@@ -456,7 +450,7 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
             <span style="font-size: 0.72rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">TIMEFRAME</span>
         </div>
         """, unsafe_allow_html=True)
-        date_range = st.selectbox("Timeframe", ["24H", "12H", "6H", "4H", "7D", "1M", "1Y", "All"], index=0, label_visibility="collapsed")
+        date_range = st.selectbox("Timeframe", ["1 Day", "12 Hours", "6 Hours", "4 Hours", "7 Days", "1 Month", "1 Year", "All"], index=0, label_visibility="collapsed")
         
     with filter_col2:
         st.markdown("""
@@ -501,13 +495,13 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
             display_payloads['timestamp'] = display_payloads['timestamp'].dt.tz_localize('UTC')
             
         now = pd.Timestamp.utcnow()
-        if date_range == "4H": cutoff = now - pd.Timedelta(hours=4)
-        elif date_range == "6H": cutoff = now - pd.Timedelta(hours=6)
-        elif date_range == "12H": cutoff = now - pd.Timedelta(hours=12)
-        elif date_range == "24H": cutoff = now - pd.Timedelta(hours=24)
-        elif date_range == "7D": cutoff = now - pd.Timedelta(days=7)
-        elif date_range == "1M": cutoff = now - pd.Timedelta(days=30)
-        elif date_range == "1Y": cutoff = now - pd.Timedelta(days=365)
+        if date_range in ["4 Hours", "4 Hour", "4H"]: cutoff = now - pd.Timedelta(hours=4)
+        elif date_range in ["6 Hours", "6 Hour", "6H"]: cutoff = now - pd.Timedelta(hours=6)
+        elif date_range in ["12 Hours", "12 Hour", "12H"]: cutoff = now - pd.Timedelta(hours=12)
+        elif date_range in ["1 Day", "1Day", "24 Hours", "24 Hour", "24H"]: cutoff = now - pd.Timedelta(hours=24)
+        elif date_range in ["7 Days", "7 Day", "7D"]: cutoff = now - pd.Timedelta(days=7)
+        elif date_range in ["1 Month", "1M"]: cutoff = now - pd.Timedelta(days=30)
+        elif date_range in ["1 Year", "1Y"]: cutoff = now - pd.Timedelta(days=365)
         
         filtered_signals = filtered_signals[filtered_signals['timestamp'] >= cutoff]
         display_payloads = display_payloads[display_payloads['timestamp'] >= cutoff]
@@ -526,7 +520,7 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
         
         # Dynamically adjust grouping frequency based on zoom level to prevent blank charts
         freq_str = 'h'
-        if date_range in ["1M", "1Y", "All"]:
+        if date_range in ["1 Month", "1M", "1 Year", "1Y", "All"]:
             freq_str = 'D'
         
         # Calculate EMA by grouping into active periods (dropna prevents flatlines)
@@ -875,7 +869,7 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
         if not region_payloads.empty:
             for _, row in region_payloads.iterrows():
                 sentiment = row['sentiment_index']
-                if date_range in ["4H", "6H", "12H", "24H"]:
+                if date_range in ["4 Hours", "4 Hour", "4H", "6 Hours", "6 Hour", "6H", "12 Hours", "12 Hour", "12H", "1 Day", "1Day", "24 Hours", "24 Hour", "24H"]:
                     time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
                 else:
                     time_str = pd.to_datetime(row['timestamp']).strftime('%b %d, %H:%M')
