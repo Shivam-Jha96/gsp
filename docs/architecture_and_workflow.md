@@ -422,11 +422,14 @@ order = trading_client.submit_order(order_data=order_data)
 The dashboard implements a financial terminal theme with custom CSS styling:
 * **Background & Typography:** Deep slate canvas (`#020617`), Montserrat for typographic hierarchy, and IBM Plex Sans for tabular readouts.
 * **Glassmorphic Surface Design:** Translucent cards (`rgba(255, 255, 255, 0.03)` with `backdrop-filter: blur(10px)`) accented with directional color borders: Emerald (`#10b981`) for bullish signals, Rose (`#ef4444`) for bearish conditions, and Blue (`#3b82f6`) for aggregate metrics.
+* **Styled Dropdown Filter Headers:** Replaced plain native select labels with high-contrast terminal micro-headers featuring SVG indicators (Clock for `TIMEFRAME`, Globe for `REGION`, Pulse for `EMA WINDOW`, Bar Chart for `CHART DISPLAY`, and Compass for `TIMEZONE`) in bold Montserrat uppercase with distinct category accents.
+* **Flush Column Alignment & Flex Stretch Layout:** Sibling column flex stretch (`div[data-testid="stHorizontalBlock"]`) and calibrated chart geometry (`height=370`) eliminate vertical misalignment between the 4-card left KPI stack and the right chart/mini-tile stack, achieving pixel-perfect baseline parity.
 
 #### 2. Plotly Multi-Index Sentiment Surface
 The primary visualization overlays filled area plots for each tracked index alongside a prominent region-wide EMA trend line:
 * Individual asset areas use semi-transparent fills (`fill='tozeroy'`, opacity 0.3).
 * The aggregate regional EMA is drawn as a high-contrast white vector line (`width=2.5`).
+* **High-Contrast Terminal Axes:** Styled X-axis (`TIMELINE • {tz_abbr}`) and Y-axis (`OPTIMISM SCORE`) titles in bold Montserrat with cyan (`#38bdf8`) accents, crisp outside tick marks (`ticks='outside'`), and an emerald equilibrium line (`#10b981` at $0.0$) marking bullish/bearish divergence.
 * Plotly timestamps are converted to naive datetimes in the user's selected timezone, eliminating UTC conversion discrepancies on the x-axis.
 
 #### 3. Global Timezone Conversion Engine

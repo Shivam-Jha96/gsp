@@ -45,11 +45,14 @@ st.markdown("""
     .white-card {
         background: rgba(255, 255, 255, 0.03) !important;
         border-radius: 8px;
-        padding: 12px;
-        margin-bottom: 12px;
+        padding: 12px 16px;
+        margin-bottom: 10px;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
         backdrop-filter: blur(10px);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .white-card:last-child {
+        margin-bottom: 0 !important;
     }
     .white-card:hover {
         background: rgba(255, 255, 255, 0.05) !important;
@@ -80,12 +83,37 @@ st.markdown("""
         box-shadow: none !important;
     }
     
-    /* Force Streamlit Columns to Stretch & Align Bottoms */
-    [data-testid="column"] > div[data-testid="stVerticalBlock"] {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 100%;
+    /* Force Streamlit Columns to Stretch & Align Bottoms Flush */
+    div[data-testid="stHorizontalBlock"] {
+        align-items: stretch !important;
+    }
+    div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    div[data-testid="stHorizontalBlock"] > div[data-testid="column"] > div[data-testid="stVerticalBlock"] {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        height: 100% !important;
+        flex: 1 1 auto !important;
+    }
+    
+    /* Style Streamlit Selectbox Inputs */
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 1px solid rgba(255, 255, 255, 0.09) !important;
+        border-radius: 6px !important;
+        font-family: 'Montserrat', sans-serif !important;
+        font-size: 0.82rem !important;
+        font-weight: 600 !important;
+        color: #f8fafc !important;
+        transition: all 0.2s ease !important;
+    }
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover {
+        border-color: rgba(59, 130, 246, 0.45) !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        box-shadow: 0 0 10px rgba(59, 130, 246, 0.15) !important;
     }
     
     /* Metrics */
@@ -382,7 +410,12 @@ if not df_signals.empty:
         </div>
         """, unsafe_allow_html=True)
     with tz_col:
-        st.markdown('<div style="font-size: 0.75rem; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; font-family: \'Montserrat\', sans-serif;">Timezone</div>', unsafe_allow_html=True)
+        st.markdown("""
+        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 10"></polyline></svg>
+            <span style="font-size: 0.72rem; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">TIMEZONE</span>
+        </div>
+        """, unsafe_allow_html=True)
         tz_options = {
             "Asia/Kolkata (IST)": "Asia/Kolkata",
             "UTC": "UTC",
@@ -394,22 +427,48 @@ if not df_signals.empty:
         target_tz = tz_options[display_tz]
         tz_abbr = display_tz.split('(')[-1].replace(')', '').strip() if '(' in display_tz else display_tz
     
-    # --- Top Row: Filters Using Native Labels ---
+    # --- Top Row: Styled Filter Dropdowns ---
     filter_col1, filter_col2, filter_col3, filter_col4 = st.columns([1, 1, 1, 1.2])
     
     with filter_col1:
-        date_range = st.selectbox("Timeframe", ["24H", "12H", "6H", "4H", "7D", "1M", "1Y", "All"], index=0)
+        st.markdown("""
+        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span style="font-size: 0.72rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">TIMEFRAME</span>
+        </div>
+        """, unsafe_allow_html=True)
+        date_range = st.selectbox("Timeframe", ["24H", "12H", "6H", "4H", "7D", "1M", "1Y", "All"], index=0, label_visibility="collapsed")
+        
     with filter_col2:
+        st.markdown("""
+        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <span style="font-size: 0.72rem; font-weight: 700; color: #a78bfa; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">REGION</span>
+        </div>
+        """, unsafe_allow_html=True)
         regions = df_signals['market_region'].unique().tolist()
         default_ix = regions.index("US") if "US" in regions else 0
-        selected_region = st.selectbox("Region", regions, index=default_ix)
+        selected_region = st.selectbox("Region", regions, index=default_ix, label_visibility="collapsed")
+        
     with filter_col3:
-        ema_window = st.selectbox("Exponential Moving Average (Periods)", [4, 8, 12, 24], index=0)
+        st.markdown("""
+        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            <span style="font-size: 0.72rem; font-weight: 700; color: #34d399; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">EMA WINDOW</span>
+        </div>
+        """, unsafe_allow_html=True)
+        ema_window = st.selectbox("Exponential Moving Average (Periods)", [4, 8, 12, 24], index=0, label_visibility="collapsed")
+        
     with filter_col4:
-        # Dynamically fetch available indices for the chosen region
+        st.markdown("""
+        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            <span style="font-size: 0.72rem; font-weight: 700; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">CHART DISPLAY</span>
+        </div>
+        """, unsafe_allow_html=True)
         active_indices = df_signals[df_signals['market_region'] == selected_region]['index_ticker'].unique().tolist()
         active_indices = [x for x in active_indices if x != 'UNKNOWN']
-        chart_display = st.selectbox("Chart Display", ["All Indices"] + active_indices, index=0)
+        chart_display = st.selectbox("Chart Display", ["All Indices"] + active_indices, index=0, label_visibility="collapsed")
 
     filtered_signals = df_signals[df_signals['market_region'] == selected_region].copy()
     display_payloads = df_payloads.copy()
@@ -661,20 +720,27 @@ if not df_signals.empty:
                 ))
                 
                 fig_area.update_layout(
-                    height=490, margin=dict(l=0, r=0, t=5, b=0),
+                    height=370, margin=dict(l=0, r=0, t=5, b=0),
                     plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
                     hovermode="x unified",
-                    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, font=dict(color="#f8fafc", size=11, family="IBM Plex Sans")),
+                    legend=dict(
+                        orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0,
+                        font=dict(color="#f8fafc", size=10, family="Montserrat")
+                    ),
                     xaxis=dict(
-                        showgrid=True, gridcolor='rgba(255,255,255,0.05)',
-                        title=dict(text=f"Timeline ({tz_abbr})", font=dict(size=11, color="#94a3b8", family="IBM Plex Sans")),
-                        tickfont=dict(size=11, color="#94a3b8", family="IBM Plex Sans")
+                        showgrid=True, gridcolor='rgba(255,255,255,0.06)',
+                        showline=True, linecolor='rgba(255,255,255,0.15)', linewidth=1,
+                        ticks='outside', tickcolor='rgba(255,255,255,0.25)', ticklen=4,
+                        title=dict(text=f"<b>TIMELINE • {tz_abbr}</b>", font=dict(size=11, color="#38bdf8", family="Montserrat")),
+                        tickfont=dict(size=10, color="#94a3b8", family="IBM Plex Sans")
                     ),
                     yaxis=dict(
-                        showgrid=True, gridcolor='rgba(255,255,255,0.05)',
-                        zeroline=True, zerolinecolor='rgba(255,255,255,0.25)', zerolinewidth=1.5,
-                        title=dict(text="Optimism Score", font=dict(size=11, color="#94a3b8", family="IBM Plex Sans")),
-                        tickfont=dict(size=11, color="#f8fafc", family="IBM Plex Sans", weight="bold"),
+                        showgrid=True, gridcolor='rgba(255,255,255,0.06)',
+                        zeroline=True, zerolinecolor='rgba(16, 185, 129, 0.45)', zerolinewidth=1.5,
+                        showline=True, linecolor='rgba(255,255,255,0.15)', linewidth=1,
+                        ticks='outside', tickcolor='rgba(255,255,255,0.25)', ticklen=4,
+                        title=dict(text="<b>OPTIMISM SCORE</b>", font=dict(size=11, color="#38bdf8", family="Montserrat")),
+                        tickfont=dict(size=10, color="#f8fafc", family="IBM Plex Sans", weight="bold"),
                         side="right"
                     )
                 )
@@ -683,7 +749,7 @@ if not df_signals.empty:
             # --- Mini KPI Tiles for Individual Indices (Dynamic Sentiment Styling) ---
             valid_tickers = [t for t in tickers if t != 'UNKNOWN']
             if valid_tickers:
-                kpi_html = '<div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px;">'
+                kpi_html = '<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;">'
                 
                 for ticker in valid_tickers:
                     latest_score = pivot_df[ticker].iloc[-1] if len(pivot_df) > 0 else 0
@@ -729,7 +795,7 @@ if not df_signals.empty:
                         d_pill_border = "rgba(148, 163, 184, 0.25)"
                     
                     kpi_html += f"""
-<div class="news-item-card" style="flex: 1 1 130px; padding: 12px 14px; border-left: 3px solid {t_card_border}; margin-bottom: 0;">
+<div class="news-item-card" style="flex: 1 1 120px; padding: 10px 12px; border-left: 3px solid {t_card_border}; margin-bottom: 0;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
         <span style="font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 700; color: #f8fafc; text-transform: uppercase; letter-spacing: 0.03em;">{ticker}</span>
         <span style="font-family: 'Montserrat', sans-serif; font-size: 0.65rem; font-weight: 800; color: {t_status_color}; background: {t_status_bg}; border: 1px solid {t_status_border}; padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">{ticker_status}</span>
