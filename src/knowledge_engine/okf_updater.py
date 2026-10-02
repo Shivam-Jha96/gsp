@@ -1,6 +1,8 @@
 import os
 import asyncio
 import logging
+import time
+import re
 import feedparser
 from urllib.parse import quote
 from google import genai
@@ -15,8 +17,34 @@ if not api_key:
     exit(1)
 
 client = genai.Client(api_key=api_key.strip())
-# Ordered list of models to try (fallback on 503 high-demand errors)
+# Ordered list of models to try (fallback on 503 high-demand or 404 errors)
 MODEL_FALLBACKS = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.5-flash-lite"]
+
+# Rate limiting guardrails to stay strictly below Google Gemini 15 RPM free-tier quota
+MIN_REQUEST_INTERVAL = 6.0   # Mandatory 6.0s spacing between all API dispatches (<= 10 RPM ceiling)
+INTER_REGION_DELAY = 10.0    # 10.0s cooldown between regional runs
+
+_last_request_time = 0.0
+
+async def rate_limited_generate(client, model_id: str, prompt: str):
+    """
+    Enforces a mandatory 6.0-second floor between any two Gemini API calls,
+    preventing RPM bursts regardless of retries or fallback switching.
+    """
+    global _last_request_time
+    now = time.time()
+    elapsed = now - _last_request_time
+    if elapsed < MIN_REQUEST_INTERVAL:
+        sleep_needed = MIN_REQUEST_INTERVAL - elapsed
+        logger.info(f"  [RATE-GUARD] Pacing dispatch: waiting {sleep_needed:.2f}s to strictly preserve 15 RPM quota...")
+        await asyncio.sleep(sleep_needed)
+        
+    response = client.models.generate_content(
+        model=model_id,
+        contents=prompt
+    )
+    _last_request_time = time.time()
+    return response
 
 REGIONS = {
     "US": {
@@ -142,19 +170,17 @@ Output ONLY raw Markdown text. Do NOT wrap it in code blocks.
         for attempt in range(3):
             try:
                 logger.info(f"  Trying model={model_id} (attempt {attempt + 1}/3)...")
-                response = client.models.generate_content(
-                    model=model_id,
-                    contents=prompt
-                )
+                response = await rate_limited_generate(client, model_id, prompt)
                 new_content = response.text
                 
+                if not new_content or len(new_content.strip()) < 80:
+                    logger.warning(f"  Empty response from {model_id}, retrying...")
+                    await asyncio.sleep(6)
+                    continue
+
                 # Strip potential markdown fencing the LLM might hallucinate
-                if new_content.startswith("```markdown"):
-                    new_content = new_content.replace("```markdown", "", 1)
-                if new_content.startswith("```"):
-                    new_content = new_content.replace("```", "", 1)
-                if new_content.endswith("```"):
-                    new_content = new_content[:-3]
+                new_content = re.sub(r"^```(?:markdown)?\s*", "", new_content.strip(), flags=re.IGNORECASE)
+                new_content = re.sub(r"\s*```$", "", new_content)
                     
                 # Save to disk
                 write_okf(region_data["file"], new_content)
@@ -163,16 +189,29 @@ Output ONLY raw Markdown text. Do NOT wrap it in code blocks.
                 
             except Exception as e:
                 error_str = str(e)
-                if "503" in error_str or "UNAVAILABLE" in error_str:
-                    wait = 5 * (attempt + 1)  # 5s, 10s, 15s backoff
-                    logger.warning(f"  {model_id} unavailable (attempt {attempt + 1}), retrying in {wait}s...")
+                error_upper = error_str.upper()
+                is_rate_limit = any(k in error_upper for k in ["429", "RESOURCE_EXHAUSTED", "RATE_LIMIT", "QUOTA"])
+                is_unavailable = any(k in error_upper for k in ["503", "UNAVAILABLE", "OVERLOADED"])
+                is_not_found = "404" in error_upper or "NOT_FOUND" in error_upper
+
+                if is_rate_limit:
+                    wait = 15 * (attempt + 1)  # 15s, 30s, 45s exponential backoff
+                    logger.warning(f"  [QUOTA/429] Rate limit hit on {model_id} (attempt {attempt + 1}/3). Backing off for {wait}s...")
                     await asyncio.sleep(wait)
-                elif "404" in error_str:
-                    logger.warning(f"  {model_id} not found, trying next model...")
+                elif is_unavailable:
+                    wait = 8 * (attempt + 1)  # 8s, 16s, 24s backoff
+                    logger.warning(f"  [503/UNAVAILABLE] {model_id} busy (attempt {attempt + 1}/3), retrying in {wait}s...")
+                    await asyncio.sleep(wait)
+                elif is_not_found:
+                    logger.warning(f"  [404] {model_id} not found, trying next fallback model...")
                     break  # Skip to next model
                 else:
                     logger.error(f"  Unexpected error with {model_id}: {e}")
                     break  # Skip to next model
+
+        # Cooldown before switching to next fallback model to avoid immediately hitting project-level quota
+        logger.info(f"  Cooling down 8s before trying next fallback model...")
+        await asyncio.sleep(8)
     
     logger.error(f"All models failed for {region_data['name']}. OKF not updated.")
 
@@ -180,9 +219,8 @@ async def main():
     logger.info("=== Starting Dynamic OKF Updater ===")
     for region_code, region_data in REGIONS.items():
         await update_region(region_code, region_data)
-        # Respect 15 RPM rate limit: 60s / 15 = 4s minimum gap
-        logger.info("  Waiting 5s for rate limit...")
-        await asyncio.sleep(5)
+        logger.info(f"  Cooling down {INTER_REGION_DELAY}s between regions to stay safely under 15 RPM limit...")
+        await asyncio.sleep(INTER_REGION_DELAY)
     logger.info("=== OKF Update Complete! ===")
 
 if __name__ == "__main__":

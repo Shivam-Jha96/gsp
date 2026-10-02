@@ -508,8 +508,11 @@ MODEL_FALLBACKS = [
 ]
 ```
 
-* **Retry Strategy:** Up to 3 retry attempts per model with linear backoff delays (5s, 10s, 15s) upon receiving `503 Service Unavailable` or transient capacity errors.
-* **Rate-Limit Throttling:** Introduces an explicit 5-second pause between regional assessments to respect Google Gemini's 15 requests-per-minute (RPM) free-tier limit.
+* **Mandatory Pacing Floor (`rate_limited_generate`):** Programmatically enforces a minimum 6.0-second delay (`MIN_REQUEST_INTERVAL = 6.0`) between any two consecutive Gemini requests, mathematically capping throughput at $\le 10\text{ RPM}$ and preventing request bursts during retries or fallback transitions.
+* **Explicit 429 / Quota Trap with Exponential Backoff:** Specifically detects `429`, `RESOURCE_EXHAUSTED`, and `QUOTA` errors, applying escalating backoffs (15s, 30s, 45s) to allow rolling rate windows to cool down.
+* **Transient Error Retries:** Applies backoff (8s, 16s, 24s) for `503 UNAVAILABLE` and high-demand capacity limits across up to 3 attempts per model.
+* **Inter-Model Cooldown:** Enforces an 8-second pause before cascading to the next fallback model to avoid immediately exhausting project-level quotas.
+* **Inter-Region Rate Throttling:** Introduces an explicit 10.0-second cooldown (`INTER_REGION_DELAY = 10.0`) between regional runs (US, IN, UK, JP), keeping total run velocity under $\le 6\text{ RPM}$ (far below Google Gemini's 15 RPM free-tier limit).
 
 #### 3. Dynamic Regime-Driven Rule Synthesis (Unconstrained Transmission Channels)
 To eliminate artificial information bottlenecks, the OKF generation prompt does not restrict rules to an arbitrary numerical ceiling (e.g., 4–6 rules). Instead, Gemini is instructed to comprehensively span all active, independent macroeconomic transmission channels:
