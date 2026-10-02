@@ -436,7 +436,9 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
             "Europe/London (GMT)": "Europe/London",
             "Asia/Tokyo (JST)": "Asia/Tokyo"
         }
-        display_tz = st.selectbox("tz", list(tz_options.keys()), index=0, label_visibility="collapsed")
+        tz_keys = list(tz_options.keys())
+        default_tz_ix = next((i for i, k in enumerate(tz_keys) if "IST" in k), 0)
+        display_tz = st.selectbox("tz", tz_keys, index=default_tz_ix, label_visibility="collapsed")
         target_tz = tz_options[display_tz]
         tz_abbr = display_tz.split('(')[-1].replace(')', '').strip() if '(' in display_tz else display_tz
     
@@ -450,7 +452,9 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
             <span style="font-size: 0.72rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">TIMEFRAME</span>
         </div>
         """, unsafe_allow_html=True)
-        date_range = st.selectbox("Timeframe", ["1 Day", "12 Hours", "6 Hours", "4 Hours", "7 Days", "1 Month", "1 Year", "All"], index=0, label_visibility="collapsed")
+        timeframe_options = ["1 Day", "12 Hours", "6 Hours", "4 Hours", "7 Days", "1 Month", "1 Year", "All"]
+        default_tf_ix = timeframe_options.index("1 Day") if "1 Day" in timeframe_options else 0
+        date_range = st.selectbox("Timeframe", timeframe_options, index=default_tf_ix, label_visibility="collapsed")
         
     with filter_col2:
         st.markdown("""
@@ -459,8 +463,12 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
             <span style="font-size: 0.72rem; font-weight: 700; color: #a78bfa; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">REGION</span>
         </div>
         """, unsafe_allow_html=True)
-        regions = df_signals['market_region'].unique().tolist()
-        default_ix = regions.index("US") if "US" in regions else 0
+        all_regions = ["IN", "US", "UK", "JP"]
+        available_regions = df_signals['market_region'].unique().tolist()
+        regions = [r for r in all_regions if r in available_regions] + [r for r in available_regions if r not in all_regions]
+        if not regions:
+            regions = ["IN"]
+        default_ix = regions.index("IN") if "IN" in regions else 0
         selected_region = st.selectbox("Region", regions, index=default_ix, label_visibility="collapsed")
         
     with filter_col3:
@@ -470,7 +478,9 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
             <span style="font-size: 0.72rem; font-weight: 700; color: #34d399; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">EMA WINDOW</span>
         </div>
         """, unsafe_allow_html=True)
-        ema_window = st.selectbox("Exponential Moving Average (Periods)", [4, 8, 12, 24], index=0, label_visibility="collapsed")
+        ema_options = [4, 8, 12, 24]
+        default_ema_ix = ema_options.index(8) if 8 in ema_options else 1
+        ema_window = st.selectbox("Exponential Moving Average (Periods)", ema_options, index=default_ema_ix, label_visibility="collapsed")
         
     with filter_col4:
         st.markdown("""
