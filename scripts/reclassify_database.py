@@ -84,20 +84,26 @@ def reclassify_database(mode: str = "dry-run"):
                     return
 
                 print(f"\n[PURGING] Deleting {len(contaminant_ids)} contaminated records from Supabase...")
-                # Delete from payloads first
-                cur.execute(
-                    "DELETE FROM event_payloads WHERE id = ANY(%s);",
-                    (contaminant_ids,)
-                )
-                deleted_p = cur.rowcount
-                print(f"  Deleted {deleted_p} rows from event_payloads.")
+                batch_size = 500
+                deleted_p = 0
+                deleted_s = 0
+                for i in range(0, len(contaminant_ids), batch_size):
+                    batch = [str(uid) for uid in contaminant_ids[i:i + batch_size]]
+                    # Delete from payloads first
+                    cur.execute(
+                        "DELETE FROM event_payloads WHERE id = ANY(%s::uuid[]);",
+                        (batch,)
+                    )
+                    deleted_p += cur.rowcount
 
-                # Delete from signals
-                cur.execute(
-                    "DELETE FROM event_signals WHERE id = ANY(%s);",
-                    (contaminant_ids,)
-                )
-                deleted_s = cur.rowcount
+                    # Delete from signals
+                    cur.execute(
+                        "DELETE FROM event_signals WHERE id = ANY(%s::uuid[]);",
+                        (batch,)
+                    )
+                    deleted_s += cur.rowcount
+
+                print(f"  Deleted {deleted_p} rows from event_payloads.")
                 print(f"  Deleted {deleted_s} rows from event_signals.")
 
                 conn.commit()
