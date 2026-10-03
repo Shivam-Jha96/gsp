@@ -159,7 +159,7 @@ def run_rescoring(conn, batch_limit=None):
         for row in rows:
             rec_id, region, ticker, old_score, raw_text = row
             context = load_okf_rules(region)
-            res = score_sentiment(client, str(raw_text or ""), context)
+            res = score_sentiment(client, str(raw_text or ""), context, region_tag=region)
             new_score = float(res.get("DirectionalScore", 0.0))
 
             cur.execute("""
