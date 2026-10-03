@@ -366,8 +366,13 @@ CREATE TABLE event_payloads (
   ```
   Since event records are written chronologically, BRIN stores only the minimum and maximum timestamps per physical disk block. This provides lightning-fast range queries over millions of historical events with less than 1% of the disk footprint of a traditional B-Tree index.
 
-#### 3. Connection Pooling Logic
-[`SupabasePoolClient`](file:///d:/Dev/repos/gsp/src/database/client.py#L9-L48) implements a thread-safe connection pool using `psycopg2.pool.ThreadedConnectionPool`. It is configured to route connections through Supabase's transaction-mode connection pooler (port 6543 / PgBouncer), preventing database connection exhaustion during bursts of concurrent runner requests.
+#### 3. Connection Pooling & Self-Healing Resiliency Logic
+[`SupabasePoolClient`](file:///d:/Dev/repos/gsp/src/database/client.py) implements an institutional, auto-reconnecting connection pool using `psycopg2.pool.ThreadedConnectionPool`:
+* **Transaction Pooler Targeting:** Formatted to route queries through Supabase's transaction-mode connection pooler (port 6543 / Supavisor / PgBouncer), preventing database connection slot exhaustion during concurrent ingestion bursts.
+* **Proactive TCP Keepalives:** Configured with `keepalives=1`, `keepalives_idle=30`, `keepalives_interval=10`, and `keepalives_count=5`. This ensures intermediate NAT firewalls and cloud proxies do not sever idle socket state tables unnoticed.
+* **Pre-Checkout Liveness Validation:** Before checking out any connection from the pool, `_get_valid_connection()` executes a lightweight `SELECT 1;` health check (`_is_alive()`). If the remote server or pooler terminated the connection during idle dashboard periods, the dead socket is immediately discarded using `pool.putconn(conn, close=True)` and a fresh connection is spawned.
+* **Automatic Exception Recycling:** In `get_connection()`, any query failing with `OperationalError` or `InterfaceError` flags the connection as broken and purges it with `close=True`, preventing dead sockets from returning to contaminate the pool.
+* **Streamlit Transparent 2-Attempt Auto-Retry:** In [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py)'s `load_data()`, database queries run inside a 2-attempt retry loop. If an idle timeout drop occurs, the client invokes `reset_db_client()`, waits 500ms, and reconnects transparently, completely eliminating transient error banners and false "Database empty" warnings for end users.
 
 ---
 
@@ -683,7 +688,19 @@ The table below provides a detailed breakdown of all third-party services and in
   ```
 * **Resolution:**
   1. Verify that `DATABASE_URL` specifies port `6543` with `?pgbouncer=true`.
-  2. Ensure database operations use the context manager pattern in [`src/database/client.py`](file:///d:/Dev/repos/gsp/src/database/client.py#L31-L42), which guarantees connection cleanup via `finally: self.pool.putconn(conn)`.
+  2. Ensure database operations use the context manager pattern in [`src/database/client.py`](file:///d:/Dev/repos/gsp/src/database/client.py), which guarantees connection cleanup via `finally: self.pool.putconn(conn, close=is_broken)`.
+
+#### Symptom: `psycopg2.OperationalError: server closed the connection unexpectedly` followed by `Database empty`
+* **Root Causes:**
+  1. Streamlit Community Cloud runs `src/ui/app.py` as a persistent process. When idle between user visits, Supabase's connection pooler (PgBouncer/Supavisor) or intermediate NAT firewalls terminate idle TCP sockets (typically after 5–10 minutes).
+  2. The pool retained the dead socket. When a user visited the dashboard, the dead socket was handed to `load_data()`, raising an `OperationalError` and causing Streamlit to fall back to an empty DataFrame state.
+* **Diagnosis:**
+  * Check if GitHub Actions runs are succeeding (i.e. database is healthy and actively receiving rows).
+  * If the database is healthy, the error is purely a client-side idle socket drop.
+* **Resolution:**
+  1. **TCP Keepalives:** Ensured `ThreadedConnectionPool` sets `keepalives=1`, `keepalives_idle=30`, `keepalives_interval=10`, `keepalives_count=5`.
+  2. **Pre-Checkout Liveness Check:** `SupabasePoolClient._get_valid_connection()` tests sockets with `SELECT 1;` before checkout and purges dead sockets with `close=True`.
+  3. **Auto-Retry Loop:** `load_data()` in `src/ui/app.py` includes a 2-attempt retry loop that calls `reset_db_client()` on failure and re-executes seamlessly with zero user interruption.
 
 ---
 

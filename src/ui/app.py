@@ -6,9 +6,10 @@ import os
 import sys
 import re
 import html
+import time
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from database.client import get_db_client
+from database.client import get_db_client, reset_db_client
 
 st.set_page_config(page_title="Global Sentiment Platform of Share Markets", layout="wide", initial_sidebar_state="collapsed", page_icon="📈")
 
@@ -453,24 +454,31 @@ def load_data():
         })
         return mock_signals, mock_payloads
 
-    try:
-        client = get_db_client()
-        with client.get_connection() as conn:
-            query_signals = "SELECT id, timestamp, market_region, index_ticker, sentiment_score FROM event_signals ORDER BY timestamp DESC LIMIT 2000"
-            df_signals = pd.read_sql(query_signals, conn)
-            df_signals['timestamp'] = pd.to_datetime(df_signals['timestamp'])
-            
-            query_payloads = """
-                SELECT s.id, s.timestamp, s.market_region, s.index_ticker, s.sentiment_score, p.raw_text
-                FROM event_signals s JOIN event_payloads p ON s.id = p.id
-                ORDER BY s.timestamp DESC LIMIT 2000
-            """
-            df_payloads = pd.read_sql(query_payloads, conn)
-            df_payloads['timestamp'] = pd.to_datetime(df_payloads['timestamp'])
-        return df_signals, df_payloads
-    except Exception as e:
-        st.error(f"Database error: {e}")
-        return pd.DataFrame(), pd.DataFrame()
+    max_retries = 2
+    for attempt in range(max_retries):
+        try:
+            client = get_db_client()
+            with client.get_connection() as conn:
+                query_signals = "SELECT id, timestamp, market_region, index_ticker, sentiment_score FROM event_signals ORDER BY timestamp DESC LIMIT 2000"
+                df_signals = pd.read_sql(query_signals, conn)
+                df_signals['timestamp'] = pd.to_datetime(df_signals['timestamp'])
+                
+                query_payloads = """
+                    SELECT s.id, s.timestamp, s.market_region, s.index_ticker, s.sentiment_score, p.raw_text
+                    FROM event_signals s JOIN event_payloads p ON s.id = p.id
+                    ORDER BY s.timestamp DESC LIMIT 2000
+                """
+                df_payloads = pd.read_sql(query_payloads, conn)
+                df_payloads['timestamp'] = pd.to_datetime(df_payloads['timestamp'])
+            return df_signals, df_payloads
+        except Exception as e:
+            if attempt < max_retries - 1:
+                # Connection may have dropped due to idle timeout; reset pool and retry
+                reset_db_client()
+                time.sleep(0.5)
+                continue
+            st.error(f"Database error: {e}")
+            return pd.DataFrame(), pd.DataFrame()
 
 df_signals, df_payloads = load_data()
 
