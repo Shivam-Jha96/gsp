@@ -227,21 +227,75 @@ __THEME_VARS__
         color: var(--input-text) !important;
     }
 
-    /* Style Streamlit Toggle Switch (Top Right Corner) */
-    div[data-testid="stToggle"] {
-        display: flex !important;
-        justify-content: flex-end !important;
-        align-items: center !important;
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
+    /* Top Header Row Layout & Symmetrical Cards */
+    div[data-testid="stHorizontalBlock"]:first-of-type {
+        margin-bottom: 14px !important;
+        align-items: stretch !important;
     }
-    div[data-testid="stToggle"] label {
+    
+    /* Top Right Action Card (Backend Status & Dark Mode Toggle) */
+    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor),
+    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) > div[data-testid="stVerticalBlock"] {
+        background: var(--header-bg) !important;
+        border: 1px solid var(--header-border) !important;
+        border-left: 4px solid var(--header-border-left) !important;
+        border-radius: 8px !important;
+        padding: 10px 14px !important;
+        backdrop-filter: blur(10px) !important;
+        box-shadow: var(--header-shadow) !important;
+        height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        box-sizing: border-box !important;
+        margin-bottom: 0 !important;
+        gap: 0 !important;
+    }
+    
+    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stMarkdownContainer"],
+    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stMarkdownContainer"] {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stMarkdownContainer"] > p,
+    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stMarkdownContainer"] > p {
+        margin: 0 !important;
+    }
+
+    /* Style Streamlit Toggle Switch inside the Header Action Card */
+    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stToggle"],
+    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stToggle"] {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+        margin-top: 4px !important;
+        margin-bottom: 0 !important;
+        padding-top: 5px !important;
+        border-top: 1px solid var(--card-border) !important;
+    }
+    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stToggle"] label,
+    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stToggle"] label {
+        display: flex !important;
+        flex-direction: row-reverse !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+        cursor: pointer !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 8px !important;
+    }
+    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stToggle"] label p,
+    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stToggle"] label p {
         font-family: 'Montserrat', sans-serif !important;
-        font-size: 0.72rem !important;
+        font-size: 0.68rem !important;
         font-weight: 700 !important;
         color: var(--text-primary) !important;
-        letter-spacing: 0.05em !important;
+        letter-spacing: 0.04em !important;
         text-transform: uppercase !important;
+        margin: 0 !important;
     }
     
     /* Metrics */
@@ -575,11 +629,11 @@ if not df_signals.empty:
     df_signals['sentiment_index'] = df_signals['sentiment_score'] * 100
     df_payloads['sentiment_index'] = df_payloads['sentiment_score'] * 100
     # --- Top Row: Header Banner (Left) & Top-Right Control Card (System Status + Theme Toggle) ---
-    header_col, action_col = st.columns([0.76, 0.24])
+    header_col, action_col = st.columns([0.72, 0.28])
     
     with header_col:
         st.markdown(f"""
-        <div style="background: var(--header-bg); border: 1px solid var(--header-border); border-left: 4px solid var(--header-border-left); border-radius: 8px; padding: clamp(10px, 2vw, 14px) clamp(12px, 2.5vw, 20px); height: 100%; display: flex; align-items: center; backdrop-filter: blur(10px); box-shadow: var(--header-shadow); margin-bottom: 14px;">
+        <div style="background: var(--header-bg); border: 1px solid var(--header-border); border-left: 4px solid var(--header-border-left); border-radius: 8px; padding: clamp(10px, 2vw, 14px) clamp(12px, 2.5vw, 20px); height: 100%; display: flex; align-items: center; backdrop-filter: blur(10px); box-shadow: var(--header-shadow); margin-bottom: 0; box-sizing: border-box;">
             <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
                 <div style="background: linear-gradient(135deg, #2563eb, #3b82f6); color: #ffffff; padding: 4px 10px; border-radius: 5px; font-weight: 800; font-size: 1.1rem; letter-spacing: 1.5px; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 12px rgba(59, 130, 246, 0.45); flex-shrink: 0;">GSP</div>
                 <div>
@@ -596,7 +650,8 @@ if not df_signals.empty:
         status_text = "#059669" if is_light else "#34d399"
 
         st.markdown(f"""
-        <div style="background: var(--header-bg); border: 1px solid var(--header-border); border-radius: 8px; padding: 7px 12px; backdrop-filter: blur(10px); box-shadow: var(--header-shadow); margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
+        <div id="header-control-card-anchor" style="display: none;"></div>
+        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 2px;">
             <span style="font-size: 0.65rem; font-weight: 700; color: var(--text-muted); font-family: 'Montserrat', sans-serif; letter-spacing: 0.05em; text-transform: uppercase;">BACKEND</span>
             <div style="display: inline-flex; align-items: center; gap: 5px; background: {status_bg}; border: 1px solid {status_border}; color: {status_text}; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.08em; padding: 2px 8px; border-radius: 12px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
                 <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; display: inline-block;"></span>
