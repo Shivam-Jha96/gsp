@@ -8,8 +8,30 @@ import re
 import html
 import time
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from database.client import get_db_client, reset_db_client
+# Configure paths to ensure absolute resolution across Streamlit Cloud runtimes
+current_dir = os.path.dirname(os.path.abspath(__file__))
+src_dir = os.path.abspath(os.path.join(current_dir, '..'))
+root_dir = os.path.abspath(os.path.join(src_dir, '..'))
+
+for p in [src_dir, root_dir]:
+    if p not in sys.path:
+        sys.path.insert(0, p)
+
+# Dynamic resilient import: guards against Streamlit daemon caching stale modules in sys.modules during hot-reloads
+try:
+    import database.client as db_client_mod
+    if not hasattr(db_client_mod, 'reset_db_client'):
+        import importlib
+        importlib.reload(db_client_mod)
+    get_db_client = db_client_mod.get_db_client
+    reset_db_client = getattr(db_client_mod, 'reset_db_client', None)
+except Exception:
+    import src.database.client as db_client_mod
+    if not hasattr(db_client_mod, 'reset_db_client'):
+        import importlib
+        importlib.reload(db_client_mod)
+    get_db_client = db_client_mod.get_db_client
+    reset_db_client = getattr(db_client_mod, 'reset_db_client', None)
 
 st.set_page_config(page_title="Global Sentiment Platform of Share Markets", layout="wide", initial_sidebar_state="collapsed", page_icon="📈")
 
@@ -474,7 +496,14 @@ def load_data():
         except Exception as e:
             if attempt < max_retries - 1:
                 # Connection may have dropped due to idle timeout; reset pool and retry
-                reset_db_client()
+                if reset_db_client:
+                    reset_db_client()
+                else:
+                    try:
+                        client = get_db_client()
+                        client.close_pool()
+                    except Exception:
+                        pass
                 time.sleep(0.5)
                 continue
             st.error(f"Database error: {e}")
