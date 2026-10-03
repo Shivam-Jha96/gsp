@@ -425,7 +425,7 @@ order = trading_client.submit_order(order_data=order_data)
 +------------------------------------------------------------------------------------+
 |         GLOBAL SENTIMENT PLATFORM OF SHARE MARKETS (GSP) - TERMINAL LAYOUT         |
 +------------------------------------------------------------------------------------+
-|  [HEADER BANNER: System Status Online | GSP Platform Identity]                     |
+|  [HEADER BANNER: GSP Platform Identity (Left) | Status & Dark/Light Toggle (Right)]|
 +------------------------------------------------------------------------------------+
 |  [THE QUANTITATIVE EDGE: Full-Width Contrastive Language Model (CLM) USP Banner]   |
 +------------------------------------------------------------------------------------+
@@ -445,7 +445,8 @@ order = trading_client.submit_order(order_data=order_data)
 
 #### 1. Visual Design Architecture
 The dashboard implements a financial terminal theme with custom CSS styling:
-* **Background & Typography:** Deep slate canvas (`#020617`), Montserrat for typographic hierarchy, and IBM Plex Sans for tabular readouts.
+* **Top-Right Dark/Light Mode Theme Toggle:** Positioned in the upper right control card, allowing seamless switching between deep slate canvas (`#020617`) and a luminous sky-blue gradient (`linear-gradient(180deg, #dbeafe 0%, #eff6ff 25%, #f8fafc 100%)`). Adapts glassmorphic card surfaces, fonts, filter dropdowns, news feeds, and Plotly chart axes/EMA traces in real time while preserving the green `SYSTEM ONLINE` backend health status.
+* **Background & Typography:** Deep slate canvas (`#020617`) in dark mode or sky-blue financial gradient in light mode, Montserrat for typographic hierarchy, and IBM Plex Sans for tabular readouts.
 * **Glassmorphic Surface Design:** Translucent cards (`rgba(255, 255, 255, 0.03)` with `backdrop-filter: blur(10px)`) accented with directional color borders: Emerald (`#10b981`) for bullish signals, Rose (`#ef4444`) for bearish conditions, and Blue (`#3b82f6`) for aggregate metrics.
 * **Full-Width Quantitative Edge USP Banner:** Prominently highlights the CLM mathematical advantage across the full width of the terminal canvas with zero blank voids, fluid typography (`clamp()`), and responsive status badges.
 * **Unified 5-Column Filter Bar:** Positioned `TIMEFRAME`, `REGION`, `TIMEZONE`, `EMA WINDOW`, and `CHART DISPLAY` in a balanced 5-column horizontal control grid (`st.columns([1.0, 0.85, 1.25, 0.95, 1.15])`) with SVG indicators and matching baseline geometry, eliminating awkward whitespace beneath individual dropdowns on PC widescreen monitors.
