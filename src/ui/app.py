@@ -83,41 +83,41 @@ else:
     """
 
 # --- CSS Theme Injection ---
-st.markdown(f"""
+css_theme_template = """
 <style>
     @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700;800&display=swap');
     
-    :root {{
-        {theme_css_vars}
-    }}
+    :root {
+__THEME_VARS__
+    }
     
-    html, body, [class*="css"], .stApp, [data-testid="stAppViewContainer"] {{
+    html, body, [class*="css"], .stApp, [data-testid="stAppViewContainer"] {
         font-family: 'IBM Plex Sans', sans-serif;
         background: var(--bg-gradient) !important;
         background-color: var(--bg-main) !important;
         color: var(--text-primary) !important;
-    }}
+    }
     
-    .block-container {{
+    .block-container {
         padding-top: 1.5rem !important;
         padding-bottom: 1.5rem !important;
         max-width: 1600px;
         background: transparent !important;
-    }}
+    }
     
     /* Professional Headers */
-    .main-header, .section-header {{
+    .main-header, .section-header {
         font-family: 'Montserrat', sans-serif;
         font-weight: 700;
         color: var(--text-primary) !important;
-    }}
-    .section-header {{
+    }
+    .section-header {
         font-size: 1.1rem;
         margin-bottom: 15px;
-    }}
+    }
     
     /* Enviro Style Glass Cards */
-    .white-card {{
+    .white-card {
         background: var(--card-bg) !important;
         border-radius: 8px;
         padding: 12px 16px;
@@ -126,14 +126,14 @@ st.markdown(f"""
         box-shadow: var(--card-shadow);
         backdrop-filter: blur(10px);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }}
-    .white-card:last-child {{
+    }
+    .white-card:last-child {
         margin-bottom: 0 !important;
-    }}
-    .white-card:hover {{
+    }
+    .white-card:hover {
         background: var(--card-hover-bg) !important;
         border-color: var(--card-hover-border) !important;
-    }}
+    }
     
     /* Colored Glass Cards (Deep Translucent Tints) */
     .bg-blue { border-left: 3px solid #3b82f6 !important; background: rgba(59, 130, 246, 0.1) !important; }
@@ -153,10 +153,10 @@ st.markdown(f"""
     
     /* Override Streamlit native container border */
     [data-testid="stVerticalBlockBorderWrapper"] {
-        background: rgba(255, 255, 255, 0.02) !important;
+        background: var(--card-bg) !important;
         border-radius: 8px !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        box-shadow: none !important;
+        border: 1px solid var(--card-border) !important;
+        box-shadow: var(--card-shadow) !important;
     }
     
     /* Force Streamlit Columns to Stretch & Align Bottoms Flush */
@@ -176,7 +176,7 @@ st.markdown(f"""
     }
     
     /* Style Streamlit Selectbox Inputs */
-    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div {{
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
         background: var(--input-bg) !important;
         border: 1px solid var(--input-border) !important;
         border-radius: 6px !important;
@@ -185,44 +185,44 @@ st.markdown(f"""
         font-weight: 600 !important;
         color: var(--input-text) !important;
         transition: all 0.2s ease !important;
-    }}
-    div[data-testid="stSelectbox"] div[data-baseweb="select"] span {{
+    }
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] span {
         color: var(--input-text) !important;
-    }}
-    div[data-testid="stSelectbox"] div[data-baseweb="select"] svg {{
+    }
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] svg {
         fill: var(--input-text) !important;
-    }}
-    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover {{
+    }
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover {
         border-color: rgba(59, 130, 246, 0.45) !important;
         box-shadow: 0 0 10px rgba(59, 130, 246, 0.15) !important;
-    }}
-    div[data-baseweb="popover"], div[data-baseweb="menu"], ul[data-testid="stSelectboxVirtualDropdown"] {{
+    }
+    div[data-baseweb="popover"], div[data-baseweb="menu"], ul[data-testid="stSelectboxVirtualDropdown"] {
         background: var(--input-bg) !important;
         color: var(--input-text) !important;
-    }}
-    div[data-baseweb="menu"] li {{
+    }
+    div[data-baseweb="menu"] li {
         color: var(--input-text) !important;
-    }}
+    }
 
     /* Style Streamlit Toggle Switch (Top Right Corner) */
-    div[data-testid="stToggle"] {{
+    div[data-testid="stToggle"] {
         display: flex !important;
         justify-content: flex-end !important;
         align-items: center !important;
         margin-top: 0 !important;
         margin-bottom: 0 !important;
-    }}
-    div[data-testid="stToggle"] label {{
+    }
+    div[data-testid="stToggle"] label {
         font-family: 'Montserrat', sans-serif !important;
         font-size: 0.72rem !important;
         font-weight: 700 !important;
         color: var(--text-primary) !important;
         letter-spacing: 0.05em !important;
         text-transform: uppercase !important;
-    }}
+    }
     
     /* Metrics */
-    .metric-title {{
+    .metric-title {
         font-family: 'Montserrat', sans-serif;
         font-size: 0.75rem;
         font-weight: 600;
@@ -230,104 +230,104 @@ st.markdown(f"""
         text-transform: uppercase;
         letter-spacing: 0.03em;
         margin-bottom: 4px;
-    }}
-    .metric-value {{
+    }
+    .metric-value {
         font-family: 'Montserrat', sans-serif;
         font-size: 1.6rem;
         font-weight: 700;
         color: var(--text-primary) !important;
         letter-spacing: -0.01em;
         margin-bottom: 2px;
-    }}
-    .metric-sub {{
+    }
+    .metric-sub {
         font-size: 0.8rem;
         font-weight: 600;
-    }}
-    .green {{ color: #10b981 !important; }} /* Emerald */
-    .red {{ color: #ef4444 !important; }} 
-    .gray {{ color: var(--text-muted) !important; }}
+    }
+    .green { color: #10b981 !important; }
+    .red { color: #ef4444 !important; } 
+    .gray { color: var(--text-muted) !important; }
     
-    .metric-footer {{
+    .metric-footer {
         font-size: 0.75rem;
         color: var(--text-muted) !important;
         border-top: 1px solid var(--card-border) !important;
         padding-top: 8px;
         margin-top: 8px;
-    }}
+    }
     
     /* Responsive Design Adjustments */
-    @media (max-width: 1024px) {{
-        .metric-value {{ font-size: 1.35rem; }}
-        .block-container {{ padding: 1rem !important; }}
-    }}
+    @media (max-width: 1024px) {
+        .metric-value { font-size: 1.35rem; }
+        .block-container { padding: 1rem !important; }
+    }
     
-    @media (max-width: 768px) {{
-        .metric-value {{ font-size: 1.2rem; }}
-        .metric-title {{ font-size: 0.7rem; }}
-        .white-card {{ padding: 10px 12px; margin-bottom: 8px; }}
-        div[data-testid="stHorizontalBlock"] {{
+    @media (max-width: 768px) {
+        .metric-value { font-size: 1.2rem; }
+        .metric-title { font-size: 0.7rem; }
+        .white-card { padding: 10px 12px; margin-bottom: 8px; }
+        div[data-testid="stHorizontalBlock"] {
             align-items: initial !important;
-        }}
-        div[data-testid="stHorizontalBlock"] > div[data-testid="column"] > div[data-testid="stVerticalBlock"] {{
+        }
+        div[data-testid="stHorizontalBlock"] > div[data-testid="column"] > div[data-testid="stVerticalBlock"] {
             height: auto !important;
             justify-content: flex-start !important;
             flex: initial !important;
-        }}
-    }}
+        }
+    }
 
-    @media (max-width: 480px) {{
-        .block-container {{ padding: 0.75rem 0.5rem !important; }}
-        .white-card {{ padding: 8px 10px; margin-bottom: 8px; }}
-    }}
+    @media (max-width: 480px) {
+        .block-container { padding: 0.75rem 0.5rem !important; }
+        .white-card { padding: 8px 10px; margin-bottom: 8px; }
+    }
 
     /* Hide Streamlit native UI elements */
-    header[data-testid="stHeader"] {{display: none !important;}}
-    #MainMenu {{display: none !important;}}
-    footer {{display: none !important;}}
-    [data-testid="collapsedControl"] {{display: none !important;}}
+    header[data-testid="stHeader"] {display: none !important;}
+    #MainMenu {display: none !important;}
+    footer {display: none !important;}
+    [data-testid="collapsedControl"] {display: none !important;}
     
     /* Enhanced Live News Feed Styling */
-    .news-feed-container {{
+    .news-feed-container {
         background: var(--feed-bg) !important;
         border: 1px solid var(--feed-border) !important;
         border-radius: 8px;
         padding: 14px;
         max-height: 420px;
         overflow-y: auto;
-    }}
-    .news-feed-container::-webkit-scrollbar {{
+    }
+    .news-feed-container::-webkit-scrollbar {
         width: 6px;
-    }}
-    .news-feed-container::-webkit-scrollbar-track {{
+    }
+    .news-feed-container::-webkit-scrollbar-track {
         background: rgba(0, 0, 0, 0.04);
         border-radius: 4px;
-    }}
-    .news-feed-container::-webkit-scrollbar-thumb {{
+    }
+    .news-feed-container::-webkit-scrollbar-thumb {
         background: rgba(148, 163, 184, 0.3);
         border-radius: 4px;
-    }}
-    .news-feed-container::-webkit-scrollbar-thumb:hover {{
+    }
+    .news-feed-container::-webkit-scrollbar-thumb:hover {
         background: rgba(148, 163, 184, 0.5);
-    }}
+    }
     
-    .news-item-card {{
+    .news-item-card {
         background: var(--feed-card-bg) !important;
         border: 1px solid var(--feed-card-border) !important;
         border-radius: 6px;
         padding: 12px 14px;
         margin-bottom: 8px;
         transition: all 0.2s ease;
-    }}
-    .news-item-card:hover {{
+    }
+    .news-item-card:hover {
         background: var(--feed-card-hover) !important;
         border-color: rgba(59, 130, 246, 0.25) !important;
-    }}
-    .news-item-card:last-child {{
+    }
+    .news-item-card:last-child {
         margin-bottom: 0;
-    }}
+    }
     
     /* Collapsible News Feed Card & Accordion */
-    details.news-feed-accordion {{
+    details.news-feed-accordion {
         margin-top: 28px;
         margin-bottom: 14px;
         background: var(--card-bg) !important;
@@ -336,10 +336,10 @@ st.markdown(f"""
         border-radius: 8px;
         transition: all 0.25s ease;
         box-shadow: var(--card-shadow) !important;
-    }}
-    details.news-feed-accordion:hover {{
+    }
+    details.news-feed-accordion:hover {
         border-color: rgba(59, 130, 246, 0.35) !important;
-    }}
+    }
     details.news-feed-accordion summary.news-feed-summary {
         list-style: none !important;
         cursor: pointer;
@@ -401,7 +401,9 @@ st.markdown(f"""
         box-shadow: 0 0 12px rgba(239, 68, 68, 0.35);
     }
 </style>
-""", unsafe_allow_html=True)
+""".replace("__THEME_VARS__", theme_css_vars)
+
+st.markdown(css_theme_template, unsafe_allow_html=True)
 
 def clean_news_item(raw_text: str) -> dict:
     if not raw_text:
