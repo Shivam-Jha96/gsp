@@ -514,21 +514,24 @@ flowchart LR
     I -->|No Diff| K["Exit Cleanly"]
 ```
 
-#### 2. Resilient Fallback Chain & Backoff Mechanics
-To safeguard against upstream API limits or model deprecations, [`okf_updater.py`](file:///d:/Dev/repos/gsp/src/knowledge_engine/okf_updater.py#L18-L20) defines a multi-model fallback chain:
+#### 2. Dynamic Discovery, Resilient Fallback Chain & Instant 503 Failover
+To eliminate HTTP 404 errors from model deprecations and safeguard against upstream Google capacity limits, [`okf_updater.py`](file:///d:/Dev/repos/gsp/src/knowledge_engine/okf_updater.py#L30-L75) dynamically queries available Gemini models via `client.models.list()` and enforces an intelligent multi-model failover policy:
 
 ```python
-MODEL_FALLBACKS = [
+DEFAULT_MODEL_FALLBACKS = [
     "gemini-3.8-flash", 
     "gemini-3.7-flash", 
-    "gemini-3.5-flash-lite"
+    "gemini-3.5-flash-lite",
+    "gemini-2.0-flash",
+    "gemini-1.5-flash"
 ]
 ```
 
+* **Dynamic API Model Discovery (`get_available_models`):** At initialization, the engine interrogates Google GenAI's model registry to discover all models supporting `generateContent` in the user's account, prioritizing preferred models (`gemini-3.8-flash`, `gemini-3.7-flash`, `gemini-3.5-flash-lite`) and eliminating 404 deprecation errors.
+* **Instant 503 Failover (Zero Wasted Sleeps):** If Google returns `503 UNAVAILABLE` or `OVERLOADED` on a specific model, the updater immediately fails over to the next model in the candidate pool without looping through futile retry delays on the same busy cluster.
+* **Double-Pass Resilience:** If all candidate models in Pass 1 experience temporary upstream congestion, the engine cools down for 10 seconds and executes Pass 2 before aborting. If all attempts fail, existing OKF rules on disk are strictly preserved without corrupting historical knowledge.
 * **Mandatory Pacing Floor (`rate_limited_generate`):** Programmatically enforces a minimum 6.0-second delay (`MIN_REQUEST_INTERVAL = 6.0`) between any two consecutive Gemini requests, mathematically capping throughput at $\le 10\text{ RPM}$ and preventing request bursts during retries or fallback transitions.
-* **Explicit 429 / Quota Trap with Exponential Backoff:** Specifically detects `429`, `RESOURCE_EXHAUSTED`, and `QUOTA` errors, applying escalating backoffs (15s, 30s, 45s) to allow rolling rate windows to cool down.
-* **Transient Error Retries:** Applies backoff (8s, 16s, 24s) for `503 UNAVAILABLE` and high-demand capacity limits across up to 3 attempts per model.
-* **Inter-Model Cooldown:** Enforces an 8-second pause before cascading to the next fallback model to avoid immediately exhausting project-level quotas.
+* **Explicit 429 / Quota Trap:** Specifically detects `429`, `RESOURCE_EXHAUSTED`, and `QUOTA` errors, applying an 8-second cooldown before attempting the next fallback model.
 * **Inter-Region Rate Throttling:** Introduces an explicit 10.0-second cooldown (`INTER_REGION_DELAY = 10.0`) between regional runs (US, IN, UK, JP), keeping total run velocity under $\le 6\text{ RPM}$ (far below Google Gemini's 15 RPM free-tier limit).
 
 #### 3. Dynamic Regime-Driven Rule Synthesis (Unconstrained Transmission Channels)

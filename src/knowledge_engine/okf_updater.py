@@ -6,25 +6,19 @@ import re
 import feedparser
 from urllib.parse import quote
 from google import genai
+from config.market_registry import load_market_registry
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-# Configure Gemini via the new google.genai SDK
-api_key = os.environ.get("GEMINI_API_KEY")
-if not api_key:
-    logger.error("GEMINI_API_KEY environment variable is required.")
-    exit(1)
-
-client = genai.Client(api_key=api_key.strip())
-# Ordered list of models to try (reliable production models first, followed by fallbacks)
-MODEL_FALLBACKS = [
-    "gemini-2.5-flash",
+# Default model fallback priority list
+DEFAULT_MODEL_FALLBACKS = [
+    "gemini-3.8-flash",
+    "gemini-3.7-flash",
+    "gemini-3.5-flash-lite",
+    "gemini-3.5-flash",
     "gemini-2.0-flash",
     "gemini-1.5-flash",
-    "gemini-3.7-flash",
-    "gemini-2.5-pro",
-    "gemini-1.5-pro"
 ]
 
 # Rate limiting guardrails to stay strictly below Google Gemini 15 RPM free-tier quota
@@ -32,6 +26,50 @@ MIN_REQUEST_INTERVAL = 6.0   # Mandatory 6.0s spacing between all API dispatches
 INTER_REGION_DELAY = 10.0    # 10.0s cooldown between regional runs
 
 _last_request_time = 0.0
+
+def get_available_models(client) -> list:
+    """
+    Discovers available Gemini models dynamically from the Google GenAI API
+    to eliminate 404 errors caused by deprecated model IDs or account tier constraints.
+    """
+    preferred_priority = [
+        "gemini-3.8-flash",
+        "gemini-3.7-flash",
+        "gemini-3.5-flash-lite",
+        "gemini-3.5-flash",
+        "gemini-2.0-flash",
+        "gemini-1.5-flash",
+    ]
+    discovered = []
+    try:
+        pager = client.models.list()
+        for m in pager:
+            name = getattr(m, "name", "") or ""
+            name = name.replace("models/", "")
+            actions = getattr(m, "supported_actions", []) or []
+            if name and ("generateContent" in actions or not actions):
+                discovered.append(name)
+        logger.info(f"Dynamically discovered {len(discovered)} available Gemini models in account: {discovered[:10]}")
+    except Exception as e:
+        logger.warning(f"Unable to query client.models.list(): {e}. Using static fallbacks.")
+        return DEFAULT_MODEL_FALLBACKS
+
+    # Prioritize preferred models if discovered
+    models_to_use = [m for m in preferred_priority if m in discovered]
+    # Add any other discovered flash models
+    for m in discovered:
+        if "flash" in m.lower() and m not in models_to_use:
+            models_to_use.append(m)
+    # Add pro models as final resilience tier
+    for m in discovered:
+        if "pro" in m.lower() and m not in models_to_use:
+            models_to_use.append(m)
+
+    if not models_to_use:
+        models_to_use = DEFAULT_MODEL_FALLBACKS
+
+    logger.info(f"Active resilient model priority: {models_to_use}")
+    return models_to_use
 
 async def rate_limited_generate(client, model_id: str, prompt: str):
     """
@@ -52,8 +90,6 @@ async def rate_limited_generate(client, model_id: str, prompt: str):
     )
     _last_request_time = time.time()
     return response
-
-from config.market_registry import load_market_registry
 
 # Dynamically loaded from declarative market registry
 _REGISTRY = load_market_registry()
@@ -85,7 +121,6 @@ def fetch_macro_news(queries: list, locale: dict = None, max_items_per_query: in
             title = entry.get("title", "")
             if title and title not in seen_titles:
                 seen_titles.add(title)
-                desc = entry.get("description", "")
                 all_items.append(f"- {title}")
     
     logger.info(f"  Fetched {len(all_items)} unique news items.")
@@ -102,7 +137,7 @@ def write_okf(filepath: str, content: str):
     with open(filepath, "w", encoding="utf-8") as f:
         f.write(content.strip() + "\n")
 
-async def update_region(region_code: str, region_data: dict):
+async def update_region(region_code: str, region_data: dict, client, model_fallbacks: list):
     logger.info(f"Updating OKF for {region_data['name']} ({region_code})...")
     
     # 1. Fetch recent macro news from multiple queries (geotargeted)
@@ -151,17 +186,16 @@ Output ONLY raw Markdown text. Do NOT wrap it in code blocks.
 
 (continue for all rules)
 """
-    # Try each fallback model with retries
-    for model_id in MODEL_FALLBACKS:
-        for attempt in range(2):
+    # Up to 2 passes across candidate models to absorb transient Google 503 bursts
+    for pass_num in range(1, 3):
+        for model_id in model_fallbacks:
             try:
-                logger.info(f"  Trying model={model_id} (attempt {attempt + 1}/2)...")
+                logger.info(f"  [Pass {pass_num}] Trying model={model_id}...")
                 response = await rate_limited_generate(client, model_id, prompt)
                 new_content = response.text
                 
                 if not new_content or len(new_content.strip()) < 80:
-                    logger.warning(f"  Empty response from {model_id}, retrying...")
-                    await asyncio.sleep(4)
+                    logger.warning(f"  Empty response from {model_id}, trying next model...")
                     continue
 
                 # Strip potential markdown fencing the LLM might hallucinate
@@ -181,30 +215,36 @@ Output ONLY raw Markdown text. Do NOT wrap it in code blocks.
                 is_not_found = "404" in error_upper or "NOT_FOUND" in error_upper
 
                 if is_rate_limit:
-                    wait = 12 * (attempt + 1)  # 12s, 24s backoff
-                    logger.warning(f"  [QUOTA/429] Rate limit hit on {model_id} (attempt {attempt + 1}/2). Backing off for {wait}s...")
-                    await asyncio.sleep(wait)
+                    logger.warning(f"  [QUOTA/429] Rate limit hit on {model_id}. Cooling down 8s before trying next model...")
+                    await asyncio.sleep(8)
                 elif is_unavailable:
-                    wait = 4 * (attempt + 1)  # 4s, 8s backoff
-                    logger.warning(f"  [503/UNAVAILABLE] {model_id} busy on Google servers (attempt {attempt + 1}/2). Retrying in {wait}s...")
-                    await asyncio.sleep(wait)
+                    # 503 means this specific model cluster is busy; failover IMMEDIATELY to next model in pool without wasted sleep loops
+                    logger.warning(f"  [503/UNAVAILABLE] {model_id} busy on Google servers. Failing over immediately to next model in pool...")
+                    await asyncio.sleep(2)
                 elif is_not_found:
-                    logger.warning(f"  [404] {model_id} not found, failing over to next model...")
-                    break  # Skip to next model
+                    logger.warning(f"  [404] {model_id} not found on this API endpoint. Skipping...")
                 else:
-                    logger.error(f"  Unexpected error with {model_id}: {e}")
-                    break  # Skip to next model
+                    logger.error(f"  Unexpected error with {model_id}: {e}. Skipping to next fallback...")
+                    await asyncio.sleep(2)
 
-        # Cooldown before switching to next fallback model to avoid immediately hitting project-level quota
-        logger.info(f"  Failing over to next fallback model in chain...")
-        await asyncio.sleep(3)
+        if pass_num == 1:
+            logger.warning(f"All candidate models busy or transiently failed for {region_data['name']} in Pass 1. Cooldown 10s before Pass 2...")
+            await asyncio.sleep(10)
     
-    logger.error(f"All models failed for {region_data['name']}. OKF not updated.")
+    logger.error(f"All models exhausted after 2 passes for {region_data['name']}. Existing OKF rules preserved.")
 
 async def main():
     logger.info("=== Starting Dynamic OKF Updater ===")
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        logger.error("GEMINI_API_KEY environment variable is required.")
+        exit(1)
+
+    client = genai.Client(api_key=api_key.strip())
+    model_fallbacks = get_available_models(client)
+
     for region_code, region_data in REGIONS.items():
-        await update_region(region_code, region_data)
+        await update_region(region_code, region_data, client, model_fallbacks)
         logger.info(f"  Cooling down {INTER_REGION_DELAY}s between regions to stay safely under 15 RPM limit...")
         await asyncio.sleep(INTER_REGION_DELAY)
     logger.info("=== OKF Update Complete! ===")
