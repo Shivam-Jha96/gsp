@@ -12,52 +12,128 @@ from database.client import get_db_client
 
 st.set_page_config(page_title="Global Sentiment Platform of Share Markets", layout="wide", initial_sidebar_state="collapsed", page_icon="📈")
 
-# --- CSS to match the provided screenshot without breaking layout ---
-st.markdown("""
+# --- Dynamic Theme Mode Detection ---
+is_light = bool(st.session_state.get('theme_toggle', False))
+
+if is_light:
+    theme_css_vars = """
+        --bg-main: #f0f7ff;
+        --bg-gradient: linear-gradient(180deg, #dbeafe 0%, #eff6ff 25%, #f8fafc 100%);
+        --text-primary: #0f172a;
+        --text-secondary: #334155;
+        --text-muted: #64748b;
+        --card-bg: rgba(255, 255, 255, 0.85);
+        --card-border: rgba(148, 163, 184, 0.3);
+        --card-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+        --card-hover-bg: #ffffff;
+        --card-hover-border: rgba(59, 130, 246, 0.4);
+        --input-bg: #ffffff;
+        --input-border: rgba(148, 163, 184, 0.35);
+        --input-text: #0f172a;
+        --header-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(224, 242, 254, 0.85) 100%);
+        --header-border: rgba(59, 130, 246, 0.35);
+        --header-border-left: #0284c7;
+        --header-shadow: 0 4px 20px rgba(2, 132, 199, 0.08);
+        --edge-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 249, 255, 0.9) 100%);
+        --edge-border: rgba(56, 189, 248, 0.35);
+        --edge-accent: #0284c7;
+        --edge-text: #334155;
+        --feed-bg: rgba(255, 255, 255, 0.65);
+        --feed-border: rgba(148, 163, 184, 0.25);
+        --feed-card-bg: #ffffff;
+        --feed-card-border: rgba(148, 163, 184, 0.2);
+        --feed-card-hover: rgba(240, 249, 255, 0.95);
+        --feed-headline: #0f172a;
+        --feed-badge-bg: rgba(0, 0, 0, 0.04);
+        --feed-badge-border: rgba(0, 0, 0, 0.08);
+        --feed-badge-text: #475569;
+    """
+else:
+    theme_css_vars = """
+        --bg-main: #020617;
+        --bg-gradient: #020617;
+        --text-primary: #f8fafc;
+        --text-secondary: #cbd5e1;
+        --text-muted: #94a3b8;
+        --card-bg: rgba(255, 255, 255, 0.03);
+        --card-border: rgba(255, 255, 255, 0.1);
+        --card-shadow: none;
+        --card-hover-bg: rgba(255, 255, 255, 0.05);
+        --card-hover-border: rgba(255, 255, 255, 0.2);
+        --input-bg: rgba(255, 255, 255, 0.03);
+        --input-border: rgba(255, 255, 255, 0.09);
+        --input-text: #f8fafc;
+        --header-bg: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 58, 138, 0.22) 100%);
+        --header-border: rgba(59, 130, 246, 0.28);
+        --header-border-left: #3b82f6;
+        --header-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), 0 0 15px rgba(59, 130, 246, 0.08);
+        --edge-bg: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.45) 50%, rgba(15, 23, 42, 0.85) 100%);
+        --edge-border: rgba(56, 189, 248, 0.22);
+        --edge-accent: #38bdf8;
+        --edge-text: #cbd5e1;
+        --feed-bg: rgba(255, 255, 255, 0.015);
+        --feed-border: rgba(255, 255, 255, 0.08);
+        --feed-card-bg: rgba(255, 255, 255, 0.02);
+        --feed-card-border: rgba(255, 255, 255, 0.06);
+        --feed-card-hover: rgba(255, 255, 255, 0.04);
+        --feed-headline: #f8fafc;
+        --feed-badge-bg: rgba(255, 255, 255, 0.04);
+        --feed-badge-border: rgba(255, 255, 255, 0.08);
+        --feed-badge-text: #94a3b8;
+    """
+
+# --- CSS Theme Injection ---
+st.markdown(f"""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700;800&display=swap');
     
-    html, body, [class*="css"], .stApp, [data-testid="stAppViewContainer"] {
-        font-family: 'IBM Plex Sans', sans-serif;
-        background-color: #020617 !important;
-        color: #f8fafc;
-    }
+    :root {{
+        {theme_css_vars}
+    }}
     
-    .block-container {
+    html, body, [class*="css"], .stApp, [data-testid="stAppViewContainer"] {{
+        font-family: 'IBM Plex Sans', sans-serif;
+        background: var(--bg-gradient) !important;
+        background-color: var(--bg-main) !important;
+        color: var(--text-primary) !important;
+    }}
+    
+    .block-container {{
         padding-top: 1.5rem !important;
         padding-bottom: 1.5rem !important;
         max-width: 1600px;
         background: transparent !important;
-    }
+    }}
     
     /* Professional Headers */
-    .main-header, .section-header {
+    .main-header, .section-header {{
         font-family: 'Montserrat', sans-serif;
         font-weight: 700;
-        color: #f8fafc;
-    }
-    .section-header {
+        color: var(--text-primary) !important;
+    }}
+    .section-header {{
         font-size: 1.1rem;
         margin-bottom: 15px;
-    }
+    }}
     
     /* Enviro Style Glass Cards */
-    .white-card {
-        background: rgba(255, 255, 255, 0.03) !important;
+    .white-card {{
+        background: var(--card-bg) !important;
         border-radius: 8px;
         padding: 12px 16px;
         margin-bottom: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid var(--card-border) !important;
+        box-shadow: var(--card-shadow);
         backdrop-filter: blur(10px);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .white-card:last-child {
+    }}
+    .white-card:last-child {{
         margin-bottom: 0 !important;
-    }
-    .white-card:hover {
-        background: rgba(255, 255, 255, 0.05) !important;
-        border-color: rgba(255, 255, 255, 0.2) !important;
-    }
+    }}
+    .white-card:hover {{
+        background: var(--card-hover-bg) !important;
+        border-color: var(--card-hover-border) !important;
+    }}
     
     /* Colored Glass Cards (Deep Translucent Tints) */
     .bg-blue { border-left: 3px solid #3b82f6 !important; background: rgba(59, 130, 246, 0.1) !important; }
@@ -100,143 +176,170 @@ st.markdown("""
     }
     
     /* Style Streamlit Selectbox Inputs */
-    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
-        background: rgba(255, 255, 255, 0.03) !important;
-        border: 1px solid rgba(255, 255, 255, 0.09) !important;
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div {{
+        background: var(--input-bg) !important;
+        border: 1px solid var(--input-border) !important;
         border-radius: 6px !important;
         font-family: 'Montserrat', sans-serif !important;
         font-size: 0.82rem !important;
         font-weight: 600 !important;
-        color: #f8fafc !important;
+        color: var(--input-text) !important;
         transition: all 0.2s ease !important;
-    }
-    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover {
+    }}
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] span {{
+        color: var(--input-text) !important;
+    }}
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] svg {{
+        fill: var(--input-text) !important;
+    }}
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover {{
         border-color: rgba(59, 130, 246, 0.45) !important;
-        background: rgba(255, 255, 255, 0.05) !important;
         box-shadow: 0 0 10px rgba(59, 130, 246, 0.15) !important;
-    }
+    }}
+    div[data-baseweb="popover"], div[data-baseweb="menu"], ul[data-testid="stSelectboxVirtualDropdown"] {{
+        background: var(--input-bg) !important;
+        color: var(--input-text) !important;
+    }}
+    div[data-baseweb="menu"] li {{
+        color: var(--input-text) !important;
+    }}
+
+    /* Style Streamlit Toggle Switch (Top Right Corner) */
+    div[data-testid="stToggle"] {{
+        display: flex !important;
+        justify-content: flex-end !important;
+        align-items: center !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }}
+    div[data-testid="stToggle"] label {{
+        font-family: 'Montserrat', sans-serif !important;
+        font-size: 0.72rem !important;
+        font-weight: 700 !important;
+        color: var(--text-primary) !important;
+        letter-spacing: 0.05em !important;
+        text-transform: uppercase !important;
+    }}
     
     /* Metrics */
-    .metric-title {
+    .metric-title {{
         font-family: 'Montserrat', sans-serif;
         font-size: 0.75rem;
         font-weight: 600;
-        color: #94a3b8; /* text-muted */
+        color: var(--text-muted) !important;
         text-transform: uppercase;
         letter-spacing: 0.03em;
         margin-bottom: 4px;
-    }
-    .metric-value {
+    }}
+    .metric-value {{
         font-family: 'Montserrat', sans-serif;
         font-size: 1.6rem;
         font-weight: 700;
-        color: #f8fafc;
+        color: var(--text-primary) !important;
         letter-spacing: -0.01em;
         margin-bottom: 2px;
-    }
-    .metric-sub {
+    }}
+    .metric-sub {{
         font-size: 0.8rem;
         font-weight: 600;
-    }
-    .green { color: #10b981 !important; } /* Emerald */
-    .red { color: #ef4444 !important; } 
-    .gray { color: #94a3b8 !important; }
+    }}
+    .green {{ color: #10b981 !important; }} /* Emerald */
+    .red {{ color: #ef4444 !important; }} 
+    .gray {{ color: var(--text-muted) !important; }}
     
-    .metric-footer {
+    .metric-footer {{
         font-size: 0.75rem;
-        color: #64748b;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text-muted) !important;
+        border-top: 1px solid var(--card-border) !important;
         padding-top: 8px;
         margin-top: 8px;
-    }
+    }}
     
     /* Responsive Design Adjustments */
-    @media (max-width: 1024px) {
-        .metric-value { font-size: 1.35rem; }
-        .block-container { padding: 1rem !important; }
-    }
+    @media (max-width: 1024px) {{
+        .metric-value {{ font-size: 1.35rem; }}
+        .block-container {{ padding: 1rem !important; }}
+    }}
     
-    @media (max-width: 768px) {
-        .metric-value { font-size: 1.2rem; }
-        .metric-title { font-size: 0.7rem; }
-        .white-card { padding: 10px 12px; margin-bottom: 8px; }
-        /* Disable desktop-only vertical stretching on mobile so items stack naturally */
-        div[data-testid="stHorizontalBlock"] {
+    @media (max-width: 768px) {{
+        .metric-value {{ font-size: 1.2rem; }}
+        .metric-title {{ font-size: 0.7rem; }}
+        .white-card {{ padding: 10px 12px; margin-bottom: 8px; }}
+        div[data-testid="stHorizontalBlock"] {{
             align-items: initial !important;
-        }
-        div[data-testid="stHorizontalBlock"] > div[data-testid="column"] > div[data-testid="stVerticalBlock"] {
+        }}
+        div[data-testid="stHorizontalBlock"] > div[data-testid="column"] > div[data-testid="stVerticalBlock"] {{
             height: auto !important;
             justify-content: flex-start !important;
             flex: initial !important;
-        }
-    }
+        }}
+    }}
 
-    @media (max-width: 480px) {
-        .block-container { padding: 0.75rem 0.5rem !important; }
-        .white-card { padding: 8px 10px; margin-bottom: 8px; }
-    }
+    @media (max-width: 480px) {{
+        .block-container {{ padding: 0.75rem 0.5rem !important; }}
+        .white-card {{ padding: 8px 10px; margin-bottom: 8px; }}
+    }}
 
-    /* Hide Streamlit native UI elements including the white top header bar */
-    header[data-testid="stHeader"] {display: none !important;}
-    #MainMenu {display: none !important;}
-    footer {display: none !important;}
-    [data-testid="collapsedControl"] {display: none !important;}
+    /* Hide Streamlit native UI elements */
+    header[data-testid="stHeader"] {{display: none !important;}}
+    #MainMenu {{display: none !important;}}
+    footer {{display: none !important;}}
+    [data-testid="collapsedControl"] {{display: none !important;}}
     
     /* Enhanced Live News Feed Styling */
-    .news-feed-container {
-        background: rgba(255, 255, 255, 0.015) !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    .news-feed-container {{
+        background: var(--feed-bg) !important;
+        border: 1px solid var(--feed-border) !important;
         border-radius: 8px;
         padding: 14px;
         max-height: 420px;
         overflow-y: auto;
-    }
-    .news-feed-container::-webkit-scrollbar {
+    }}
+    .news-feed-container::-webkit-scrollbar {{
         width: 6px;
-    }
-    .news-feed-container::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.02);
+    }}
+    .news-feed-container::-webkit-scrollbar-track {{
+        background: rgba(0, 0, 0, 0.04);
         border-radius: 4px;
-    }
-    .news-feed-container::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.15);
+    }}
+    .news-feed-container::-webkit-scrollbar-thumb {{
+        background: rgba(148, 163, 184, 0.3);
         border-radius: 4px;
-    }
-    .news-feed-container::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 255, 255, 0.25);
-    }
+    }}
+    .news-feed-container::-webkit-scrollbar-thumb:hover {{
+        background: rgba(148, 163, 184, 0.5);
+    }}
     
-    .news-item-card {
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid rgba(255, 255, 255, 0.06);
+    .news-item-card {{
+        background: var(--feed-card-bg) !important;
+        border: 1px solid var(--feed-card-border) !important;
         border-radius: 6px;
         padding: 12px 14px;
         margin-bottom: 8px;
         transition: all 0.2s ease;
-    }
-    .news-item-card:hover {
-        background: rgba(255, 255, 255, 0.04);
-        border-color: rgba(255, 255, 255, 0.12);
-    }
-    .news-item-card:last-child {
+    }}
+    .news-item-card:hover {{
+        background: var(--feed-card-hover) !important;
+        border-color: rgba(59, 130, 246, 0.25) !important;
+    }}
+    .news-item-card:last-child {{
         margin-bottom: 0;
-    }
+    }}
     
     /* Collapsible News Feed Card & Accordion */
-    details.news-feed-accordion {
+    details.news-feed-accordion {{
         margin-top: 28px;
         margin-bottom: 14px;
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-left: 4px solid #3b82f6;
+        background: var(--card-bg) !important;
+        border: 1px solid var(--card-border) !important;
+        border-left: 4px solid #3b82f6 !important;
         border-radius: 8px;
         transition: all 0.25s ease;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-    }
-    details.news-feed-accordion:hover {
-        border-color: rgba(59, 130, 246, 0.35);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(59, 130, 246, 0.1);
-    }
+        box-shadow: var(--card-shadow) !important;
+    }}
+    details.news-feed-accordion:hover {{
+        border-color: rgba(59, 130, 246, 0.35) !important;
+    }}
     details.news-feed-accordion summary.news-feed-summary {
         list-style: none !important;
         cursor: pointer;
@@ -432,38 +535,54 @@ if not df_signals.empty:
     # Calibrate historical records where magnitude was suppressed by the early rubric-score bug
     df_signals['sentiment_index'] = df_signals['sentiment_score'] * 100
     df_payloads['sentiment_index'] = df_payloads['sentiment_score'] * 100
-    # --- Page Header Banner (Dark Sapphire Blue Glassmorphism Card) ---
-    st.markdown("""
-    <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 58, 138, 0.22) 100%); border: 1px solid rgba(59, 130, 246, 0.28); border-left: 4px solid #3b82f6; border-radius: 8px; padding: clamp(10px, 2vw, 14px) clamp(12px, 2.5vw, 20px); margin-bottom: 14px; backdrop-filter: blur(10px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), 0 0 15px rgba(59, 130, 246, 0.08); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-            <div style="background: linear-gradient(135deg, #2563eb, #3b82f6); color: #ffffff; padding: 4px 10px; border-radius: 5px; font-weight: 800; font-size: 1.1rem; letter-spacing: 1.5px; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 12px rgba(59, 130, 246, 0.45); flex-shrink: 0;">GSP</div>
-            <div>
-                <div style="font-size: clamp(1.05rem, 2.5vw, 1.35rem); font-weight: 700; color: #f8fafc; letter-spacing: -0.01em; font-family: 'Montserrat', sans-serif;">Global Sentiment Platform of Share Markets</div>
-                <div style="font-size: clamp(0.72rem, 1.6vw, 0.8rem); font-weight: 500; color: #94a3b8; font-family: 'IBM Plex Sans', sans-serif;">Real-Time Global Quantitative Intelligence & Execution Engine</div>
+    # --- Top Row: Header Banner (Left) & Top-Right Control Card (System Status + Theme Toggle) ---
+    header_col, action_col = st.columns([0.76, 0.24])
+    
+    with header_col:
+        st.markdown(f"""
+        <div style="background: var(--header-bg); border: 1px solid var(--header-border); border-left: 4px solid var(--header-border-left); border-radius: 8px; padding: clamp(10px, 2vw, 14px) clamp(12px, 2.5vw, 20px); height: 100%; display: flex; align-items: center; backdrop-filter: blur(10px); box-shadow: var(--header-shadow); margin-bottom: 14px;">
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <div style="background: linear-gradient(135deg, #2563eb, #3b82f6); color: #ffffff; padding: 4px 10px; border-radius: 5px; font-weight: 800; font-size: 1.1rem; letter-spacing: 1.5px; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 12px rgba(59, 130, 246, 0.45); flex-shrink: 0;">GSP</div>
+                <div>
+                    <div style="font-size: clamp(1.02rem, 2.3vw, 1.3rem); font-weight: 700; color: var(--text-primary); letter-spacing: -0.01em; font-family: 'Montserrat', sans-serif;">Global Sentiment Platform of Share Markets</div>
+                    <div style="font-size: clamp(0.70rem, 1.5vw, 0.78rem); font-weight: 500; color: var(--text-muted); font-family: 'IBM Plex Sans', sans-serif;">Real-Time Global Quantitative Intelligence & Execution Engine</div>
+                </div>
             </div>
         </div>
-        <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); color: #34d399; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; padding: 4px 10px; border-radius: 12px; text-transform: uppercase; flex-shrink: 0;">
-            <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; display: inline-block;"></span>
-            SYSTEM ONLINE
+        """, unsafe_allow_html=True)
+        
+    with action_col:
+        status_bg = "rgba(16, 185, 129, 0.12)" if is_light else "rgba(16, 185, 129, 0.15)"
+        status_border = "rgba(16, 185, 129, 0.4)" if is_light else "rgba(16, 185, 129, 0.35)"
+        status_text = "#059669" if is_light else "#34d399"
+
+        st.markdown(f"""
+        <div style="background: var(--header-bg); border: 1px solid var(--header-border); border-radius: 8px; padding: 7px 12px; backdrop-filter: blur(10px); box-shadow: var(--header-shadow); margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
+            <span style="font-size: 0.65rem; font-weight: 700; color: var(--text-muted); font-family: 'Montserrat', sans-serif; letter-spacing: 0.05em; text-transform: uppercase;">BACKEND</span>
+            <div style="display: inline-flex; align-items: center; gap: 5px; background: {status_bg}; border: 1px solid {status_border}; color: {status_text}; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.08em; padding: 2px 8px; border-radius: 12px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
+                <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; display: inline-block;"></span>
+                SYSTEM ONLINE
+            </div>
         </div>
-    </div>
-    """, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
+        
+        st.toggle("☀️ Light Mode" if is_light else "🌙 Dark Mode", key="theme_toggle")
     
-    st.markdown("""
-<div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.45) 50%, rgba(15, 23, 42, 0.85) 100%); border: 1px solid rgba(56, 189, 248, 0.22); border-left: 4px solid #38bdf8; border-radius: 8px; padding: clamp(10px, 2vw, 12px) clamp(12px, 2.5vw, 18px); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), 0 0 15px rgba(56, 189, 248, 0.05); margin-bottom: 14px;">
+    st.markdown(f"""
+<div style="background: var(--edge-bg); border: 1px solid var(--edge-border); border-left: 4px solid var(--edge-accent); border-radius: 8px; padding: clamp(10px, 2vw, 12px) clamp(12px, 2.5vw, 18px); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); margin-bottom: 14px;">
 <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-<span style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; font-family: 'Montserrat', sans-serif; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; padding: 3px 8px; border-radius: 4px; text-transform: uppercase;">THE QUANTITATIVE EDGE</span>
-<span style="font-family: 'Montserrat', sans-serif; font-size: clamp(0.82rem, 1.8vw, 0.95rem); font-weight: 700; color: #f8fafc; letter-spacing: -0.01em;">Pure Mathematical Sentiment via Contrastive Language Modeling</span>
+<span style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: {'#0284c7' if is_light else '#38bdf8'}; font-family: 'Montserrat', sans-serif; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; padding: 3px 8px; border-radius: 4px; text-transform: uppercase;">THE QUANTITATIVE EDGE</span>
+<span style="font-family: 'Montserrat', sans-serif; font-size: clamp(0.82rem, 1.8vw, 0.95rem); font-weight: 700; color: var(--text-primary); letter-spacing: -0.01em;">Pure Mathematical Sentiment via Contrastive Language Modeling</span>
 </div>
 <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-<span style="font-size: 0.65rem; font-weight: 700; color: #34d399; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">DETERMINISTIC</span>
-<span style="font-size: 0.65rem; font-weight: 700; color: #a78bfa; background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">OKF-CONDITIONED</span>
-<span style="font-size: 0.65rem; font-weight: 700; color: #fbbf24; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">ZERO HALLUCINATION</span>
+<span style="font-size: 0.65rem; font-weight: 700; color: {'#059669' if is_light else '#34d399'}; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">DETERMINISTIC</span>
+<span style="font-size: 0.65rem; font-weight: 700; color: {'#7c3aed' if is_light else '#a78bfa'}; background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">OKF-CONDITIONED</span>
+<span style="font-size: 0.65rem; font-weight: 700; color: {'#d97706' if is_light else '#fbbf24'}; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">ZERO HALLUCINATION</span>
 </div>
 </div>
-<div style="font-family: 'IBM Plex Sans', sans-serif; font-size: clamp(0.78rem, 1.5vw, 0.82rem); color: #cbd5e1; line-height: 1.55; margin-bottom: 0;">
-Generative LLMs suffer from prompt drift, hallucination, and confidence clustering. GSP replaces text generation with a <strong>System-One Contrastive Model (CLM-8B)</strong> that projects global news directly onto native choice probabilities: <strong style="color: #34d399; font-weight: 700;">P(Bullish)</strong>, <strong style="color: #f87171; font-weight: 700;">P(Bearish)</strong>, and <strong style="color: #cbd5e1; font-weight: 700;">P(Neutral)</strong>. Headlines are conditioned against regional macroeconomic policy rules (OKF), converting real-time global news into an institutional momentum score [-100, +100].
+<div style="font-family: 'IBM Plex Sans', sans-serif; font-size: clamp(0.78rem, 1.5vw, 0.82rem); color: var(--edge-text); line-height: 1.55; margin-bottom: 0;">
+Generative LLMs suffer from prompt drift, hallucination, and confidence clustering. GSP replaces text generation with a <strong>System-One Contrastive Model (CLM-8B)</strong> that projects global news directly onto native choice probabilities: <strong style="color: {'#059669' if is_light else '#34d399'}; font-weight: 700;">P(Bullish)</strong>, <strong style="color: {'#dc2626' if is_light else '#f87171'}; font-weight: 700;">P(Bearish)</strong>, and <strong style="color: var(--text-muted); font-weight: 700;">P(Neutral)</strong>. Headlines are conditioned against regional macroeconomic policy rules (OKF), converting real-time global news into an institutional momentum score [-100, +100].
 </div>
 </div>
 """, unsafe_allow_html=True)
@@ -678,9 +797,9 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
         </span>
         <span style="font-size: 0.72rem; color: #64748b;">moving average</span>
     </div>
-    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: #94a3b8; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
+    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
         <span>Signal Strategy</span>
-        <span style="color: #cbd5e1; font-weight: 600;">EMA Crossover</span>
+        <span style="color: var(--text-secondary); font-weight: 600;">EMA Crossover</span>
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -692,16 +811,16 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
         <span class="metric-title" style="margin-bottom: 0;">Total News Volume</span>
         <span style="font-size: 0.68rem; font-weight: 700; color: #fbbf24; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">Live Feed</span>
     </div>
-    <div class="metric-value" style="color: #f8fafc;">{len(filtered_signals)}</div>
+    <div class="metric-value" style="color: var(--text-primary);">{len(filtered_signals)}</div>
     <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 4px;">
         <span style="font-size: 0.72rem; font-weight: 700; color: #fbbf24; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
             {date_range} Window
         </span>
         <span style="font-size: 0.72rem; color: #64748b;">articles ingested</span>
     </div>
-    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: #94a3b8; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
+    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
         <span>Ingestion Cycle</span>
-        <span style="color: #cbd5e1; font-weight: 600;">Every 2 Hours</span>
+        <span style="color: var(--text-secondary); font-weight: 600;">Every 2 Hours</span>
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -714,16 +833,16 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
         <span class="metric-title" style="margin-bottom: 0;">Tracked Indices</span>
         <span style="font-size: 0.68rem; font-weight: 700; color: #34d399; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">{selected_region}</span>
     </div>
-    <div class="metric-value" style="color: #f8fafc;">{tracked_count}</div>
+    <div class="metric-value" style="color: var(--text-primary);">{tracked_count}</div>
     <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 4px;">
         <span style="font-size: 0.72rem; font-weight: 700; color: #34d399; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
             100% Active
         </span>
         <span style="font-size: 0.72rem; color: #64748b;">real-time monitored</span>
     </div>
-    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: #94a3b8; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
+    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
         <span>Active Universe</span>
-        <span style="color: #cbd5e1; font-weight: 600;">20 Global Assets</span>
+        <span style="color: var(--text-secondary); font-weight: 600;">20 Global Assets</span>
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -738,21 +857,21 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
                         </div>
                         <div>
-                            <div style="font-size: 1.15rem; font-weight: 700; color: #f8fafc; font-family: 'Montserrat', sans-serif;">Aggregate Market Optimism</div>
-                            <div style="font-size: 0.75rem; color: #94a3b8; font-family: 'IBM Plex Sans', sans-serif;">Multi-Index Sentiment Surface & {selected_region} Moving Average</div>
+                            <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); font-family: 'Montserrat', sans-serif;">Aggregate Market Optimism</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); font-family: 'IBM Plex Sans', sans-serif;">Multi-Index Sentiment Surface & {selected_region} Moving Average</div>
                         </div>
                     </div>
                     <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-                        <span style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; color: #60a5fa; background: rgba(59, 130, 246, 0.12); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(59, 130, 246, 0.25); text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
+                        <span style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; color: {'#0284c7' if is_light else '#60a5fa'}; background: {'rgba(2, 132, 199, 0.12)' if is_light else 'rgba(59, 130, 246, 0.12)'}; padding: 3px 8px; border-radius: 4px; border: 1px solid {'rgba(2, 132, 199, 0.25)' if is_light else 'rgba(59, 130, 246, 0.25)'}; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
                             {selected_region} Market
                         </span>
-                        <span style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; color: #a78bfa; background: rgba(168, 85, 247, 0.12); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(168, 85, 247, 0.25); text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
+                        <span style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; color: {'#7c3aed' if is_light else '#a78bfa'}; background: {'rgba(124, 58, 237, 0.12)' if is_light else 'rgba(168, 85, 247, 0.12)'}; padding: 3px 8px; border-radius: 4px; border: 1px solid {'rgba(124, 58, 237, 0.25)' if is_light else 'rgba(168, 85, 247, 0.25)'}; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
                             {ema_window}-Period EMA
                         </span>
-                        <span style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; color: #34d399; background: rgba(16, 185, 129, 0.12); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.25); text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
+                        <span style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; color: {'#059669' if is_light else '#34d399'}; background: {'rgba(5, 150, 105, 0.12)' if is_light else 'rgba(16, 185, 129, 0.12)'}; padding: 3px 8px; border-radius: 4px; border: 1px solid {'rgba(5, 150, 105, 0.25)' if is_light else 'rgba(16, 185, 129, 0.25)'}; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
                             AI System-One
                         </span>
-                        <span style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; color: #38bdf8; background: rgba(56, 189, 248, 0.12); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(56, 189, 248, 0.25); text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
+                        <span style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; color: {'#0284c7' if is_light else '#38bdf8'}; background: {'rgba(2, 132, 199, 0.12)' if is_light else 'rgba(56, 189, 248, 0.12)'}; padding: 3px 8px; border-radius: 4px; border: 1px solid {'rgba(2, 132, 199, 0.25)' if is_light else 'rgba(56, 189, 248, 0.25)'}; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
                             {tz_abbr}
                         </span>
                     </div>
@@ -766,11 +885,9 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
                 tickers = [c for c in pivot_df.columns if c != 'timestamp']
                 
                 for i, ticker in enumerate(tickers):
-                    # Ignore the old placeholder data if any still exists
                     if ticker == 'UNKNOWN': 
                         continue
                         
-                    # Filter based on user's Chart Display selection
                     if chart_display != "All Indices" and ticker != chart_display:
                         continue
                         
@@ -787,33 +904,34 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
                 fig_area.add_trace(go.Scatter(
                     x=plot_trend_x, y=df_trend['EMA_Index'],
                     mode='lines+markers',
-                    line=dict(color='#f8fafc', width=2.5, shape='linear'), 
-                    marker=dict(size=6, color='#f8fafc', line=dict(color='#020617', width=1)),
+                    line=dict(color='#0f172a' if is_light else '#f8fafc', width=2.5, shape='linear'), 
+                    marker=dict(size=6, color='#0f172a' if is_light else '#f8fafc', line=dict(color='#ffffff' if is_light else '#020617', width=1)),
                     name=f'{selected_region} Mean (EMA)'
                 ))
                 
                 fig_area.update_layout(
                     height=370, margin=dict(l=0, r=0, t=5, b=0),
-                    plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
+                    plot_bgcolor="rgba(255,255,255,0.55)" if is_light else "rgba(0,0,0,0)",
+                    paper_bgcolor="rgba(0,0,0,0)",
                     hovermode="x unified",
                     legend=dict(
                         orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0,
-                        font=dict(color="#f8fafc", size=10, family="Montserrat")
+                        font=dict(color="#0f172a" if is_light else "#f8fafc", size=10, family="Montserrat")
                     ),
                     xaxis=dict(
-                        showgrid=True, gridcolor='rgba(255,255,255,0.06)',
-                        showline=True, linecolor='rgba(255,255,255,0.15)', linewidth=1,
-                        ticks='outside', tickcolor='rgba(255,255,255,0.25)', ticklen=4,
-                        title=dict(text=f"<b>TIMELINE • {tz_abbr}</b>", font=dict(size=11, color="#38bdf8", family="Montserrat")),
-                        tickfont=dict(size=10, color="#94a3b8", family="IBM Plex Sans")
+                        showgrid=True, gridcolor='rgba(148, 163, 184, 0.22)' if is_light else 'rgba(255,255,255,0.06)',
+                        showline=True, linecolor='rgba(100, 116, 139, 0.35)' if is_light else 'rgba(255,255,255,0.15)', linewidth=1,
+                        ticks='outside', tickcolor='rgba(100, 116, 139, 0.35)' if is_light else 'rgba(255,255,255,0.25)', ticklen=4,
+                        title=dict(text=f"<b>TIMELINE • {tz_abbr}</b>", font=dict(size=11, color="#0284c7" if is_light else "#38bdf8", family="Montserrat")),
+                        tickfont=dict(size=10, color="#334155" if is_light else "#94a3b8", family="IBM Plex Sans")
                     ),
                     yaxis=dict(
-                        showgrid=True, gridcolor='rgba(255,255,255,0.06)',
-                        zeroline=True, zerolinecolor='rgba(16, 185, 129, 0.45)', zerolinewidth=1.5,
-                        showline=True, linecolor='rgba(255,255,255,0.15)', linewidth=1,
-                        ticks='outside', tickcolor='rgba(255,255,255,0.25)', ticklen=4,
-                        title=dict(text="<b>OPTIMISM SCORE</b>", font=dict(size=11, color="#38bdf8", family="Montserrat")),
-                        tickfont=dict(size=10, color="#f8fafc", family="IBM Plex Sans", weight="bold"),
+                        showgrid=True, gridcolor='rgba(148, 163, 184, 0.22)' if is_light else 'rgba(255,255,255,0.06)',
+                        zeroline=True, zerolinecolor='rgba(16, 185, 129, 0.65)' if is_light else 'rgba(16, 185, 129, 0.45)', zerolinewidth=1.5,
+                        showline=True, linecolor='rgba(100, 116, 139, 0.35)' if is_light else 'rgba(255,255,255,0.15)', linewidth=1,
+                        ticks='outside', tickcolor='rgba(100, 116, 139, 0.35)' if is_light else 'rgba(255,255,255,0.25)', ticklen=4,
+                        title=dict(text="<b>OPTIMISM SCORE</b>", font=dict(size=11, color="#0284c7" if is_light else "#38bdf8", family="Montserrat")),
+                        tickfont=dict(size=10, color="#0f172a" if is_light else "#f8fafc", family="IBM Plex Sans", weight="bold"),
                         side="right"
                     )
                 )
@@ -831,52 +949,52 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
                     
                     if abs(latest_score) < 0.5:
                         ticker_status = "NEUTRAL"
-                        t_status_color = "#94a3b8"
-                        t_status_bg = "rgba(148, 163, 184, 0.12)"
-                        t_status_border = "rgba(148, 163, 184, 0.3)"
-                        t_card_border = "#64748b"
-                        t_val_color = "#cbd5e1"
+                        t_status_color = "#475569" if is_light else "#94a3b8"
+                        t_status_bg = "rgba(148, 163, 184, 0.18)" if is_light else "rgba(148, 163, 184, 0.12)"
+                        t_status_border = "rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.3)"
+                        t_card_border = "#94a3b8" if is_light else "#64748b"
+                        t_val_color = "#334155" if is_light else "#cbd5e1"
                     elif latest_score >= 0.5:
                         ticker_status = "BULLISH"
-                        t_status_color = "#34d399"
+                        t_status_color = "#059669" if is_light else "#34d399"
                         t_status_bg = "rgba(16, 185, 129, 0.15)"
                         t_status_border = "rgba(16, 185, 129, 0.35)"
                         t_card_border = "#10b981"
-                        t_val_color = "#10b981"
+                        t_val_color = "#059669" if is_light else "#10b981"
                     else:
                         ticker_status = "BEARISH"
-                        t_status_color = "#f87171"
+                        t_status_color = "#dc2626" if is_light else "#f87171"
                         t_status_bg = "rgba(239, 68, 68, 0.15)"
                         t_status_border = "rgba(239, 68, 68, 0.35)"
                         t_card_border = "#ef4444"
-                        t_val_color = "#ef4444"
+                        t_val_color = "#dc2626" if is_light else "#ef4444"
                     
                     if delta_idx > 0:
                         d_arrow = "▲"
-                        d_pill_color = "#34d399"
+                        d_pill_color = "#059669" if is_light else "#34d399"
                         d_pill_bg = "rgba(16, 185, 129, 0.12)"
                         d_pill_border = "rgba(16, 185, 129, 0.25)"
                     elif delta_idx < 0:
                         d_arrow = "▼"
-                        d_pill_color = "#f87171"
+                        d_pill_color = "#dc2626" if is_light else "#f87171"
                         d_pill_bg = "rgba(239, 68, 68, 0.12)"
                         d_pill_border = "rgba(239, 68, 68, 0.25)"
                     else:
                         d_arrow = "▬"
-                        d_pill_color = "#94a3b8"
+                        d_pill_color = "#475569" if is_light else "#94a3b8"
                         d_pill_bg = "rgba(148, 163, 184, 0.12)"
                         d_pill_border = "rgba(148, 163, 184, 0.25)"
                     
                     kpi_html += f"""
 <div class="news-item-card" style="flex: 1 1 120px; padding: 10px 12px; border-left: 3px solid {t_card_border}; margin-bottom: 0;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-        <span style="font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 700; color: #f8fafc; text-transform: uppercase; letter-spacing: 0.03em;">{ticker}</span>
+        <span style="font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 700; color: {'#0f172a' if is_light else '#f8fafc'}; text-transform: uppercase; letter-spacing: 0.03em;">{ticker}</span>
         <span style="font-family: 'Montserrat', sans-serif; font-size: 0.65rem; font-weight: 800; color: {t_status_color}; background: {t_status_bg}; border: 1px solid {t_status_border}; padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">{ticker_status}</span>
     </div>
     <div style="font-family: 'Montserrat', sans-serif; font-size: clamp(1.2rem, 2vw, 1.6rem); font-weight: 800; color: {t_val_color}; margin: 2px 0;">{latest_score:+.1f}</div>
     <div style="display: flex; align-items: center; gap: 5px; margin-top: 4px;">
         <span style="font-size: 0.72rem; font-weight: 700; color: {d_pill_color}; background: {d_pill_bg}; border: 1px solid {d_pill_border}; padding: 1px 6px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">{d_arrow} {abs(delta_idx):.1f}%</span>
-        <span style="font-size: 0.7rem; color: #64748b;">momentum</span>
+        <span style="font-size: 0.7rem; color: {'#64748b' if is_light else '#94a3b8'};">momentum</span>
     </div>
 </div>
 """
@@ -900,7 +1018,7 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
             f'<div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">'
             f'<div style="display: flex; align-items: center; gap: 10px;">'
             f'<span style="display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 10px #3b82f6; flex-shrink: 0;"></span>'
-            f'<span style="font-size: clamp(0.95rem, 2vw, 1.15rem); font-weight: 700; color: #f8fafc; font-family: \'Montserrat\', sans-serif;">{selected_region} Live Intelligence Feed</span>'
+            f'<span style="font-size: clamp(0.95rem, 2vw, 1.15rem); font-weight: 700; color: {"#0f172a" if is_light else "#f8fafc"}; font-family: \'Montserrat\', sans-serif;">{selected_region} Live Intelligence Feed</span>'
             f'</div>'
             f'<div class="expand-action-btn">'
             f'<span class="expand-text">EXPAND FEED <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span>'
@@ -908,10 +1026,10 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
             f'</div>'
             f'</div>'
             f'<div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">'
-            f'<span style="font-size: 0.72rem; font-weight: 700; color: #f8fafc; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{total_events} Total</span>'
-            f'<span style="font-size: 0.72rem; font-weight: 700; color: #34d399; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{bullish_count} Bullish</span>'
-            f'<span style="font-size: 0.72rem; font-weight: 700; color: #f87171; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{bearish_count} Bearish</span>'
-            f'<span style="font-size: 0.72rem; font-weight: 700; color: #cbd5e1; background: rgba(148, 163, 184, 0.18); border: 1px solid rgba(148, 163, 184, 0.4); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{noise_count} Noise</span>'
+            f'<span style="font-size: 0.72rem; font-weight: 700; color: {"#0f172a" if is_light else "#f8fafc"}; background: {"rgba(0, 0, 0, 0.05)" if is_light else "rgba(255, 255, 255, 0.06)"}; border: 1px solid {"rgba(0, 0, 0, 0.1)" if is_light else "rgba(255, 255, 255, 0.12)"}; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{total_events} Total</span>'
+            f'<span style="font-size: 0.72rem; font-weight: 700; color: {"#059669" if is_light else "#34d399"}; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{bullish_count} Bullish</span>'
+            f'<span style="font-size: 0.72rem; font-weight: 700; color: {"#dc2626" if is_light else "#f87171"}; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{bearish_count} Bearish</span>'
+            f'<span style="font-size: 0.72rem; font-weight: 700; color: {"#475569" if is_light else "#cbd5e1"}; background: {"rgba(148, 163, 184, 0.2)" if is_light else "rgba(148, 163, 184, 0.18)"}; border: 1px solid {"rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.4)"}; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{noise_count} Noise</span>'
             f'</div>'
             f'</div>'
             f'</summary>'
@@ -933,35 +1051,35 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
                 
                 # Determine Sentiment & Noise status
                 if abs(sentiment) < 0.5:
-                    status_badge = '<span style="background: rgba(148, 163, 184, 0.18); border: 1px solid rgba(148, 163, 184, 0.45); color: #cbd5e1; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">NOISE</span>'
-                    score_color = "#94a3b8"
-                    score_bg = "rgba(148, 163, 184, 0.12)"
-                    score_border = "rgba(148, 163, 184, 0.3)"
-                    card_border = "#64748b"
+                    status_badge = f'<span style="background: {"rgba(148, 163, 184, 0.2)" if is_light else "rgba(148, 163, 184, 0.18)"}; border: 1px solid {"rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.45)"}; color: {"#475569" if is_light else "#cbd5e1"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">NOISE</span>'
+                    score_color = "#64748b" if is_light else "#94a3b8"
+                    score_bg = "rgba(148, 163, 184, 0.15)" if is_light else "rgba(148, 163, 184, 0.12)"
+                    score_border = "rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.3)"
+                    card_border = "#94a3b8" if is_light else "#64748b"
                 elif sentiment >= 0.5:
-                    status_badge = '<span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BULLISH</span>'
-                    score_color = "#10b981"
-                    score_bg = "rgba(16, 185, 129, 0.12)"
-                    score_border = "rgba(16, 185, 129, 0.3)"
+                    status_badge = f'<span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: {"#059669" if is_light else "#34d399"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BULLISH</span>'
+                    score_color = "#059669" if is_light else "#10b981"
+                    score_bg = "rgba(16, 185, 129, 0.15)" if is_light else "rgba(16, 185, 129, 0.12)"
+                    score_border = "rgba(16, 185, 129, 0.35)" if is_light else "rgba(16, 185, 129, 0.3)"
                     card_border = "#10b981"
                 else:
-                    status_badge = '<span style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BEARISH</span>'
-                    score_color = "#ef4444"
-                    score_bg = "rgba(239, 68, 68, 0.12)"
-                    score_border = "rgba(239, 68, 68, 0.3)"
+                    status_badge = f'<span style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: {"#dc2626" if is_light else "#f87171"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BEARISH</span>'
+                    score_color = "#dc2626" if is_light else "#ef4444"
+                    score_bg = "rgba(239, 68, 68, 0.15)" if is_light else "rgba(239, 68, 68, 0.12)"
+                    score_border = "rgba(239, 68, 68, 0.35)" if is_light else "rgba(239, 68, 68, 0.3)"
                     card_border = "#ef4444"
                 
-                source_badge = f'<span style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: #94a3b8; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">{source}</span>' if source else ""
+                source_badge = f'<span style="background: {"rgba(0, 0, 0, 0.04)" if is_light else "rgba(255, 255, 255, 0.04)"}; border: 1px solid {"rgba(0, 0, 0, 0.08)" if is_light else "rgba(255, 255, 255, 0.08)"}; color: {"#475569" if is_light else "#94a3b8"}; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">{source}</span>' if source else ""
                 
                 escaped_headline = html.escape(clean_headline)
                 badges_markup = (
-                    f'<span style="font-family: \'IBM Plex Sans\', sans-serif; font-size: 0.75rem; font-weight: 500; color: #94a3b8; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 2px 7px; border-radius: 4px; flex-shrink: 0;">{time_str}</span>'
-                    f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.75rem; font-weight: 700; color: #f8fafc; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.35); padding: 2px 8px; border-radius: 4px; flex-shrink: 0;">{ticker_label}</span>'
+                    f'<span style="font-family: \'IBM Plex Sans\', sans-serif; font-size: 0.75rem; font-weight: 500; color: {"#475569" if is_light else "#94a3b8"}; background: {"rgba(0,0,0,0.04)" if is_light else "rgba(255,255,255,0.04)"}; border: 1px solid {"rgba(0,0,0,0.08)" if is_light else "rgba(255,255,255,0.08)"}; padding: 2px 7px; border-radius: 4px; flex-shrink: 0;">{time_str}</span>'
+                    f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.75rem; font-weight: 700; color: {"#0284c7" if is_light else "#f8fafc"}; background: {"rgba(2, 132, 199, 0.12)" if is_light else "rgba(59, 130, 246, 0.15)"}; border: 1px solid {"rgba(2, 132, 199, 0.3)" if is_light else "rgba(59, 130, 246, 0.35)"}; padding: 2px 8px; border-radius: 4px; flex-shrink: 0;">{ticker_label}</span>'
                     f'{source_badge}{status_badge}'
                 )
                 score_markup = f'<div style="flex-shrink: 0;"><span style="font-family: \'Montserrat\', sans-serif; font-size: 0.8rem; font-weight: 700; color: {score_color}; background: {score_bg}; border: 1px solid {score_border}; padding: 3px 9px; border-radius: 4px; letter-spacing: 0.02em;">{sentiment:+.1f}</span></div>'
                 card_top = f'<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">{badges_markup}</div>{score_markup}</div>'
-                card_body = f'<div style="font-size: 0.92rem; color: #f8fafc; font-weight: 500; line-height: 1.5; font-family: \'IBM Plex Sans\', sans-serif;">{escaped_headline}</div>'
+                card_body = f'<div style="font-size: 0.92rem; color: {"#0f172a" if is_light else "#f8fafc"}; font-weight: 500; line-height: 1.5; font-family: \'IBM Plex Sans\', sans-serif;">{escaped_headline}</div>'
                 
                 html_feed += f'<div class="news-item-card" style="border-left: 3px solid {card_border};">{card_top}{card_body}</div>'
         else:
