@@ -1,0 +1,40 @@
+name: Database Regional Reclassification & Contaminant Purge
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Execution mode (dry-run to preview, purge to delete contaminants)'
+        required: true
+        default: 'dry-run'
+        type: choice
+        options:
+          - dry-run
+          - purge
+
+jobs:
+  audit-and-reclassify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install psycopg2-binary
+
+      - name: Execute Reclassification Audit
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          PYTHONPATH: src
+        run: |
+          python scripts/reclassify_database.py --mode=${{ github.event.inputs.mode }}

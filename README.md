@@ -158,12 +158,12 @@ flowchart TD
 
 | Layer | Tech | Description |
 |-------|------|-------------|
-| **Ingestion** | `aiohttp`, Google News RSS | Async poller fetching ~120 headlines per run across 20 indices in 4 regions (US, IN, UK, JP) |
+| **Ingestion** | `aiohttp`, Google News RSS, Regional Classifier | Async poller with declarative `market_registry.json` and strict affinity scoring (120 headlines across 20 indices) |
 | **AI Engine** | `Contrastive-LM/CLM-v0.1-8B`, Modal A10G, TypeSafe SDK | System-One mathematical scorer — no token generation, pure probability vectors (-1.0 to +1.0) |
 | **Knowledge** | Gemini Flash, Google News RSS | Daily auto-updating OKF rules via Gemini with resilient model fallback chain |
 | **Database** | Supabase PostgreSQL | Vertical partitioning: `event_signals` (math layer) + `event_payloads` (document layer) |
 | **Signal Engine** | Pandas, Alpaca API | 4-hour EMA crossover strategy routing BUY/SELL orders to paper trading |
-| **Dashboard** | Streamlit, Plotly | Dark-mode glassmorphism terminal with auto-scaling charts and live intelligence feed |
+| **Dashboard** | Streamlit, Plotly | Dark-mode glassmorphism terminal with dynamic regional filtering, auto-scaling charts and live feed |
 
 ---
 
@@ -173,7 +173,8 @@ flowchart TD
 gsp/
 ├── .github/workflows/
 │   ├── deploy.yml              # Sentiment pipeline (every 2 hours)
-│   └── update_okf.yml          # Dynamic OKF updater (daily)
+│   ├── update_okf.yml          # Dynamic OKF updater (daily)
+│   └── reclassify_db.yml       # Database regional reclassification & contaminant purge
 ├── docs/                       # Quantitative & architectural documentation
 │   ├── architecture_and_workflow.md  # End-to-end architecture & workflows
 │   ├── sentiment_math.md             # CLM quantitative math & scoring proofs
@@ -183,10 +184,13 @@ gsp/
 │   ├── india_macro.okf.md
 │   ├── uk_macro.okf.md
 │   └── japan_macro.okf.md
+├── scripts/
+│   └── reclassify_database.py  # Supabase historical reclassification & purge CLI
 ├── src/
 │   ├── ai_engine/              # Modal serverless GPU (CLM System-One)
+│   ├── config/                 # Declarative market registry (tickers, keywords, geotargeting)
 │   ├── database/               # Supabase connection pooler & SQL schemas
-│   ├── ingestion/              # Async RSS feed poller
+│   ├── ingestion/              # Async RSS feed poller & regional affinity classifier
 │   ├── knowledge_engine/       # Gemini-powered OKF updater
 │   ├── signal_engine/          # Pandas EMA calculator & Alpaca routing
 │   ├── ui/                     # Streamlit dashboard
@@ -237,8 +241,9 @@ PYTHONPATH=src python src/main.py
 |----------|----------|-------------|
 | **Sentiment Pipeline** (`deploy.yml`) | Every 2 hours | Ingestion → AI Scoring → Database → Paper Trading |
 | **OKF Knowledge Updater** (`update_okf.yml`) | Daily at 00:00 UTC | Gemini analyzes macro policy news and auto-commits updated OKF trading rules |
+| **Reclassification & Purge** (`reclassify_db.yml`) | Manual (`workflow_dispatch`) | Scans historical Supabase records and audits/purges regional contaminants |
 
-Both workflows can also be triggered manually via `workflow_dispatch` from the GitHub Actions UI.
+All workflows can also be triggered manually via `workflow_dispatch` from the GitHub Actions UI.
 
 ---
 

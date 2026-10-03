@@ -351,12 +351,12 @@ def load_data():
     try:
         client = get_db_client()
         with client.get_connection() as conn:
-            query_signals = "SELECT timestamp, market_region, index_ticker, sentiment_score FROM event_signals ORDER BY timestamp DESC LIMIT 2000"
+            query_signals = "SELECT id, timestamp, market_region, index_ticker, sentiment_score FROM event_signals ORDER BY timestamp DESC LIMIT 2000"
             df_signals = pd.read_sql(query_signals, conn)
             df_signals['timestamp'] = pd.to_datetime(df_signals['timestamp'])
             
             query_payloads = """
-                SELECT s.timestamp, s.market_region, s.index_ticker, s.sentiment_score, p.raw_text
+                SELECT s.id, s.timestamp, s.market_region, s.index_ticker, s.sentiment_score, p.raw_text
                 FROM event_signals s JOIN event_payloads p ON s.id = p.id
                 ORDER BY s.timestamp DESC LIMIT 2000
             """
@@ -368,6 +368,31 @@ def load_data():
         return pd.DataFrame(), pd.DataFrame()
 
 df_signals, df_payloads = load_data()
+
+# Real-time regional relevance and contaminant gatekeeper:
+# Dynamically eliminates legacy misclassified news items (e.g. US news under India)
+if os.environ.get("DATABASE_URL") and not df_payloads.empty and 'raw_text' in df_payloads.columns and 'id' in df_payloads.columns:
+    try:
+        from ingestion.classifier import RegionalAffinityClassifier
+        classifier = RegionalAffinityClassifier()
+        valid_ids = set()
+        for _, row in df_payloads.iterrows():
+            res = classifier.classify_and_validate(
+                headline=str(row.get('raw_text', '')),
+                summary="",
+                expected_region=str(row.get('market_region', '')),
+                expected_ticker=str(row.get('index_ticker', '')),
+                allow_reroute=False
+            )
+            if res is not None:
+                valid_ids.add(row['id'])
+
+        if valid_ids:
+            df_payloads = df_payloads[df_payloads['id'].isin(valid_ids)].copy()
+            if 'id' in df_signals.columns:
+                df_signals = df_signals[df_signals['id'].isin(valid_ids)].copy()
+    except Exception as filter_err:
+        pass
 
 # Enforce strict cutoff floor: 12:00 PM IST on September 30, 2026 (06:30 AM UTC)
 DATA_CUTOFF_FLOOR = pd.Timestamp("2026-09-30 06:30:00", tz="UTC")
