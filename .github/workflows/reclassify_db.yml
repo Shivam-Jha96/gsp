@@ -1,21 +1,24 @@
-name: Database Regional Reclassification & Contaminant Purge
+name: Database Integrity, Deduplication & Sentiment Re-scoring
 
 on:
   workflow_dispatch:
     inputs:
       mode:
-        description: 'Execution mode (dry-run to preview, purge to delete contaminants)'
+        description: 'Execution mode: dry-run (preview), purge (delete contaminants), dedup (purge redundant duplicates), rescore (recalibrate sentiment), full-clean (all)'
         required: true
         default: 'dry-run'
         type: choice
         options:
           - dry-run
+          - dedup
           - purge
+          - rescore
+          - full-clean
 
 jobs:
   audit-and-reclassify:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
 
     steps:
       - name: Checkout Repository
@@ -32,9 +35,10 @@ jobs:
           pip install -r requirements.txt
           pip install psycopg2-binary
 
-      - name: Execute Reclassification Audit
+      - name: Execute Maintenance Routine
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
           PYTHONPATH: src
         run: |
           python scripts/reclassify_database.py --mode=${{ github.event.inputs.mode }}

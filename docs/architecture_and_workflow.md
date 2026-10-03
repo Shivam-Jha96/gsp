@@ -214,6 +214,11 @@ To mathematically prevent cross-region contamination (e.g., US Wall Street marke
 }
 ```
 
+#### 3. Universal Multi-Stage News Deduplication Engine
+To eliminate OPEX/CAPEX waste (redundant inference costs and duplicate database records), [`src/ingestion/dedup.py`](file:///d:/Dev/repos/gsp/src/ingestion/dedup.py) provides deterministic headline fingerprinting (`canonical_fingerprint()`):
+* **Intra-Run Deduplication:** In [`src/ingestion/poller.py`](file:///d:/Dev/repos/gsp/src/ingestion/poller.py#L77-L85), [`NewsDeduplicator`](file:///d:/Dev/repos/gsp/src/ingestion/dedup.py#L48-L82) filters the batch of polled items across all 20 ticker queries. If major publishers (Reuters, Bloomberg, etc.) appear in multiple feeds (e.g. Nifty 50 and Sensex), redundant copies are collapsed into a single canonical payload.
+* **Cross-Run Database Deduplication:** In [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py#L140-L175), before calling the AI engine, the pipeline queries recent headline fingerprints from Supabase for the last 48 hours. Any headline already present in storage is skipped, saving 100% of redundant inference calls.
+
 ---
 
 ### Layer 2: AI Inference & Knowledge Layer
@@ -226,7 +231,15 @@ Conventional generative AI models (System-Two) rely on autoregressive token-by-t
 * **Projection Heads:** Lightweight 20M-parameter contrastive heads (`Contrastive-LM/CLM-v0.1-8B`) trained via bidirectional InfoNCE loss.
 * **Disaggregated Embeddings:** State text (the news headline + regional macro context) and action candidates (`Bullish`, `Bearish`, `Neutral`) are embedded separately. Candidate vectors are cached in an in-memory vector arena on the GPU, reducing repeated scoring operations to simple matrix dot products ($s_i^\top a_j / \tau$) and softmax operations, yielding latencies under 60 milliseconds.
 
-#### 2. Serverless Modal Deployment & Zero Cold-Boot ASGI Design
+#### 2. Grounded Contrastive Criteria & Polarity Anchoring
+To prevent the inherent lexical positive bias of unconditioned language model embeddings (where financial words naturally associate with positive expansion terminology), [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py#L14-L21) explicitly grounds the contrastive hypotheses in concrete equity market outcomes:
+* **Bullish Anchor:** *"Positive for equity markets: stock prices rising, benchmark index gains, market rally, interest rate cuts, economic expansion, capital inflows, corporate earnings beats."*
+* **Bearish Anchor:** *"Negative for equity markets: stock prices falling, benchmark index drops, worst monthly or weekly decline, interest rate hikes, capital outflows, market selloffs, recession fears, margin compression."*
+* **Neutral Anchor:** *"Balanced, flat, routine macroeconomic data, unchanged policy rates, or negligible directional market impact."*
+
+This anchors the hypersphere projection so that severe drops, rate hikes, or outflows ("worst month since March") decisively project into negative conviction ($P(\text{Bearish}) \ge 0.85$).
+
+#### 3. Serverless Modal Deployment & Zero Cold-Boot ASGI Design
 To avoid connection proxy deadlocks and minimize cold-start latency, [`src/ai_engine/modal_app.py`](file:///d:/Dev/repos/gsp/src/ai_engine/modal_app.py) deploys the model directly to an NVIDIA A10G GPU using Modal's `@modal.asgi_app()` decorator:
 
 ```python
@@ -258,8 +271,8 @@ def clm_server():
 * **Image Optimization:** Weights are pre-baked into the Modal Debian container image using `hf_transfer` and Hugging Face snapshot downloads, eliminating runtime downloading delays.
 * **Keep-Alive Scale-Down Window:** An idle scale-down window of 120 seconds keeps containers warm during consecutive batch queries.
 
-#### 3. Mathematical Sentiment Calibration
-In [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py#L13-L82), the TypeSafe SDK queries the CLM serverless endpoint. The probabilities $P(\text{Bullish})$, $P(\text{Bearish})$, and $P(\text{Neutral})$ are converted into a calibrated directional sentiment score $S \in [-1.0, 1.0]$:
+#### 4. Mathematical Sentiment Calibration
+In [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py#L22-L82), the TypeSafe SDK queries the CLM serverless endpoint. The probabilities $P(\text{Bullish})$, $P(\text{Bearish})$, and $P(\text{Neutral})$ are converted into a calibrated directional sentiment score $S \in [-1.0, 1.0]$:
 
 1. **Relative Directional Spread ($s_{\text{rel}}$):**
    $$s_{\text{rel}} = \frac{P(\text{Bullish}) - P(\text{Bearish})}{P(\text{Bullish}) + P(\text{Bearish}) + \epsilon} \quad \text{where } \epsilon = 10^{-5}$$
@@ -267,15 +280,15 @@ In [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py#L13-L82), the TypeSafe S
    $$M = |s_{\text{rel}}| \times \left(1.0 - 0.5 \times P(\text{Neutral})\right)$$
 3. **Directional Assignment & Clamping:**
    $$S = \begin{cases} 
-      0.0 & \text{if Decision} = \text{Neutral} \\
-      -M & \text{if Decision} = \text{Bearish} \\
-      +M & \text{if Decision} = \text{Bullish}
+      0.0 & \text{if Decision} = \text{Neutral or } |s_{\text{rel}}| < 0.05 \\
+      -M & \text{if } P(\text{Bearish}) > P(\text{Bullish}) \\
+      +M & \text{if } P(\text{Bullish}) > P(\text{Bearish})
    \end{cases}, \quad S = \max(-1.0, \min(1.0, S))$$
 
 This ensures high confidence is required to trigger strong bullish or bearish values, while ambiguous headlines naturally decay toward zero.
 
-#### 4. Objective Knowledge Framework (OKF) Integration
-Prior to sending headlines to the AI model, [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py#L92-L112) dynamically loads the corresponding region's macro rules from `knowledge/{region}_macro.okf.md`. These rules provide the macroeconomic domain constraints under which the CLM evaluates headline impact (e.g., treating rate hikes as bearish for equities but bullish for currency values).
+#### 5. Objective Knowledge Framework (OKF) Integration
+Prior to sending headlines to the AI model, [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py) dynamically loads the corresponding region's macro rules from `knowledge/{region}_macro.okf.md`. These rules provide the macroeconomic domain constraints under which the CLM evaluates headline impact (e.g., treating rate hikes as bearish for equities but bullish for currency values).
 
 ---
 
@@ -455,9 +468,14 @@ if clm_damped_mask_sig.any():
 To resolve historical data misclassifications (e.g. earlier US Wall Street headlines tagged under India, or non-financial items), [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py#L370-L395) evaluates loaded payloads in real time using [`RegionalAffinityClassifier`](file:///d:/Dev/repos/gsp/src/ingestion/classifier.py):
 * **Live Contaminant Purging:** Any loaded record whose headline fails regional validation ($\text{Affinity}(\text{ExpectedRegion}) = 0$) is immediately excluded from `df_payloads` and `df_signals`.
 * **Zero Chart & KPI Distortion:** Multi-index area charts, EMA momentum vectors, and executive KPI tiles calculate strictly over authenticated regional events.
-* **Storage Layer Reclassification Script:** For permanent database cleanup, [`scripts/reclassify_database.py`](file:///d:/Dev/repos/gsp/scripts/reclassify_database.py) and [`.github/workflows/reclassify_db.yml`](file:///d:/Dev/repos/gsp/.github/workflows/reclassify_db.yml) provide one-click auditing and purging of historical contaminants in Supabase.
+* **Storage Layer Maintenance CLI:** For permanent database cleanup, [`scripts/reclassify_database.py`](file:///d:/Dev/repos/gsp/scripts/reclassify_database.py) and [`.github/workflows/reclassify_db.yml`](file:///d:/Dev/repos/gsp/.github/workflows/reclassify_db.yml) provide one-click auditing, contaminant purging (`purge`), deduplication (`dedup`), and sentiment re-scoring (`rescore`).
 
-#### 6. Collapsible Live Feed & Accordion Architecture
+#### 6. Real-Time Headline Deduplication Gatekeeper
+To guarantee that the user dashboard never renders redundant copies of the same news item (e.g., when a single Reuters or Bloomberg headline appeared across multiple ticker queries prior to database cleanup), [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py#L397-L417) applies [`canonical_fingerprint()`](file:///d:/Dev/repos/gsp/src/ingestion/dedup.py) on the loaded DataFrame:
+* **Canonical Collapse:** Groups records by normalized headline fingerprint, retaining only 1 canonical card per story.
+* **Chart Weight Normalization:** Multi-index area charts and EMA calculations receive exactly 1 observation per event, eliminating artificial multi-count weighting.
+
+#### 7. Collapsible Live Feed & Accordion Architecture
 The Live Intelligence Feed uses a native HTML `<details>` and `<summary>` accordion architecture:
 * **Collapsed Executive State (Default):** Shows only the high-level regional header bar containing the interactive rotating SVG chevron, region pulse dot, and real-time count badges (`Total`, `Bullish`, `Bearish`, `Noise`).
 * **Expanded State:** Revealing the underlying news container when clicked, with zero page reloads, zero Streamlit re-renders, and full client-side 60fps interaction.

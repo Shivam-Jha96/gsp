@@ -3,6 +3,7 @@ import logging
 from typing import List, Dict, Any
 from .api_clients import RSSClient
 from .classifier import RegionalAffinityClassifier
+from .dedup import NewsDeduplicator
 from config.market_registry import build_rss_feeds
 
 logging.basicConfig(level=logging.INFO)
@@ -16,6 +17,7 @@ class FeedPoller:
         self.feeds = feeds if feeds is not None else FEEDS
         self.client = RSSClient()
         self.classifier = RegionalAffinityClassifier()
+        self.deduplicator = NewsDeduplicator()
 
     async def poll_feed(self, feed: Dict[str, str]) -> List[Dict[str, Any]]:
         """Poll a single feed, parse items, and validate via RegionalAffinityClassifier."""
@@ -76,8 +78,12 @@ class FeedPoller:
         # Flatten the list of lists
         all_items = [item for sublist in results for item in sublist]
         
+        # Deduplicate identical news items across different ticker queries
+        unique_items = self.deduplicator.filter_batch(all_items, text_key="title")
+        logger.info(f"Deduplication: {len(all_items)} raw items -> {len(unique_items)} unique items across all feeds.")
+        
         # Prepare payloads for the AI Engine
-        payloads = self.prepare_payloads(all_items)
+        payloads = self.prepare_payloads(unique_items)
         
         logger.info(f"Prepared {len(payloads)} total payloads for the AI Engine.")
         

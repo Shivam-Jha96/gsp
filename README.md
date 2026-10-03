@@ -158,12 +158,12 @@ flowchart TD
 
 | Layer | Tech | Description |
 |-------|------|-------------|
-| **Ingestion** | `aiohttp`, Google News RSS, Regional Classifier | Async poller with declarative `market_registry.json` and strict affinity scoring (120 headlines across 20 indices) |
-| **AI Engine** | `Contrastive-LM/CLM-v0.1-8B`, Modal A10G, TypeSafe SDK | System-One mathematical scorer — no token generation, pure probability vectors (-1.0 to +1.0) |
+| **Ingestion** | `aiohttp`, Google News RSS, Classifier, Deduplicator | Async poller with declarative registry, affinity classifier, and multi-stage deduplication |
+| **AI Engine** | `Contrastive-LM/CLM-v0.1-8B`, Modal A10G, TypeSafe SDK | Grounded System-One mathematical scorer — explicit market criteria anchors, pure probability vectors (-1.0 to +1.0) |
 | **Knowledge** | Gemini Flash, Google News RSS | Daily auto-updating OKF rules via Gemini with resilient model fallback chain |
 | **Database** | Supabase PostgreSQL | Vertical partitioning: `event_signals` (math layer) + `event_payloads` (document layer) |
 | **Signal Engine** | Pandas, Alpaca API | 4-hour EMA crossover strategy routing BUY/SELL orders to paper trading |
-| **Dashboard** | Streamlit, Plotly | Dark-mode glassmorphism terminal with dynamic regional filtering, auto-scaling charts and live feed |
+| **Dashboard** | Streamlit, Plotly | Dark-mode glassmorphism terminal with dynamic regional filtering, deduplication, auto-scaling charts and live feed |
 
 ---
 
@@ -174,7 +174,7 @@ gsp/
 ├── .github/workflows/
 │   ├── deploy.yml              # Sentiment pipeline (every 2 hours)
 │   ├── update_okf.yml          # Dynamic OKF updater (daily)
-│   └── reclassify_db.yml       # Database regional reclassification & contaminant purge
+│   └── reclassify_db.yml       # Database integrity, deduplication & re-scoring workflow
 ├── docs/                       # Quantitative & architectural documentation
 │   ├── architecture_and_workflow.md  # End-to-end architecture & workflows
 │   ├── sentiment_math.md             # CLM quantitative math & scoring proofs
@@ -185,12 +185,12 @@ gsp/
 │   ├── uk_macro.okf.md
 │   └── japan_macro.okf.md
 ├── scripts/
-│   └── reclassify_database.py  # Supabase historical reclassification & purge CLI
+│   └── reclassify_database.py  # Supabase purge, dedup, and sentiment re-scoring CLI
 ├── src/
 │   ├── ai_engine/              # Modal serverless GPU (CLM System-One)
 │   ├── config/                 # Declarative market registry (tickers, keywords, geotargeting)
 │   ├── database/               # Supabase connection pooler & SQL schemas
-│   ├── ingestion/              # Async RSS feed poller & regional affinity classifier
+│   ├── ingestion/              # Async RSS poller, regional affinity classifier & deduplicator
 │   ├── knowledge_engine/       # Gemini-powered OKF updater
 │   ├── signal_engine/          # Pandas EMA calculator & Alpaca routing
 │   ├── ui/                     # Streamlit dashboard

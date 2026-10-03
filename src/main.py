@@ -6,30 +6,40 @@ import uuid
 
 # Ingestion
 from ingestion.poller import FeedPoller, FEEDS
+from ingestion.dedup import canonical_fingerprint
 
 # AI Engine (TypeSafe AI - Jev System-One Model)
 from typesafe_sdk import TypeSafeClient, Choice
 
+# Grounded directional criteria to eliminate unconditioned token bias
+SENTIMENT_CRITERIA = {
+    "Bullish": "Positive for equity markets: stock prices rising, benchmark index gains, market rally, interest rate cuts, economic expansion, capital inflows, corporate earnings beats.",
+    "Bearish": "Negative for equity markets: stock prices falling, benchmark index drops, worst monthly or weekly decline, interest rate hikes, capital outflows, market selloffs, recession fears, margin compression.",
+    "Neutral": "Balanced, flat, routine macroeconomic data, unchanged policy rates, or negligible directional market impact."
+}
+
 def score_sentiment(client, text: str, region_context: str) -> dict:
     """
     Sends the text and context to TypeSafe AI's Jev model using the official SDK.
+    Grounds choices in explicit financial market criteria to eliminate unconditioned Bullish bias.
     Computes Net Directional Probability Vector: P(Bullish) - P(Bearish) calibrated
     against the relative directional conviction to produce an accurate [-1.0, 1.0] score.
     """
     try:
-        # We define a structured State using our text and OKF Rules
-        state_content = f"""Regional Context (OKF Rules):
-{region_context}
+        # Structure state with target news headline first to focus embedding
+        state_content = f"""Target Financial News Event:
+{text}
 
-Text to analyze: {text}"""
+Macro Context & Regional Transmission Channels:
+{region_context}"""
 
-        # Jev evaluates states purely via predefined Choices
+        # Jev evaluates states via explicitly grounded Choices
         result = client.system_one(
             state=state_content,
             questions={
                 "direction": Choice(
-                    instructions="Determine the market direction implied by the text according to the OKF Rules.",
-                    criteria={"Bullish": None, "Bearish": None, "Neutral": None}
+                    instructions="Determine the directional market sentiment of this financial news event for regional benchmark equity indices:",
+                    criteria=SENTIMENT_CRITERIA
                 )
             }
         )
@@ -50,19 +60,22 @@ Text to analyze: {text}"""
         else:
             s_rel = 0.0
             
-        # Directional sentiment: if model decides Neutral, center at 0.0
-        if choice_str.lower() == "neutral":
+        # Conviction magnitude weighted by neutral attenuation
+        magnitude = abs(s_rel) * (1.0 - 0.5 * p_neut)
+            
+        # Directional sentiment assignment
+        if choice_str.lower() == "neutral" or abs(s_rel) < 0.05:
             directional_score = 0.0
             score_magnitude = 0.0
-        elif choice_str.lower() == "bearish":
-            # Scale by certainty (1 - 0.5 * P_neutral)
-            magnitude = abs(s_rel) * (1.0 - 0.5 * p_neut)
+            choice_str = "Neutral"
+        elif p_bear > p_bull:
             directional_score = -abs(magnitude)
             score_magnitude = abs(directional_score)
+            choice_str = "Bearish"
         else: # Bullish
-            magnitude = abs(s_rel) * (1.0 - 0.5 * p_neut)
             directional_score = abs(magnitude)
             score_magnitude = abs(directional_score)
+            choice_str = "Bullish"
             
         # Clamp to [-1.0, 1.0]
         directional_score = max(-1.0, min(1.0, directional_score))
@@ -128,16 +141,49 @@ async def run_ingestion_pipeline():
 
     # Initialize DB (Requires DATABASE_URL environment variable)
     db_client = None
+    existing_fingerprints = set()
     if os.environ.get("DATABASE_URL"):
         try:
             db_client = get_db_client()
+            with db_client.get_connection() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("""
+                        SELECT p.raw_text
+                        FROM event_payloads p
+                        JOIN event_signals s ON p.id = s.id
+                        WHERE s.timestamp >= NOW() - INTERVAL '48 hours';
+                    """)
+                    rows = cur.fetchall()
+                    for r in rows:
+                        if r[0]:
+                            existing_fingerprints.add(canonical_fingerprint(r[0]))
+            logger.info(f"Loaded {len(existing_fingerprints)} existing headline fingerprints from Supabase (last 48h).")
         except Exception as e:
-            logger.error(f"Failed to connect to database: {e}")
+            logger.error(f"Failed to connect to database or fetch recent fingerprints: {e}")
     else:
         logger.warning("DATABASE_URL not set. Skipping actual database insertion.")
     
-    # 2 & 3. Score and Insert
+    # Filter payloads against existing database records to prevent redundant scoring
+    fresh_payloads = []
+    seen_in_run = set()
     for item in payloads:
+        headline = item['data']['headline']
+        fp = canonical_fingerprint(headline)
+        if not fp:
+            continue
+        if fp in existing_fingerprints or fp in seen_in_run:
+            logger.info(f"Skipping duplicate/already-stored headline: {headline[:60]}...")
+            continue
+        seen_in_run.add(fp)
+        fresh_payloads.append(item)
+
+    logger.info(f"Deduplication summary: {len(payloads)} polled -> {len(fresh_payloads)} fresh payloads to score and store.")
+    if not fresh_payloads:
+        logger.info("All polled news items are already recorded in Supabase. Zero OPEX wasted.")
+        return
+
+    # 2 & 3. Score and Insert Fresh Payloads
+    for item in fresh_payloads:
         text = f"{item['data']['headline']} - {item['data']['summary']}"
         region = item['region_tag']
         ticker = item.get('index_ticker', 'UNKNOWN')

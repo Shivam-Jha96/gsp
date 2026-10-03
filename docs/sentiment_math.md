@@ -113,36 +113,36 @@ The **Ontological Knowledge Framework (OKF)** formalizes this regional macroecon
 
 Let $\mathcal{P}_t$ denote the real-time ingested payload consisting of headline $H_t$, body text $B_t$, and metadata $\Omega_t$. The contextual fusion operator $\Phi: (\mathcal{R}_r, \mathcal{P}_t) \to \mathbf{X}$ synthesizes the deterministic prompt state:
 
-$$\mathbf{X} = \Phi(\mathcal{R}_r, \mathcal{P}_t) = [\texttt{BOS}] \oplus \mathbf{T}_{\text{prompt-prefix}} \oplus \mathcal{R}_r \oplus \mathbf{T}_{\text{payload-prefix}} \oplus (H_t \circ B_t) \oplus [\texttt{EOS}]$$
+$$\mathbf{X} = \Phi(\mathcal{R}_r, \mathcal{P}_t) = [\texttt{BOS}] \oplus \mathbf{T}_{\text{payload-prefix}} \oplus (H_t \circ B_t) \oplus \mathbf{T}_{\text{macro-prefix}} \oplus \mathcal{R}_r \oplus [\texttt{EOS}]$$
 
-Specifically, the prompt string is formatted as:
+Specifically, to prevent context dilution and ensure the embedding head attends primarily to the incoming event, the target news event is positioned first:
 
 ```text
-Regional Context (OKF Rules):
-<Markdown Rule 1: Fed Rate Decisions vs Inflation>
-<Markdown Rule 2: CPI and Nominal Yield Pressures>
-<Markdown Rule 3: Labor Market & Wage Spirals>
-<Markdown Rule 4: Structural Tariffs & Supply Chain Friction>
-<Markdown Rule 5: Secular Tech/AI Productivity Offsets>
+Target Financial News Event:
+<Ingested Headline> - <Ingested Raw Text Snippet>
 
-Text to analyze:
-Headline: <Ingested Headline>
-Body: <Ingested Raw Text Snippet>
+Macro Context & Regional Transmission Channels:
+<Regional OKF Markdown Rules>
 ```
 
-### 3.2 Bidirectional Self-Attention Cross-Conditioning
+### 3.2 Grounded Hypothesis Anchor Formulations
 
-When $\mathbf{X}$ is ingested by the Transformer encoder, the self-attention mechanism computes pairwise token interactions across all $N$ tokens:
+In metric hypersphere contrastive modeling, unconditioned token labels (e.g. evaluating against bare string labels `{"Bullish": None, "Bearish": None}`) suffer from an inherent lexical bias: financial corpus pre-training intrinsically clusters general equity vocabulary (*"shares"*, *"market"*, *"quarter"*, *"benchmark"*) closer to positive growth terminology than negative distress terms.
 
-$$\mathbf{A}_{i,j} = \text{Softmax}\left( \frac{\mathbf{q}_i \mathbf{k}_j^T}{\sqrt{d_k}} \right) = \frac{\exp\left( \frac{\mathbf{x}_i \mathbf{W}_Q \mathbf{W}_K^T \mathbf{x}_j^T}{\sqrt{d_k}} \right)}{\sum_{l=1}^N \exp\left( \frac{\mathbf{x}_i \mathbf{W}_Q \mathbf{W}_K^T \mathbf{x}_l^T}{\sqrt{d_k}} \right)}$$
+To eliminate this unconditioned bias, hypothesis vectors $\mathbf{a}_c$ are computed from rigorous, explicit macroeconomic criteria anchors $\mathcal{C}_c$:
 
-Because the OKF rules $\mathcal{R}_r$ reside within the same attention context window as the payload $\mathcal{P}_t$, the query vectors $\mathbf{q}$ from the news tokens attend directly to the key vectors $\mathbf{k}$ of the relevant OKF conditions. The resulting pooled embedding $\mathbf{z}$ is conditioned on the macroeconomic transmission mechanism defined by the regional policy regime.
+$$\mathbf{a}_c = \mathbf{W}_P \cdot \text{Encoder}(\mathcal{C}_c), \quad c \in \lbrace \text{Bullish}, \text{Bearish}, \text{Neutral} \rbrace$$
+
+where the explicit criteria formulations are:
+* **$\mathcal{C}_{\text{Bullish}}$**: *"Positive for equity markets: stock prices rising, benchmark index gains, market rally, interest rate cuts, economic expansion, capital inflows, corporate earnings beats."*
+* **$\mathcal{C}_{\text{Bearish}}$**: *"Negative for equity markets: stock prices falling, benchmark index drops, worst monthly or weekly decline, interest rate hikes, capital outflows, market selloffs, recession fears, margin compression."*
+* **$\mathcal{C}_{\text{Neutral}}$**: *"Balanced, flat, routine macroeconomic data, unchanged policy rates, or negligible directional market impact."*
 
 ---
 
 ## 4. Tri-Partite Probability Extraction
 
-Let $\tau > 0$ denote the learned temperature hyperparameter scaling the metric hypersphere projection. For each canonical hypothesis anchor $c \in \lbrace \text{Bullish}, \text{Bearish}, \text{Neutral} \rbrace$, the scaled similarity logit $u_c$ is:
+Let $\tau > 0$ denote the learned temperature hyperparameter scaling the metric hypersphere projection. For each grounded canonical hypothesis anchor $c \in \lbrace \text{Bullish}, \text{Bearish}, \text{Neutral} \rbrace$, the scaled similarity logit $u_c$ is:
 
 $$u_c = \frac{\langle \mathbf{z}, \mathbf{a}_c \rangle}{\tau}$$
 

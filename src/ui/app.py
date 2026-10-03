@@ -394,6 +394,27 @@ if os.environ.get("DATABASE_URL") and not df_payloads.empty and 'raw_text' in df
     except Exception as filter_err:
         pass
 
+# Real-time deduplication gatekeeper:
+# Dynamically eliminates redundant entries for the same headline across multiple index tickers
+if not df_payloads.empty and 'raw_text' in df_payloads.columns and 'id' in df_payloads.columns:
+    try:
+        from ingestion.dedup import canonical_fingerprint
+        seen_fps = set()
+        unique_ids = set()
+        df_sorted = df_payloads.sort_values('timestamp', ascending=False)
+        for _, row in df_sorted.iterrows():
+            fp = canonical_fingerprint(str(row.get('raw_text', '')))
+            if fp and fp not in seen_fps:
+                seen_fps.add(fp)
+                unique_ids.add(row['id'])
+
+        if unique_ids:
+            df_payloads = df_payloads[df_payloads['id'].isin(unique_ids)].copy()
+            if 'id' in df_signals.columns:
+                df_signals = df_signals[df_signals['id'].isin(unique_ids)].copy()
+    except Exception as dedup_err:
+        pass
+
 # Enforce strict cutoff floor: 12:00 PM IST on September 30, 2026 (06:30 AM UTC)
 DATA_CUTOFF_FLOOR = pd.Timestamp("2026-09-30 06:30:00", tz="UTC")
 
