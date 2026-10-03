@@ -96,8 +96,7 @@ class RegionalAffinityClassifier:
 
         # 2. Cross-Region Contaminant Detected
         if affinities:
-            dominant_region = max(affinities, key=affinities.get)
-            dom_score = affinities[dominant_region]
+            dominant_region, dom_score = max(affinities.items(), key=lambda item: item[1])
 
             if allow_reroute and dom_score >= 3.0:
                 # Find matching ticker in dominant region if present
