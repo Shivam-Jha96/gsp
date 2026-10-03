@@ -17,8 +17,15 @@ if not api_key:
     exit(1)
 
 client = genai.Client(api_key=api_key.strip())
-# Ordered list of models to try (fallback on 503 high-demand or 404 errors)
-MODEL_FALLBACKS = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.5-flash-lite"]
+# Ordered list of models to try (reliable production models first, followed by fallbacks)
+MODEL_FALLBACKS = [
+    "gemini-2.5-flash",
+    "gemini-2.0-flash",
+    "gemini-1.5-flash",
+    "gemini-3.7-flash",
+    "gemini-2.5-pro",
+    "gemini-1.5-pro"
+]
 
 # Rate limiting guardrails to stay strictly below Google Gemini 15 RPM free-tier quota
 MIN_REQUEST_INTERVAL = 6.0   # Mandatory 6.0s spacing between all API dispatches (<= 10 RPM ceiling)
@@ -146,15 +153,15 @@ Output ONLY raw Markdown text. Do NOT wrap it in code blocks.
 """
     # Try each fallback model with retries
     for model_id in MODEL_FALLBACKS:
-        for attempt in range(3):
+        for attempt in range(2):
             try:
-                logger.info(f"  Trying model={model_id} (attempt {attempt + 1}/3)...")
+                logger.info(f"  Trying model={model_id} (attempt {attempt + 1}/2)...")
                 response = await rate_limited_generate(client, model_id, prompt)
                 new_content = response.text
                 
                 if not new_content or len(new_content.strip()) < 80:
                     logger.warning(f"  Empty response from {model_id}, retrying...")
-                    await asyncio.sleep(6)
+                    await asyncio.sleep(4)
                     continue
 
                 # Strip potential markdown fencing the LLM might hallucinate
@@ -174,23 +181,23 @@ Output ONLY raw Markdown text. Do NOT wrap it in code blocks.
                 is_not_found = "404" in error_upper or "NOT_FOUND" in error_upper
 
                 if is_rate_limit:
-                    wait = 15 * (attempt + 1)  # 15s, 30s, 45s exponential backoff
-                    logger.warning(f"  [QUOTA/429] Rate limit hit on {model_id} (attempt {attempt + 1}/3). Backing off for {wait}s...")
+                    wait = 12 * (attempt + 1)  # 12s, 24s backoff
+                    logger.warning(f"  [QUOTA/429] Rate limit hit on {model_id} (attempt {attempt + 1}/2). Backing off for {wait}s...")
                     await asyncio.sleep(wait)
                 elif is_unavailable:
-                    wait = 8 * (attempt + 1)  # 8s, 16s, 24s backoff
-                    logger.warning(f"  [503/UNAVAILABLE] {model_id} busy (attempt {attempt + 1}/3), retrying in {wait}s...")
+                    wait = 4 * (attempt + 1)  # 4s, 8s backoff
+                    logger.warning(f"  [503/UNAVAILABLE] {model_id} busy on Google servers (attempt {attempt + 1}/2). Retrying in {wait}s...")
                     await asyncio.sleep(wait)
                 elif is_not_found:
-                    logger.warning(f"  [404] {model_id} not found, trying next fallback model...")
+                    logger.warning(f"  [404] {model_id} not found, failing over to next model...")
                     break  # Skip to next model
                 else:
                     logger.error(f"  Unexpected error with {model_id}: {e}")
                     break  # Skip to next model
 
         # Cooldown before switching to next fallback model to avoid immediately hitting project-level quota
-        logger.info(f"  Cooling down 8s before trying next fallback model...")
-        await asyncio.sleep(8)
+        logger.info(f"  Failing over to next fallback model in chain...")
+        await asyncio.sleep(3)
     
     logger.error(f"All models failed for {region_data['name']}. OKF not updated.")
 
