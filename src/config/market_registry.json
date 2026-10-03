@@ -12,32 +12,70 @@
       {
         "ticker": "Nifty 50",
         "search_term": "%22Nifty+50%22+market",
-        "aliases": ["nifty 50", "nifty50", "nifty", "nse"]
+        "aliases": [
+          "nifty 50",
+          "nifty50",
+          "nifty",
+          "nse"
+        ],
+        "asset_class": "equity"
       },
       {
         "ticker": "Sensex",
         "search_term": "%22Sensex%22+market",
-        "aliases": ["sensex", "bse sensex", "bse"]
+        "aliases": [
+          "sensex",
+          "bse sensex",
+          "bse"
+        ],
+        "asset_class": "equity"
       },
       {
         "ticker": "Nifty Bank",
         "search_term": "%22Nifty+Bank%22+index",
-        "aliases": ["nifty bank", "bank nifty", "banknifty"]
+        "aliases": [
+          "nifty bank",
+          "bank nifty",
+          "banknifty"
+        ],
+        "asset_class": "equity"
       },
       {
         "ticker": "Nifty IT",
         "search_term": "%22Nifty+IT%22+index",
-        "aliases": ["nifty it", "indian it"]
+        "aliases": [
+          "nifty it",
+          "indian it"
+        ],
+        "asset_class": "equity"
       },
       {
         "ticker": "BSE Midcap",
         "search_term": "%22BSE+Midcap%22+market",
-        "aliases": ["bse midcap", "nifty midcap", "midcap india"]
+        "aliases": [
+          "bse midcap",
+          "nifty midcap",
+          "midcap india"
+        ],
+        "asset_class": "equity"
       }
     ],
     "anchors": [
-      "rbi", "reserve bank of india", "rupee", "inr", "dalal street",
-      "india", "indian", "mumbai", "gift nifty", "fpi", "dii", "nifty", "sensex", "bse", "nse"
+      "rbi",
+      "reserve bank of india",
+      "rupee",
+      "inr",
+      "dalal street",
+      "india",
+      "indian",
+      "mumbai",
+      "gift nifty",
+      "fpi",
+      "dii",
+      "nifty",
+      "sensex",
+      "bse",
+      "nse"
     ],
     "macro_queries": [
       "Reserve Bank of India RBI repo rate",
@@ -60,33 +98,76 @@
       {
         "ticker": "S&P 500",
         "search_term": "%22S%26P+500%22+market",
-        "aliases": ["s&p 500", "s&p500", "sp500", "s&p"]
+        "aliases": [
+          "s&p 500",
+          "s&p500",
+          "sp500",
+          "s&p"
+        ],
+        "asset_class": "equity"
       },
       {
         "ticker": "NASDAQ",
         "search_term": "%22NASDAQ%22+market",
-        "aliases": ["nasdaq", "nasdaq 100", "qqq"]
+        "aliases": [
+          "nasdaq",
+          "nasdaq 100",
+          "qqq"
+        ],
+        "asset_class": "equity"
       },
       {
         "ticker": "Dow Jones",
         "search_term": "%22Dow+Jones%22+market",
-        "aliases": ["dow jones", "dow", "djia"]
+        "aliases": [
+          "dow jones",
+          "dow",
+          "djia"
+        ],
+        "asset_class": "equity"
       },
       {
         "ticker": "Russell 2000",
         "search_term": "%22Russell+2000%22+market",
-        "aliases": ["russell 2000", "russell", "rut"]
+        "aliases": [
+          "russell 2000",
+          "russell",
+          "rut"
+        ],
+        "asset_class": "equity"
       },
       {
         "ticker": "VIX",
         "search_term": "%22VIX%22+volatility+index",
-        "aliases": ["vix", "cboe volatility", "volatility index"]
+        "aliases": [
+          "vix",
+          "cboe volatility",
+          "volatility index"
+        ],
+        "asset_class": "volatility"
       }
     ],
     "anchors": [
-      "fed", "federal reserve", "jerome powell", "treasury", "treasuries",
-      "dollar", "usd", "wall street", "u.s.", "united states", "american", "us stocks", "us markets",
-      "us", "us equities", "jobs data", "labor market", "non-farm", "cpi", "fomc"
+      "fed",
+      "federal reserve",
+      "jerome powell",
+      "treasury",
+      "treasuries",
+      "dollar",
+      "usd",
+      "wall street",
+      "u.s.",
+      "united states",
+      "american",
+      "us stocks",
+      "us markets",
+      "us",
+      "us equities",
+      "jobs data",
+      "labor market",
+      "non-farm",
+      "cpi",
+      "fomc"
     ],
     "macro_queries": [
       "Federal Reserve interest rate decision",
@@ -109,33 +190,71 @@
       {
         "ticker": "FTSE 100",
         "search_term": "%22FTSE+100%22+market",
-        "aliases": ["ftse 100", "ftse100", "footsie"]
+        "aliases": [
+          "ftse 100",
+          "ftse100",
+          "footsie"
+        ],
+        "asset_class": "equity"
       },
       {
         "ticker": "FTSE 250",
         "search_term": "%22FTSE+250%22+market",
-        "aliases": ["ftse 250", "ftse250"]
+        "aliases": [
+          "ftse 250",
+          "ftse250"
+        ],
+        "asset_class": "equity"
       },
       {
         "ticker": "FTSE All-Share",
         "search_term": "%22FTSE+All-Share%22",
-        "aliases": ["ftse all-share", "ftse all share", "ftas"]
+        "aliases": [
+          "ftse all-share",
+          "ftse all share",
+          "ftas"
+        ],
+        "asset_class": "equity"
       },
       {
         "ticker": "FTSE AIM",
         "search_term": "%22FTSE+AIM%22+UK",
-        "aliases": ["ftse aim", "aim market uk", "ftse aim all-share"]
+        "aliases": [
+          "ftse aim",
+          "aim market uk",
+          "ftse aim all-share"
+        ],
+        "asset_class": "equity"
       },
       {
         "ticker": "UK Gilts",
         "search_term": "%22UK+Gilts%22+yields",
-        "aliases": ["uk gilts", "gilt yields", "british gilts", "gilts"]
+        "aliases": [
+          "uk gilts",
+          "gilt yields",
+          "british gilts",
+          "gilts"
+        ],
+        "asset_class": "fixed_income"
       }
     ],
     "anchors": [
-      "bank of england", "boe", "andrew bailey", "pound", "sterling",
-      "gbp", "gilt", "gilts", "london", "uk market", "uk stocks", "britain", "british", "uk economy",
-      "ftas", "uk equities"
+      "bank of england",
+      "boe",
+      "andrew bailey",
+      "pound",
+      "sterling",
+      "gbp",
+      "gilt",
+      "gilts",
+      "london",
+      "uk market",
+      "uk stocks",
+      "britain",
+      "british",
+      "uk economy",
+      "ftas",
+      "uk equities"
     ],
     "macro_queries": [
       "Bank of England interest rate decision",
@@ -158,32 +277,66 @@
       {
         "ticker": "Nikkei 225",
         "search_term": "%22Nikkei+225%22+market",
-        "aliases": ["nikkei 225", "nikkei225", "nikkei"]
+        "aliases": [
+          "nikkei 225",
+          "nikkei225",
+          "nikkei"
+        ],
+        "asset_class": "equity"
       },
       {
         "ticker": "TOPIX",
         "search_term": "%22TOPIX%22+index",
-        "aliases": ["topix", "topix index"]
+        "aliases": [
+          "topix",
+          "topix index"
+        ],
+        "asset_class": "equity"
       },
       {
         "ticker": "JP Mothers",
         "search_term": "%22TOPIX%22+Growth+Japan",
-        "aliases": ["tse growth", "mothers index", "mothers japan", "jp mothers"]
+        "aliases": [
+          "tse growth",
+          "mothers index",
+          "mothers japan",
+          "jp mothers"
+        ],
+        "asset_class": "equity"
       },
       {
         "ticker": "JASDAQ",
         "search_term": "%22JASDAQ%22+market",
-        "aliases": ["jasdaq", "tse standard"]
+        "aliases": [
+          "jasdaq",
+          "tse standard"
+        ],
+        "asset_class": "equity"
       },
       {
         "ticker": "JP Bonds",
         "search_term": "%22JGB%22+yields+Japan",
-        "aliases": ["jgb", "jgb yields", "japan government bond", "japan bonds"]
+        "aliases": [
+          "jgb",
+          "jgb yields",
+          "japan government bond",
+          "japan bonds"
+        ],
+        "asset_class": "fixed_income"
       }
     ],
     "anchors": [
-      "bank of japan", "boj", "kazuo ueda", "yen", "jpy",
-      "tokyo", "tse", "jgb", "japan", "japanese", "ministry of finance"
+      "bank of japan",
+      "boj",
+      "kazuo ueda",
+      "yen",
+      "jpy",
+      "tokyo",
+      "tse",
+      "jgb",
+      "japan",
+      "japanese",
+      "ministry of finance"
     ],
     "macro_queries": [
       "Bank of Japan BOJ interest rate yield curve",

@@ -6,11 +6,16 @@ from typing import Dict, Any, List, Optional
 logger = logging.getLogger(__name__)
 
 _REGISTRY_CACHE: Optional[Dict[str, Any]] = None
+_ASSET_CLASSES_CACHE: Optional[Dict[str, Any]] = None
 _CONSTITUENTS_CACHE: Dict[str, Dict[str, List[Dict[str, Any]]]] = {}
 
 def get_registry_path() -> str:
     """Returns absolute path to market_registry.json."""
     return os.path.join(os.path.dirname(__file__), "market_registry.json")
+
+def get_asset_classes_path() -> str:
+    """Returns absolute path to asset_classes.json."""
+    return os.path.join(os.path.dirname(__file__), "asset_classes.json")
 
 def load_market_registry(force_reload: bool = False) -> Dict[str, Any]:
     """Loads and caches the market registry configuration."""
@@ -27,6 +32,23 @@ def load_market_registry(force_reload: bool = False) -> Dict[str, Any]:
 
     _REGISTRY_CACHE = data
     return _REGISTRY_CACHE
+
+def load_asset_classes(force_reload: bool = False) -> Dict[str, Any]:
+    """Loads and caches the asset classes configuration."""
+    global _ASSET_CLASSES_CACHE
+    if _ASSET_CLASSES_CACHE is not None and not force_reload:
+        return _ASSET_CLASSES_CACHE
+
+    ac_path = get_asset_classes_path()
+    if not os.path.exists(ac_path):
+        logger.warning(f"Asset classes configuration not found at: {ac_path}. Using empty.")
+        return {}
+
+    with open(ac_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    _ASSET_CLASSES_CACHE = data
+    return _ASSET_CLASSES_CACHE
 
 def get_all_region_codes() -> List[str]:
     """Returns list of all active region codes (e.g. ['IN', 'US', 'UK', 'JP'])."""
@@ -85,19 +107,22 @@ def build_rss_feeds() -> List[Dict[str, Any]]:
         for index_meta in region_meta.get("indices", []):
             ticker = index_meta["ticker"]
             search_term = index_meta["search_term"]
+            asset_class = index_meta.get("asset_class", "equity")
 
             # 1. Geotargeted General Market News
             feeds.append({
                 "url": f"https://news.google.com/rss/search?q={search_term}{locale_params}",
                 "region": region_code,
-                "ticker": ticker
+                "ticker": ticker,
+                "asset_class": asset_class
             })
 
             # 2. Geotargeted Reuters Institutional Channel
             feeds.append({
                 "url": f"https://news.google.com/rss/search?q={search_term}+site:reuters.com{locale_params}",
                 "region": region_code,
-                "ticker": ticker
+                "ticker": ticker,
+                "asset_class": asset_class
             })
 
     return feeds

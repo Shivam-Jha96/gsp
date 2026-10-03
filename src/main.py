@@ -11,30 +11,30 @@ from ingestion.dedup import canonical_fingerprint
 # AI Engine (TypeSafe AI - Jev System-One Model)
 from typesafe_sdk import TypeSafeClient, Choice
 
-# Grounded bipolar criteria to eliminate unconditioned Bullish bias and neutral flatlining
-SENTIMENT_CRITERIA = {
-    "Bullish": "Equity market optimism: stock prices rising, benchmark index gains, market rally, positive corporate growth, expansion.",
-    "Bearish": "Equity market pessimism: stock prices falling, benchmark index drops, market selloff, decline, warnings, downward pressure."
-}
+from config.market_registry import get_region_meta, load_asset_classes
 
-def score_sentiment(client, text: str, region_context: str = "", region_tag: str = "GLOBAL") -> dict:
+def score_sentiment(client, text: str, region_context: str = "", region_tag: str = "GLOBAL", asset_class: str = "equity") -> dict:
     """
     Sends the target financial news event to TypeSafe AI's Jev model using the official SDK.
-    Grounds choices in pure bipolar equity market momentum criteria (Bullish vs Bearish)
-    to eliminate neutral dampening and flatlining at 0.0000.
+    Grounds choices in asset-class aware bipolar criteria (Bullish vs Bearish)
+    to eliminate inverse bias for non-equity assets.
     Produces a continuous, calibrated directional score in [-1.0, 1.0].
     """
     try:
+        all_classes = load_asset_classes()
+        criteria = all_classes.get(asset_class, all_classes.get("equity", {}))
+        
         # Keep state focused on the target financial event to prevent context dilution
-        state_content = f"Target Financial News Event ({region_tag} Market):\n{text}"
+        formatted_asset_class = asset_class.replace('_', ' ').title()
+        state_content = f"Target Financial News Event ({region_tag} Market - {formatted_asset_class} Asset Class):\n{text}"
 
         # Jev evaluates states via explicitly grounded bipolar Choices
         result = client.system_one(
             state=state_content,
             questions={
                 "direction": Choice(
-                    instructions="Directional equity market sentiment of this financial news event:",
-                    criteria=SENTIMENT_CRITERIA
+                    instructions=f"Directional sentiment of this financial news event concerning the {formatted_asset_class} market:",
+                    criteria=criteria
                 )
             }
         )
@@ -83,7 +83,7 @@ from signal_engine.cron_jobs import cron_ema_trigger
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-from config.market_registry import get_region_meta
+
 
 def load_okf_rules(region_tag: str) -> str:
     """Loads the regional OKF markdown rules dynamically based on the market registry."""
@@ -168,13 +168,14 @@ async def run_ingestion_pipeline():
         text = f"{item['data']['headline']} - {item['data']['summary']}"
         region = item['region_tag']
         ticker = item.get('index_ticker', 'UNKNOWN')
+        asset_class = item.get('asset_class', 'equity')
         
         # Load context
         context = load_okf_rules(region)
         
         # Score via ZeroGPU CLM-8B (or Gemini SDK)
-        logger.info(f"Scoring [{region}] {ticker} headline: {item['data']['headline'][:50]}...")
-        result = score_sentiment(client, text, context, region_tag=region)
+        logger.info(f"Scoring [{region}] {ticker} ({asset_class}) headline: {item['data']['headline'][:50]}...")
+        result = score_sentiment(client, text, context, region_tag=region, asset_class=asset_class)
         
         # Guard against LLM formatting hallucinations (e.g., returning a list instead of a dict)
         if isinstance(result, list) and len(result) > 0:

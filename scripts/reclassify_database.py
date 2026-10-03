@@ -131,6 +131,16 @@ def run_deduplication(conn, do_purge=False):
 
     return duplicate_ids
 
+from config.market_registry import load_market_registry
+
+def get_asset_class_for_ticker(region: str, ticker: str) -> str:
+    registry = load_market_registry()
+    r_meta = registry.get(region, {})
+    for idx in r_meta.get("indices", []):
+        if idx.get("ticker") == ticker:
+            return idx.get("asset_class", "equity")
+    return "equity"
+
 def run_rescoring(conn, batch_limit=None):
     print("\n--- [STAGE 3] Grounded Sentiment Re-Scoring ---")
     typesafe_api_key = os.environ.get('TYPESAFE_API_KEY')
@@ -158,8 +168,9 @@ def run_rescoring(conn, batch_limit=None):
 
         for row in rows:
             rec_id, region, ticker, old_score, raw_text = row
+            asset_class = get_asset_class_for_ticker(region, ticker)
             context = load_okf_rules(region)
-            res = score_sentiment(client, str(raw_text or ""), context, region_tag=region)
+            res = score_sentiment(client, str(raw_text or ""), context, region_tag=region, asset_class=asset_class)
             new_score = float(res.get("DirectionalScore", 0.0))
 
             cur.execute("""

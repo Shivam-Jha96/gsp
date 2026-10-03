@@ -24,6 +24,7 @@ class FeedPoller:
         url = feed['url']
         region = feed['region']
         ticker = feed.get('ticker', 'UNKNOWN')
+        asset_class = feed.get('asset_class', 'equity')
         
         logger.info(f"Polling feed for [{region}] {ticker}: {url}")
         content = await self.client.fetch_feed(url)
@@ -43,6 +44,7 @@ class FeedPoller:
                 if validation:
                     item['market_region'] = validation['market_region']
                     item['index_ticker'] = validation['index_ticker']
+                    item['asset_class'] = asset_class
                     verified_items.append(item)
 
             logger.info(f"Retrieved {len(parsed_items)} raw items -> {len(verified_items)} verified for [{region}] {ticker}")
@@ -59,6 +61,7 @@ class FeedPoller:
                 "content_type": "news",
                 "region_tag": item["market_region"],
                 "index_ticker": item.get("index_ticker", "UNKNOWN"),
+                "asset_class": item.get("asset_class", "equity"),
                 "data": {
                     "headline": item["title"],
                     "summary": item["description"],
