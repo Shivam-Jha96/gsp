@@ -451,7 +451,11 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
             <span style="font-size: 0.72rem; font-weight: 700; color: #a78bfa; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">REGION</span>
         </div>
         """, unsafe_allow_html=True)
-        all_regions = ["IN", "US", "UK", "JP"]
+        try:
+            from config.market_registry import get_all_region_codes
+            all_regions = get_all_region_codes()
+        except Exception:
+            all_regions = ["IN", "US", "UK", "JP"]
         available_regions = df_signals['market_region'].unique().tolist()
         regions = [r for r in all_regions if r in available_regions] + [r for r in available_regions if r not in all_regions]
         if not regions:

@@ -2,64 +2,23 @@ import asyncio
 import logging
 from typing import List, Dict, Any
 from .api_clients import RSSClient
+from .classifier import RegionalAffinityClassifier
+from config.market_registry import build_rss_feeds
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Base tracking queries for global indices
-BASE_QUERIES = [
-    # United States (US)
-    ("US", "S&P 500", "S%26P+500+market"),
-    ("US", "NASDAQ", "NASDAQ+market"),
-    ("US", "Dow Jones", "Dow+Jones+market"),
-    ("US", "Russell 2000", "Russell+2000+market"),
-    ("US", "VIX", "VIX+volatility+index"),
-    
-    # India (IN)
-    ("IN", "Nifty 50", "Nifty+50+market"),
-    ("IN", "Sensex", "Sensex+market"),
-    ("IN", "Nifty Bank", "Nifty+Bank+index"),
-    ("IN", "Nifty IT", "Nifty+IT+index"),
-    ("IN", "BSE Midcap", "BSE+Midcap+market"),
-
-    # United Kingdom (UK)
-    ("UK", "FTSE 100", "FTSE+100+market"),
-    ("UK", "FTSE 250", "FTSE+250+market"),
-    ("UK", "FTSE All-Share", "FTSE+All-Share"),
-    ("UK", "FTSE AIM", "FTSE+AIM+UK"),
-    ("UK", "UK Gilts", "UK+Gilt+Yields"),
-    
-    # Japan (JP)
-    ("JP", "Nikkei 225", "Nikkei+225+market"),
-    ("JP", "TOPIX", "TOPIX+index"),
-    ("JP", "JP Mothers", "Mothers+Index+Japan"),
-    ("JP", "JASDAQ", "JASDAQ+market"),
-    ("JP", "JP Bonds", "JGB+Yields+Japan")
-]
-
-# Dynamically generate FEEDS to include both General News and Reuters-specific news
-FEEDS = []
-for region, ticker, query in BASE_QUERIES:
-    # 1. General Global News Aggregation
-    FEEDS.append({
-        "url": f"https://news.google.com/rss/search?q={query}",
-        "region": region, 
-        "ticker": ticker
-    })
-    # 2. Strict Reuters-Only Aggregation
-    FEEDS.append({
-        "url": f"https://news.google.com/rss/search?q={query}+site:reuters.com",
-        "region": region, 
-        "ticker": ticker
-    })
+# Dynamically generated from the declarative market registry with geotargeting and exact quotes
+FEEDS = build_rss_feeds()
 
 class FeedPoller:
-    def __init__(self, feeds: List[Dict[str, str]]):
-        self.feeds = feeds
+    def __init__(self, feeds: List[Dict[str, str]] = None):
+        self.feeds = feeds if feeds is not None else FEEDS
         self.client = RSSClient()
+        self.classifier = RegionalAffinityClassifier()
 
     async def poll_feed(self, feed: Dict[str, str]) -> List[Dict[str, Any]]:
-        """Poll a single feed and prepare payloads."""
+        """Poll a single feed, parse items, and validate via RegionalAffinityClassifier."""
         url = feed['url']
         region = feed['region']
         ticker = feed.get('ticker', 'UNKNOWN')
@@ -69,12 +28,23 @@ class FeedPoller:
         
         if content:
             parsed_items = self.client.parse_feed(content, region)
-            # Inject ticker into the payload metadata
+            verified_items = []
+
             for item in parsed_items:
-                item['index_ticker'] = ticker
-                
-            logger.info(f"Retrieved {len(parsed_items)} items for {ticker}")
-            return parsed_items
+                validation = self.classifier.classify_and_validate(
+                    headline=item.get("title", ""),
+                    summary=item.get("description", ""),
+                    expected_region=region,
+                    expected_ticker=ticker,
+                    allow_reroute=False
+                )
+                if validation:
+                    item['market_region'] = validation['market_region']
+                    item['index_ticker'] = validation['index_ticker']
+                    verified_items.append(item)
+
+            logger.info(f"Retrieved {len(parsed_items)} raw items -> {len(verified_items)} verified for [{region}] {ticker}")
+            return verified_items
         return []
 
     def prepare_payloads(self, items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:

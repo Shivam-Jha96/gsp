@@ -46,53 +46,32 @@ async def rate_limited_generate(client, model_id: str, prompt: str):
     _last_request_time = time.time()
     return response
 
+from config.market_registry import load_market_registry
+
+# Dynamically loaded from declarative market registry
+_REGISTRY = load_market_registry()
 REGIONS = {
-    "US": {
-        "name": "United States",
-        "file": "knowledge/us_macro.okf.md",
-        "search_queries": [
-            "Federal Reserve interest rate decision",
-            "US CPI inflation data",
-            "US economy GDP jobs"
-        ]
-    },
-    "IN": {
-        "name": "India",
-        "file": "knowledge/india_macro.okf.md",
-        "search_queries": [
-            "Reserve Bank of India RBI repo rate",
-            "India inflation CPI data",
-            "India economy GDP FPI flows"
-        ]
-    },
-    "UK": {
-        "name": "United Kingdom",
-        "file": "knowledge/uk_macro.okf.md",
-        "search_queries": [
-            "Bank of England interest rate decision",
-            "UK inflation CPI data",
-            "UK economy GDP gilts"
-        ]
-    },
-    "JP": {
-        "name": "Japan",
-        "file": "knowledge/japan_macro.okf.md",
-        "search_queries": [
-            "Bank of Japan BOJ interest rate yield curve",
-            "Japan inflation CPI yen",
-            "Japan economy GDP Nikkei"
-        ]
+    code: {
+        "name": meta["name"],
+        "file": meta["okf_file"],
+        "search_queries": meta.get("macro_queries", []),
+        "locale": meta.get("locale", {"hl": "en-US", "gl": "US", "ceid": "US:en"})
     }
+    for code, meta in _REGISTRY.items()
 }
 
-def fetch_macro_news(queries: list, max_items_per_query: int = 5) -> str:
-    """Fetches recent macroeconomic news from Google News RSS across multiple queries."""
+def fetch_macro_news(queries: list, locale: dict = None, max_items_per_query: int = 5) -> str:
+    """Fetches recent macroeconomic news from Google News RSS across multiple queries with regional geotargeting."""
     all_items = []
     seen_titles = set()
     
+    hl = locale.get("hl", "en-US") if locale else "en-US"
+    gl = locale.get("gl", "US") if locale else "US"
+    ceid = locale.get("ceid", "US:en") if locale else "US:en"
+    
     for query in queries:
         encoded_query = quote(query)
-        url = f"https://news.google.com/rss/search?q={encoded_query}&hl=en-US&gl=US&ceid=US:en"
+        url = f"https://news.google.com/rss/search?q={encoded_query}&hl={hl}&gl={gl}&ceid={ceid}"
         
         feed = feedparser.parse(url)
         for entry in feed.entries[:max_items_per_query]:
@@ -119,8 +98,8 @@ def write_okf(filepath: str, content: str):
 async def update_region(region_code: str, region_data: dict):
     logger.info(f"Updating OKF for {region_data['name']} ({region_code})...")
     
-    # 1. Fetch recent macro news from multiple queries
-    news_context = fetch_macro_news(region_data["search_queries"])
+    # 1. Fetch recent macro news from multiple queries (geotargeted)
+    news_context = fetch_macro_news(region_data["search_queries"], locale=region_data.get("locale"))
     if not news_context:
         logger.warning(f"No news found for {region_data['name']}, skipping.")
         return

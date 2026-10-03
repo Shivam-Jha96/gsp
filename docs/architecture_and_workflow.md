@@ -172,37 +172,30 @@ sequenceDiagram
 * **Source Files:** [`src/ingestion/poller.py`](file:///d:/Dev/repos/gsp/src/ingestion/poller.py), [`src/ingestion/api_clients.py`](file:///d:/Dev/repos/gsp/src/ingestion/api_clients.py)
 * **Runtime & Dependencies:** Python 3.10+, `aiohttp>=3.11.12`, `xml.etree.ElementTree`, `asyncio`
 
-#### 1. Coverage Universe (20 Assets Across 4 Regions)
-The ingestion layer maintains strict regional tagging across 20 global macroeconomic indices and liquidity proxies:
+#### 1. Coverage Universe & Declarative Market Registry (`market_registry.json`)
+The ingestion layer is driven entirely by a single-source-of-truth declarative registry at [`src/config/market_registry.json`](file:///d:/Dev/repos/gsp/src/config/market_registry.json). Adding a new country to the global coverage universe requires solely appending an entry to the registry without modifying core ingestion code. Currently, it maintains active coverage across 20 global macroeconomic indices and proxies:
 
-| Region Code | Market Region | Tracked Indices / Proxies | Base Search Queries |
-| :--- | :--- | :--- | :--- |
-| **US** | United States | S&P 500, NASDAQ, Dow Jones, Russell 2000, VIX | `S&P+500+market`, `NASDAQ+market`, `Dow+Jones+market`, `Russell+2000+market`, `VIX+volatility+index` |
-| **IN** | India | Nifty 50, Sensex, Nifty Bank, Nifty IT, BSE Midcap | `Nifty+50+market`, `Sensex+market`, `Nifty+Bank+index`, `Nifty+IT+index`, `BSE+Midcap+market` |
-| **UK** | United Kingdom | FTSE 100, FTSE 250, FTSE All-Share, FTSE AIM, UK Gilts | `FTSE+100+market`, `FTSE+250+market`, `FTSE+All-Share`, `FTSE+AIM+UK`, `UK+Gilt+Yields` |
-| **JP** | Japan | Nikkei 225, TOPIX, JP Mothers, JASDAQ, JP Bonds | `Nikkei+225+market`, `TOPIX+index`, `Mothers+Index+Japan`, `JASDAQ+market`, `JGB+Yields+Japan` |
+| Region Code | Market Region | Currency | Geotargeting (`hl`, `gl`, `ceid`) | Tracked Indices / Proxies |
+| :--- | :--- | :--- | :--- | :--- |
+| **US** | United States | USD | `en-US`, `US`, `US:en` | S&P 500, NASDAQ, Dow Jones, Russell 2000, VIX |
+| **IN** | India | INR | `en-IN`, `IN`, `IN:en` | Nifty 50, Sensex, Nifty Bank, Nifty IT, BSE Midcap |
+| **UK** | United Kingdom | GBP | `en-GB`, `GB`, `GB:en` | FTSE 100, FTSE 250, FTSE All-Share, FTSE AIM, UK Gilts |
+| **JP** | Japan | JPY | `en-JP`, `JP`, `JP:en` | Nikkei 225, TOPIX, JP Mothers (TSE Growth), JASDAQ, JP Bonds |
 
-#### 2. Dual Query Channeling & Polling Architecture
-Each asset is mapped to two distinct polling URLs to ensure comprehensive news capture while prioritizing authoritative sources:
-1. **General News Channel:** `https://news.google.com/rss/search?q={query}`
-2. **Authoritative Reuters Channel:** `https://news.google.com/rss/search?q={query}+site:reuters.com`
+#### 2. Geotargeted Query Channeling & Polling Architecture
+Each asset is dynamically expanded by [`src/config/market_registry.py`](file:///d:/Dev/repos/gsp/src/config/market_registry.py) into two distinct geotargeted polling channels:
+1. **Geotargeted General News Channel:** `https://news.google.com/rss/search?q=%22{ticker}%22+market&hl={hl}&gl={gl}&ceid={ceid}`
+2. **Geotargeted Institutional Reuters Channel:** `https://news.google.com/rss/search?q=%22{ticker}%22+market+site:reuters.com&hl={hl}&gl={gl}&ceid={ceid}`
 
-This configuration generates 40 active RSS polling endpoints. `FeedPoller` executes these feeds asynchronously using `asyncio.gather(*tasks)` and a shared `aiohttp.ClientSession` with a total request timeout configured to 10 seconds.
+Exact quotation prevents Google from returning broad fuzzy keyword associations, while country geolocation parameters (`gl`, `ceid`) force the RSS indexer to return country-edition articles rather than defaulting to US-centric cloud runner editions. `FeedPoller` executes all 40 active endpoints asynchronously using `asyncio.gather(*tasks)` and a shared `aiohttp.ClientSession`.
 
-```python
-class FeedPoller:
-    def __init__(self, feeds: List[Dict[str, str]]):
-        self.feeds = feeds
-        self.client = RSSClient()
+#### 3. Deterministic Entity & Regional Affinity Gatekeeper (`classifier.py`)
+To mathematically prevent cross-region contamination (e.g., US Wall Street market wraps erroneously tagged under India, or Indian shares returned under UK FTSE queries), [`RegionalAffinityClassifier`](file:///d:/Dev/repos/gsp/src/ingestion/classifier.py) evaluates every parsed headline against a compiled regex entity trie:
+* **Ticker Affinity (Weight = 3.0):** Matches exact index ticker names and their aliases.
+* **Macroeconomic Anchor Affinity (Weight = 1.0):** Matches country-specific institutions, central banks, and currency anchors (`rbi`, `rupee`, `dalal street`, `fed`, `boe`, `boj`, `yen`, `gilt`).
+* **Verification Rule:** An item is only accepted into the pipeline if $\text{Affinity}(\text{ExpectedRegion}) > 0$. Cross-region contaminants where expected affinity is 0 but another region's affinity is high are automatically rejected and logged. Non-financial news (0 affinity across all regions) is dropped.
 
-    async def run(self):
-        tasks = [self.poll_feed(feed) for feed in self.feeds]
-        results = await asyncio.gather(*tasks)
-        all_items = [item for sublist in results for item in sublist]
-        return self.prepare_payloads(all_items)
-```
-
-#### 3. XML Parsing, Rate Control & Deduplication Logic
+#### 4. XML Parsing, Rate Control & Deduplication Logic
 * **Lightweight Parsing:** Rather than incurring the overhead of heavy third-party RSS libraries, [`RSSClient.parse_feed`](file:///d:/Dev/repos/gsp/src/ingestion/api_clients.py#L24-L54) uses Python's built-in `xml.etree.ElementTree` to parse raw XML into standard Python dictionaries containing title, link, published timestamp, and summary.
 * **Volume Limiting & Free-Tier Guard:** The parser applies a strict `items[:3]` slice per endpoint. Across 40 feeds, this generates a deterministic ceiling of at most 120 items per ingestion cycle, ensuring the downstream inference process stays well within API quotas and completes within standard CI/CD timeouts.
 * **Normalized Data Contract:**

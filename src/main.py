@@ -89,26 +89,21 @@ from signal_engine.cron_jobs import cron_ema_trigger
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
+from config.market_registry import get_region_meta
+
 def load_okf_rules(region_tag: str) -> str:
-    """Loads the regional OKF markdown rules based on the region tag."""
-    # Mapping region tags to their respective OKF files
-    file_map = {
-        "US": "us_macro.okf.md",
-        "IN": "india_macro.okf.md",
-        "UK": "uk_macro.okf.md",
-        "JP": "japan_macro.okf.md",
-    }
-    
-    filename = file_map.get(region_tag)
-    if not filename:
+    """Loads the regional OKF markdown rules dynamically based on the market registry."""
+    meta = get_region_meta(region_tag)
+    if not meta or not meta.get("okf_file"):
         return "No specific macro rules for this region."
         
-    filepath = os.path.join(os.path.dirname(os.path.dirname(__file__)), "knowledge", filename)
+    rel_path = meta["okf_file"]
+    filepath = os.path.join(os.path.dirname(os.path.dirname(__file__)), rel_path)
     try:
         with open(filepath, "r", encoding="utf-8") as f:
             return f.read()
     except FileNotFoundError:
-        logger.warning(f"Knowledge file {filename} not found.")
+        logger.warning(f"Knowledge file {filepath} not found.")
         return "No specific macro rules for this region."
 
 async def run_ingestion_pipeline():
