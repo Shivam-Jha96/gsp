@@ -432,14 +432,14 @@ if not df_signals.empty:
     # Calibrate historical records where magnitude was suppressed by the early rubric-score bug
     df_signals['sentiment_index'] = df_signals['sentiment_score'] * 100
     df_payloads['sentiment_index'] = df_payloads['sentiment_score'] * 100
-    # --- Page Header Banner (Dark Emerald Glassmorphism Card) ---
+    # --- Page Header Banner (Dark Sapphire Blue Glassmorphism Card) ---
     st.markdown("""
-    <div style="background: rgba(16, 185, 129, 0.07); border: 1px solid rgba(16, 185, 129, 0.22); border-left: 4px solid #10b981; border-radius: 8px; padding: clamp(10px, 2vw, 14px) clamp(12px, 2.5vw, 20px); margin-bottom: 14px; backdrop-filter: blur(10px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), 0 0 15px rgba(16, 185, 129, 0.06); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+    <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 58, 138, 0.22) 100%); border: 1px solid rgba(59, 130, 246, 0.28); border-left: 4px solid #3b82f6; border-radius: 8px; padding: clamp(10px, 2vw, 14px) clamp(12px, 2.5vw, 20px); margin-bottom: 14px; backdrop-filter: blur(10px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), 0 0 15px rgba(59, 130, 246, 0.08); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
         <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-            <div style="background-color: #10b981; color: #020617; padding: 4px 10px; border-radius: 5px; font-weight: 800; font-size: 1.1rem; letter-spacing: 1.5px; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); flex-shrink: 0;">GSP</div>
+            <div style="background: linear-gradient(135deg, #2563eb, #3b82f6); color: #ffffff; padding: 4px 10px; border-radius: 5px; font-weight: 800; font-size: 1.1rem; letter-spacing: 1.5px; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 12px rgba(59, 130, 246, 0.45); flex-shrink: 0;">GSP</div>
             <div>
                 <div style="font-size: clamp(1.05rem, 2.5vw, 1.35rem); font-weight: 700; color: #f8fafc; letter-spacing: -0.01em; font-family: 'Montserrat', sans-serif;">Global Sentiment Platform of Share Markets</div>
-                <div style="font-size: clamp(0.72rem, 1.6vw, 0.8rem); font-weight: 500; color: #a7f3d0; font-family: 'IBM Plex Sans', sans-serif;">Real-Time Global Quantitative Intelligence & Execution Engine</div>
+                <div style="font-size: clamp(0.72rem, 1.6vw, 0.8rem); font-weight: 500; color: #94a3b8; font-family: 'IBM Plex Sans', sans-serif;">Real-Time Global Quantitative Intelligence & Execution Engine</div>
             </div>
         </div>
         <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); color: #34d399; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; padding: 4px 10px; border-radius: 12px; text-transform: uppercase; flex-shrink: 0;">
