@@ -1,21 +1,25 @@
 # United Kingdom Macro Trading Rules
 
-## Rule 1: Divergent Monetary Policy vs. Federal Reserve
-- **Condition:** The Bank of England defies aggressive Fed rate-hike cycles, leaving rates unchanged while grappling with domestic fiscal uncertainty and sticky inflation printing at 3.1%.
-- **Action:** Bearish on GBP relative to USD; bullish on short-to-medium duration UK Gilts as terminal rate expectations decouple and price lower than US counterparts.
+## Rule 1: Monetary Policy Divergence vs. Federal Reserve
+- **Condition:** The Bank of England leaves the Bank Rate unchanged despite aggressive Federal Reserve rate-hike cycles, decoupling UK terminal rate expectations amid stagnant growth and dovish committee commentary.
+- **Action:** Bearish on GBP/USD; bullish on 2Y to 5Y UK Gilts relative to US Treasuries.
 
-## Rule 2: Energy Shock and Headline Inflation Pressures
-- **Condition:** Oil price shocks—compounded by geopolitical events like the Iran conflict—drive headline CPI inflation above the BoE target to 3.1%, squeezing household real incomes and weighing on consumer-facing sectors despite stagnant broader growth.
-- **Action:** Bearish on UK Consumer Discretionary equities (FTSE 250 consumer-facing retail and mortgage-sensitive cyclicals); bullish on UK Energy majors (FTSE 100 oil and gas constituents) as a direct inflation and geopolitical shock hedge.
+## Rule 2: Geopolitical Energy Shock and Headline Inflation Pressures
+- **Condition:** Geopolitical disruption (e.g., Iran conflict) drives crude oil and record diesel prices, pushing headline CPI above 3.0% (printing at 3.1%) and compressing real household disposable income despite flat broader GDP.
+- **Action:** Bullish on FTSE 100 Energy majors (integrated oil and gas); bearish on FTSE 250 Consumer Discretionary and retail equities.
 
-## Rule 3: Stagnant Growth and Fiscal Expansion Pressures
-- **Condition:** Monthly GDP prints show zero or negative growth (e.g., January stagnation) compounding with market anxiety over higher public spending and debt issuance under a new Prime Minister.
-- **Action:** Bearish on long-dated Gilts due to rising term premia and increased debt issuance risk; neutral to defensive on broader UK domestic equities (FTSE 250).
+## Rule 3: Fiscal Expansion, Issuance Supply, and Term Premia Steepening
+- **Condition:** Increased fiscal spending commitments and debt issuance under a new Prime Minister coincide with elevated term premia, preventing long-dated sovereign yields from declining alongside front-end policy expectations.
+- **Action:** Bearish on 10Y and 30Y UK Gilts; bullish on UK Gilt yield curve steepeners (2s10s and 5s30s).
 
-## Rule 4: Split Monetary Policy Committee (MPC) Dynamics
-- **Condition:** MPC members signal internal division—such as dovish members (e.g., Taylor) viewing rate hike cases as "not compelling" balanced against hawks warning of persistent inflation pressures and mismanaged external shocks.
-- **Action:** Expect heightened short-term volatility in short Sterling futures and SONIA swap curves around inflation, mortgage data, and labor market releases; maintain tactical range-bound trading strategies on the front end.
+## Rule 4: Divided Monetary Policy Committee (MPC) and Front-End Rate Volatility
+- **Condition:** MPC voting fractures between dovish members viewing incremental rate hikes as "not compelling" and critics warning of mishandled inflation shocks, generating heightened uncertainty around quarterly rate paths.
+- **Action:** Bullish on short Sterling and SONIA front-month implied volatility; tactical range-bound execution on 2Y Gilt yields around CPI and labor prints.
 
-## Rule 5: Financial Conditions and Corporate Resilience
-- **Condition:** Overall financial conditions remain relatively loose, providing a tactical tailwind to corporate liquidity and high-net-worth borrowing capacity despite structural energy shocks and domestic GDP stagnation.
-- **Action:** Bullish on UK Financials and export-heavy FTSE 100 multinationals that benefit from global revenue streams and currency depreciation, while insulating themselves from domestic consumer slowdowns.
+## Rule 5: Sterling Depreciation and Large-Cap Multinationals Outperformance
+- **Condition:** Relatively loose broad financial conditions and macro policy inertia sustain Sterling depreciation, conferring foreign currency earnings translation tailwinds on globally exposed UK corporates.
+- **Action:** Bullish on FTSE 100 international exporters and dollar-earning multinationals; bearish on GBP/EUR and GBP/USD spot.
+
+## Rule 6: Domestic Economic Stagnation and Consumer Credit Strain
+- **Condition:** Monthly GDP prints flatline at zero or turn negative while persistent headline energy and transport inflation erode discretionary cash flows and heighten retail mortgage sensitivities.
+- **Action:** Bearish on UK domestic homebuilders, mortgage lenders, and mid-cap domestic cyclicals (FTSE 250); neutral to bullish on defensive UK utilities and non-discretionary staples.

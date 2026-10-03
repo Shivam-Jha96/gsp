@@ -1,21 +1,25 @@
 # United States Macro Trading Rules
 
-## Rule 1: Federal Reserve Rate Hikes Amid Stubborn Inflation
-- **Condition:** Federal Reserve increases interest rates in response to persistent consumer price inflation or accelerating annual price prints.
-- **Action:** Bearish on Equities (SPY), Bullish on Yields (UST), and Bullish on USD.
+## Rule 1: Federal Reserve Monetary Tightening and Rate Lift-Off
+- **Condition:** The Federal Reserve initiates or accelerates an interest rate hiking cycle (e.g., 25 bps increases) amid persistent inflation, signaling sustained policy tightening despite political pushback.
+- **Action:** Bullish on the US Dollar (USD), Bullish on Short-End Treasury Yields (2Y UST), Bearish on Broad Equities (SPY), and Bearish on Long-Duration Treasuries (TLT).
 
-## Rule 2: Above-Expectations Consumer Price Index (CPI) Prints
-- **Condition:** Monthly or annual CPI prints (such as annual rates holding near 3.4%) meeting or exceeding consensus expectations, signaling entrenched price pressures that lock in Fed tightening.
-- **Action:** Bearish on Equities (SPY), Bullish on the US Dollar (USD), and Bearish on long-duration Fixed Income (TLT).
+## Rule 2: Persistent Consumer Price Pressures (CPI Sticking Above Target)
+- **Condition:** Monthly headline or core CPI prints accelerate or print stubbornly elevated (e.g., holding near or above 3.4% annualized), confirming entrenched cost pressures that cement terminal rate expectations.
+- **Action:** Bullish on USD, Bearish on Long-Duration Fixed Income (TLT), and Bearish on High-Multiple/Unprofitable Growth Equities.
 
-## Rule 3: Robust Labor Market Resilience and Wage Pressures
-- **Condition:** Solid employment numbers and low unemployment persist, complicating the macroeconomic outlook and prompting tighter monetary policy responses.
-- **Action:** Bearish on Bonds (Yields rise on anticipated Fed tightening), and Bullish on USD.
+## Rule 3: Resilient Labor Market Underlying Strength
+- **Condition:** Employment metrics demonstrate structural resilience and steady wage gains despite softening headline hiring numbers, preventing monetary easing and sustaining consumer demand.
+- **Action:** Bullish on USD, Bullish on Intermediate Treasury Yields (5Y/10Y UST), and Bearish on Core Fixed Income (AGG).
 
-## Rule 4: Structural Economic Shocks from Trade and Tariffs
-- **Condition:** Implementation or escalation of broad US tariffs (such as levies targeting Canada's auto industry) impacting domestic supply chains, regional GDP, and industrial sectors.
-- **Action:** Bearish on cyclical Equities and industrial sectors, Bullish on defensive assets and USD safe-haven flows.
+## Rule 4: Productivity Divergence via AI and Technology Capex
+- **Condition:** High-margin enterprise investments in artificial intelligence infrastructure and compute capacity sustain baseline GDP growth (e.g., sustaining ~2.2% output) independently of traditional credit cycle constraints.
+- **Action:** Bullish on Tech-Heavy Equities (QQQ) and Semiconductors (SMH), Bearish on Non-Tech Defensive Value and Capital-Intensive Small-Caps (IWM).
 
-## Rule 5: Productivity-Driven Growth Divergence via Tech and AI
-- **Condition:** Sustained private-sector artificial intelligence (AI) investments and technological innovation offset traditional monetary policy drags to keep baseline US economic growth and productivity in gear.
-- **Action:** Bullish on secular growth and tech-heavy Equities (QQQ) despite restrictive Fed policy rates.
+## Rule 5: Geopolitical Supply Shock and Energy Escalation
+- **Condition:** Military friction or geopolitical conflict involving major global energy corridors (e.g., Middle East/Iran war escalations) triggers risk-off sentiment and upward price shocks in crude oil.
+- **Action:** Bullish on Energy Commodities (WTI/Brent Crude), Bullish on USD as a global liquidity reserve, and Bearish on Consumer Discretionary (XLY) and Transportation Equities.
+
+## Rule 6: Trade Tariffs and Industrial Supply Chain Friction
+- **Condition:** Escalation or imposition of protectionist tariffs on critical cross-border trade flows (such as automotive and heavy industrial intermediate goods) generating supply bottlenecks and input cost inflation.
+- **Action:** Bearish on Cyclical Equities and Industrials (XLI), Bearish on Trade-Dependent Emerging Market FX, and Bullish on Domestic Safe-Haven Assets (USD, Short-Term T-Bills).
