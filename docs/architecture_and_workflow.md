@@ -81,7 +81,7 @@ flowchart TD
 
     subgraph S6["Presentation Layer (Streamlit Cloud)"]
         ST_APP["Macro-Sentiment Terminal<br/>(src/ui/app.py)"]
-        CALIBRATE["Historical Calibration Filter<br/>(8x Rescaling Engine)"]
+        CALIBRATE["Historical Calibration Filter<br/>(Floor Cutoff)"]
         TZ_ENGINE["Timezone Conversion Engine<br/>(IST, UTC, EST, GMT, JST)"]
         KPI_TILES["Dynamic Responsive KPI Cards<br/>(Optimism, Bias, Volume, Momentum)"]
         PLOTLY_AREA["Plotly Multi-Index Sentiment Surface<br/>(Overlapping Filled Areas + Region Mean)"]
@@ -473,13 +473,6 @@ To establish a pure Contrastive Language Model (CLM) regime and eliminate legacy
 * **Cutoff Baseline:** `2026-09-30 12:00:00+05:30` (06:30 AM UTC).
 * **Database Purge:** All legacy records prior to this timestamp in both `event_signals` and `event_payloads` were permanently excised from Supabase.
 * **Application Floor Filter:** [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py#L258-L270) applies `DATA_CUTOFF_FLOOR = pd.Timestamp("2026-09-30 06:30:00", tz="UTC")` immediately upon ingestion to guarantee all charts, KPI tiles, and news feeds reflect only the modern CLM era.
-* **Dynamic Historical Rescaling:** For transitional records where early CLM confidence was suppressed, a dynamic calibration filter rescales raw scores into the standardized $[-100, +100]$ index scale:
-
-```python
-clm_damped_mask_sig = (df_signals['sentiment_score'].abs() > 0.001) & (df_signals['sentiment_score'].abs() < 0.15)
-if clm_damped_mask_sig.any():
-    df_signals.loc[clm_damped_mask_sig, 'sentiment_score'] = df_signals.loc[clm_damped_mask_sig, 'sentiment_score'] * 8.0
-```
 
 #### 5. Real-Time Regional Relevance & Contaminant Gatekeeper
 To resolve historical data misclassifications (e.g. earlier US Wall Street headlines tagged under India, or non-financial items), [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py#L370-L395) evaluates loaded payloads in real time using [`RegionalAffinityClassifier`](file:///d:/Dev/repos/gsp/src/ingestion/classifier.py):

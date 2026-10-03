@@ -308,7 +308,7 @@ To eliminate neutral flatlining while retaining strict mathematical determinism,
 
 #### 1. Focused State Conditioning
 The state vector is constrained strictly to the target market event to maximize encoder attention density:
-$$\text{State} = \texttt{"Target Financial News Event (\{region_tag\} Market):\textbackslash n\{Headline\} - \{Summary\}"}$$
+$$\text{State} = \texttt{"Target Financial News Event (\{region\_tag\} Market):\backslash n\{Headline\} - \{Summary\}"}$$
 
 #### 2. Grounded Bipolar Momentum Criteria
 Evaluation is performed over two mutually exclusive, polarity-anchored criteria:

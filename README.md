@@ -193,6 +193,8 @@ gsp/
 ├── src/
 │   ├── ai_engine/              # Modal serverless GPU (CLM System-One)
 │   ├── config/                 # Declarative market registry & constituent loaders
+│   │   ├── asset_classes.json  # Global asset-class dynamic criteria (equity, fixed_income, etc.)
+│   │   └── market_registry.json
 │   ├── database/               # Supabase connection pooler & SQL schemas
 │   ├── ingestion/              # Async RSS poller, regional affinity classifier & deduplicator
 │   ├── knowledge_engine/       # Gemini-powered OKF updater
