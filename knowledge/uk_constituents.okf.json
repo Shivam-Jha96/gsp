@@ -1,0 +1,54 @@
+{
+  "region": "UK",
+  "name": "United Kingdom Index Constituents",
+  "indices": {
+    "FTSE 100": [
+      {"symbol": "AZN.L", "name": "AstraZeneca", "aliases": ["astrazeneca", "astra"]},
+      {"symbol": "SHEL.L", "name": "Shell", "aliases": ["shell plc", "shell"]},
+      {"symbol": "HSBA.L", "name": "HSBC Holdings", "aliases": ["hsbc holdings", "hsbc"]},
+      {"symbol": "ULVR.L", "name": "Unilever", "aliases": ["unilever"]},
+      {"symbol": "BP.L", "name": "BP", "aliases": ["bp plc", "british petroleum", "bp"]},
+      {"symbol": "GSK.L", "name": "GSK", "aliases": ["gsk plc", "glaxosmithkline", "gsk"]},
+      {"symbol": "BATS.L", "name": "British American Tobacco", "aliases": ["british american tobacco", "bat"]},
+      {"symbol": "DGE.L", "name": "Diageo", "aliases": ["diageo"]},
+      {"symbol": "RIO.L", "name": "Rio Tinto", "aliases": ["rio tinto"]},
+      {"symbol": "GLEN.L", "name": "Glencore", "aliases": ["glencore"]},
+      {"symbol": "BARC.L", "name": "Barclays", "aliases": ["barclays plc", "barclays"]},
+      {"symbol": "LLOY.L", "name": "Lloyds Banking Group", "aliases": ["lloyds banking group", "lloyds bank", "lloyds"]},
+      {"symbol": "NWG.L", "name": "NatWest Group", "aliases": ["natwest group", "natwest"]},
+      {"symbol": "LSEG.L", "name": "London Stock Exchange Group", "aliases": ["london stock exchange group", "lseg"]},
+      {"symbol": "RR.L", "name": "Rolls-Royce Holdings", "aliases": ["rolls-royce", "rolls royce"]},
+      {"symbol": "BA.L", "name": "BAE Systems", "aliases": ["bae systems", "bae"]},
+      {"symbol": "VOD.L", "name": "Vodafone Group", "aliases": ["vodafone group", "vodafone"]},
+      {"symbol": "TSCO.L", "name": "Tesco", "aliases": ["tesco plc", "tesco"]}
+    ],
+    "FTSE 250": [
+      {"symbol": "MKS.L", "name": "Marks & Spencer", "aliases": ["marks & spencer", "marks and spencer", "m&s"]},
+      {"symbol": "EZJ.L", "name": "easyJet", "aliases": ["easyjet"]},
+      {"symbol": "GRG.L", "name": "Greggs", "aliases": ["greggs"]},
+      {"symbol": "DLG.L", "name": "Direct Line", "aliases": ["direct line insurance", "direct line"]},
+      {"symbol": "GAW.L", "name": "Games Workshop", "aliases": ["games workshop"]},
+      {"symbol": "ITV.L", "name": "ITV", "aliases": ["itv plc", "itv"]},
+      {"symbol": "AML.L", "name": "Aston Martin Lagonda", "aliases": ["aston martin lagonda", "aston martin"]},
+      {"symbol": "DRX.L", "name": "Drax Group", "aliases": ["drax group", "drax"]}
+    ],
+    "FTSE All-Share": [
+      {"symbol": "FSV.L", "name": "Fidelity Special Values", "aliases": ["fidelity special values", "fidelity"]},
+      {"symbol": "SMT.L", "name": "Scottish Mortgage Investment Trust", "aliases": ["scottish mortgage investment trust", "scottish mortgage"]},
+      {"symbol": "TEM.L", "name": "Templeton Emerging Markets", "aliases": ["templeton emerging markets", "templeton"]}
+    ],
+    "FTSE AIM": [
+      {"symbol": "MUL.L", "name": "Mulberry Group", "aliases": ["mulberry group", "mulberry"]},
+      {"symbol": "ASC.L", "name": "ASOS", "aliases": ["asos plc", "asos"]},
+      {"symbol": "BOO.L", "name": "Boohoo Group", "aliases": ["boohoo group", "boohoo"]},
+      {"symbol": "FEVR.L", "name": "Fevertree Drinks", "aliases": ["fevertree drinks", "fevertree", "fever-tree"]},
+      {"symbol": "JET2.L", "name": "Jet2", "aliases": ["jet2 plc", "jet2"]},
+      {"symbol": "ITM.L", "name": "ITM Power", "aliases": ["itm power"]},
+      {"symbol": "CWR.L", "name": "Ceres Power Holdings", "aliases": ["ceres power holdings", "ceres power"]},
+      {"symbol": "STEADY.L", "name": "Steady Energy", "aliases": ["steady energy"]}
+    ],
+    "UK Gilts": [
+      {"symbol": "DMO", "name": "UK Debt Management Office", "aliases": ["debt management office", "uk dmo", "gilt-edged market", "hm treasury"]}
+    ]
+  }
+}

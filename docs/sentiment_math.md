@@ -297,6 +297,44 @@ $$\text{Range Interpretation:} \quad \begin{cases}
 -100.0 : & \text{Maximum Theoretical Contractionary / Risk-Off Conviction}
 \end{cases}$$
 
+### 7.4 Production Calibrated Bipolar Momentum Formulation (Zero Flatline Architecture)
+
+In production serverless deployments (`src/main.py`), an empirical challenge arose when providing the tri-partite `{Bullish, Bearish, Neutral}` choice alongside extensive raw OKF macro markdown dumps:
+
+1. **Context Dilution:** When hundreds of tokens of static macro theory (policy stances, inflation corridors) flooded the 2048-token context window, the 20-word headline became diluted, causing the contrastive encoder to anchor into general equilibrium and assign $P(\text{Neutral}) \in [0.85, 0.99]$.
+2. **Neutral Flatlining:** Under discrete gating ($C^* = \text{Neutral} \implies S = 0.0000$), virtually every headline—even clear directional shifts like corporate earnings beats or index rebalancing—collapsed to identically $+0.0000$, destroying the platform's ability to discern moderate and minor sentiment signals.
+
+To eliminate neutral flatlining while retaining strict mathematical determinism, the production inference pipeline in `src/main.py` implements **Focused Bipolar Equity Momentum Conditioning**:
+
+#### 1. Focused State Conditioning
+The state vector is constrained strictly to the target market event to maximize encoder attention density:
+$$\text{State} = \texttt{"Target Financial News Event (\{region_tag\} Market):\textbackslash n\{Headline\} - \{Summary\}"}$$
+
+#### 2. Grounded Bipolar Momentum Criteria
+Evaluation is performed over two mutually exclusive, polarity-anchored criteria:
+* **$\mathcal{C}_{\text{Bullish}}$**: *"Equity market optimism: stock prices rising, benchmark index gains, market rally, positive corporate growth, expansion."*
+* **$\mathcal{C}_{\text{Bearish}}$**: *"Equity market pessimism: stock prices falling, benchmark index drops, market selloff, decline, warnings, downward pressure."*
+
+#### 3. Continuous Directional Spread
+The continuous directional score $S \in [-1.0, 1.0]$ is computed directly as the probability spread across the bipolar simplex $\Delta^1$:
+$$S = P(\text{Bullish}) - P(\text{Bearish})$$
+where $P(\text{Bullish}) + P(\text{Bearish}) = 1.0$.
+
+#### 4. Dynamic Range & Categorical Labeling
+* $|S| < 0.05 \implies \text{Choice} = \text{"Neutral"}$ (Tight continuous equilibrium band)
+* $S \ge +0.05 \implies \text{Choice} = \text{"Bullish"}$
+* $S \le -0.05 \implies \text{Choice} = \text{"Bearish"}$
+
+This continuous formulation exhibits exceptional dynamic range across diverse real-world news categories:
+| Headline Sample | $P(\text{Bullish})$ | $P(\text{Bearish})$ | Score ($S$) | Classification | Market Context |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| *India worst month since March...* | $0.023$ | $0.977$ | **-0.954** | Bearish | Extreme Outflow / Structural Decline |
+| *Stocks fall as jobs data quiets...* | $0.085$ | $0.915$ | **-0.830** | Bearish | Macro Selloff / Monetary Caution |
+| *Moderna to replace WBD in index...* | $0.442$ | $0.558$ | **-0.116** | Bearish | Minor / Moderate Index Rebalance |
+| *Dow Futures Rise, Oil Tumble...* | $0.501$ | $0.499$ | **+0.002** | Neutral | Balanced Cross-Asset Forces |
+| *Mulberry global push turnaround...* | $0.659$ | $0.341$ | **+0.317** | Bullish | Moderate Corporate Growth |
+| *TCS steady Q2 revenue growth beat...* | $0.789$ | $0.211$ | **+0.579** | Bullish | Strong Corporate Earnings Outperformance |
+
 ---
 
 ## 8. Cross-Sectional Aggregation & Time-Series EMA Vector Calculation

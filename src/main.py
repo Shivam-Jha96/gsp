@@ -11,34 +11,29 @@ from ingestion.dedup import canonical_fingerprint
 # AI Engine (TypeSafe AI - Jev System-One Model)
 from typesafe_sdk import TypeSafeClient, Choice
 
-# Grounded directional criteria to eliminate unconditioned token bias
+# Grounded bipolar criteria to eliminate unconditioned Bullish bias and neutral flatlining
 SENTIMENT_CRITERIA = {
-    "Bullish": "Positive for equity markets: stock prices rising, benchmark index gains, market rally, interest rate cuts, economic expansion, capital inflows, corporate earnings beats.",
-    "Bearish": "Negative for equity markets: stock prices falling, benchmark index drops, worst monthly or weekly decline, interest rate hikes, capital outflows, market selloffs, recession fears, margin compression.",
-    "Neutral": "Balanced, flat, routine macroeconomic data, unchanged policy rates, or negligible directional market impact."
+    "Bullish": "Equity market optimism: stock prices rising, benchmark index gains, market rally, positive corporate growth, expansion.",
+    "Bearish": "Equity market pessimism: stock prices falling, benchmark index drops, market selloff, decline, warnings, downward pressure."
 }
 
-def score_sentiment(client, text: str, region_context: str) -> dict:
+def score_sentiment(client, text: str, region_context: str = "", region_tag: str = "GLOBAL") -> dict:
     """
-    Sends the text and context to TypeSafe AI's Jev model using the official SDK.
-    Grounds choices in explicit financial market criteria to eliminate unconditioned Bullish bias.
-    Computes Net Directional Probability Vector: P(Bullish) - P(Bearish) calibrated
-    against the relative directional conviction to produce an accurate [-1.0, 1.0] score.
+    Sends the target financial news event to TypeSafe AI's Jev model using the official SDK.
+    Grounds choices in pure bipolar equity market momentum criteria (Bullish vs Bearish)
+    to eliminate neutral dampening and flatlining at 0.0000.
+    Produces a continuous, calibrated directional score in [-1.0, 1.0].
     """
     try:
-        # Structure state with target news headline first to focus embedding
-        state_content = f"""Target Financial News Event:
-{text}
+        # Keep state focused on the target financial event to prevent context dilution
+        state_content = f"Target Financial News Event ({region_tag} Market):\n{text}"
 
-Macro Context & Regional Transmission Channels:
-{region_context}"""
-
-        # Jev evaluates states via explicitly grounded Choices
+        # Jev evaluates states via explicitly grounded bipolar Choices
         result = client.system_one(
             state=state_content,
             questions={
                 "direction": Choice(
-                    instructions="Determine the directional market sentiment of this financial news event for regional benchmark equity indices:",
+                    instructions="Directional equity market sentiment of this financial news event:",
                     criteria=SENTIMENT_CRITERIA
                 )
             }
@@ -46,36 +41,22 @@ Macro Context & Regional Transmission Channels:
         
         # Extract the structured decisions natively
         choice_obj = result.choices["direction"]
-        choice_str = choice_obj.choice.capitalize()
         probs = choice_obj.probabilities or {}
         
-        p_bull = float(probs.get("Bullish", 0.0))
-        p_bear = float(probs.get("Bearish", 0.0))
-        p_neut = float(probs.get("Neutral", 0.0))
+        p_bull = float(probs.get("Bullish", 0.5))
+        p_bear = float(probs.get("Bearish", 0.5))
         
-        # Relative directional spread: (P_bull - P_bear) / (P_bull + P_bear)
-        dir_sum = p_bull + p_bear
-        if dir_sum > 1e-5:
-            s_rel = (p_bull - p_bear) / dir_sum
-        else:
-            s_rel = 0.0
-            
-        # Conviction magnitude weighted by neutral attenuation
-        magnitude = abs(s_rel) * (1.0 - 0.5 * p_neut)
-            
-        # Directional sentiment assignment
-        if choice_str.lower() == "neutral" or abs(s_rel) < 0.05:
-            directional_score = 0.0
-            score_magnitude = 0.0
+        # Pure continuous directional spread in [-1.0, 1.0]
+        directional_score = p_bull - p_bear
+        score_magnitude = abs(directional_score)
+        
+        # Categorical label assignment
+        if abs(directional_score) < 0.05:
             choice_str = "Neutral"
-        elif p_bear > p_bull:
-            directional_score = -abs(magnitude)
-            score_magnitude = abs(directional_score)
-            choice_str = "Bearish"
-        else: # Bullish
-            directional_score = abs(magnitude)
-            score_magnitude = abs(directional_score)
+        elif p_bull > p_bear:
             choice_str = "Bullish"
+        else:
+            choice_str = "Bearish"
             
         # Clamp to [-1.0, 1.0]
         directional_score = max(-1.0, min(1.0, directional_score))
@@ -86,7 +67,7 @@ Macro Context & Regional Transmission Channels:
             "Score": score_magnitude,
             "DirectionalScore": directional_score,
             "Probabilities": probs,
-            "Noul": f"Evaluated via TypeSafe Jev (P_bull={p_bull:.2f}, P_bear={p_bear:.2f}, P_neut={p_neut:.2f})"
+            "Noul": f"Evaluated via TypeSafe Jev (P_bull={p_bull:.2f}, P_bear={p_bear:.2f})"
         }
         
     except Exception as e:
@@ -193,7 +174,7 @@ async def run_ingestion_pipeline():
         
         # Score via ZeroGPU CLM-8B (or Gemini SDK)
         logger.info(f"Scoring [{region}] {ticker} headline: {item['data']['headline'][:50]}...")
-        result = score_sentiment(client, text, context)
+        result = score_sentiment(client, text, context, region_tag=region)
         
         # Guard against LLM formatting hallucinations (e.g., returning a list instead of a dict)
         if isinstance(result, list) and len(result) > 0:

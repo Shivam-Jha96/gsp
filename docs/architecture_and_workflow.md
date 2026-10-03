@@ -189,13 +189,27 @@ Each asset is dynamically expanded by [`src/config/market_registry.py`](file:///
 
 Exact quotation prevents Google from returning broad fuzzy keyword associations, while country geolocation parameters (`gl`, `ceid`) force the RSS indexer to return country-edition articles rather than defaulting to US-centric cloud runner editions. `FeedPoller` executes all 40 active endpoints asynchronously using `asyncio.gather(*tasks)` and a shared `aiohttp.ClientSession`.
 
-#### 3. Deterministic Entity & Regional Affinity Gatekeeper (`classifier.py`)
-To mathematically prevent cross-region contamination (e.g., US Wall Street market wraps erroneously tagged under India, or Indian shares returned under UK FTSE queries), [`RegionalAffinityClassifier`](file:///d:/Dev/repos/gsp/src/ingestion/classifier.py) evaluates every parsed headline against a compiled regex entity trie:
-* **Ticker Affinity (Weight = 3.0):** Matches exact index ticker names and their aliases.
-* **Macroeconomic Anchor Affinity (Weight = 1.0):** Matches country-specific institutions, central banks, and currency anchors (`rbi`, `rupee`, `dalal street`, `fed`, `boe`, `boj`, `yen`, `gilt`).
-* **Verification Rule:** An item is only accepted into the pipeline if $\text{Affinity}(\text{ExpectedRegion}) > 0$. Cross-region contaminants where expected affinity is 0 but another region's affinity is high are automatically rejected and logged. Non-financial news (0 affinity across all regions) is dropped.
+#### 3. Deterministic Entity, Constituent Company & Regional Affinity Gatekeeper (`classifier.py`)
+To mathematically prevent cross-region contamination (e.g., US Wall Street market wraps erroneously tagged under India, or Indian shares returned under UK FTSE queries) while ensuring constituent company news is correctly recognized, [`RegionalAffinityClassifier`](file:///d:/Dev/repos/gsp/src/ingestion/classifier.py) evaluates every parsed headline against a multi-tier compiled regex entity trie:
+* **Index Ticker Affinity (Weight = 3.0):** Matches exact index ticker names and their aliases (e.g., `S&P 500`, `Nifty 50`, `FTSE 100`, `Nikkei 225`).
+* **Constituent Company Affinity (Weight = 2.0):** Dynamically compiled from declarative regional constituent files (`knowledge/*_constituents.okf.json`). Matches individual listed companies (e.g., `Apple`, `Nvidia`, `Mulberry`, `Steady Energy`, `Fidelity Special Values`, `TCS`, `Toyota`) and automatically resolves the article to its parent index ticker (e.g., Mulberry $\to$ FTSE AIM).
+* **Macroeconomic Anchor Affinity (Weight = 1.0):** Matches country-specific institutions, central banks, and currency anchors (`rbi`, `rupee`, `dalal street`, `fed`, `boe`, `boj`, `yen`, `gilt`, `london`).
+* **Verification & Rerouting Rules:**
+  - An item is accepted into the pipeline if $\text{Affinity}(\text{ExpectedRegion}) > 0$.
+  - If a constituent company is matched, the item's `index_ticker` is resolved directly to that company's parent index.
+  - Cross-region contaminants (where expected affinity is 0 but another region's affinity is high) are automatically rejected and logged.
+  - **Broad-Market Equity Action Heuristic:** If a feed item exhibits zero cross-region contaminant signals and contains market price-action vocabulary (`stocks`, `equities`, `rally`, `selloff`, `jobs data`), it is validated for the expected region rather than falsely discarded as noise.
 
-#### 4. XML Parsing, Rate Control & Deduplication Logic
+#### 4. Region-Wise Declarative Index Constituents (`knowledge/*_constituents.okf.json`)
+Indices are baskets of constituent companies. In practice, high-impact financial news frequently mentions individual companies rather than the abstract index ticker. GSP maintains declarative constituent registries per region:
+* [`knowledge/us_constituents.okf.json`](file:///d:/Dev/repos/gsp/knowledge/us_constituents.okf.json): S&P 500, NASDAQ, Dow Jones, Russell 2000 mega-caps and mid-caps.
+* [`knowledge/india_constituents.okf.json`](file:///d:/Dev/repos/gsp/knowledge/india_constituents.okf.json): Nifty 50, Sensex, Nifty Bank, Nifty IT leaders.
+* [`knowledge/uk_constituents.okf.json`](file:///d:/Dev/repos/gsp/knowledge/uk_constituents.okf.json): FTSE 100, FTSE 250, FTSE All-Share, and FTSE AIM constituents.
+* [`knowledge/japan_constituents.okf.json`](file:///d:/Dev/repos/gsp/knowledge/japan_constituents.okf.json): Nikkei 225, TOPIX, JP Mothers, JASDAQ constituents.
+
+[`src/config/market_registry.py`](file:///d:/Dev/repos/gsp/src/config/market_registry.py#L39-L68) provides `load_region_constituents(region_code)` with memoized caching.
+
+#### 5. XML Parsing, Rate Control & Deduplication Logic
 * **Lightweight Parsing:** Rather than incurring the overhead of heavy third-party RSS libraries, [`RSSClient.parse_feed`](file:///d:/Dev/repos/gsp/src/ingestion/api_clients.py#L24-L54) uses Python's built-in `xml.etree.ElementTree` to parse raw XML into standard Python dictionaries containing title, link, published timestamp, and summary.
 * **Volume Limiting & Free-Tier Guard:** The parser applies a strict `items[:3]` slice per endpoint. Across 40 feeds, this generates a deterministic ceiling of at most 120 items per ingestion cycle, ensuring the downstream inference process stays well within API quotas and completes within standard CI/CD timeouts.
 * **Normalized Data Contract:**
@@ -214,7 +228,7 @@ To mathematically prevent cross-region contamination (e.g., US Wall Street marke
 }
 ```
 
-#### 3. Universal Multi-Stage News Deduplication Engine
+#### 6. Universal Multi-Stage News Deduplication Engine
 To eliminate OPEX/CAPEX waste (redundant inference costs and duplicate database records), [`src/ingestion/dedup.py`](file:///d:/Dev/repos/gsp/src/ingestion/dedup.py) provides deterministic headline fingerprinting (`canonical_fingerprint()`):
 * **Intra-Run Deduplication:** In [`src/ingestion/poller.py`](file:///d:/Dev/repos/gsp/src/ingestion/poller.py#L77-L85), [`NewsDeduplicator`](file:///d:/Dev/repos/gsp/src/ingestion/dedup.py#L48-L82) filters the batch of polled items across all 20 ticker queries. If major publishers (Reuters, Bloomberg, etc.) appear in multiple feeds (e.g. Nifty 50 and Sensex), redundant copies are collapsed into a single canonical payload.
 * **Cross-Run Database Deduplication:** In [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py#L140-L175), before calling the AI engine, the pipeline queries recent headline fingerprints from Supabase for the last 48 hours. Any headline already present in storage is skipped, saving 100% of redundant inference calls.
@@ -229,15 +243,18 @@ To eliminate OPEX/CAPEX waste (redundant inference costs and duplicate database 
 Conventional generative AI models (System-Two) rely on autoregressive token-by-token generation, requiring hundreds of milliseconds to produce formatted JSON responses that frequently fail schema validation. GSP implements a **System-One Contrastive Language Model (CLM-8B)**:
 * **Backbone:** Frozen `Qwen/Qwen3-8B` language model acting as a semantic text encoder.
 * **Projection Heads:** Lightweight 20M-parameter contrastive heads (`Contrastive-LM/CLM-v0.1-8B`) trained via bidirectional InfoNCE loss.
-* **Disaggregated Embeddings:** State text (the news headline + regional macro context) and action candidates (`Bullish`, `Bearish`, `Neutral`) are embedded separately. Candidate vectors are cached in an in-memory vector arena on the GPU, reducing repeated scoring operations to simple matrix dot products ($s_i^\top a_j / \tau$) and softmax operations, yielding latencies under 60 milliseconds.
+* **Disaggregated Embeddings:** State text and candidate criteria vectors are embedded separately and compared in metric space, yielding latencies under 60 milliseconds.
 
-#### 2. Grounded Contrastive Criteria & Polarity Anchoring
-To prevent the inherent lexical positive bias of unconditioned language model embeddings (where financial words naturally associate with positive expansion terminology), [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py#L14-L21) explicitly grounds the contrastive hypotheses in concrete equity market outcomes:
-* **Bullish Anchor:** *"Positive for equity markets: stock prices rising, benchmark index gains, market rally, interest rate cuts, economic expansion, capital inflows, corporate earnings beats."*
-* **Bearish Anchor:** *"Negative for equity markets: stock prices falling, benchmark index drops, worst monthly or weekly decline, interest rate hikes, capital outflows, market selloffs, recession fears, margin compression."*
-* **Neutral Anchor:** *"Balanced, flat, routine macroeconomic data, unchanged policy rates, or negligible directional market impact."*
-
-This anchors the hypersphere projection so that severe drops, rate hikes, or outflows ("worst month since March") decisively project into negative conviction ($P(\text{Bearish}) \ge 0.85$).
+#### 2. Focused State Conditioning & Grounded Bipolar Momentum Scoring
+To eliminate context dilution (where 400 words of static OKF macro rules flooded the context window and caused the model to default to $P(\text{Neutral}) \ge 0.90$ with zero dynamic range), [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py#L20-L76) implements **Focused Bipolar Equity Momentum Conditioning**:
+* **State Text:** Constrained strictly to the target event with regional jurisdictional tagging:
+  $$\text{State} = \texttt{"Target Financial News Event (\{region_tag\} Market):\textbackslash n\{Headline\} - \{Summary\}"}$$
+* **Grounded Bipolar Choices:**
+  - **Bullish:** *"Equity market optimism: stock prices rising, benchmark index gains, market rally, positive corporate growth, expansion."*
+  - **Bearish:** *"Equity market pessimism: stock prices falling, benchmark index drops, market selloff, decline, warnings, downward pressure."*
+* **Continuous Calibrated Directional Score:**
+  $$S = P(\text{Bullish}) - P(\text{Bearish}) \in [-1.0, 1.0]$$
+  This captures minor and moderate company developments ($+0.10$ to $+0.35$), neutral balance ($+0.002$), and major macroeconomic shocks ($-0.85$ to $-0.95$), completely eliminating neutral flatlining.
 
 #### 3. Serverless Modal Deployment & Zero Cold-Boot ASGI Design
 To avoid connection proxy deadlocks and minimize cold-start latency, [`src/ai_engine/modal_app.py`](file:///d:/Dev/repos/gsp/src/ai_engine/modal_app.py) deploys the model directly to an NVIDIA A10G GPU using Modal's `@modal.asgi_app()` decorator:

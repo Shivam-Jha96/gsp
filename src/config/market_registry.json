@@ -44,7 +44,8 @@
       "India inflation CPI data",
       "India economy GDP FPI flows"
     ],
-    "okf_file": "knowledge/india_macro.okf.md"
+    "okf_file": "knowledge/india_macro.okf.md",
+    "constituents_file": "knowledge/india_constituents.okf.json"
   },
   "US": {
     "name": "United States",
@@ -84,14 +85,16 @@
     ],
     "anchors": [
       "fed", "federal reserve", "jerome powell", "treasury", "treasuries",
-      "dollar", "usd", "wall street", "u.s.", "united states", "american", "us stocks", "us markets"
+      "dollar", "usd", "wall street", "u.s.", "united states", "american", "us stocks", "us markets",
+      "us", "us equities", "jobs data", "labor market", "non-farm", "cpi", "fomc"
     ],
     "macro_queries": [
       "Federal Reserve interest rate decision",
       "US CPI inflation data",
       "US economy GDP jobs"
     ],
-    "okf_file": "knowledge/us_macro.okf.md"
+    "okf_file": "knowledge/us_macro.okf.md",
+    "constituents_file": "knowledge/us_constituents.okf.json"
   },
   "UK": {
     "name": "United Kingdom",
@@ -116,12 +119,12 @@
       {
         "ticker": "FTSE All-Share",
         "search_term": "%22FTSE+All-Share%22",
-        "aliases": ["ftse all-share", "ftse all share"]
+        "aliases": ["ftse all-share", "ftse all share", "ftas"]
       },
       {
         "ticker": "FTSE AIM",
         "search_term": "%22FTSE+AIM%22+UK",
-        "aliases": ["ftse aim", "aim market uk"]
+        "aliases": ["ftse aim", "aim market uk", "ftse aim all-share"]
       },
       {
         "ticker": "UK Gilts",
@@ -131,14 +134,16 @@
     ],
     "anchors": [
       "bank of england", "boe", "andrew bailey", "pound", "sterling",
-      "gbp", "gilt", "gilts", "london", "uk market", "uk stocks", "britain", "british", "uk economy"
+      "gbp", "gilt", "gilts", "london", "uk market", "uk stocks", "britain", "british", "uk economy",
+      "ftas", "uk equities"
     ],
     "macro_queries": [
       "Bank of England interest rate decision",
       "UK inflation CPI data",
       "UK economy GDP gilts"
     ],
-    "okf_file": "knowledge/uk_macro.okf.md"
+    "okf_file": "knowledge/uk_macro.okf.md",
+    "constituents_file": "knowledge/uk_constituents.okf.json"
   },
   "JP": {
     "name": "Japan",
@@ -185,6 +190,7 @@
       "Japan inflation CPI yen",
       "Japan economy GDP Nikkei"
     ],
-    "okf_file": "knowledge/japan_macro.okf.md"
+    "okf_file": "knowledge/japan_macro.okf.md",
+    "constituents_file": "knowledge/japan_constituents.okf.json"
   }
 }

@@ -6,6 +6,7 @@ from typing import Dict, Any, List, Optional
 logger = logging.getLogger(__name__)
 
 _REGISTRY_CACHE: Optional[Dict[str, Any]] = None
+_CONSTITUENTS_CACHE: Dict[str, Dict[str, List[Dict[str, Any]]]] = {}
 
 def get_registry_path() -> str:
     """Returns absolute path to market_registry.json."""
@@ -34,6 +35,36 @@ def get_all_region_codes() -> List[str]:
 def get_region_meta(region_code: str) -> Optional[Dict[str, Any]]:
     """Returns metadata for a specific region code."""
     return load_market_registry().get(region_code)
+
+def load_region_constituents(region_code: str, force_reload: bool = False) -> Dict[str, List[Dict[str, Any]]]:
+    """
+    Loads constituent companies for a given region from its declarative OKF constituents file.
+    Returns mapping: {index_ticker: [ {symbol, name, aliases}, ... ]}
+    """
+    global _CONSTITUENTS_CACHE
+    if not force_reload and region_code in _CONSTITUENTS_CACHE:
+        return _CONSTITUENTS_CACHE[region_code]
+
+    meta = get_region_meta(region_code)
+    if not meta or not meta.get("constituents_file"):
+        return {}
+
+    rel_path = meta["constituents_file"]
+    repo_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    abs_path = os.path.join(repo_root, rel_path)
+    if not os.path.exists(abs_path):
+        logger.warning(f"Constituents file not found at: {abs_path}")
+        return {}
+
+    try:
+        with open(abs_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        indices_map = data.get("indices", {})
+        _CONSTITUENTS_CACHE[region_code] = indices_map
+        return indices_map
+    except Exception as e:
+        logger.error(f"Error loading constituents file {abs_path}: {e}")
+        return {}
 
 def build_rss_feeds() -> List[Dict[str, Any]]:
     """

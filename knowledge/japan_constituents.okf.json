@@ -1,0 +1,50 @@
+{
+  "region": "JP",
+  "name": "Japan Index Constituents",
+  "indices": {
+    "Nikkei 225": [
+      {"symbol": "7203.T", "name": "Toyota Motor", "aliases": ["toyota motor", "toyota"]},
+      {"symbol": "6758.T", "name": "Sony Group", "aliases": ["sony group", "sony"]},
+      {"symbol": "6861.T", "name": "Keyence", "aliases": ["keyence"]},
+      {"symbol": "8306.T", "name": "Mitsubishi UFJ Financial", "aliases": ["mitsubishi ufj", "mufg"]},
+      {"symbol": "9983.T", "name": "Fast Retailing", "aliases": ["fast retailing", "uniqlo"]},
+      {"symbol": "8035.T", "name": "Tokyo Electron", "aliases": ["tokyo electron"]},
+      {"symbol": "9984.T", "name": "SoftBank Group", "aliases": ["softbank group", "softbank"]},
+      {"symbol": "7974.T", "name": "Nintendo", "aliases": ["nintendo"]},
+      {"symbol": "4063.T", "name": "Shin-Etsu Chemical", "aliases": ["shin-etsu chemical", "shin-etsu"]},
+      {"symbol": "6501.T", "name": "Hitachi", "aliases": ["hitachi"]},
+      {"symbol": "6367.T", "name": "Daikin Industries", "aliases": ["daikin industries", "daikin"]},
+      {"symbol": "7267.T", "name": "Honda Motor", "aliases": ["honda motor", "honda"]},
+      {"symbol": "4502.T", "name": "Takeda Pharmaceutical", "aliases": ["takeda pharmaceutical", "takeda"]},
+      {"symbol": "6857.T", "name": "Advantest", "aliases": ["advantest corp", "advantest"]},
+      {"symbol": "6920.T", "name": "Lasertec", "aliases": ["lasertec corp", "lasertec"]},
+      {"symbol": "6954.T", "name": "Fanuc", "aliases": ["fanuc corp", "fanuc"]},
+      {"symbol": "3382.T", "name": "Seven & i Holdings", "aliases": ["seven & i", "seven and i", "7-eleven"]}
+    ],
+    "TOPIX": [
+      {"symbol": "7203.T", "name": "Toyota Motor", "aliases": ["toyota motor", "toyota"]},
+      {"symbol": "6758.T", "name": "Sony Group", "aliases": ["sony group", "sony"]},
+      {"symbol": "8306.T", "name": "Mitsubishi UFJ", "aliases": ["mitsubishi ufj", "mufg"]},
+      {"symbol": "8316.T", "name": "Sumitomo Mitsui Financial", "aliases": ["sumitomo mitsui", "smfg"]},
+      {"symbol": "8411.T", "name": "Mizuho Financial Group", "aliases": ["mizuho financial", "mizuho"]},
+      {"symbol": "8058.T", "name": "Mitsubishi Corp", "aliases": ["mitsubishi corp", "mitsubishi corporation"]},
+      {"symbol": "8001.T", "name": "Itochu", "aliases": ["itochu corp", "itochu"]},
+      {"symbol": "8031.T", "name": "Mitsui & Co", "aliases": ["mitsui & co", "mitsui"]}
+    ],
+    "JP Mothers": [
+      {"symbol": "4478.T", "name": "Freee K.K.", "aliases": ["freee k.k.", "freee"]},
+      {"symbol": "4180.T", "name": "Appier Group", "aliases": ["appier group", "appier"]},
+      {"symbol": "5253.T", "name": "Cover Corp", "aliases": ["cover corp", "hololive"]},
+      {"symbol": "4194.T", "name": "Visional", "aliases": ["visional inc", "visional"]},
+      {"symbol": "4485.T", "name": "JTOWER", "aliases": ["jtower inc", "jtower"]}
+    ],
+    "JASDAQ": [
+      {"symbol": "2702.T", "name": "McDonald's Holdings Japan", "aliases": ["mcdonald's holdings japan", "mcdonalds japan"]},
+      {"symbol": "7564.T", "name": "Workman Co", "aliases": ["workman co", "workman"]},
+      {"symbol": "6324.T", "name": "Harmonic Drive Systems", "aliases": ["harmonic drive systems", "harmonic drive"]}
+    ],
+    "JP Bonds": [
+      {"symbol": "MOF", "name": "Ministry of Finance Japan", "aliases": ["ministry of finance japan", "mof japan", "japanese government bonds", "jgb auctions"]}
+    ]
+  }
+}

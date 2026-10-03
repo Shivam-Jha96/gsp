@@ -158,9 +158,9 @@ flowchart TD
 
 | Layer | Tech | Description |
 |-------|------|-------------|
-| **Ingestion** | `aiohttp`, Google News RSS, Classifier, Deduplicator | Async poller with declarative registry, affinity classifier, and multi-stage deduplication |
-| **AI Engine** | `Contrastive-LM/CLM-v0.1-8B`, Modal A10G, TypeSafe SDK | Grounded System-One mathematical scorer — explicit market criteria anchors, pure probability vectors (-1.0 to +1.0) |
-| **Knowledge** | Gemini Flash, Google News RSS | Daily auto-updating OKF rules via Gemini with resilient model fallback chain |
+| **Ingestion** | `aiohttp`, Google News RSS, Classifier, Constituent OKF, Deduplicator | Async poller with declarative market registry, index constituent entity mapping, affinity classifier, and multi-stage deduplication |
+| **AI Engine** | `Contrastive-LM/CLM-v0.1-8B`, Modal A10G, TypeSafe SDK | Grounded System-One mathematical scorer — focused state conditioning, explicit market criteria anchors, continuous probability vectors (-1.0 to +1.0) |
+| **Knowledge** | Gemini Flash, Google News RSS, Declarative Constituents | Daily auto-updating OKF macro rules via Gemini and curated regional index constituent registries |
 | **Database** | Supabase PostgreSQL | Vertical partitioning: `event_signals` (math layer) + `event_payloads` (document layer) |
 | **Signal Engine** | Pandas, Alpaca API | 4-hour EMA crossover strategy routing BUY/SELL orders to paper trading |
 | **Dashboard** | Streamlit, Plotly | Dark-mode glassmorphism terminal with dynamic regional filtering, deduplication, auto-scaling charts and live feed |
@@ -179,16 +179,20 @@ gsp/
 │   ├── architecture_and_workflow.md  # End-to-end architecture & workflows
 │   ├── sentiment_math.md             # CLM quantitative math & scoring proofs
 │   └── build_progress.md             # Milestone build progress log
-├── knowledge/                  # Auto-updated regional trading rules
+├── knowledge/                  # Auto-updated regional trading rules & constituents
 │   ├── us_macro.okf.md
+│   ├── us_constituents.okf.json
 │   ├── india_macro.okf.md
+│   ├── india_constituents.okf.json
 │   ├── uk_macro.okf.md
-│   └── japan_macro.okf.md
+│   ├── uk_constituents.okf.json
+│   ├── japan_macro.okf.md
+│   └── japan_constituents.okf.json
 ├── scripts/
 │   └── reclassify_database.py  # Supabase purge, dedup, and sentiment re-scoring CLI
 ├── src/
 │   ├── ai_engine/              # Modal serverless GPU (CLM System-One)
-│   ├── config/                 # Declarative market registry (tickers, keywords, geotargeting)
+│   ├── config/                 # Declarative market registry & constituent loaders
 │   ├── database/               # Supabase connection pooler & SQL schemas
 │   ├── ingestion/              # Async RSS poller, regional affinity classifier & deduplicator
 │   ├── knowledge_engine/       # Gemini-powered OKF updater
