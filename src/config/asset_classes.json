@@ -1,22 +1,27 @@
 {
   "equity": {
     "Bullish": "Equity market optimism: stock prices rising, benchmark index gains, market rally, positive corporate growth, expansion.",
-    "Bearish": "Equity market pessimism: stock prices falling, benchmark index drops, market selloff, decline, warnings, downward pressure."
+    "Bearish": "Equity market pessimism: stock prices falling, benchmark index drops, market selloff, decline, warnings, downward pressure.",
+    "Neutral": "Market noise: routine reports, mixed signals, no clear directional momentum, balanced or irrelevant news."
   },
   "fixed_income": {
     "Bullish": "Fixed income optimism: bond yields climbing, bond prices rising due to strong demand, positive auction results, safe-haven inflows.",
-    "Bearish": "Fixed income pessimism: bond market selloff, yields plunging unexpectedly, weak auction demand, sovereign debt concerns, capital flight."
+    "Bearish": "Fixed income pessimism: bond market selloff, yields plunging unexpectedly, weak auction demand, sovereign debt concerns, capital flight.",
+    "Neutral": "Market noise: routine reports, mixed signals, no clear directional momentum, balanced or irrelevant news."
   },
   "volatility": {
     "Bullish": "Volatility increase: fear gauges rising, market panic, VIX surging, massive uncertainty.",
-    "Bearish": "Volatility decrease: market calm, VIX dropping, complacency, low volatility."
+    "Bearish": "Volatility decrease: market calm, VIX dropping, complacency, low volatility.",
+    "Neutral": "Market noise: routine reports, mixed signals, no clear directional momentum, balanced or irrelevant news."
   },
   "currency": {
     "Bullish": "Currency strength: appreciation, rising exchange rate, strong demand, favorable interest rate differentials.",
-    "Bearish": "Currency weakness: depreciation, falling exchange rate, capital outflows, dovish monetary policy."
+    "Bearish": "Currency weakness: depreciation, falling exchange rate, capital outflows, dovish monetary policy.",
+    "Neutral": "Market noise: routine reports, mixed signals, no clear directional momentum, balanced or irrelevant news."
   },
   "commodity": {
     "Bullish": "Commodity price rise: supply shortages, high demand, price rally, positive macroeconomic trends.",
-    "Bearish": "Commodity price fall: oversupply, weak demand, price drop, economic slowdown."
+    "Bearish": "Commodity price fall: oversupply, weak demand, price drop, economic slowdown.",
+    "Neutral": "Market noise: routine reports, mixed signals, no clear directional momentum, balanced or irrelevant news."
   }
 }

@@ -43,24 +43,41 @@ def score_sentiment(client, text: str, region_context: str = "", region_tag: str
         choice_obj = result.choices["direction"]
         probs = choice_obj.probabilities or {}
         
-        p_bull = float(probs.get("Bullish", 0.5))
-        p_bear = float(probs.get("Bearish", 0.5))
+        p_bull = float(probs.get("Bullish", 0.0))
+        p_bear = float(probs.get("Bearish", 0.0))
+        p_neut = float(probs.get("Neutral", 0.0))
         
-        # Pure continuous directional spread in [-1.0, 1.0]
-        directional_score = p_bull - p_bear
-        score_magnitude = abs(directional_score)
+        # Normalize in case they don't sum to 1 (TypeSafe Jev usually does, but safe fallback)
+        total_p = p_bull + p_bear + p_neut
+        if total_p > 0:
+            p_bull /= total_p
+            p_bear /= total_p
+            p_neut /= total_p
         
+        # Relative Directional Spread: S_rel
+        spread_denom = p_bull + p_bear + 1e-9
+        s_rel = (p_bull - p_bear) / spread_denom
+        
+        # Conviction Magnitude weighted by Neutral attenuation: M
+        magnitude = abs(s_rel) * (1.0 - 0.5 * p_neut)
+        
+        # Signed directional score [-1.0, 1.0]
+        if s_rel > 0:
+            directional_score = magnitude
+        else:
+            directional_score = -magnitude
+            
         # Categorical label assignment
-        if abs(directional_score) < 0.05:
+        if abs(directional_score) < 0.05 or p_neut > max(p_bull, p_bear):
             choice_str = "Neutral"
-        elif p_bull > p_bear:
+        elif directional_score > 0:
             choice_str = "Bullish"
         else:
             choice_str = "Bearish"
             
         # Clamp to [-1.0, 1.0]
         directional_score = max(-1.0, min(1.0, directional_score))
-        score_magnitude = max(0.0, min(1.0, score_magnitude))
+        score_magnitude = abs(directional_score)
         
         return {
             "Choice": choice_str,
