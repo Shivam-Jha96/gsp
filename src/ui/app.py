@@ -479,7 +479,7 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
         </div>
         """, unsafe_allow_html=True)
         timeframe_options = ["1 Day", "12 Hours", "6 Hours", "4 Hours", "7 Days", "1 Month", "1 Year", "All"]
-        default_tf_ix = timeframe_options.index("1 Day") if "1 Day" in timeframe_options else 0
+        default_tf_ix = timeframe_options.index("7 Days") if "7 Days" in timeframe_options else 4
         date_range = st.selectbox("Timeframe", timeframe_options, index=default_tf_ix, label_visibility="collapsed")
         
     with filter_col2:
@@ -529,7 +529,7 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
         </div>
         """, unsafe_allow_html=True)
         ema_options = [4, 8, 12, 24]
-        default_ema_ix = ema_options.index(8) if 8 in ema_options else 1
+        default_ema_ix = ema_options.index(4) if 4 in ema_options else 0
         ema_window = st.selectbox("Exponential Moving Average (Periods)", ema_options, index=default_ema_ix, label_visibility="collapsed")
         
     with filter_col5:
