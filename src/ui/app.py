@@ -492,7 +492,11 @@ __THEME_VARS__
     div[data-testid="stToggle"] div[data-testid="stCheckboxToggle"] {
         margin: 0 !important;
     }
-    /* Explicit high-contrast toggle switch track and border */
+    /* Explicit high-contrast toggle switch track and border across all Streamlit DOM variants */
+    .st-key-theme_toggle [data-testid="stCheckbox"] label > div:first-of-type,
+    .st-key-theme_toggle [data-testid="stCheckbox"] span + div,
+    div[data-testid="stCheckbox"]:has(input[role="switch"]) label > div:first-of-type,
+    div[data-testid="stCheckbox"]:has(input[role="switch"]) span + div,
     div[data-testid="stToggle"] [role="switch"],
     div[data-testid="stToggle"] div[data-testid="stCheckboxToggle"] > div,
     div[data-testid="stToggle"] span[data-baseweb="toggle"] {
@@ -501,12 +505,19 @@ __THEME_VARS__
         box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15) !important;
         transition: all 0.2s ease !important;
     }
+    .st-key-theme_toggle [data-testid="stCheckbox"]:has(input:checked) label > div:first-of-type,
+    .st-key-theme_toggle [data-testid="stCheckbox"]:has(input:checked) span + div,
+    div[data-testid="stCheckbox"]:has(input[role="switch"]:checked) label > div:first-of-type,
+    div[data-testid="stCheckbox"]:has(input[role="switch"]:checked) span + div,
     div[data-testid="stToggle"] [role="switch"][aria-checked="true"],
     div[data-testid="stToggle"] [role="switch"][data-checked="true"] {
         background-color: var(--header-border-left) !important;
         border-color: var(--header-border-left) !important;
     }
+    .st-key-theme_toggle [data-testid="stCheckbox"] label > div:first-of-type > div,
+    .st-key-theme_toggle [data-testid="stCheckbox"] span + div > div,
     div[data-testid="stToggle"] [role="switch"] > div {
+        background-color: #ffffff !important;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) !important;
     }
 
@@ -538,9 +549,13 @@ __THEME_VARS__
         font-weight: 700 !important;
     }
     
-    /* Popover button styling */
-    div[data-testid="stPopover"] > button {
+    /* Popover button styling - Ensure high contrast across both themes */
+    div[data-testid="stPopover"] button[data-testid="stPopoverButton"],
+    div[data-testid="stPopover"] > button,
+    div[data-testid="stPopover"] button,
+    .stPopover button {
         background: var(--input-bg) !important;
+        background-color: var(--input-bg) !important;
         border: 1px solid var(--input-border) !important;
         color: var(--text-primary) !important;
         font-family: 'Montserrat', sans-serif !important;
@@ -549,8 +564,15 @@ __THEME_VARS__
         border-radius: 6px !important;
         height: 38px !important;
         padding: 0 12px !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
     }
-    div[data-testid="stPopover"] > button:hover {
+    div[data-testid="stPopover"] button *,
+    .stPopover button * {
+        color: var(--text-primary) !important;
+        fill: var(--text-primary) !important;
+    }
+    div[data-testid="stPopover"] button:hover,
+    .stPopover button:hover {
         border-color: var(--header-border-left) !important;
         color: var(--header-border-left) !important;
     }
