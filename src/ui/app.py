@@ -1095,6 +1095,7 @@ def load_data():
                 continue
             st.error(f"Database error: {e}")
             return pd.DataFrame(), pd.DataFrame()
+    return pd.DataFrame(), pd.DataFrame()
 
 df_signals, df_payloads = load_data()
 
@@ -1261,7 +1262,7 @@ if not df_signals.empty:
     """, unsafe_allow_html=True)
     
     # Helper for segmented filter buttons (resilient across Streamlit versions)
-    def render_segmented_filter(label, options, default_ix=0, key=None):
+    def render_segmented_filter(label, options, default_ix: int | None = 0, key=None):
         default_val = options[default_ix] if (default_ix is not None and 0 <= default_ix < len(options)) else None
         if hasattr(st, "pills"):
             res = st.pills(label, options, default=default_val, key=key, label_visibility="collapsed")
@@ -1371,6 +1372,7 @@ if not df_signals.empty:
             display_payloads['timestamp'] = display_payloads['timestamp'].dt.tz_localize('UTC')
             
         now = pd.Timestamp.utcnow()
+        cutoff = now  # default: no filtering if date_range is unrecognized
         if date_range in ["4 Hours", "4 Hour", "4H"]: cutoff = now - pd.Timedelta(hours=4)
         elif date_range in ["6 Hours", "6 Hour", "6H"]: cutoff = now - pd.Timedelta(hours=6)
         elif date_range in ["12 Hours", "12 Hour", "12H"]: cutoff = now - pd.Timedelta(hours=12)
@@ -1689,7 +1691,7 @@ if not df_signals.empty:
         if hasattr(st, "fragment"):
             fragment_decorator = st.fragment
         elif hasattr(st, "experimental_fragment"):
-            fragment_decorator = st.experimental_fragment
+            fragment_decorator = st.experimental_fragment  # type: ignore[attr-defined]
         else:
             def fragment_decorator(func):
                 return func
