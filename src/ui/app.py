@@ -1244,7 +1244,6 @@ if not df_signals.empty:
                     hovermode="x unified",
                     legend=dict(
                         orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0,
-                        itemgap=18,
                         font=dict(color="#0f172a" if is_light else "#f8fafc", size=11, family="Montserrat")
                     ),
                     xaxis=dict(
