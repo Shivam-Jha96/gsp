@@ -1,11 +1,11 @@
 # United States Macro Trading Rules
 
 ## Rule 1: Federal Reserve Monetary Tightening and Rate Lift-Off
-- **Condition:** The Federal Reserve initiates an interest rate hiking cycle (e.g., 25 bps increases) amid persistent inflation, signaling sustained policy tightening despite political pushback or demands for rate cuts.
+- **Condition:** The Federal Reserve initiates an interest rate hiking cycle and signals further tightening amid persistent inflation, despite political friction and demands for rate cuts.
 - **Action:** Bullish on the US Dollar (USD), Bullish on Short-End Treasury Yields (2Y UST), Bearish on Broad Equities (SPY), and Bearish on Long-Duration Treasuries (TLT).
 
 ## Rule 2: Persistent Consumer Price Pressures and Elevated Inflation
-- **Condition:** Monthly headline or core CPI prints accelerate or hold stubbornly elevated (e.g., holding near or at 3.4% annualized), confirming entrenched cost pressures that validate Fed tightening.
+- **Condition:** Monthly headline or core CPI prints accelerate or hold stubbornly elevated (e.g., holding near 3.4% annualized), confirming entrenched cost pressures that validate Fed tightening.
 - **Action:** Bullish on USD, Bearish on Long-Duration Fixed Income (TLT), and Bearish on High-Multiple/Unprofitable Growth Equities.
 
 ## Rule 3: Resilient Labor Market Underlying Strength
@@ -13,7 +13,7 @@
 - **Action:** Bullish on USD, Bullish on Intermediate Treasury Yields (5Y/10Y UST), and Bearish on Core Fixed Income (AGG).
 
 ## Rule 4: Productivity Divergence via AI and Technology Capex
-- **Condition:** High-margin enterprise investments in artificial intelligence infrastructure and compute capacity sustain baseline GDP growth (e.g., maintaining ~2.2% output) independently of traditional credit cycle constraints.
+- **Condition:** High-margin enterprise investments in artificial intelligence infrastructure and compute capacity sustain baseline GDP growth independently of traditional credit cycle constraints.
 - **Action:** Bullish on Tech-Heavy Equities (QQQ) and Semiconductors (SMH), Bearish on Non-Tech Defensive Value and Capital-Intensive Small-Caps (IWM).
 
 ## Rule 5: Geopolitical Supply Shock and Energy Escalation

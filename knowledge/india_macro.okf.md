@@ -1,7 +1,7 @@
 # India Macro Trading Rules
 
 ## Rule 1: RBI Rate Hike Cycle & Broadening Inflation
-- **Condition:** CPI inflation accelerates toward a 20-month high driven by broadening price pressures across food, fuel, sugar, and semiconductors, prompting the RBI to resume a policy rate hike cycle targeting a 5.50% repo rate.
+- **Condition:** CPI inflation accelerates toward a 20-month high (reaching 4.82% in August) driven by broadening price pressures across food, fuel, sugar, and semiconductors, prompting the RBI to resume a policy rate hike cycle targeting a 5.50% repo rate.
 - **Action:** Bearish on long-duration sovereign bonds (G-Secs) and high-valuation equity multiples; Bullish on short-duration money market yields and commercial bank Net Interest Margins (NIMs).
 
 ## Rule 2: Rupee Depreciation & Growth-FX Decoupling
@@ -13,7 +13,7 @@
 - **Action:** Bearish on bank treasury and FX trading desk revenues; Bullish on near-term spot INR stabilization and narrowing onshore-offshore basis spreads.
 
 ## Rule 4: Food, Fuel, & Semiconductor Price Spikes on Consumer Wallets
-- **Condition:** Concentrated supply bottlenecks, climate disruptions, and structural component pressures drive sharp price jumps in key staples (sugar, cereals, vegetables) and electronic inputs, elevating headline CPI.
+- **Condition:** Concentrated supply bottlenecks, climate disruptions, and structural component pressures drive sharp price jumps in key staples (sugar, cereals, vegetables) and electronic inputs, elevating headline CPI for successive months.
 - **Action:** Bearish on mass-market FMCG, rural-facing two-wheelers, and entry-level consumer discretionary; Bullish on agrochemical producers, fertilizer manufacturers, and agricultural supply-chain infrastructure.
 
 ## Rule 5: FPI Capital Flow Volatility vs. Domestic Institutional Support

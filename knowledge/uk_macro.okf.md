@@ -9,7 +9,7 @@
 - **Action:** Bullish on UK 5Y and 10Y inflation-linked Gilts (breakevens) and FTSE 100 integrated energy majors; bearish on FTSE 250 Consumer Discretionary and retail equities.
 
 ## Rule 3: Sovereign Issuance Supply and Gilt Term Premia Steepening
-- **Condition:** Increased fiscal spending commitments and debt issuance under a new Prime Minister coincide with 10-year Gilt yields decoupling above nominal GDP growth, driving structural term premia expansion.
+- **Condition:** Increased fiscal spending commitments and debt issuance under the Office for Budget Responsibility's fiscal outlook coincide with 10-year Gilt yields decoupling above nominal GDP growth, driving structural term premia expansion.
 - **Action:** Bearish on 10Y and 30Y nominal UK Gilts; bullish on UK Gilt yield curve steepeners (2s10s and 5s30s).
 
 ## Rule 4: Stagflationary Terms-of-Trade Deterioration and Sterling Vulnerability
@@ -21,5 +21,5 @@
 - **Action:** Bearish on UK residential homebuilders, domestic retail banks, and real estate investment trusts (REITs); bullish on defensive UK water and power utilities.
 
 ## Rule 6: Large-Cap Exporters vs. Domestic Cyclicals Divergence
-- **Condition:** Currency depreciation combines with commodity price rallies, while domestic monthly GDP stalls under cost-of-living constraints.
+- **Condition:** Currency depreciation combines with commodity price rallies, while domestic monthly GDP growth stalls under cost-of-living constraints.
 - **Action:** Bullish on the FTSE 100 / FTSE 250 equity ratio (long FTSE 100, short FTSE 250); bearish on mid-cap domestic cyclicals.
