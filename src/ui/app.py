@@ -1262,7 +1262,7 @@ if not df_signals.empty:
                         showline=True, linecolor='rgba(100, 116, 139, 0.35)' if is_light else 'rgba(255,255,255,0.15)', linewidth=1,
                         ticks='outside', tickcolor='rgba(100, 116, 139, 0.35)' if is_light else 'rgba(255,255,255,0.25)', ticklen=4,
                         title=dict(text="<b>OPTIMISM SCORE</b>", font=dict(size=11, color="#0284c7" if is_light else "#38bdf8", family="Montserrat")),
-                        tickfont=dict(size=10, color="#0f172a" if is_light else "#f8fafc", family="IBM Plex Sans", weight="bold"),
+                        tickfont=dict(size=10, color="#0f172a" if is_light else "#f8fafc", family="IBM Plex Sans"),
                         side="right"
                     )
                 )
