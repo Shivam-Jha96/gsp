@@ -1351,6 +1351,13 @@ if not df_signals.empty:
             </div>
             """, unsafe_allow_html=True)
         with feed_header_col2:
+            lbl_color = "#64748b" if is_light else "#94a3b8"
+            st.markdown(f"""
+            <div style="display: flex; align-items: center; gap: 5px; margin-top: 14px; margin-bottom: 2px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">FILTER BY SENTIMENT</span>
+            </div>
+            """, unsafe_allow_html=True)
             sentiment_filter_options = [
                 f"All Events ({total_events})",
                 f"Bullish Only ({bullish_count})",
@@ -1361,6 +1368,7 @@ if not df_signals.empty:
                 "Filter News Feed",
                 sentiment_filter_options,
                 index=0,
+                label_visibility="collapsed",
                 key="feed_sentiment_filter"
             )
 
