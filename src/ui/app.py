@@ -40,31 +40,32 @@ is_light = bool(st.session_state.get('theme_toggle', False))
 
 if is_light:
     theme_css_vars = """
+        color-scheme: light !important;
         --bg-main: #f0f7ff;
         --bg-gradient: linear-gradient(180deg, #dbeafe 0%, #eff6ff 25%, #f8fafc 100%);
         --text-primary: #0f172a;
         --text-secondary: #334155;
         --text-muted: #64748b;
-        --card-bg: rgba(255, 255, 255, 0.85);
-        --card-border: rgba(148, 163, 184, 0.3);
-        --card-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+        --card-bg: rgba(255, 255, 255, 0.92);
+        --card-border: rgba(148, 163, 184, 0.35);
+        --card-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
         --card-hover-bg: #ffffff;
-        --card-hover-border: rgba(59, 130, 246, 0.4);
+        --card-hover-border: rgba(2, 132, 199, 0.5);
         --input-bg: #ffffff;
-        --input-border: rgba(148, 163, 184, 0.35);
+        --input-border: #cbd5e1;
         --input-text: #0f172a;
-        --header-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(224, 242, 254, 0.85) 100%);
-        --header-border: rgba(59, 130, 246, 0.35);
+        --header-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(224, 242, 254, 0.9) 100%);
+        --header-border: rgba(2, 132, 199, 0.35);
         --header-border-left: #0284c7;
         --header-shadow: 0 4px 20px rgba(2, 132, 199, 0.08);
-        --edge-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 249, 255, 0.9) 100%);
+        --edge-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(240, 249, 255, 0.95) 100%);
         --edge-border: rgba(56, 189, 248, 0.35);
         --edge-accent: #0284c7;
         --edge-text: #334155;
-        --feed-bg: rgba(255, 255, 255, 0.65);
-        --feed-border: rgba(148, 163, 184, 0.25);
+        --feed-bg: rgba(255, 255, 255, 0.85);
+        --feed-border: rgba(148, 163, 184, 0.3);
         --feed-card-bg: #ffffff;
-        --feed-card-border: rgba(148, 163, 184, 0.2);
+        --feed-card-border: rgba(148, 163, 184, 0.25);
         --feed-card-hover: rgba(240, 249, 255, 0.95);
         --feed-headline: #0f172a;
         --feed-badge-bg: rgba(0, 0, 0, 0.04);
@@ -73,32 +74,33 @@ if is_light:
     """
 else:
     theme_css_vars = """
+        color-scheme: dark !important;
         --bg-main: #020617;
         --bg-gradient: #020617;
         --text-primary: #f8fafc;
         --text-secondary: #cbd5e1;
         --text-muted: #94a3b8;
-        --card-bg: rgba(255, 255, 255, 0.03);
-        --card-border: rgba(255, 255, 255, 0.1);
-        --card-shadow: none;
-        --card-hover-bg: rgba(255, 255, 255, 0.05);
-        --card-hover-border: rgba(255, 255, 255, 0.2);
-        --input-bg: rgba(255, 255, 255, 0.03);
-        --input-border: rgba(255, 255, 255, 0.09);
+        --card-bg: rgba(15, 23, 42, 0.65);
+        --card-border: rgba(255, 255, 255, 0.08);
+        --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        --card-hover-bg: rgba(30, 41, 59, 0.75);
+        --card-hover-border: rgba(59, 130, 246, 0.4);
+        --input-bg: #0b1329;
+        --input-border: rgba(255, 255, 255, 0.12);
         --input-text: #f8fafc;
-        --header-bg: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 58, 138, 0.22) 100%);
-        --header-border: rgba(59, 130, 246, 0.28);
+        --header-bg: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 58, 138, 0.28) 100%);
+        --header-border: rgba(59, 130, 246, 0.35);
         --header-border-left: #3b82f6;
-        --header-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), 0 0 15px rgba(59, 130, 246, 0.08);
-        --edge-bg: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.45) 50%, rgba(15, 23, 42, 0.85) 100%);
-        --edge-border: rgba(56, 189, 248, 0.22);
+        --header-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), 0 0 15px rgba(59, 130, 246, 0.1);
+        --edge-bg: linear-gradient(135deg, rgba(15, 23, 42, 0.88) 0%, rgba(30, 41, 59, 0.5) 50%, rgba(15, 23, 42, 0.88) 100%);
+        --edge-border: rgba(56, 189, 248, 0.25);
         --edge-accent: #38bdf8;
         --edge-text: #cbd5e1;
-        --feed-bg: rgba(255, 255, 255, 0.015);
+        --feed-bg: rgba(15, 23, 42, 0.5);
         --feed-border: rgba(255, 255, 255, 0.08);
-        --feed-card-bg: rgba(255, 255, 255, 0.02);
-        --feed-card-border: rgba(255, 255, 255, 0.06);
-        --feed-card-hover: rgba(255, 255, 255, 0.04);
+        --feed-card-bg: rgba(15, 23, 42, 0.65);
+        --feed-card-border: rgba(255, 255, 255, 0.07);
+        --feed-card-hover: rgba(30, 41, 59, 0.8);
         --feed-headline: #f8fafc;
         --feed-badge-bg: rgba(255, 255, 255, 0.04);
         --feed-badge-border: rgba(255, 255, 255, 0.08);
@@ -190,29 +192,51 @@ __THEME_VARS__
         display: flex !important;
         flex-direction: column !important;
     }
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"] > div[data-testid="stVerticalBlock"] {
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:first-child > div[data-testid="stVerticalBlock"] {
         display: flex !important;
         flex-direction: column !important;
         justify-content: space-between !important;
         height: 100% !important;
+        gap: 10px !important;
+    }
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:first-child > div[data-testid="stVerticalBlock"] > div[data-testid="element-container"] {
+        flex: 1 1 0% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        margin: 0 !important;
+    }
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:first-child .white-card {
         flex: 1 1 auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        height: 100% !important;
+        margin-bottom: 0 !important;
+        box-sizing: border-box !important;
+        padding: 12px 16px !important;
     }
 
-    /* Filter Bar Columns: Tightly Group Label Directly Above Selectbox (Zero Excess Space) */
+    /* Unified Filter Toolbar Card: Tightly Group Labels Directly Above Dropdowns */
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stSelectbox"]) {
-        align-items: flex-start !important;
+        background: var(--card-bg) !important;
+        border: 1px solid var(--card-border) !important;
+        border-radius: 8px !important;
+        padding: 10px 14px 12px 14px !important;
         margin-bottom: 14px !important;
+        backdrop-filter: blur(10px) !important;
+        box-shadow: var(--card-shadow) !important;
+        align-items: flex-end !important;
     }
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stSelectbox"]) > div[data-testid="column"] {
         display: flex !important;
         flex-direction: column !important;
-        justify-content: flex-start !important;
+        justify-content: flex-end !important;
     }
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stSelectbox"]) > div[data-testid="column"] > div[data-testid="stVerticalBlock"] {
         display: flex !important;
         flex-direction: column !important;
-        justify-content: flex-start !important;
-        gap: 3px !important;
+        justify-content: flex-end !important;
+        gap: 4px !important;
         height: auto !important;
         flex: 0 0 auto !important;
     }
@@ -223,10 +247,11 @@ __THEME_VARS__
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stSelectbox"]) div[data-testid="stMarkdownContainer"] > p {
         margin: 0 !important;
         padding: 0 !important;
+        line-height: 1.2 !important;
     }
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stSelectbox"]) div[data-testid="stSelectbox"] {
-        margin-top: 0 !important;
-        padding-top: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stSelectbox"]) div[data-testid="stSelectbox"] label {
         display: none !important;
@@ -236,39 +261,85 @@ __THEME_VARS__
         padding: 0 !important;
     }
 
-    /* Style Streamlit Selectbox Inputs */
-    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
+    /* Style Streamlit Selectbox Inputs & Overrides (Both Themes) */
+    div[data-testid="stSelectbox"],
+    div[data-testid="stSelectbox"] > div,
+    div[data-testid="stSelectbox"] div[data-baseweb="select"],
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div,
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div > div,
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] [role="combobox"] {
         background: var(--input-bg) !important;
-        border: 1px solid var(--input-border) !important;
+        background-color: var(--input-bg) !important;
+        border-color: var(--input-border) !important;
+        color: var(--input-text) !important;
         border-radius: 6px !important;
+    }
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] input,
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] span,
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] div {
+        background: transparent !important;
+        background-color: transparent !important;
+        color: var(--input-text) !important;
         font-family: 'Montserrat', sans-serif !important;
         font-size: 0.82rem !important;
         font-weight: 600 !important;
-        color: var(--input-text) !important;
-        transition: all 0.2s ease !important;
-    }
-    div[data-testid="stSelectbox"] div[data-baseweb="select"] span {
-        color: var(--input-text) !important;
     }
     div[data-testid="stSelectbox"] div[data-baseweb="select"] svg {
         fill: var(--input-text) !important;
+        stroke: var(--input-text) !important;
+        color: var(--input-text) !important;
     }
     div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover {
-        border-color: rgba(59, 130, 246, 0.45) !important;
-        box-shadow: 0 0 10px rgba(59, 130, 246, 0.15) !important;
+        border-color: var(--header-border-left) !important;
+        box-shadow: 0 0 10px rgba(59, 130, 246, 0.2) !important;
     }
-    div[data-baseweb="popover"], div[data-baseweb="menu"], ul[data-testid="stSelectboxVirtualDropdown"] {
+    
+    /* Popovers, Menus, Dropdown Options */
+    div[data-baseweb="popover"],
+    div[data-baseweb="popover"] > div,
+    div[data-baseweb="popover"] ul,
+    div[data-baseweb="menu"],
+    div[data-baseweb="menu"] ul,
+    ul[role="listbox"],
+    ul[data-testid="stSelectboxVirtualDropdown"] {
         background: var(--input-bg) !important;
-        color: var(--input-text) !important;
+        background-color: var(--input-bg) !important;
+        border: 1px solid var(--input-border) !important;
+        border-radius: 8px !important;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25) !important;
+        padding: 4px !important;
     }
-    div[data-baseweb="menu"] li {
+    div[data-baseweb="popover"] li,
+    div[data-baseweb="menu"] li,
+    li[role="option"] {
+        background: var(--input-bg) !important;
+        background-color: var(--input-bg) !important;
         color: var(--input-text) !important;
+        font-family: 'Montserrat', sans-serif !important;
+        font-size: 0.82rem !important;
+        font-weight: 600 !important;
+        border-radius: 4px !important;
+        margin-bottom: 2px !important;
+        padding: 8px 12px !important;
+        transition: all 0.15s ease !important;
+    }
+    div[data-baseweb="popover"] li:hover,
+    div[data-baseweb="menu"] li:hover,
+    li[role="option"]:hover,
+    li[role="option"][aria-selected="true"] {
+        background: var(--card-hover-bg) !important;
+        background-color: var(--card-hover-bg) !important;
+        color: var(--header-border-left) !important;
     }
 
     /* Top Header Row Layout & Symmetrical Cards */
     div[data-testid="stHorizontalBlock"]:first-of-type {
         margin-bottom: 14px !important;
         align-items: stretch !important;
+    }
+    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"] {
+        display: flex !important;
+        flex-direction: column !important;
     }
     
     /* Top Right Action Card (Backend Status & Dark Mode Toggle) */
@@ -308,10 +379,9 @@ __THEME_VARS__
         align-items: center !important;
         justify-content: stretch !important;
         width: 100% !important;
-        margin-top: 5px !important;
+        margin-top: 6px !important;
         margin-bottom: 0 !important;
-        padding-top: 6px !important;
-        border-top: 1px solid var(--card-border) !important;
+        padding: 0 !important;
     }
     div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stToggle"] label,
     div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stToggle"] label {
@@ -321,8 +391,8 @@ __THEME_VARS__
         width: 100% !important;
         cursor: pointer !important;
         margin: 0 !important;
-        padding: 5px 10px !important;
-        background: rgba(255, 255, 255, 0.035) !important;
+        padding: 4px 10px !important;
+        background: rgba(255, 255, 255, 0.04) !important;
         border: 1px solid var(--card-border) !important;
         border-radius: 6px !important;
         box-sizing: border-box !important;
@@ -330,14 +400,14 @@ __THEME_VARS__
     }
     div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stToggle"] label:hover,
     div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stToggle"] label:hover {
-        background: rgba(255, 255, 255, 0.07) !important;
-        border-color: rgba(59, 130, 246, 0.45) !important;
+        background: var(--card-hover-bg) !important;
+        border-color: var(--header-border-left) !important;
         box-shadow: 0 0 10px rgba(59, 130, 246, 0.15) !important;
     }
     div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stToggle"] label div[data-testid="stMarkdownContainer"] p,
     div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stToggle"] label div[data-testid="stMarkdownContainer"] p {
         font-family: 'Montserrat', sans-serif !important;
-        font-size: 0.68rem !important;
+        font-size: 0.70rem !important;
         font-weight: 700 !important;
         color: var(--text-primary) !important;
         letter-spacing: 0.05em !important;
@@ -350,6 +420,32 @@ __THEME_VARS__
     div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stToggle"] div[data-testid="stCheckboxToggle"],
     div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stToggle"] div[data-testid="stCheckboxToggle"] {
         margin: 0 !important;
+    }
+    
+    /* Dedicated Mini Index Grid & Card Styling */
+    .mini-kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 10px;
+        margin-top: 10px;
+    }
+    .mini-index-card {
+        background: var(--feed-card-bg) !important;
+        border: 1px solid var(--feed-card-border) !important;
+        border-radius: 8px;
+        padding: 10px 14px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        box-sizing: border-box;
+        box-shadow: var(--card-shadow);
+    }
+    .mini-index-card:hover {
+        background: var(--card-hover-bg) !important;
+        border-color: var(--card-hover-border) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
     
     /* Metrics */
@@ -706,9 +802,9 @@ if not df_signals.empty:
         st.markdown(f"""
         <div id="header-control-card-anchor" style="display: none;"></div>
         <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-            <div style="display: inline-flex; align-items: center; gap: 5px; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 3px 8px; border-radius: 4px;">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="{'#0284c7' if is_light else '#38bdf8'}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
-                <span style="font-size: 0.66rem; font-weight: 800; color: {'#0284c7' if is_light else '#38bdf8'}; font-family: 'Montserrat', sans-serif; letter-spacing: 0.08em; text-transform: uppercase;">BACKEND</span>
+            <div style="display: inline-flex; align-items: center; gap: 5px; background: {'rgba(2, 132, 199, 0.12)' if is_light else 'rgba(56, 189, 248, 0.12)'}; border: 1px solid {'rgba(2, 132, 199, 0.3)' if is_light else 'rgba(56, 189, 248, 0.28)'}; padding: 3px 8px; border-radius: 4px;">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="{'#0284c7' if is_light else '#38bdf8'}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                <span style="font-size: 0.66rem; font-weight: 800; color: {'#0284c7' if is_light else '#38bdf8'}; font-family: 'Montserrat', sans-serif; letter-spacing: 0.08em; text-transform: uppercase;">MODAL A10G CLM</span>
             </div>
             <div style="display: inline-flex; align-items: center; gap: 6px; background: {status_bg}; border: 1px solid {status_border}; color: {status_text}; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.08em; padding: 3px 9px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);">
                 <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; display: inline-block;"></span>
@@ -739,7 +835,7 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
 """, unsafe_allow_html=True)
     
     # --- Top Row: Styled Filter Dropdowns (5 Aligned Controls) ---
-    filter_col1, filter_col2, filter_col3, filter_col4, filter_col5 = st.columns([1.0, 0.85, 1.25, 0.95, 1.15])
+    filter_col1, filter_col2, filter_col3, filter_col4, filter_col5 = st.columns([1.0, 0.7, 1.45, 0.8, 1.15])
     
     with filter_col1:
         st.markdown("""
@@ -1061,7 +1157,7 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
                 ))
                 
                 fig_area.update_layout(
-                    height=370, margin=dict(l=0, r=0, t=5, b=0),
+                    height=345, margin=dict(l=0, r=0, t=5, b=0),
                     plot_bgcolor="rgba(255,255,255,0.55)" if is_light else "rgba(0,0,0,0)",
                     paper_bgcolor="rgba(0,0,0,0)",
                     hovermode="x unified",
@@ -1091,7 +1187,7 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
             # --- Mini KPI Tiles for Individual Indices (Dynamic Sentiment Styling) ---
             valid_tickers = [t for t in tickers if t != 'UNKNOWN']
             if valid_tickers:
-                kpi_html = '<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;">'
+                kpi_html = '<div class="mini-kpi-grid">'
                 
                 for ticker in valid_tickers:
                     latest_score = pivot_df[ticker].iloc[-1] if len(pivot_df) > 0 else 0
@@ -1137,7 +1233,7 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
                         d_pill_border = "rgba(148, 163, 184, 0.25)"
                     
                     kpi_html += f"""
-<div class="news-item-card" style="flex: 1 1 120px; padding: 10px 12px; border-left: 3px solid {t_card_border}; margin-bottom: 0;">
+<div class="mini-index-card" style="border-left: 3px solid {t_card_border}; margin-bottom: 0;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
         <span style="font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 700; color: {'#0f172a' if is_light else '#f8fafc'}; text-transform: uppercase; letter-spacing: 0.03em;">{ticker}</span>
         <span style="font-family: 'Montserrat', sans-serif; font-size: 0.65rem; font-weight: 800; color: {t_status_color}; background: {t_status_bg}; border: 1px solid {t_status_border}; padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">{ticker_status}</span>
