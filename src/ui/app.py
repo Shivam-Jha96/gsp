@@ -455,11 +455,8 @@ __THEME_VARS__
     }
 
     /* Top Header Row Layout & Symmetrical Cards */
-    .block-container > div[data-testid="stVerticalBlock"] {
-        gap: 0 !important;
-    }
     div[data-testid="stHorizontalBlock"]:first-of-type {
-        margin-bottom: 0 !important;
+        margin-bottom: -0.5rem !important;
         align-items: stretch !important;
     }
     div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"],
@@ -469,7 +466,6 @@ __THEME_VARS__
     }
     
     /* Top Right Action Card (Backend Status & Dark Mode Toggle) - Scoped exclusively to action column */
-    div[data-testid="stColumn"]:has(#header-control-card-anchor) > div[data-testid="stVerticalBlock"],
     div[data-testid="stColumn"]:has(#header-control-card-anchor) {
         background: var(--header-bg) !important;
         border: 1px solid var(--header-border) !important;
@@ -478,12 +474,20 @@ __THEME_VARS__
         backdrop-filter: blur(10px) !important;
         box-shadow: var(--header-shadow) !important;
         height: 100% !important;
-        min-height: 68px !important;
         display: flex !important;
         flex-direction: column !important;
         justify-content: space-between !important;
         box-sizing: border-box !important;
         margin-bottom: 0 !important;
+        gap: 4px !important;
+    }
+    div[data-testid="stColumn"]:has(#header-control-card-anchor) > div[data-testid="stVerticalBlock"] {
+        background: transparent !important;
+        border: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        margin: 0 !important;
         gap: 4px !important;
     }
     div[data-testid="stColumn"]:has(#header-control-card-anchor) div[data-testid="stMarkdownContainer"] {
