@@ -41,15 +41,19 @@ is_light = bool(st.session_state.get('theme_toggle', False))
 if is_light:
     theme_css_vars = """
         color-scheme: light !important;
+        --primary-color: #0284c7 !important;
+        --background-color: #f0f7ff !important;
+        --secondary-background-color: #ffffff !important;
+        --text-color: #0f172a !important;
         --bg-main: #f0f7ff;
         --bg-gradient: linear-gradient(180deg, #dbeafe 0%, #eff6ff 25%, #f8fafc 100%);
         --text-primary: #0f172a;
         --text-secondary: #334155;
         --text-muted: #64748b;
-        --card-bg: rgba(255, 255, 255, 0.92);
+        --card-bg: rgba(255, 255, 255, 0.94);
         --card-border: rgba(148, 163, 184, 0.35);
         --card-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
-        --card-hover-bg: #ffffff;
+        --card-hover-bg: #f8fafc;
         --card-hover-border: rgba(2, 132, 199, 0.5);
         --input-bg: #ffffff;
         --input-border: #cbd5e1;
@@ -71,10 +75,16 @@ if is_light:
         --feed-badge-bg: rgba(0, 0, 0, 0.04);
         --feed-badge-border: rgba(0, 0, 0, 0.08);
         --feed-badge-text: #475569;
+        --metric-green: #059669;
+        --metric-red: #dc2626;
     """
 else:
     theme_css_vars = """
         color-scheme: dark !important;
+        --primary-color: #10b981 !important;
+        --background-color: #020617 !important;
+        --secondary-background-color: #0b1329 !important;
+        --text-color: #f8fafc !important;
         --bg-main: #020617;
         --bg-gradient: #020617;
         --text-primary: #f8fafc;
@@ -105,6 +115,8 @@ else:
         --feed-badge-bg: rgba(255, 255, 255, 0.04);
         --feed-badge-border: rgba(255, 255, 255, 0.08);
         --feed-badge-text: #94a3b8;
+        --metric-green: #10b981;
+        --metric-red: #ef4444;
     """
 
 # --- CSS Theme Injection ---
@@ -112,7 +124,7 @@ css_theme_template = """
 <style>
     @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700;800&display=swap');
     
-    :root {
+    :root, .stApp, html, body {
 __THEME_VARS__
     }
     
@@ -188,72 +200,82 @@ __THEME_VARS__
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) {
         align-items: stretch !important;
     }
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"],
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"] {
         display: flex !important;
         flex-direction: column !important;
+        height: 100% !important;
     }
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:first-child > div[data-testid="stVerticalBlock"],
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:first-child > div[data-testid="stVerticalBlock"] {
         display: flex !important;
         flex-direction: column !important;
-        justify-content: space-between !important;
         height: 100% !important;
-        gap: 10px !important;
+        flex: 1 1 auto !important;
     }
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:first-child > div[data-testid="stVerticalBlock"] > div[data-testid="element-container"] {
-        flex: 1 1 0% !important;
-        display: flex !important;
-        flex-direction: column !important;
-        margin: 0 !important;
-    }
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:first-child .white-card {
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) div[data-testid="stElementContainer"]:has(.kpi-column-container),
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) div[data-testid="element-container"]:has(.kpi-column-container) {
+        height: 100% !important;
         flex: 1 1 auto !important;
         display: flex !important;
         flex-direction: column !important;
+    }
+    .kpi-column-container {
+        display: flex !important;
+        flex-direction: column !important;
         justify-content: space-between !important;
         height: 100% !important;
+        min-height: 520px !important;
+        gap: 10px !important;
+    }
+    .kpi-column-container .kpi-card {
+        flex: 1 1 0px !important;
         margin-bottom: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        padding: 10px 14px !important;
         box-sizing: border-box !important;
-        padding: 12px 16px !important;
     }
 
-    /* Unified Filter Toolbar Card: Tightly Group Labels Directly Above Dropdowns */
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stSelectbox"]) {
-        background: var(--card-bg) !important;
-        border: 1px solid var(--card-border) !important;
-        border-radius: 8px !important;
-        padding: 10px 14px 12px 14px !important;
-        margin-bottom: 14px !important;
-        backdrop-filter: blur(10px) !important;
-        box-shadow: var(--card-shadow) !important;
+    /* Filter Toolbar Card Enclosure & Alignment */
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) {
+        padding: 8px 14px 10px 14px !important;
+        margin-bottom: 12px !important;
+    }
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stHorizontalBlock"] {
         align-items: flex-end !important;
+        gap: 10px !important;
     }
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stSelectbox"]) > div[data-testid="column"] {
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stColumn"],
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="column"] {
         display: flex !important;
         flex-direction: column !important;
         justify-content: flex-end !important;
     }
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stSelectbox"]) > div[data-testid="column"] > div[data-testid="stVerticalBlock"] {
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stColumn"] > div[data-testid="stVerticalBlock"],
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="column"] > div[data-testid="stVerticalBlock"] {
         display: flex !important;
         flex-direction: column !important;
         justify-content: flex-end !important;
-        gap: 4px !important;
+        gap: 2px !important;
         height: auto !important;
         flex: 0 0 auto !important;
     }
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stSelectbox"]) div[data-testid="stMarkdownContainer"] {
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stMarkdownContainer"] {
         margin: 0 !important;
         padding: 0 !important;
     }
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stSelectbox"]) div[data-testid="stMarkdownContainer"] > p {
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stMarkdownContainer"] > p {
         margin: 0 !important;
         padding: 0 !important;
         line-height: 1.2 !important;
     }
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stSelectbox"]) div[data-testid="stSelectbox"] {
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stSelectbox"] {
         margin: 0 !important;
         padding: 0 !important;
     }
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stSelectbox"]) div[data-testid="stSelectbox"] label {
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stSelectbox"] label {
         display: none !important;
         height: 0 !important;
         min-height: 0 !important;
@@ -262,46 +284,54 @@ __THEME_VARS__
     }
 
     /* Style Streamlit Selectbox Inputs & Overrides (Both Themes) */
-    div[data-testid="stSelectbox"],
-    div[data-testid="stSelectbox"] > div,
-    div[data-testid="stSelectbox"] div[data-baseweb="select"],
-    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div,
-    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div > div,
-    div[data-testid="stSelectbox"] div[data-baseweb="select"] [role="combobox"] {
+    html body [data-baseweb="select"],
+    html body [data-baseweb="select"] > div,
+    html body [data-baseweb="select"] div[role="combobox"],
+    html body div[data-testid="stSelectbox"] [data-baseweb="select"],
+    html body div[data-testid="stSelectbox"] [data-baseweb="select"] > div,
+    html body div[data-testid="stSelectbox"] [data-baseweb="select"] div[role="combobox"] {
         background: var(--input-bg) !important;
         background-color: var(--input-bg) !important;
-        border-color: var(--input-border) !important;
-        color: var(--input-text) !important;
+        border: 1px solid var(--input-border) !important;
         border-radius: 6px !important;
-    }
-    div[data-testid="stSelectbox"] div[data-baseweb="select"] input,
-    div[data-testid="stSelectbox"] div[data-baseweb="select"] span,
-    div[data-testid="stSelectbox"] div[data-baseweb="select"] div {
-        background: transparent !important;
-        background-color: transparent !important;
         color: var(--input-text) !important;
+        -webkit-text-fill-color: var(--input-text) !important;
+        box-shadow: none !important;
+    }
+    html body [data-baseweb="select"] input,
+    html body [data-baseweb="select"] span,
+    html body [data-baseweb="select"] div,
+    html body div[data-testid="stSelectbox"] [data-baseweb="select"] input,
+    html body div[data-testid="stSelectbox"] [data-baseweb="select"] span,
+    html body div[data-testid="stSelectbox"] [data-baseweb="select"] div {
+        color: var(--input-text) !important;
+        -webkit-text-fill-color: var(--input-text) !important;
         font-family: 'Montserrat', sans-serif !important;
         font-size: 0.82rem !important;
         font-weight: 600 !important;
     }
-    div[data-testid="stSelectbox"] div[data-baseweb="select"] svg {
+    html body [data-baseweb="select"] svg,
+    html body div[data-testid="stSelectbox"] svg {
         fill: var(--input-text) !important;
         stroke: var(--input-text) !important;
         color: var(--input-text) !important;
+        background: transparent !important;
+        background-color: transparent !important;
     }
-    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover {
+    html body [data-baseweb="select"] > div:hover,
+    html body div[data-testid="stSelectbox"] [data-baseweb="select"] > div:hover {
         border-color: var(--header-border-left) !important;
         box-shadow: 0 0 10px rgba(59, 130, 246, 0.2) !important;
     }
     
     /* Popovers, Menus, Dropdown Options */
-    div[data-baseweb="popover"],
-    div[data-baseweb="popover"] > div,
-    div[data-baseweb="popover"] ul,
-    div[data-baseweb="menu"],
-    div[data-baseweb="menu"] ul,
-    ul[role="listbox"],
-    ul[data-testid="stSelectboxVirtualDropdown"] {
+    html body [data-baseweb="popover"],
+    html body [data-baseweb="popover"] > div,
+    html body [data-baseweb="popover"] ul,
+    html body [data-baseweb="menu"],
+    html body [data-baseweb="menu"] ul,
+    html body ul[role="listbox"],
+    html body ul[data-testid="stSelectboxVirtualDropdown"] {
         background: var(--input-bg) !important;
         background-color: var(--input-bg) !important;
         border: 1px solid var(--input-border) !important;
@@ -309,12 +339,13 @@ __THEME_VARS__
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25) !important;
         padding: 4px !important;
     }
-    div[data-baseweb="popover"] li,
-    div[data-baseweb="menu"] li,
-    li[role="option"] {
+    html body [data-baseweb="popover"] li,
+    html body [data-baseweb="menu"] li,
+    html body li[role="option"] {
         background: var(--input-bg) !important;
         background-color: var(--input-bg) !important;
         color: var(--input-text) !important;
+        -webkit-text-fill-color: var(--input-text) !important;
         font-family: 'Montserrat', sans-serif !important;
         font-size: 0.82rem !important;
         font-weight: 600 !important;
@@ -323,13 +354,14 @@ __THEME_VARS__
         padding: 8px 12px !important;
         transition: all 0.15s ease !important;
     }
-    div[data-baseweb="popover"] li:hover,
-    div[data-baseweb="menu"] li:hover,
-    li[role="option"]:hover,
-    li[role="option"][aria-selected="true"] {
+    html body [data-baseweb="popover"] li:hover,
+    html body [data-baseweb="menu"] li:hover,
+    html body li[role="option"]:hover,
+    html body li[role="option"][aria-selected="true"] {
         background: var(--card-hover-bg) !important;
         background-color: var(--card-hover-bg) !important;
         color: var(--header-border-left) !important;
+        -webkit-text-fill-color: var(--header-border-left) !important;
     }
 
     /* Top Header Row Layout & Symmetrical Cards */
@@ -337,6 +369,7 @@ __THEME_VARS__
         margin-bottom: 14px !important;
         align-items: stretch !important;
     }
+    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"],
     div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"] {
         display: flex !important;
         flex-direction: column !important;
@@ -344,68 +377,69 @@ __THEME_VARS__
     
     /* Top Right Action Card (Backend Status & Dark Mode Toggle) */
     div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor),
+    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"]:nth-of-type(2) > div[data-testid="stVerticalBlock"],
     div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) > div[data-testid="stVerticalBlock"] {
         background: var(--header-bg) !important;
         border: 1px solid var(--header-border) !important;
         border-left: 4px solid var(--header-border-left) !important;
         border-radius: 8px !important;
-        padding: 10px 14px !important;
+        padding: 8px 12px !important;
         backdrop-filter: blur(10px) !important;
         box-shadow: var(--header-shadow) !important;
         height: 100% !important;
+        min-height: 68px !important;
         display: flex !important;
         flex-direction: column !important;
         justify-content: space-between !important;
         box-sizing: border-box !important;
         margin-bottom: 0 !important;
-        gap: 0 !important;
+        gap: 4px !important;
     }
     
     div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stMarkdownContainer"],
+    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"]:nth-of-type(2) div[data-testid="stMarkdownContainer"],
     div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stMarkdownContainer"] {
         width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
     }
     div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stMarkdownContainer"] > p,
+    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"]:nth-of-type(2) div[data-testid="stMarkdownContainer"] > p,
     div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stMarkdownContainer"] > p {
         margin: 0 !important;
     }
 
     /* Style Streamlit Toggle Switch inside the Header Action Card */
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stToggle"],
-    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stToggle"] {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: stretch !important;
+    div[data-testid="stToggle"] {
         width: 100% !important;
-        margin-top: 6px !important;
-        margin-bottom: 0 !important;
+        margin: 0 !important;
+        margin-top: 4px !important;
         padding: 0 !important;
     }
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stToggle"] label,
-    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stToggle"] label {
+    div[data-testid="stToggle"] > div {
+        width: 100% !important;
+    }
+    div[data-testid="stToggle"] label {
         display: flex !important;
+        flex-direction: row-reverse !important;
         align-items: center !important;
         justify-content: space-between !important;
         width: 100% !important;
         cursor: pointer !important;
         margin: 0 !important;
         padding: 4px 10px !important;
-        background: rgba(255, 255, 255, 0.04) !important;
+        background: var(--card-bg) !important;
         border: 1px solid var(--card-border) !important;
         border-radius: 6px !important;
         box-sizing: border-box !important;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stToggle"] label:hover,
-    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stToggle"] label:hover {
+    div[data-testid="stToggle"] label:hover {
         background: var(--card-hover-bg) !important;
         border-color: var(--header-border-left) !important;
         box-shadow: 0 0 10px rgba(59, 130, 246, 0.15) !important;
     }
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stToggle"] label div[data-testid="stMarkdownContainer"] p,
-    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stToggle"] label div[data-testid="stMarkdownContainer"] p {
+    div[data-testid="stToggle"] label div[data-testid="stMarkdownContainer"] p {
         font-family: 'Montserrat', sans-serif !important;
         font-size: 0.70rem !important;
         font-weight: 700 !important;
@@ -417,8 +451,7 @@ __THEME_VARS__
         align-items: center !important;
         gap: 6px !important;
     }
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stToggle"] div[data-testid="stCheckboxToggle"],
-    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stToggle"] div[data-testid="stCheckboxToggle"] {
+    div[data-testid="stToggle"] div[data-testid="stCheckboxToggle"] {
         margin: 0 !important;
     }
     
@@ -470,8 +503,8 @@ __THEME_VARS__
         font-size: 0.8rem;
         font-weight: 600;
     }
-    .green { color: #10b981 !important; }
-    .red { color: #ef4444 !important; } 
+    .green { color: var(--metric-green) !important; }
+    .red { color: var(--metric-red) !important; } 
     .gray { color: var(--text-muted) !important; }
     
     .metric-footer {
@@ -834,80 +867,82 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
 </div>
 """, unsafe_allow_html=True)
     
-    # --- Top Row: Styled Filter Dropdowns (5 Aligned Controls) ---
-    filter_col1, filter_col2, filter_col3, filter_col4, filter_col5 = st.columns([1.0, 0.7, 1.45, 0.8, 1.15])
-    
-    with filter_col1:
-        st.markdown("""
-        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            <span style="font-size: 0.72rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">TIMEFRAME</span>
-        </div>
-        """, unsafe_allow_html=True)
-        timeframe_options = ["1 Day", "12 Hours", "6 Hours", "4 Hours", "7 Days", "1 Month", "1 Year", "All"]
-        default_tf_ix = timeframe_options.index("7 Days") if "7 Days" in timeframe_options else 4
-        date_range = st.selectbox("Timeframe", timeframe_options, index=default_tf_ix, label_visibility="collapsed")
+    # --- Top Row: Filter Toolbar Card (5 Aligned Controls) ---
+    with st.container(border=True):
+        st.markdown('<div id="filter-toolbar-anchor" style="display: none;"></div>', unsafe_allow_html=True)
+        filter_col1, filter_col2, filter_col3, filter_col4, filter_col5 = st.columns([1.1, 0.85, 1.45, 0.85, 1.25])
         
-    with filter_col2:
-        st.markdown("""
-        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-            <span style="font-size: 0.72rem; font-weight: 700; color: #a78bfa; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">REGION</span>
-        </div>
-        """, unsafe_allow_html=True)
-        try:
-            from config.market_registry import get_all_region_codes
-            all_regions = get_all_region_codes()
-        except Exception:
-            all_regions = ["IN", "US", "UK", "JP"]
-        available_regions = df_signals['market_region'].unique().tolist()
-        regions = [r for r in all_regions if r in available_regions] + [r for r in available_regions if r not in all_regions]
-        if not regions:
-            regions = ["IN"]
-        default_ix = regions.index("IN") if "IN" in regions else 0
-        selected_region = st.selectbox("Region", regions, index=default_ix, label_visibility="collapsed")
+        with filter_col1:
+            st.markdown("""
+            <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span style="font-size: 0.70rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">TIMEFRAME</span>
+            </div>
+            """, unsafe_allow_html=True)
+            timeframe_options = ["1 Day", "12 Hours", "6 Hours", "4 Hours", "7 Days", "1 Month", "1 Year", "All"]
+            default_tf_ix = timeframe_options.index("7 Days") if "7 Days" in timeframe_options else 4
+            date_range = st.selectbox("Timeframe", timeframe_options, index=default_tf_ix, label_visibility="collapsed")
+            
+        with filter_col2:
+            st.markdown("""
+            <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                <span style="font-size: 0.70rem; font-weight: 700; color: #a78bfa; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">REGION</span>
+            </div>
+            """, unsafe_allow_html=True)
+            try:
+                from config.market_registry import get_all_region_codes
+                all_regions = get_all_region_codes()
+            except Exception:
+                all_regions = ["IN", "US", "UK", "JP"]
+            available_regions = df_signals['market_region'].unique().tolist()
+            regions = [r for r in all_regions if r in available_regions] + [r for r in available_regions if r not in all_regions]
+            if not regions:
+                regions = ["IN"]
+            default_ix = regions.index("IN") if "IN" in regions else 0
+            selected_region = st.selectbox("Region", regions, index=default_ix, label_visibility="collapsed")
 
-    with filter_col3:
-        st.markdown("""
-        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 10"></polyline></svg>
-            <span style="font-size: 0.72rem; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">TIMEZONE</span>
-        </div>
-        """, unsafe_allow_html=True)
-        tz_options = {
-            "Asia/Kolkata (IST)": "Asia/Kolkata",
-            "UTC": "UTC",
-            "America/New_York (EST)": "America/New_York",
-            "Europe/London (GMT)": "Europe/London",
-            "Asia/Tokyo (JST)": "Asia/Tokyo"
-        }
-        tz_keys = list(tz_options.keys())
-        default_tz_ix = next((i for i, k in enumerate(tz_keys) if "IST" in k), 0)
-        display_tz = st.selectbox("tz", tz_keys, index=default_tz_ix, label_visibility="collapsed")
-        target_tz = tz_options[display_tz]
-        tz_abbr = display_tz.split('(')[-1].replace(')', '').strip() if '(' in display_tz else display_tz
-        
-    with filter_col4:
-        st.markdown("""
-        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-            <span style="font-size: 0.72rem; font-weight: 700; color: #34d399; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">EMA WINDOW</span>
-        </div>
-        """, unsafe_allow_html=True)
-        ema_options = [4, 8, 12, 24]
-        default_ema_ix = ema_options.index(4) if 4 in ema_options else 0
-        ema_window = st.selectbox("Exponential Moving Average (Periods)", ema_options, index=default_ema_ix, label_visibility="collapsed")
-        
-    with filter_col5:
-        st.markdown("""
-        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-            <span style="font-size: 0.72rem; font-weight: 700; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">CHART DISPLAY</span>
-        </div>
-        """, unsafe_allow_html=True)
-        active_indices = df_signals[df_signals['market_region'] == selected_region]['index_ticker'].unique().tolist()
-        active_indices = [x for x in active_indices if x != 'UNKNOWN']
-        chart_display = st.selectbox("Chart Display", ["All Indices"] + active_indices, index=0, label_visibility="collapsed")
+        with filter_col3:
+            st.markdown("""
+            <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 10"></polyline></svg>
+                <span style="font-size: 0.70rem; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">TIMEZONE</span>
+            </div>
+            """, unsafe_allow_html=True)
+            tz_options = {
+                "Asia/Kolkata (IST)": "Asia/Kolkata",
+                "UTC": "UTC",
+                "America/New_York (EST)": "America/New_York",
+                "Europe/London (GMT)": "Europe/London",
+                "Asia/Tokyo (JST)": "Asia/Tokyo"
+            }
+            tz_keys = list(tz_options.keys())
+            default_tz_ix = next((i for i, k in enumerate(tz_keys) if "IST" in k), 0)
+            display_tz = st.selectbox("tz", tz_keys, index=default_tz_ix, label_visibility="collapsed")
+            target_tz = tz_options[display_tz]
+            tz_abbr = display_tz.split('(')[-1].replace(')', '').strip() if '(' in display_tz else display_tz
+            
+        with filter_col4:
+            st.markdown("""
+            <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                <span style="font-size: 0.70rem; font-weight: 700; color: #34d399; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">EMA WINDOW</span>
+            </div>
+            """, unsafe_allow_html=True)
+            ema_options = [4, 8, 12, 24]
+            default_ema_ix = ema_options.index(4) if 4 in ema_options else 0
+            ema_window = st.selectbox("Exponential Moving Average (Periods)", ema_options, index=default_ema_ix, label_visibility="collapsed")
+            
+        with filter_col5:
+            st.markdown("""
+            <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                <span style="font-size: 0.70rem; font-weight: 700; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">CHART DISPLAY</span>
+            </div>
+            """, unsafe_allow_html=True)
+            active_indices = df_signals[df_signals['market_region'] == selected_region]['index_ticker'].unique().tolist()
+            active_indices = [x for x in active_indices if x != 'UNKNOWN']
+            chart_display = st.selectbox("Chart Display", ["All Indices"] + active_indices, index=0, label_visibility="collapsed")
 
     filtered_signals = df_signals[df_signals['market_region'] == selected_region].copy()
     display_payloads = df_payloads.copy()
@@ -977,119 +1012,118 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
             # 1. Global Index
             if delta > 0:
                 arrow = "▲"
-                delta_pill_color = "#34d399"
-                delta_pill_bg = "rgba(16, 185, 129, 0.15)"
+                delta_pill_color = "#059669" if is_light else "#34d399"
+                delta_pill_bg = "rgba(16, 185, 129, 0.12)" if is_light else "rgba(16, 185, 129, 0.15)"
                 delta_pill_border = "rgba(16, 185, 129, 0.3)"
             elif delta < 0:
                 arrow = "▼"
-                delta_pill_color = "#f87171"
-                delta_pill_bg = "rgba(239, 68, 68, 0.15)"
+                delta_pill_color = "#dc2626" if is_light else "#f87171"
+                delta_pill_bg = "rgba(239, 68, 68, 0.12)" if is_light else "rgba(239, 68, 68, 0.15)"
                 delta_pill_border = "rgba(239, 68, 68, 0.3)"
             else:
                 arrow = "▬"
-                delta_pill_color = "#94a3b8"
-                delta_pill_bg = "rgba(148, 163, 184, 0.15)"
+                delta_pill_color = "#475569" if is_light else "#94a3b8"
+                delta_pill_bg = "rgba(148, 163, 184, 0.12)" if is_light else "rgba(148, 163, 184, 0.15)"
                 delta_pill_border = "rgba(148, 163, 184, 0.3)"
                 
             val_color = "green" if current_ema > 0 else "red" if current_ema < 0 else ""
             
-            st.markdown(f"""
-<div class="white-card bg-blue">
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 4px;">
-        <span class="metric-title" style="margin-bottom: 0;">Aggregate Optimism</span>
-        <span style="font-size: 0.68rem; font-weight: 700; color: #60a5fa; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">{selected_region}</span>
-    </div>
-    <div class="metric-value {val_color}">{current_ema:+.1f}</div>
-    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 4px;">
-        <span style="font-size: 0.72rem; font-weight: 700; color: {delta_pill_color}; background: {delta_pill_bg}; border: 1px solid {delta_pill_border}; padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
-            {arrow} {abs(delta):.1f}%
-        </span>
-        <span style="font-size: 0.72rem; color: #64748b;">vs previous period</span>
-    </div>
-    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: #94a3b8; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
-        <span>Confidence Vector</span>
-        <span style="color: #cbd5e1; font-weight: 600;">System-One CLM</span>
-    </div>
-</div>
-""", unsafe_allow_html=True)
-            
             # 2. Market Bias
             bias = "Bullish" if current_ema > 5 else "Bearish" if current_ema < -5 else "Neutral"
             if bias == "Bullish":
-                b_color_hex = "#34d399"
-                b_pill_bg = "rgba(16, 185, 129, 0.15)"
+                b_color_hex = "#059669" if is_light else "#34d399"
+                b_pill_bg = "rgba(16, 185, 129, 0.12)" if is_light else "rgba(16, 185, 129, 0.15)"
                 b_pill_border = "rgba(16, 185, 129, 0.3)"
                 b_val_color = "green"
             elif bias == "Bearish":
-                b_color_hex = "#f87171"
-                b_pill_bg = "rgba(239, 68, 68, 0.15)"
+                b_color_hex = "#dc2626" if is_light else "#f87171"
+                b_pill_bg = "rgba(239, 68, 68, 0.12)" if is_light else "rgba(239, 68, 68, 0.15)"
                 b_pill_border = "rgba(239, 68, 68, 0.3)"
                 b_val_color = "red"
             else:
-                b_color_hex = "#c084fc"
-                b_pill_bg = "rgba(168, 85, 247, 0.15)"
-                b_pill_border = "rgba(168, 85, 247, 0.3)"
+                b_color_hex = "#7c3aed" if is_light else "#c084fc"
+                b_pill_bg = "rgba(124, 58, 237, 0.12)" if is_light else "rgba(168, 85, 247, 0.15)"
+                b_pill_border = "rgba(124, 58, 237, 0.3)" if is_light else "rgba(168, 85, 247, 0.3)"
                 b_val_color = ""
-                
-            st.markdown(f"""
-<div class="white-card bg-purple">
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 4px;">
-        <span class="metric-title" style="margin-bottom: 0;">Market Bias</span>
-        <span style="font-size: 0.68rem; font-weight: 700; color: {b_color_hex}; background: {b_pill_bg}; border: 1px solid {b_pill_border}; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">{bias}</span>
-    </div>
-    <div class="metric-value {b_val_color}">{bias}</div>
-    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 4px;">
-        <span style="font-size: 0.72rem; font-weight: 700; color: #c084fc; background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
-            {ema_window}-Period Window
-        </span>
-        <span style="font-size: 0.72rem; color: #64748b;">moving average</span>
-    </div>
-    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
-        <span>Signal Strategy</span>
-        <span style="color: var(--text-secondary); font-weight: 600;">EMA Crossover</span>
-    </div>
-</div>
-""", unsafe_allow_html=True)
-            
+
             # 3. Volume
-            st.markdown(f"""
-<div class="white-card bg-orange">
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 4px;">
-        <span class="metric-title" style="margin-bottom: 0;">Total News Volume</span>
-        <span style="font-size: 0.68rem; font-weight: 700; color: #fbbf24; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">Live Feed</span>
-    </div>
-    <div class="metric-value" style="color: var(--text-primary);">{len(filtered_signals)}</div>
-    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 4px;">
-        <span style="font-size: 0.72rem; font-weight: 700; color: #fbbf24; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
-            {date_range} Window
-        </span>
-        <span style="font-size: 0.72rem; color: #64748b;">articles ingested</span>
-    </div>
-    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
-        <span>Ingestion Cycle</span>
-        <span style="color: var(--text-secondary); font-weight: 600;">Every 2 Hours</span>
-    </div>
-</div>
-""", unsafe_allow_html=True)
-            
+            total_news_count = len(filtered_signals)
+
             # 4. Indices Active
             tracked_count = filtered_signals['index_ticker'].nunique()
+
             st.markdown(f"""
-<div class="white-card bg-green">
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 4px;">
-        <span class="metric-title" style="margin-bottom: 0;">Tracked Indices</span>
-        <span style="font-size: 0.68rem; font-weight: 700; color: #34d399; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">{selected_region}</span>
+<div class="kpi-column-container">
+    <div class="white-card bg-blue kpi-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">
+            <span class="metric-title" style="margin-bottom: 0;">Aggregate Optimism</span>
+            <span style="font-size: 0.68rem; font-weight: 700; color: {'#0284c7' if is_light else '#60a5fa'}; background: {'rgba(2, 132, 199, 0.12)' if is_light else 'rgba(59, 130, 246, 0.15)'}; border: 1px solid {'rgba(2, 132, 199, 0.3)' if is_light else 'rgba(59, 130, 246, 0.3)'}; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">{selected_region}</span>
+        </div>
+        <div class="metric-value {val_color}">{current_ema:+.1f}</div>
+        <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">
+            <span style="font-size: 0.72rem; font-weight: 700; color: {delta_pill_color}; background: {delta_pill_bg}; border: 1px solid {delta_pill_border}; padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
+                {arrow} {abs(delta):.1f}%
+            </span>
+            <span style="font-size: 0.72rem; color: {'#475569' if is_light else '#64748b'};">vs previous period</span>
+        </div>
+        <div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.72rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
+            <span>Confidence Vector</span>
+            <span style="color: var(--text-secondary); font-weight: 600;">System-One CLM</span>
+        </div>
     </div>
-    <div class="metric-value" style="color: var(--text-primary);">{tracked_count}</div>
-    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 4px;">
-        <span style="font-size: 0.72rem; font-weight: 700; color: #34d399; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
-            100% Active
-        </span>
-        <span style="font-size: 0.72rem; color: #64748b;">real-time monitored</span>
+
+    <div class="white-card bg-purple kpi-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">
+            <span class="metric-title" style="margin-bottom: 0;">Market Bias</span>
+            <span style="font-size: 0.68rem; font-weight: 700; color: {b_color_hex}; background: {b_pill_bg}; border: 1px solid {b_pill_border}; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">{bias}</span>
+        </div>
+        <div class="metric-value {b_val_color}">{bias}</div>
+        <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">
+            <span style="font-size: 0.72rem; font-weight: 700; color: {'#7c3aed' if is_light else '#c084fc'}; background: {'rgba(124, 58, 237, 0.12)' if is_light else 'rgba(168, 85, 247, 0.12)'}; border: 1px solid {'rgba(124, 58, 237, 0.25)' if is_light else 'rgba(168, 85, 247, 0.25)'}; padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
+                {ema_window}-Period Window
+            </span>
+            <span style="font-size: 0.72rem; color: {'#475569' if is_light else '#64748b'};">moving average</span>
+        </div>
+        <div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.72rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
+            <span>Signal Strategy</span>
+            <span style="color: var(--text-secondary); font-weight: 600;">EMA Crossover</span>
+        </div>
     </div>
-    <div class="metric-footer" style="margin-top: 8px; padding-top: 6px; font-size: 0.72rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
-        <span>Active Universe</span>
-        <span style="color: var(--text-secondary); font-weight: 600;">20 Global Assets</span>
+
+    <div class="white-card bg-orange kpi-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">
+            <span class="metric-title" style="margin-bottom: 0;">Total News Volume</span>
+            <span style="font-size: 0.68rem; font-weight: 700; color: {'#d97706' if is_light else '#fbbf24'}; background: {'rgba(245, 158, 11, 0.12)' if is_light else 'rgba(245, 158, 11, 0.15)'}; border: 1px solid {'rgba(245, 158, 11, 0.3)' if is_light else 'rgba(245, 158, 11, 0.3)'}; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">Live Feed</span>
+        </div>
+        <div class="metric-value" style="color: var(--text-primary);">{total_news_count}</div>
+        <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">
+            <span style="font-size: 0.72rem; font-weight: 700; color: {'#d97706' if is_light else '#fbbf24'}; background: {'rgba(245, 158, 11, 0.12)' if is_light else 'rgba(245, 158, 11, 0.12)'}; border: 1px solid {'rgba(245, 158, 11, 0.25)' if is_light else 'rgba(245, 158, 11, 0.25)'}; padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
+                {date_range} Window
+            </span>
+            <span style="font-size: 0.72rem; color: {'#475569' if is_light else '#64748b'};">articles ingested</span>
+        </div>
+        <div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.72rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
+            <span>Ingestion Cycle</span>
+            <span style="color: var(--text-secondary); font-weight: 600;">Every 2 Hours</span>
+        </div>
+    </div>
+
+    <div class="white-card bg-green kpi-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">
+            <span class="metric-title" style="margin-bottom: 0;">Tracked Indices</span>
+            <span style="font-size: 0.68rem; font-weight: 700; color: {'#059669' if is_light else '#34d399'}; background: {'rgba(16, 185, 129, 0.12)' if is_light else 'rgba(16, 185, 129, 0.15)'}; border: 1px solid {'rgba(16, 185, 129, 0.3)' if is_light else 'rgba(16, 185, 129, 0.3)'}; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">{selected_region}</span>
+        </div>
+        <div class="metric-value" style="color: var(--text-primary);">{tracked_count}</div>
+        <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">
+            <span style="font-size: 0.72rem; font-weight: 700; color: {'#059669' if is_light else '#34d399'}; background: {'rgba(16, 185, 129, 0.12)' if is_light else 'rgba(16, 185, 129, 0.12)'}; border: 1px solid {'rgba(16, 185, 129, 0.25)' if is_light else 'rgba(16, 185, 129, 0.25)'}; padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
+                100% Active
+            </span>
+            <span style="font-size: 0.72rem; color: {'#475569' if is_light else '#64748b'};">real-time monitored</span>
+        </div>
+        <div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.72rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
+            <span>Active Universe</span>
+            <span style="color: var(--text-secondary); font-weight: 600;">20 Global Assets</span>
+        </div>
     </div>
 </div>
 """, unsafe_allow_html=True)
