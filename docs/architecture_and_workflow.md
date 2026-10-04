@@ -432,36 +432,38 @@ order = trading_client.submit_order(order_data=order_data)
 +------------------------------------------------------------------------------------+
 |  [HEADER BANNER: GSP Platform Identity (Left) | Status & Dark/Light Toggle (Right)]|
 +------------------------------------------------------------------------------------+
-|  [THE QUANTITATIVE EDGE: Full-Width Contrastive Language Model (CLM) USP Banner]   |
+|  [EXPANDER: How GSP Works • Pure Mathematical Sentiment via CLM (Collapsed)]      |
 +------------------------------------------------------------------------------------+
 |  [5-COLUMN FILTER BAR: Timeframe | Region | Timezone | EMA Window | Chart Display] |
 +--------------------------+---------------------------------------------------------+
-|  KPI TILES (LEFT COL)    |  CHART & TILES (RIGHT COL)                              |
+|  KPI TILES (LEFT COL)    |  UNIFIED CHART & ASSET CONTAINER (RIGHT COL)            |
 |  - Aggregate Optimism    |  +---------------------------------------------------+  |
-|  - Market Bias (Bull/Bear|  | Plotly Area Chart (Multi-Index Overlay + EMA Trend) |  |
-|  - Total Ingested Volume |  +---------------------------------------------------+  |
-|  - Active Universe Count |  - Mini Asset Tiles (S&P, NASDAQ, Dow, Russell, VIX)    |
+|    (Hero Size: 2.2rem)   |  | Multi-Series Line Chart (Prominent Bold EMA Trend)|  |
+|  - Market Bias           |  | - Symmetrical [-100, +100] Y-Axis, Neutral Gray 0 |  |
+|  - Total Ingested Volume |  | - Unified Tooltip, Unclipped Legends, Zoom/Pan   |  |
+|  - Tracked Indices Count |  +---------------------------------------------------+  |
+|  (Neutral Institutional) |  - Embedded Mini Asset Tiles (Flush Alignment)          |
 +--------------------------+---------------------------------------------------------+
-|  LIVE INTELLIGENCE STREAM (COLLAPSIBLE ACCORDION CONTAINER)                        |
-|  - Collapsed state: Summary Bar (Title, Chevron, Total / Bullish / Bearish / Noise)|
-|  - Expanded state: Individual news cards with timestamps, sources & sentiment chips|
+|  LIVE INTELLIGENCE STREAM (SURFACED ACCORDION CONTAINER WITH SENTIMENT FILTER)    |
+|  - Filter Bar: All Events | Bullish Only | Bearish Only | Market Noise             |
+|  - Open by default: Real-time news items with timestamps, sources & sentiment chips|
 +------------------------------------------------------------------------------------+
 ```
 
 #### 1. Visual Design Architecture
 The dashboard implements an institutional financial terminal theme with a unified CSS Design System:
-* **Top-Right Dark/Light Mode Theme Toggle & Telemetry:** Positioned in the upper right control card, allowing seamless switching between deep slate canvas (`#020617`) and a luminous sky-blue gradient (`linear-gradient(180deg, #dbeafe 0%, #eff6ff 25%, #f8fafc 100%)`). Uses modern `color-scheme: light / dark` alongside dual Adobe React-Aria (`react-aria-ComboBox`, `div[role="group"]`, `div.react-aria-Popover`) and legacy BaseWeb selectbox overrides, ensuring all inputs, popover lists, and dropdown options render in crisp white/slate in Light Mode. The control card integrates a `MODAL A10G CLM` hardware telemetry badge, glowing green `SYSTEM ONLINE` indicator, and a custom-styled pill toggle switch defaulted to Dark Mode with synchronized label states.
-* **Background & Typography:** Deep slate canvas (`#020617`) in dark mode or sky-blue financial gradient in light mode, Montserrat for typographic hierarchy, and IBM Plex Sans for tabular readouts.
-* **Glassmorphic Surface Design:** Translucent cards (`rgba(15, 23, 42, 0.65)` in Dark Mode, `rgba(255, 255, 255, 0.92)` in Light Mode with `backdrop-filter: blur(10px)`) accented with directional color borders: Emerald (`#10b981`) for bullish signals, Rose (`#ef4444`) for bearish conditions, and Blue (`#3b82f6`) for aggregate metrics.
-* **Full-Width Quantitative Edge USP Banner:** Prominently highlights the CLM mathematical advantage across the full width of the terminal canvas with zero blank voids, fluid typography (`clamp()`), and responsive status badges.
-* **Unified Glassmorphic Filter Toolbar:** All 5 global controls (`TIMEFRAME`, `REGION`, `TIMEZONE`, `EMA WINDOW`, and `CHART DISPLAY`) are housed in a dedicated frosted-glass toolbar card (`st.columns([1.1, 0.85, 1.45, 0.85, 1.25], gap="small")`). Docked micro-labels with SVG indicators sit directly above selectboxes with zero ghost margin, eliminating awkward horizontal voids.
-* **Flush Column Alignment & Mathematical Grid Layout:** Consolidated single-container flex stretch (`.kpi-column-container`), calibrated chart geometry (`height=345`), and proportional flex distribution (`flex: 1 1 0px`) across the 4 left KPI cards align the bottom baseline pixel-perfect with the `.mini-kpi-grid` on the right with pure HTML markdown rendering free of indented code block leakage.
+* **Top-Right Dark/Light Mode Theme Toggle & Telemetry:** Positioned in the upper right control card, allowing seamless switching between deep slate canvas (`#020617`) and high-contrast light mode (`#f1f5f9` with pure white cards `#ffffff`). Uses modern `color-scheme: light / dark` alongside dual Adobe React-Aria (`react-aria-ComboBox`, `div[role="group"]`, `div.react-aria-Popover`) and BaseWeb selectbox overrides, ensuring all inputs, popover lists, and dropdown options render with crisp contrast. The control card displays real-time telemetry (`UPDATED {time_display_str}`), glowing green `SYSTEM ONLINE` indicator, and a custom-styled pill toggle switch with defined track borders.
+* **Above-the-Fold Space Optimization:** The "Quantitative Edge" USP banner is housed in a sleek collapsed expander (`with st.expander(...)`), reclaiming ~150px of vertical space so the entire executive terminal fits cleanly above the fold at 100% browser zoom.
+* **Neutral Institutional KPI Hierarchy:** Excised legacy multi-color card backgrounds in favor of a single neutral card style (`.white-card .kpi-card`). Visual hierarchy is established by hero-sizing `Aggregate Optimism` (`2.2rem`) above secondary supporting metrics (`1.45rem`), with sentence-case typography and pills reserved strictly for directional status (`▲ 6.1%`, `BEARISH`, `BULLISH`).
+* **Unified Glassmorphic Filter Toolbar:** All 5 global controls (`TIMEFRAME`, `REGION`, `TIMEZONE`, `EMA WINDOW`, and `CHART DISPLAY`) are housed in a dedicated frosted-glass toolbar card with uniform muted slate labels (`#64748b` in light mode, `#94a3b8` in dark mode) and enriched descriptive options (e.g. `India (IN)`, `4 Periods`).
+* **Flush Column Alignment & Unified Chart Container:** Both the Plotly time series and the per-index mini tiles are unified inside the exact same bordered container (`with st.container(border=True):`). Combined with flex stretch layout (`.kpi-column-container`), this guarantees that the left KPI column and the right chart/tiles container align flush at the bottom boundary.
 
-#### 2. Plotly Multi-Index Sentiment Surface
-The primary visualization overlays filled area plots for each tracked index alongside a prominent region-wide EMA trend line:
-* Individual asset areas use semi-transparent fills (`fill='tozeroy'`, opacity 0.3).
-* The aggregate regional EMA is drawn as a high-contrast white vector line (`width=2.5`).
-* **High-Contrast Terminal Axes:** Styled X-axis (`TIMELINE • {tz_abbr}`) and Y-axis (`OPTIMISM SCORE`) titles in bold Montserrat with cyan (`#38bdf8`) accents, crisp outside tick marks (`ticks='outside'`), and an emerald equilibrium line (`#10b981` at $0.0$) marking bullish/bearish divergence.
+#### 2. Plotly Multi-Series Sentiment Visualization
+The primary visualization renders a clean, multi-line time series without visual clutter:
+* **Clean Multi-Line Traces (Zero Fill Blending):** Individual index series render as distinct lines with markers (`mode='lines+markers'`, `width=2.0`), completely eliminating overlapping translucent fills that previously obscured index differentiation.
+* **Prominent Bold EMA Trend:** The aggregate regional EMA is drawn on top as a bold, prominent vector line (`width=3.5`), providing immediate visual salience as the primary directional signal.
+* **Symmetrical Balanced Y-Axis:** Enforces a balanced $[-105, +105]$ range (`dtick=25`) centered on a neutral slate gray zero line (`rgba(148, 163, 184, 0.45)`), preventing negative data from pushing the chart ceiling down and eliminating deceptive green zero lines.
+* **Unclipped Legend & Unified Tooltips:** Legend items use clean ticker names (`name=ticker`) with generous horizontal spacing (`itemgap=18`), preventing dark-mode label clipping. `hovermode="x unified"` displays all series concurrently at any timestamp, with scroll zoom enabled.
 * Plotly timestamps are converted to naive datetimes in the user's selected timezone, eliminating UTC conversion discrepancies on the x-axis.
 
 #### 3. Global Timezone Conversion Engine

@@ -46,39 +46,45 @@ if is_light:
     theme_css_vars = """
         color-scheme: light !important;
         --primary-color: #0284c7 !important;
-        --background-color: #f0f7ff !important;
+        --background-color: #f1f5f9 !important;
         --secondary-background-color: #ffffff !important;
         --text-color: #0f172a !important;
-        --bg-main: #f0f7ff;
-        --bg-gradient: linear-gradient(180deg, #dbeafe 0%, #eff6ff 25%, #f8fafc 100%);
+        --bg-main: #f1f5f9;
+        --bg-gradient: #f1f5f9;
         --text-primary: #0f172a;
         --text-secondary: #334155;
         --text-muted: #64748b;
-        --card-bg: rgba(255, 255, 255, 0.94);
-        --card-border: rgba(148, 163, 184, 0.35);
-        --card-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
-        --card-hover-bg: #f8fafc;
-        --card-hover-border: rgba(2, 132, 199, 0.5);
+        --card-bg: #ffffff;
+        --card-border: #cbd5e1;
+        --card-shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+        --card-hover-bg: #ffffff;
+        --card-hover-border: #94a3b8;
         --input-bg: #ffffff;
         --input-border: #cbd5e1;
         --input-text: #0f172a;
-        --header-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(224, 242, 254, 0.9) 100%);
-        --header-border: rgba(2, 132, 199, 0.35);
+        --header-bg: #ffffff;
+        --header-border: #cbd5e1;
         --header-border-left: #0284c7;
-        --header-shadow: 0 4px 20px rgba(2, 132, 199, 0.08);
-        --edge-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(240, 249, 255, 0.95) 100%);
-        --edge-border: rgba(56, 189, 248, 0.35);
+        --header-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+        --edge-bg: #ffffff;
+        --edge-border: #cbd5e1;
         --edge-accent: #0284c7;
         --edge-text: #334155;
-        --feed-bg: rgba(255, 255, 255, 0.85);
-        --feed-border: rgba(148, 163, 184, 0.3);
+        --feed-bg: #ffffff;
+        --feed-border: #cbd5e1;
         --feed-card-bg: #ffffff;
-        --feed-card-border: rgba(148, 163, 184, 0.25);
-        --feed-card-hover: rgba(240, 249, 255, 0.95);
+        --feed-card-border: #e2e8f0;
+        --feed-card-hover: #f8fafc;
         --feed-headline: #0f172a;
-        --feed-badge-bg: rgba(0, 0, 0, 0.04);
-        --feed-badge-border: rgba(0, 0, 0, 0.08);
-        --feed-badge-text: #475569;
+        --feed-badge-bg: #f1f5f9;
+        --feed-badge-border: #cbd5e1;
+        --feed-badge-text: #334155;
+        --action-btn-bg: rgba(2, 132, 199, 0.12);
+        --action-btn-border: rgba(2, 132, 199, 0.35);
+        --action-btn-color: #0284c7;
+        --action-btn-hover-bg: rgba(2, 132, 199, 0.22);
+        --action-btn-hover-border: #0284c7;
+        --action-btn-hover-color: #0369a1;
         --metric-green: #059669;
         --metric-red: #dc2626;
     """
@@ -119,6 +125,12 @@ else:
         --feed-badge-bg: rgba(255, 255, 255, 0.04);
         --feed-badge-border: rgba(255, 255, 255, 0.08);
         --feed-badge-text: #94a3b8;
+        --action-btn-bg: rgba(59, 130, 246, 0.18);
+        --action-btn-border: rgba(59, 130, 246, 0.45);
+        --action-btn-color: #60a5fa;
+        --action-btn-hover-bg: rgba(59, 130, 246, 0.3);
+        --action-btn-hover-border: #60a5fa;
+        --action-btn-hover-color: #ffffff;
         --metric-green: #10b981;
         --metric-red: #ef4444;
     """
@@ -140,7 +152,7 @@ __THEME_VARS__
     }
     
     .block-container {
-        padding-top: 1.5rem !important;
+        padding-top: 1rem !important;
         padding-bottom: 1.5rem !important;
         max-width: 1600px;
         background: transparent !important;
@@ -157,7 +169,7 @@ __THEME_VARS__
         margin-bottom: 15px;
     }
     
-    /* Enviro Style Glass Cards */
+    /* Institutional Terminal Neutral Cards */
     .white-card {
         background: var(--card-bg) !important;
         border-radius: 8px;
@@ -166,7 +178,7 @@ __THEME_VARS__
         border: 1px solid var(--card-border) !important;
         box-shadow: var(--card-shadow);
         backdrop-filter: blur(10px);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .white-card:last-child {
         margin-bottom: 0 !important;
@@ -175,22 +187,9 @@ __THEME_VARS__
         background: var(--card-hover-bg) !important;
         border-color: var(--card-hover-border) !important;
     }
-    
-    /* Colored Glass Cards (Deep Translucent Tints) */
-    .bg-blue { border-left: 3px solid #3b82f6 !important; background: rgba(59, 130, 246, 0.1) !important; }
-    .bg-blue:hover { background: rgba(59, 130, 246, 0.15) !important; border-color: rgba(59, 130, 246, 0.3) !important; }
-    
-    .bg-green { border-left: 3px solid #10b981 !important; background: rgba(16, 185, 129, 0.1) !important; }
-    .bg-green:hover { background: rgba(16, 185, 129, 0.15) !important; border-color: rgba(16, 185, 129, 0.3) !important; }
-    
-    .bg-purple { border-left: 3px solid #8b5cf6 !important; background: rgba(139, 92, 246, 0.1) !important; }
-    .bg-purple:hover { background: rgba(139, 92, 246, 0.15) !important; border-color: rgba(139, 92, 246, 0.3) !important; }
-    
-    .bg-orange { border-left: 3px solid #f59e0b !important; background: rgba(245, 158, 11, 0.1) !important; }
-    .bg-orange:hover { background: rgba(245, 158, 11, 0.15) !important; border-color: rgba(245, 158, 11, 0.3) !important; }
-    
-    .bg-indigo { border-left: 3px solid #6366f1 !important; background: rgba(99, 102, 241, 0.1) !important; }
-    .bg-indigo:hover { background: rgba(99, 102, 241, 0.15) !important; border-color: rgba(99, 102, 241, 0.3) !important; }
+    .kpi-card {
+        border-left: 3px solid var(--card-border) !important;
+    }
     
     /* Override Streamlit native container border */
     [data-testid="stVerticalBlockBorderWrapper"] {
@@ -468,24 +467,24 @@ __THEME_VARS__
         width: 100% !important;
         cursor: pointer !important;
         margin: 0 !important;
-        padding: 4px 10px !important;
-        background: var(--card-bg) !important;
-        border: 1px solid var(--card-border) !important;
+        padding: 6px 12px !important;
+        background: var(--input-bg) !important;
+        border: 1px solid var(--input-border) !important;
         border-radius: 6px !important;
         box-sizing: border-box !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
     div[data-testid="stToggle"] label:hover {
-        background: var(--card-hover-bg) !important;
         border-color: var(--header-border-left) !important;
         box-shadow: 0 0 10px rgba(59, 130, 246, 0.15) !important;
     }
     div[data-testid="stToggle"] label div[data-testid="stMarkdownContainer"] p {
         font-family: 'Montserrat', sans-serif !important;
-        font-size: 0.70rem !important;
+        font-size: 0.75rem !important;
         font-weight: 700 !important;
         color: var(--text-primary) !important;
-        letter-spacing: 0.05em !important;
+        letter-spacing: 0.04em !important;
         text-transform: uppercase !important;
         margin: 0 !important;
         display: flex !important;
@@ -495,17 +494,22 @@ __THEME_VARS__
     div[data-testid="stToggle"] div[data-testid="stCheckboxToggle"] {
         margin: 0 !important;
     }
+    div[data-testid="stToggle"] div[data-testid="stCheckboxToggle"] > div {
+        border: 1px solid var(--input-border) !important;
+    }
     
     /* Dedicated Mini Index Grid & Card Styling */
     .mini-kpi-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
         gap: 10px;
-        margin-top: 10px;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid var(--card-border);
     }
     .mini-index-card {
-        background: var(--feed-card-bg) !important;
-        border: 1px solid var(--feed-card-border) !important;
+        background: var(--card-bg) !important;
+        border: 1px solid var(--card-border) !important;
         border-radius: 8px;
         padding: 10px 14px;
         display: flex;
@@ -525,32 +529,38 @@ __THEME_VARS__
     /* Metrics */
     .metric-title {
         font-family: 'Montserrat', sans-serif;
-        font-size: 0.75rem;
-        font-weight: 600;
+        font-size: 0.78rem;
+        font-weight: 700;
         color: var(--text-muted) !important;
         text-transform: uppercase;
-        letter-spacing: 0.03em;
+        letter-spacing: 0.04em;
         margin-bottom: 4px;
     }
     .metric-value {
         font-family: 'Montserrat', sans-serif;
-        font-size: 1.6rem;
+        font-size: 1.55rem;
         font-weight: 700;
         color: var(--text-primary) !important;
         letter-spacing: -0.01em;
         margin-bottom: 2px;
     }
+    .metric-hero {
+        font-size: 2.2rem !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.02em !important;
+    }
     .metric-sub {
-        font-size: 0.8rem;
-        font-weight: 600;
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: var(--text-secondary) !important;
     }
     .green { color: var(--metric-green) !important; }
     .red { color: var(--metric-red) !important; } 
     .gray { color: var(--text-muted) !important; }
     
     .metric-footer {
-        font-size: 0.75rem;
-        color: var(--text-muted) !important;
+        font-size: 0.80rem;
+        color: var(--text-secondary) !important;
         border-top: 1px solid var(--card-border) !important;
         padding-top: 8px;
         margin-top: 8px;
@@ -666,9 +676,9 @@ __THEME_VARS__
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: rgba(59, 130, 246, 0.18);
-        border: 1px solid rgba(59, 130, 246, 0.45);
-        color: #60a5fa;
+        background: var(--action-btn-bg);
+        border: 1px solid var(--action-btn-border);
+        color: var(--action-btn-color);
         padding: 4px 12px;
         border-radius: 5px;
         font-size: 0.72rem;
@@ -680,10 +690,10 @@ __THEME_VARS__
         flex-shrink: 0;
     }
     details.news-feed-accordion summary.news-feed-summary:hover .expand-action-btn {
-        background: rgba(59, 130, 246, 0.3);
-        border-color: #60a5fa;
-        color: #ffffff;
-        box-shadow: 0 0 12px rgba(59, 130, 246, 0.45);
+        background: var(--action-btn-hover-bg);
+        border-color: var(--action-btn-hover-border);
+        color: var(--action-btn-hover-color);
+        box-shadow: 0 0 12px rgba(59, 130, 246, 0.35);
     }
     details.news-feed-accordion .expand-text { display: inline-flex; align-items: center; gap: 5px; }
     details.news-feed-accordion .collapse-text { display: none; }
@@ -691,15 +701,15 @@ __THEME_VARS__
     details.news-feed-accordion[open] .collapse-text { display: inline-flex; align-items: center; gap: 5px; }
     
     details.news-feed-accordion[open] .expand-action-btn {
-        background: rgba(148, 163, 184, 0.12);
-        border-color: rgba(148, 163, 184, 0.35);
-        color: #cbd5e1;
+        background: var(--action-btn-bg);
+        border-color: var(--action-btn-border);
+        color: var(--action-btn-color);
     }
     details.news-feed-accordion[open] summary.news-feed-summary:hover .expand-action-btn {
-        background: rgba(239, 68, 68, 0.15);
-        border-color: rgba(239, 68, 68, 0.4);
-        color: #f87171;
-        box-shadow: 0 0 12px rgba(239, 68, 68, 0.35);
+        background: var(--action-btn-hover-bg);
+        border-color: var(--action-btn-hover-border);
+        color: var(--action-btn-hover-color);
+        box-shadow: 0 0 12px rgba(59, 130, 246, 0.35);
     }
 </style>
 """.replace("__THEME_VARS__", theme_css_vars)
@@ -852,6 +862,15 @@ if not df_signals.empty:
     # Calibrate historical records where magnitude was suppressed by the early rubric-score bug
     df_signals['sentiment_index'] = df_signals['sentiment_score'] * 100
     df_payloads['sentiment_index'] = df_payloads['sentiment_score'] * 100
+    latest_ts = df_signals['timestamp'].max() if not df_signals.empty else None
+    time_display_str = "14:05 IST"
+    if pd.notna(latest_ts):
+        try:
+            ts_local = latest_ts.tz_convert('Asia/Kolkata') if latest_ts.tzinfo else latest_ts
+            time_display_str = ts_local.strftime('%H:%M IST')
+        except Exception:
+            time_display_str = "LIVE"
+
     # --- Top Row: Header Banner (Left) & Top-Right Control Card (System Status + Theme Toggle) ---
     header_col, action_col = st.columns([0.72, 0.28])
     
@@ -876,9 +895,9 @@ if not df_signals.empty:
         st.markdown(f"""
         <div id="header-control-card-anchor" style="display: none;"></div>
         <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-            <div style="display: inline-flex; align-items: center; gap: 5px; background: {'rgba(2, 132, 199, 0.12)' if is_light else 'rgba(56, 189, 248, 0.12)'}; border: 1px solid {'rgba(2, 132, 199, 0.3)' if is_light else 'rgba(56, 189, 248, 0.28)'}; padding: 3px 8px; border-radius: 4px;">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="{'#0284c7' if is_light else '#38bdf8'}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                <span style="font-size: 0.66rem; font-weight: 800; color: {'#0284c7' if is_light else '#38bdf8'}; font-family: 'Montserrat', sans-serif; letter-spacing: 0.08em; text-transform: uppercase;">MODAL A10G CLM</span>
+            <div style="display: inline-flex; align-items: center; gap: 5px; background: {'rgba(2, 132, 199, 0.10)' if is_light else 'rgba(56, 189, 248, 0.12)'}; border: 1px solid {'rgba(2, 132, 199, 0.28)' if is_light else 'rgba(56, 189, 248, 0.28)'}; padding: 3px 8px; border-radius: 4px;">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="{'#0284c7' if is_light else '#38bdf8'}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span style="font-size: 0.68rem; font-weight: 700; color: {'#0284c7' if is_light else '#38bdf8'}; font-family: 'Montserrat', sans-serif; letter-spacing: 0.04em; text-transform: uppercase;">UPDATED {time_display_str}</span>
             </div>
             <div style="display: inline-flex; align-items: center; gap: 6px; background: {status_bg}; border: 1px solid {status_border}; color: {status_text}; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.08em; padding: 3px 9px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);">
                 <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; display: inline-block;"></span>
@@ -889,35 +908,37 @@ if not df_signals.empty:
         
         st.toggle("🌙 Dark Mode" if is_dark else "☀️ Light Mode", key="theme_toggle")
     
-    st.markdown(f"""
-<div style="background: var(--edge-bg); border: 1px solid var(--edge-border); border-left: 4px solid var(--edge-accent); border-radius: 8px; padding: clamp(10px, 2vw, 12px) clamp(12px, 2.5vw, 18px); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); margin-bottom: 14px;">
-<div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
-<div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-<span style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: {'#0284c7' if is_light else '#38bdf8'}; font-family: 'Montserrat', sans-serif; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; padding: 3px 8px; border-radius: 4px; text-transform: uppercase;">THE QUANTITATIVE EDGE</span>
-<span style="font-family: 'Montserrat', sans-serif; font-size: clamp(0.82rem, 1.8vw, 0.95rem); font-weight: 700; color: var(--text-primary); letter-spacing: -0.01em;">Pure Mathematical Sentiment via Contrastive Language Modeling</span>
-</div>
-<div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-<span style="font-size: 0.65rem; font-weight: 700; color: {'#059669' if is_light else '#34d399'}; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">DETERMINISTIC</span>
-<span style="font-size: 0.65rem; font-weight: 700; color: {'#7c3aed' if is_light else '#a78bfa'}; background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">OKF-CONDITIONED</span>
-<span style="font-size: 0.65rem; font-weight: 700; color: {'#d97706' if is_light else '#fbbf24'}; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">ZERO HALLUCINATION</span>
-</div>
-</div>
-<div style="font-family: 'IBM Plex Sans', sans-serif; font-size: clamp(0.78rem, 1.5vw, 0.82rem); color: var(--edge-text); line-height: 1.55; margin-bottom: 0;">
-Generative LLMs suffer from prompt drift, hallucination, and confidence clustering. GSP replaces text generation with a <strong>System-One Contrastive Model (CLM-8B)</strong> that projects global news directly onto native choice probabilities: <strong style="color: {'#059669' if is_light else '#34d399'}; font-weight: 700;">P(Bullish)</strong>, <strong style="color: {'#dc2626' if is_light else '#f87171'}; font-weight: 700;">P(Bearish)</strong>, and <strong style="color: var(--text-muted); font-weight: 700;">P(Neutral)</strong>. Headlines are conditioned against regional macroeconomic policy rules (OKF), converting real-time global news into an institutional momentum score [-100, +100].
-</div>
-</div>
-""", unsafe_allow_html=True)
+    with st.expander("ℹ️ How GSP Works • Pure Mathematical Sentiment via Contrastive Language Modeling (CLM)", expanded=False):
+        st.markdown(f"""
+        <div style="background: var(--edge-bg); border: 1px solid var(--edge-border); border-left: 4px solid var(--edge-accent); border-radius: 8px; padding: clamp(10px, 2vw, 12px) clamp(12px, 2.5vw, 18px); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); margin-bottom: 4px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <span style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: {'#0284c7' if is_light else '#38bdf8'}; font-family: 'Montserrat', sans-serif; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; padding: 3px 8px; border-radius: 4px; text-transform: uppercase;">THE QUANTITATIVE EDGE</span>
+        <span style="font-family: 'Montserrat', sans-serif; font-size: clamp(0.82rem, 1.8vw, 0.95rem); font-weight: 700; color: var(--text-primary); letter-spacing: -0.01em;">Pure Mathematical Sentiment via Contrastive Language Modeling</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+        <span style="font-size: 0.65rem; font-weight: 700; color: {'#059669' if is_light else '#34d399'}; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">DETERMINISTIC</span>
+        <span style="font-size: 0.65rem; font-weight: 700; color: {'#7c3aed' if is_light else '#a78bfa'}; background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">OKF-CONDITIONED</span>
+        <span style="font-size: 0.65rem; font-weight: 700; color: {'#d97706' if is_light else '#fbbf24'}; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">ZERO HALLUCINATION</span>
+        </div>
+        </div>
+        <div style="font-family: 'IBM Plex Sans', sans-serif; font-size: clamp(0.78rem, 1.5vw, 0.82rem); color: var(--edge-text); line-height: 1.55; margin-bottom: 0;">
+        Generative LLMs suffer from prompt drift, hallucination, and confidence clustering. GSP replaces text generation with a <strong>System-One Contrastive Model (CLM-8B)</strong> that projects global news directly onto native choice probabilities: <strong style="color: {'#059669' if is_light else '#34d399'}; font-weight: 700;">P(Bullish)</strong>, <strong style="color: {'#dc2626' if is_light else '#f87171'}; font-weight: 700;">P(Bearish)</strong>, and <strong style="color: var(--text-muted); font-weight: 700;">P(Neutral)</strong>. Headlines are conditioned against regional macroeconomic policy rules (OKF), converting real-time global news into an institutional momentum score [-100, +100].
+        </div>
+        </div>
+        """, unsafe_allow_html=True)
     
     # --- Top Row: Filter Toolbar Card (5 Aligned Controls) ---
     with st.container(border=True):
         st.markdown('<div id="filter-toolbar-anchor" style="display: none;"></div>', unsafe_allow_html=True)
-        filter_col1, filter_col2, filter_col3, filter_col4, filter_col5 = st.columns([1.1, 0.85, 1.45, 0.85, 1.25], gap="small")
+        filter_col1, filter_col2, filter_col3, filter_col4, filter_col5 = st.columns([1.1, 1.3, 1.45, 1.15, 1.25], gap="small")
+        lbl_color = "#64748b" if is_light else "#94a3b8"
         
         with filter_col1:
-            st.markdown("""
+            st.markdown(f"""
             <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                <span style="font-size: 0.70rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">TIMEFRAME</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">TIMEFRAME</span>
             </div>
             """, unsafe_allow_html=True)
             timeframe_options = ["1 Day", "12 Hours", "6 Hours", "4 Hours", "7 Days", "1 Month", "1 Year", "All"]
@@ -925,10 +946,10 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
             date_range = st.selectbox("Timeframe", timeframe_options, index=default_tf_ix, label_visibility="collapsed")
             
         with filter_col2:
-            st.markdown("""
+            st.markdown(f"""
             <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                <span style="font-size: 0.70rem; font-weight: 700; color: #a78bfa; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">REGION</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">REGION</span>
             </div>
             """, unsafe_allow_html=True)
             try:
@@ -940,14 +961,24 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
             regions = [r for r in all_regions if r in available_regions] + [r for r in available_regions if r not in all_regions]
             if not regions:
                 regions = ["IN"]
-            default_ix = regions.index("IN") if "IN" in regions else 0
-            selected_region = st.selectbox("Region", regions, index=default_ix, label_visibility="collapsed")
+            
+            region_name_map = {
+                "IN": "India (IN)",
+                "US": "United States (US)",
+                "UK": "United Kingdom (UK)",
+                "JP": "Japan (JP)"
+            }
+            display_regions = [region_name_map.get(r, r) for r in regions]
+            default_reg_name = region_name_map.get("IN", "IN")
+            default_ix = display_regions.index(default_reg_name) if default_reg_name in display_regions else 0
+            selected_region_display = st.selectbox("Region", display_regions, index=default_ix, label_visibility="collapsed")
+            selected_region = next((code for code, name in region_name_map.items() if name == selected_region_display), selected_region_display)
 
         with filter_col3:
-            st.markdown("""
+            st.markdown(f"""
             <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 10"></polyline></svg>
-                <span style="font-size: 0.70rem; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">TIMEZONE</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 10"></polyline></svg>
+                <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">TIMEZONE</span>
             </div>
             """, unsafe_allow_html=True)
             tz_options = {
@@ -964,21 +995,22 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
             tz_abbr = display_tz.split('(')[-1].replace(')', '').strip() if '(' in display_tz else display_tz
             
         with filter_col4:
-            st.markdown("""
+            st.markdown(f"""
             <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                <span style="font-size: 0.70rem; font-weight: 700; color: #34d399; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">EMA WINDOW</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">EMA WINDOW</span>
             </div>
             """, unsafe_allow_html=True)
-            ema_options = [4, 8, 12, 24]
-            default_ema_ix = ema_options.index(4) if 4 in ema_options else 0
-            ema_window = st.selectbox("Exponential Moving Average (Periods)", ema_options, index=default_ema_ix, label_visibility="collapsed")
+            ema_display_options = ["4 Periods", "8 Periods", "12 Periods", "24 Periods"]
+            default_ema_ix = 0
+            selected_ema_label = st.selectbox("Exponential Moving Average", ema_display_options, index=default_ema_ix, label_visibility="collapsed")
+            ema_window = int(selected_ema_label.split()[0])
             
         with filter_col5:
-            st.markdown("""
+            st.markdown(f"""
             <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                <span style="font-size: 0.70rem; font-weight: 700; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Montserrat', sans-serif;">CHART DISPLAY</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">CHART DISPLAY</span>
             </div>
             """, unsafe_allow_html=True)
             active_indices = df_signals[df_signals['market_region'] == selected_region]['index_ticker'].unique().tolist()
@@ -1095,64 +1127,60 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
 
             kpi_column_html = (
                 '<div class="kpi-column-container">'
-                '<div class="white-card bg-blue kpi-card">'
+                '<div class="white-card kpi-card">'
                 '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
                 '<span class="metric-title" style="margin-bottom: 0;">Aggregate Optimism</span>'
-                f'<span style="font-size: 0.68rem; font-weight: 700; color: {"#0284c7" if is_light else "#60a5fa"}; background: {"rgba(2, 132, 199, 0.12)" if is_light else "rgba(59, 130, 246, 0.15)"}; border: 1px solid {"rgba(2, 132, 199, 0.3)" if is_light else "rgba(59, 130, 246, 0.3)"}; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{selected_region}</span>'
+                f'<span style="font-size: 0.72rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{selected_region}</span>'
                 '</div>'
-                f'<div class="metric-value {val_color}">{current_ema:+.1f}</div>'
+                f'<div class="metric-value metric-hero {val_color}">{current_ema:+.1f}</div>'
                 '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
-                f'<span style="font-size: 0.72rem; font-weight: 700; color: {delta_pill_color}; background: {delta_pill_bg}; border: 1px solid {delta_pill_border}; padding: 2px 7px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">{arrow} {abs(delta):.1f}%</span>'
-                f'<span style="font-size: 0.72rem; color: {"#475569" if is_light else "#64748b"};">vs previous period</span>'
+                f'<span style="font-size: 0.75rem; font-weight: 700; color: {delta_pill_color}; background: {delta_pill_bg}; border: 1px solid {delta_pill_border}; padding: 2px 8px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">{arrow} {abs(delta):.1f}%</span>'
+                f'<span style="font-size: 0.78rem; color: var(--text-secondary);">vs previous period</span>'
                 '</div>'
-                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.72rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
-                '<span>Confidence Vector</span>'
-                '<span style="color: var(--text-secondary); font-weight: 600;">System-One CLM</span>'
+                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
+                '<span>Confidence vector</span>'
+                '<span style="color: var(--text-primary); font-weight: 600;">System-One CLM</span>'
                 '</div>'
                 '</div>'
-                '<div class="white-card bg-purple kpi-card">'
+                '<div class="white-card kpi-card">'
                 '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
                 '<span class="metric-title" style="margin-bottom: 0;">Market Bias</span>'
-                f'<span style="font-size: 0.68rem; font-weight: 700; color: {b_color_hex}; background: {b_pill_bg}; border: 1px solid {b_pill_border}; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{bias}</span>'
+                f'<span style="font-size: 0.70rem; font-weight: 800; color: {b_color_hex}; background: {b_pill_bg}; border: 1px solid {b_pill_border}; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif; letter-spacing: 0.04em;">{bias}</span>'
                 '</div>'
-                f'<div class="metric-value {b_val_color}">{bias}</div>'
+                f'<div class="metric-value {b_val_color}" style="font-size: 1.45rem;">{bias}</div>'
                 '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
-                f'<span style="font-size: 0.72rem; font-weight: 700; color: {"#7c3aed" if is_light else "#c084fc"}; background: {"rgba(124, 58, 237, 0.12)" if is_light else "rgba(168, 85, 247, 0.12)"}; border: 1px solid {"rgba(124, 58, 237, 0.25)" if is_light else "rgba(168, 85, 247, 0.25)"}; padding: 2px 7px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">{ema_window}-Period Window</span>'
-                f'<span style="font-size: 0.72rem; color: {"#475569" if is_light else "#64748b"};">moving average</span>'
+                f'<span style="font-size: 0.78rem; color: var(--text-secondary);">{ema_window}-period moving average</span>'
                 '</div>'
-                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.72rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
-                '<span>Signal Strategy</span>'
-                '<span style="color: var(--text-secondary); font-weight: 600;">EMA Crossover</span>'
+                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
+                '<span>Signal strategy</span>'
+                '<span style="color: var(--text-primary); font-weight: 600;">EMA Crossover</span>'
                 '</div>'
                 '</div>'
-                '<div class="white-card bg-orange kpi-card">'
+                '<div class="white-card kpi-card">'
                 '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
                 '<span class="metric-title" style="margin-bottom: 0;">Total News Volume</span>'
-                f'<span style="font-size: 0.68rem; font-weight: 700; color: {"#d97706" if is_light else "#fbbf24"}; background: {"rgba(245, 158, 11, 0.12)" if is_light else "rgba(245, 158, 11, 0.15)"}; border: 1px solid {"rgba(245, 158, 11, 0.3)" if is_light else "rgba(245, 158, 11, 0.3)"}; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">Live Feed</span>'
                 '</div>'
-                f'<div class="metric-value" style="color: var(--text-primary);">{total_news_count}</div>'
+                f'<div class="metric-value" style="font-size: 1.45rem; color: var(--text-primary);">{total_news_count}</div>'
                 '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
-                f'<span style="font-size: 0.72rem; font-weight: 700; color: {"#d97706" if is_light else "#fbbf24"}; background: {"rgba(245, 158, 11, 0.12)" if is_light else "rgba(245, 158, 11, 0.12)"}; border: 1px solid {"rgba(245, 158, 11, 0.25)" if is_light else "rgba(245, 158, 11, 0.25)"}; padding: 2px 7px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">{date_range} Window</span>'
-                f'<span style="font-size: 0.72rem; color: {"#475569" if is_light else "#64748b"};">articles ingested</span>'
+                f'<span style="font-size: 0.78rem; color: var(--text-secondary);">Articles ingested ({date_range})</span>'
                 '</div>'
-                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.72rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
-                '<span>Ingestion Cycle</span>'
-                '<span style="color: var(--text-secondary); font-weight: 600;">Every 2 Hours</span>'
+                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
+                '<span>Ingestion cycle</span>'
+                '<span style="color: var(--text-primary); font-weight: 600;">Every 2 hours</span>'
                 '</div>'
                 '</div>'
-                '<div class="white-card bg-green kpi-card">'
+                '<div class="white-card kpi-card">'
                 '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
                 '<span class="metric-title" style="margin-bottom: 0;">Tracked Indices</span>'
-                f'<span style="font-size: 0.68rem; font-weight: 700; color: {"#059669" if is_light else "#34d399"}; background: {"rgba(16, 185, 129, 0.12)" if is_light else "rgba(16, 185, 129, 0.15)"}; border: 1px solid {"rgba(16, 185, 129, 0.3)" if is_light else "rgba(16, 185, 129, 0.3)"}; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{selected_region}</span>'
+                f'<span style="font-size: 0.72rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{selected_region}</span>'
                 '</div>'
-                f'<div class="metric-value" style="color: var(--text-primary);">{tracked_count}</div>'
+                f'<div class="metric-value" style="font-size: 1.45rem; color: var(--text-primary);">{tracked_count}</div>'
                 '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
-                f'<span style="font-size: 0.72rem; font-weight: 700; color: {"#059669" if is_light else "#34d399"}; background: {"rgba(16, 185, 129, 0.12)" if is_light else "rgba(16, 185, 129, 0.12)"}; border: 1px solid {"rgba(16, 185, 129, 0.25)" if is_light else "rgba(16, 185, 129, 0.25)"}; padding: 2px 7px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">100% Active</span>'
-                f'<span style="font-size: 0.72rem; color: {"#475569" if is_light else "#64748b"};">real-time monitored</span>'
+                f'<span style="font-size: 0.78rem; color: var(--text-secondary);">100% active coverage</span>'
                 '</div>'
-                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.72rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
-                '<span>Active Universe</span>'
-                '<span style="color: var(--text-secondary); font-weight: 600;">20 Global Assets</span>'
+                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
+                '<span>Active universe</span>'
+                '<span style="color: var(--text-primary); font-weight: 600;">20 Global assets</span>'
                 '</div>'
                 '</div>'
                 '</div>'
@@ -1160,40 +1188,29 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
             st.markdown(kpi_column_html, unsafe_allow_html=True)
 
         with right_col:
-            # --- Large Area Chart at the top of the right column ---
+            # --- Combined Chart & Mini Index Container (unified alignment & borders) ---
             with st.container(border=True):
                 st.markdown(f"""
-                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 10px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding-bottom: 10px; border-bottom: 1px solid var(--card-border); margin-bottom: 8px;">
                     <div style="display: flex; align-items: center; gap: 10px;">
                         <div style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.35); padding: 5px; border-radius: 6px; display: flex; align-items: center;">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
                         </div>
                         <div>
                             <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); font-family: 'Montserrat', sans-serif;">Aggregate Market Optimism</div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted); font-family: 'IBM Plex Sans', sans-serif;">Multi-Index Sentiment Surface & {selected_region} Moving Average</div>
+                            <div style="font-size: 0.78rem; color: var(--text-muted); font-family: 'IBM Plex Sans', sans-serif;">Multi-index sentiment surface & {selected_region} moving average</div>
                         </div>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-                        <span style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; color: {'#0284c7' if is_light else '#60a5fa'}; background: {'rgba(2, 132, 199, 0.12)' if is_light else 'rgba(59, 130, 246, 0.12)'}; padding: 3px 8px; border-radius: 4px; border: 1px solid {'rgba(2, 132, 199, 0.25)' if is_light else 'rgba(59, 130, 246, 0.25)'}; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
-                            {selected_region} Market
-                        </span>
-                        <span style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; color: {'#7c3aed' if is_light else '#a78bfa'}; background: {'rgba(124, 58, 237, 0.12)' if is_light else 'rgba(168, 85, 247, 0.12)'}; padding: 3px 8px; border-radius: 4px; border: 1px solid {'rgba(124, 58, 237, 0.25)' if is_light else 'rgba(168, 85, 247, 0.25)'}; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
-                            {ema_window}-Period EMA
-                        </span>
-                        <span style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; color: {'#059669' if is_light else '#34d399'}; background: {'rgba(5, 150, 105, 0.12)' if is_light else 'rgba(16, 185, 129, 0.12)'}; padding: 3px 8px; border-radius: 4px; border: 1px solid {'rgba(5, 150, 105, 0.25)' if is_light else 'rgba(16, 185, 129, 0.25)'}; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
-                            AI System-One
-                        </span>
-                        <span style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; color: {'#0284c7' if is_light else '#38bdf8'}; background: {'rgba(2, 132, 199, 0.12)' if is_light else 'rgba(56, 189, 248, 0.12)'}; padding: 3px 8px; border-radius: 4px; border: 1px solid {'rgba(2, 132, 199, 0.25)' if is_light else 'rgba(56, 189, 248, 0.25)'}; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
-                            {tz_abbr}
-                        </span>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 0.75rem; color: var(--text-muted); font-family: 'IBM Plex Sans', sans-serif;">Scale: [-100, +100] • {tz_abbr}</span>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
                 
                 fig_area = go.Figure()
                 
-                # Plot overlapping filled areas for each specific Index
-                colors = ["#2962FF", "#E91E63", "#FF9800", "#9C27B0", "#00BCD4"] # Sharp terminal colors
+                # Plot clean multi-series lines for each specific Index (no overlapping translucent fills)
+                colors = ["#2563eb", "#ec4899", "#f59e0b", "#8b5cf6", "#06b6d4", "#10b981"]
                 tickers = [c for c in pivot_df.columns if c != 'timestamp']
                 
                 for i, ticker in enumerate(tickers):
@@ -1205,30 +1222,30 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
                         
                     fig_area.add_trace(go.Scatter(
                         x=plot_pivot_x, y=pivot_df[ticker],
-                        mode='lines+markers', name=f'{ticker} Sentiment',
-                        line=dict(width=1.5, color=colors[i % len(colors)]),
+                        mode='lines+markers', name=ticker,
+                        line=dict(width=2.0, color=colors[i % len(colors)]),
                         marker=dict(size=4),
-                        fill='tozeroy',
-                        opacity=0.3
+                        opacity=0.85
                     ))
                 
-                # Add smooth thick line for Global EMA Trend on top
+                # Add bold prominent line for Global EMA Trend on top
+                ema_color = '#0f172a' if is_light else '#f8fafc'
                 fig_area.add_trace(go.Scatter(
                     x=plot_trend_x, y=df_trend['EMA_Index'],
-                    mode='lines+markers',
-                    line=dict(color='#0f172a' if is_light else '#f8fafc', width=2.5, shape='linear'), 
-                    marker=dict(size=6, color='#0f172a' if is_light else '#f8fafc', line=dict(color='#ffffff' if is_light else '#020617', width=1)),
-                    name=f'{selected_region} Mean (EMA)'
+                    mode='lines',
+                    line=dict(color=ema_color, width=3.5, shape='linear'), 
+                    name=f'{selected_region} Trend ({ema_window}P EMA)'
                 ))
                 
                 fig_area.update_layout(
-                    height=345, margin=dict(l=0, r=0, t=5, b=0),
-                    plot_bgcolor="rgba(255,255,255,0.55)" if is_light else "rgba(0,0,0,0)",
+                    height=345, margin=dict(l=0, r=0, t=10, b=0),
+                    plot_bgcolor="rgba(255,255,255,0.4)" if is_light else "rgba(0,0,0,0)",
                     paper_bgcolor="rgba(0,0,0,0)",
                     hovermode="x unified",
                     legend=dict(
                         orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0,
-                        font=dict(color="#0f172a" if is_light else "#f8fafc", size=10, family="Montserrat")
+                        itemgap=18,
+                        font=dict(color="#0f172a" if is_light else "#f8fafc", size=11, family="Montserrat")
                     ),
                     xaxis=dict(
                         showgrid=True, gridcolor='rgba(148, 163, 184, 0.22)' if is_light else 'rgba(255,255,255,0.06)',
@@ -1238,8 +1255,10 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
                         tickfont=dict(size=10, color="#334155" if is_light else "#94a3b8", family="IBM Plex Sans")
                     ),
                     yaxis=dict(
+                        range=[-105, 105],
+                        dtick=25,
                         showgrid=True, gridcolor='rgba(148, 163, 184, 0.22)' if is_light else 'rgba(255,255,255,0.06)',
-                        zeroline=True, zerolinecolor='rgba(16, 185, 129, 0.65)' if is_light else 'rgba(16, 185, 129, 0.45)', zerolinewidth=1.5,
+                        zeroline=True, zerolinecolor='rgba(148, 163, 184, 0.45)' if is_light else 'rgba(148, 163, 184, 0.35)', zerolinewidth=1.5,
                         showline=True, linecolor='rgba(100, 116, 139, 0.35)' if is_light else 'rgba(255,255,255,0.15)', linewidth=1,
                         ticks='outside', tickcolor='rgba(100, 116, 139, 0.35)' if is_light else 'rgba(255,255,255,0.25)', ticklen=4,
                         title=dict(text="<b>OPTIMISM SCORE</b>", font=dict(size=11, color="#0284c7" if is_light else "#38bdf8", family="Montserrat")),
@@ -1247,72 +1266,72 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
                         side="right"
                     )
                 )
-                st.plotly_chart(fig_area, use_container_width=True)
+                st.plotly_chart(fig_area, use_container_width=True, config={'displayModeBar': True, 'scrollZoom': True, 'displaylogo': False})
 
-            # --- Mini KPI Tiles for Individual Indices (Dynamic Sentiment Styling) ---
-            valid_tickers = [t for t in tickers if t != 'UNKNOWN']
-            if valid_tickers:
-                kpi_html = '<div class="mini-kpi-grid">'
-                
-                for ticker in valid_tickers:
-                    latest_score = pivot_df[ticker].iloc[-1] if len(pivot_df) > 0 else 0
-                    prev_score = pivot_df[ticker].iloc[-2] if len(pivot_df) > 1 else 0
-                    delta_idx = latest_score - prev_score
+                # --- Mini KPI Tiles for Individual Indices (Inside same container for flush borders) ---
+                valid_tickers = [t for t in tickers if t != 'UNKNOWN']
+                if valid_tickers:
+                    kpi_html = '<div class="mini-kpi-grid">'
                     
-                    if abs(latest_score) < 0.5:
-                        ticker_status = "NEUTRAL"
-                        t_status_color = "#475569" if is_light else "#94a3b8"
-                        t_status_bg = "rgba(148, 163, 184, 0.18)" if is_light else "rgba(148, 163, 184, 0.12)"
-                        t_status_border = "rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.3)"
-                        t_card_border = "#94a3b8" if is_light else "#64748b"
-                        t_val_color = "#334155" if is_light else "#cbd5e1"
-                    elif latest_score >= 0.5:
-                        ticker_status = "BULLISH"
-                        t_status_color = "#059669" if is_light else "#34d399"
-                        t_status_bg = "rgba(16, 185, 129, 0.15)"
-                        t_status_border = "rgba(16, 185, 129, 0.35)"
-                        t_card_border = "#10b981"
-                        t_val_color = "#059669" if is_light else "#10b981"
-                    else:
-                        ticker_status = "BEARISH"
-                        t_status_color = "#dc2626" if is_light else "#f87171"
-                        t_status_bg = "rgba(239, 68, 68, 0.15)"
-                        t_status_border = "rgba(239, 68, 68, 0.35)"
-                        t_card_border = "#ef4444"
-                        t_val_color = "#dc2626" if is_light else "#ef4444"
+                    for ticker in valid_tickers:
+                        latest_score = pivot_df[ticker].iloc[-1] if len(pivot_df) > 0 else 0
+                        prev_score = pivot_df[ticker].iloc[-2] if len(pivot_df) > 1 else 0
+                        delta_idx = latest_score - prev_score
+                        
+                        if abs(latest_score) < 0.5:
+                            ticker_status = "NEUTRAL"
+                            t_status_color = "#475569" if is_light else "#94a3b8"
+                            t_status_bg = "rgba(148, 163, 184, 0.18)" if is_light else "rgba(148, 163, 184, 0.12)"
+                            t_status_border = "rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.3)"
+                            t_card_border = "#94a3b8" if is_light else "#64748b"
+                            t_val_color = "#334155" if is_light else "#cbd5e1"
+                        elif latest_score >= 0.5:
+                            ticker_status = "BULLISH"
+                            t_status_color = "#059669" if is_light else "#34d399"
+                            t_status_bg = "rgba(16, 185, 129, 0.15)"
+                            t_status_border = "rgba(16, 185, 129, 0.35)"
+                            t_card_border = "#10b981"
+                            t_val_color = "#059669" if is_light else "#10b981"
+                        else:
+                            ticker_status = "BEARISH"
+                            t_status_color = "#dc2626" if is_light else "#f87171"
+                            t_status_bg = "rgba(239, 68, 68, 0.15)"
+                            t_status_border = "rgba(239, 68, 68, 0.35)"
+                            t_card_border = "#ef4444"
+                            t_val_color = "#dc2626" if is_light else "#ef4444"
+                        
+                        if delta_idx > 0:
+                            d_arrow = "▲"
+                            d_pill_color = "#059669" if is_light else "#34d399"
+                            d_pill_bg = "rgba(16, 185, 129, 0.12)"
+                            d_pill_border = "rgba(16, 185, 129, 0.25)"
+                        elif delta_idx < 0:
+                            d_arrow = "▼"
+                            d_pill_color = "#dc2626" if is_light else "#f87171"
+                            d_pill_bg = "rgba(239, 68, 68, 0.12)"
+                            d_pill_border = "rgba(239, 68, 68, 0.25)"
+                        else:
+                            d_arrow = "▬"
+                            d_pill_color = "#475569" if is_light else "#94a3b8"
+                            d_pill_bg = "rgba(148, 163, 184, 0.12)"
+                            d_pill_border = "rgba(148, 163, 184, 0.25)"
+                        
+                        kpi_html += (
+                            f'<div class="mini-index-card" style="border-left: 3px solid {t_card_border}; margin-bottom: 0;">'
+                            '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">'
+                            f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.78rem; font-weight: 700; color: {"#0f172a" if is_light else "#f8fafc"}; text-transform: uppercase; letter-spacing: 0.03em;">{ticker}</span>'
+                            f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.68rem; font-weight: 800; color: {t_status_color}; background: {t_status_bg}; border: 1px solid {t_status_border}; padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">{ticker_status}</span>'
+                            '</div>'
+                            f'<div style="font-family: \'Montserrat\', sans-serif; font-size: clamp(1.2rem, 2vw, 1.6rem); font-weight: 800; color: {t_val_color}; margin: 2px 0;">{latest_score:+.1f}</div>'
+                            '<div style="display: flex; align-items: center; gap: 5px; margin-top: 4px;">'
+                            f'<span style="font-size: 0.75rem; font-weight: 700; color: {d_pill_color}; background: {d_pill_bg}; border: 1px solid {d_pill_border}; padding: 1px 6px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">{d_arrow} {abs(delta_idx):.1f}%</span>'
+                            f'<span style="font-size: 0.75rem; color: {"#64748b" if is_light else "#94a3b8"};">momentum</span>'
+                            '</div>'
+                            '</div>'
+                        )
                     
-                    if delta_idx > 0:
-                        d_arrow = "▲"
-                        d_pill_color = "#059669" if is_light else "#34d399"
-                        d_pill_bg = "rgba(16, 185, 129, 0.12)"
-                        d_pill_border = "rgba(16, 185, 129, 0.25)"
-                    elif delta_idx < 0:
-                        d_arrow = "▼"
-                        d_pill_color = "#dc2626" if is_light else "#f87171"
-                        d_pill_bg = "rgba(239, 68, 68, 0.12)"
-                        d_pill_border = "rgba(239, 68, 68, 0.25)"
-                    else:
-                        d_arrow = "▬"
-                        d_pill_color = "#475569" if is_light else "#94a3b8"
-                        d_pill_bg = "rgba(148, 163, 184, 0.12)"
-                        d_pill_border = "rgba(148, 163, 184, 0.25)"
-                    
-                    kpi_html += (
-                        f'<div class="mini-index-card" style="border-left: 3px solid {t_card_border}; margin-bottom: 0;">'
-                        '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">'
-                        f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.75rem; font-weight: 700; color: {"#0f172a" if is_light else "#f8fafc"}; text-transform: uppercase; letter-spacing: 0.03em;">{ticker}</span>'
-                        f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.65rem; font-weight: 800; color: {t_status_color}; background: {t_status_bg}; border: 1px solid {t_status_border}; padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">{ticker_status}</span>'
-                        '</div>'
-                        f'<div style="font-family: \'Montserrat\', sans-serif; font-size: clamp(1.2rem, 2vw, 1.6rem); font-weight: 800; color: {t_val_color}; margin: 2px 0;">{latest_score:+.1f}</div>'
-                        '<div style="display: flex; align-items: center; gap: 5px; margin-top: 4px;">'
-                        f'<span style="font-size: 0.72rem; font-weight: 700; color: {d_pill_color}; background: {d_pill_bg}; border: 1px solid {d_pill_border}; padding: 1px 6px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">{d_arrow} {abs(delta_idx):.1f}%</span>'
-                        f'<span style="font-size: 0.7rem; color: {"#64748b" if is_light else "#94a3b8"};">momentum</span>'
-                        '</div>'
-                        '</div>'
-                    )
-                
-                kpi_html += '</div>'
-                st.markdown(kpi_html, unsafe_allow_html=True)
+                    kpi_html += '</div>'
+                    st.markdown(kpi_html, unsafe_allow_html=True)
 
         # --- Regional News Feeds at the Bottom (Full Width) ---
         region_payloads = display_payloads[display_payloads['market_region'] == selected_region]
@@ -1322,15 +1341,46 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
         bullish_count = int((region_payloads['sentiment_index'] >= 0.5).sum()) if not region_payloads.empty else 0
         bearish_count = int((region_payloads['sentiment_index'] <= -0.5).sum()) if not region_payloads.empty else 0
         noise_count = total_events - bullish_count - bearish_count
-        
+
+        # Filter news items by sentiment if user desires
+        feed_header_col1, feed_header_col2 = st.columns([0.65, 0.35])
+        with feed_header_col1:
+            st.markdown(f"""
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 18px; margin-bottom: 2px;">
+                <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 8px #3b82f6;"></span>
+                <span style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); font-family: 'Montserrat', sans-serif;">{selected_region} Live Intelligence Feed</span>
+            </div>
+            """, unsafe_allow_html=True)
+        with feed_header_col2:
+            sentiment_filter_options = [
+                f"All Events ({total_events})",
+                f"Bullish Only ({bullish_count})",
+                f"Bearish Only ({bearish_count})",
+                f"Market Noise ({noise_count})"
+            ]
+            selected_sentiment_feed = st.selectbox(
+                "Filter News Feed",
+                sentiment_filter_options,
+                index=0,
+                key="feed_sentiment_filter"
+            )
+
+        if "Bullish Only" in selected_sentiment_feed:
+            feed_display_payloads = region_payloads[region_payloads['sentiment_index'] >= 0.5]
+        elif "Bearish Only" in selected_sentiment_feed:
+            feed_display_payloads = region_payloads[region_payloads['sentiment_index'] <= -0.5]
+        elif "Market Noise" in selected_sentiment_feed:
+            feed_display_payloads = region_payloads[(region_payloads['sentiment_index'] > -0.5) & (region_payloads['sentiment_index'] < 0.5)]
+        else:
+            feed_display_payloads = region_payloads
+
         html_feed = (
-            f'<details class="news-feed-accordion">'
+            f'<details class="news-feed-accordion" open>'
             f'<summary class="news-feed-summary" title="Click anywhere on this card to expand or collapse feed">'
             f'<div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">'
             f'<div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">'
             f'<div style="display: flex; align-items: center; gap: 10px;">'
-            f'<span style="display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 10px #3b82f6; flex-shrink: 0;"></span>'
-            f'<span style="font-size: clamp(0.95rem, 2vw, 1.15rem); font-weight: 700; color: {"#0f172a" if is_light else "#f8fafc"}; font-family: \'Montserrat\', sans-serif;">{selected_region} Live Intelligence Feed</span>'
+            f'<span style="font-size: 0.95rem; font-weight: 700; color: {"#0f172a" if is_light else "#f8fafc"}; font-family: \'Montserrat\', sans-serif;">Streaming Articles ({len(feed_display_payloads)} shown)</span>'
             f'</div>'
             f'<div class="expand-action-btn">'
             f'<span class="expand-text">EXPAND FEED <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span>'
@@ -1348,8 +1398,8 @@ Generative LLMs suffer from prompt drift, hallucination, and confidence clusteri
             f'<div class="news-feed-container" style="border: none !important; border-top: 1px solid rgba(255,255,255,0.06) !important; border-radius: 0 0 8px 8px; background: transparent !important; padding: 14px 18px; margin-top: 0; max-height: 440px; overflow-y: auto;">'
         )
 
-        if not region_payloads.empty:
-            for _, row in region_payloads.iterrows():
+        if not feed_display_payloads.empty:
+            for _, row in feed_display_payloads.iterrows():
                 sentiment = row['sentiment_index']
                 if date_range in ["4 Hours", "4 Hour", "4H", "6 Hours", "6 Hour", "6H", "12 Hours", "12 Hour", "12H", "1 Day", "1Day", "24 Hours", "24 Hour", "24H"]:
                     time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
