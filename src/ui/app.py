@@ -455,8 +455,11 @@ __THEME_VARS__
     }
 
     /* Top Header Row Layout & Symmetrical Cards */
+    .block-container > div[data-testid="stVerticalBlock"] {
+        gap: 0.35rem !important;
+    }
     div[data-testid="stHorizontalBlock"]:first-of-type {
-        margin-bottom: 4px !important;
+        margin-bottom: 0 !important;
         align-items: stretch !important;
     }
     div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"],
