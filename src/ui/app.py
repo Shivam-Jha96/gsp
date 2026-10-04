@@ -182,22 +182,60 @@ __THEME_VARS__
         box-shadow: var(--card-shadow) !important;
     }
     
-    /* Force Streamlit Columns to Stretch & Align Bottoms Flush */
-    div[data-testid="stHorizontalBlock"] {
+    /* Main Dashboard Content Layout (Align Left KPI Cards and Right Chart Bottoms Flush) */
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) {
         align-items: stretch !important;
     }
-    div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"] {
         display: flex !important;
         flex-direction: column !important;
     }
-    div[data-testid="stHorizontalBlock"] > div[data-testid="column"] > div[data-testid="stVerticalBlock"] {
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"] > div[data-testid="stVerticalBlock"] {
         display: flex !important;
         flex-direction: column !important;
         justify-content: space-between !important;
         height: 100% !important;
         flex: 1 1 auto !important;
     }
-    
+
+    /* Filter Bar Columns: Tightly Group Label Directly Above Selectbox (Zero Excess Space) */
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stSelectbox"]) {
+        align-items: flex-start !important;
+        margin-bottom: 14px !important;
+    }
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stSelectbox"]) > div[data-testid="column"] {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+    }
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stSelectbox"]) > div[data-testid="column"] > div[data-testid="stVerticalBlock"] {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        gap: 3px !important;
+        height: auto !important;
+        flex: 0 0 auto !important;
+    }
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stSelectbox"]) div[data-testid="stMarkdownContainer"] {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stSelectbox"]) div[data-testid="stMarkdownContainer"] > p {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stSelectbox"]) div[data-testid="stSelectbox"] {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stSelectbox"]) div[data-testid="stSelectbox"] label {
+        display: none !important;
+        height: 0 !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
     /* Style Streamlit Selectbox Inputs */
     div[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
         background: var(--input-bg) !important;
@@ -268,33 +306,49 @@ __THEME_VARS__
     div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stToggle"] {
         display: flex !important;
         align-items: center !important;
-        justify-content: space-between !important;
+        justify-content: stretch !important;
         width: 100% !important;
-        margin-top: 4px !important;
+        margin-top: 5px !important;
         margin-bottom: 0 !important;
-        padding-top: 5px !important;
+        padding-top: 6px !important;
         border-top: 1px solid var(--card-border) !important;
     }
     div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stToggle"] label,
     div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stToggle"] label {
         display: flex !important;
-        flex-direction: row-reverse !important;
         align-items: center !important;
         justify-content: space-between !important;
         width: 100% !important;
         cursor: pointer !important;
         margin: 0 !important;
-        padding: 0 !important;
-        gap: 8px !important;
+        padding: 5px 10px !important;
+        background: rgba(255, 255, 255, 0.035) !important;
+        border: 1px solid var(--card-border) !important;
+        border-radius: 6px !important;
+        box-sizing: border-box !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stToggle"] label p,
-    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stToggle"] label p {
+    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stToggle"] label:hover,
+    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stToggle"] label:hover {
+        background: rgba(255, 255, 255, 0.07) !important;
+        border-color: rgba(59, 130, 246, 0.45) !important;
+        box-shadow: 0 0 10px rgba(59, 130, 246, 0.15) !important;
+    }
+    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stToggle"] label div[data-testid="stMarkdownContainer"] p,
+    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stToggle"] label div[data-testid="stMarkdownContainer"] p {
         font-family: 'Montserrat', sans-serif !important;
         font-size: 0.68rem !important;
         font-weight: 700 !important;
         color: var(--text-primary) !important;
-        letter-spacing: 0.04em !important;
+        letter-spacing: 0.05em !important;
         text-transform: uppercase !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+    }
+    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stToggle"] div[data-testid="stCheckboxToggle"],
+    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stToggle"] div[data-testid="stCheckboxToggle"] {
         margin: 0 !important;
     }
     
@@ -651,9 +705,12 @@ if not df_signals.empty:
 
         st.markdown(f"""
         <div id="header-control-card-anchor" style="display: none;"></div>
-        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 2px;">
-            <span style="font-size: 0.65rem; font-weight: 700; color: var(--text-muted); font-family: 'Montserrat', sans-serif; letter-spacing: 0.05em; text-transform: uppercase;">BACKEND</span>
-            <div style="display: inline-flex; align-items: center; gap: 5px; background: {status_bg}; border: 1px solid {status_border}; color: {status_text}; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.08em; padding: 2px 8px; border-radius: 12px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
+        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+            <div style="display: inline-flex; align-items: center; gap: 5px; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 3px 8px; border-radius: 4px;">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="{'#0284c7' if is_light else '#38bdf8'}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                <span style="font-size: 0.66rem; font-weight: 800; color: {'#0284c7' if is_light else '#38bdf8'}; font-family: 'Montserrat', sans-serif; letter-spacing: 0.08em; text-transform: uppercase;">BACKEND</span>
+            </div>
+            <div style="display: inline-flex; align-items: center; gap: 6px; background: {status_bg}; border: 1px solid {status_border}; color: {status_text}; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.08em; padding: 3px 9px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);">
                 <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; display: inline-block;"></span>
                 SYSTEM ONLINE
             </div>
