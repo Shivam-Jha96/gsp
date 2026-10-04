@@ -248,58 +248,87 @@ __THEME_VARS__
     }
 
     /* Filter Toolbar Card Enclosure & Alignment (Ultra-Compact) */
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) {
-        padding: 0 !important;
-        margin-top: 0 !important;
+    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) {
+        margin: 0 !important;
         margin-bottom: 8px !important;
+        padding: 0 !important;
     }
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) > div,
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) > div[data-testid="stVerticalBlock"] {
-        padding: 4px 12px 6px 12px !important;
+    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) > div[data-testid="stVerticalBlock"],
+    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) > div[data-testid="stVerticalBlockBorderWrapper"],
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor),
+    div[data-testid="stVerticalBlock"]:has(> div[data-testid="stHorizontalBlock"]):has(#filter-toolbar-anchor):not(.main > div):not(section.main > div) {
+        padding: 6px 12px 6px 12px !important;
+        margin: 0 !important;
+        margin-bottom: 8px !important;
         gap: 0 !important;
     }
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stHorizontalBlock"] {
+    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) div[data-testid="stHorizontalBlock"],
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stHorizontalBlock"],
+    div[data-testid="stVerticalBlock"]:has(> div[data-testid="stHorizontalBlock"]):has(#filter-toolbar-anchor) div[data-testid="stHorizontalBlock"] {
         align-items: flex-end !important;
         gap: 8px !important;
         margin: 0 !important;
         padding: 0 !important;
     }
+    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) div[data-testid="stColumn"],
+    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) div[data-testid="column"],
     div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stColumn"],
     div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="column"] {
         display: flex !important;
         flex-direction: column !important;
         justify-content: flex-end !important;
         padding: 0 !important;
+        margin: 0 !important;
     }
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) [data-testid="stVerticalBlock"] {
-        gap: 1px !important;
+    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) div[data-testid="stColumn"] [data-testid="stVerticalBlock"],
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stColumn"] [data-testid="stVerticalBlock"] {
+        gap: 2px !important;
+        padding: 0 !important;
+        margin: 0 !important;
     }
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) [data-testid="stElementContainer"] {
+    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) div[data-testid="stColumn"] [data-testid="stElementContainer"],
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stColumn"] [data-testid="stElementContainer"] {
         margin: 0 !important;
         padding: 0 !important;
     }
+    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) div[data-testid="stMarkdownContainer"],
     div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stMarkdownContainer"] {
         margin: 0 !important;
         padding: 0 !important;
     }
+    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) div[data-testid="stMarkdownContainer"] > p,
     div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stMarkdownContainer"] > p {
         margin: 0 !important;
         padding: 0 !important;
         line-height: 1 !important;
     }
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stSelectbox"] {
+    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) div[data-testid="stSelectbox"],
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stSelectbox"],
+    div[data-testid="stSelectbox"] {
         margin: 0 !important;
         padding: 0 !important;
     }
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stSelectbox"] label {
+    /* Eliminate redundant or collapsed selectbox labels across the board */
+    div[data-testid="stSelectbox"] label,
+    div[data-testid="stSelectbox"] [data-testid="stWidgetLabel"] {
         display: none !important;
         height: 0 !important;
         min-height: 0 !important;
+        max-height: 0 !important;
         margin: 0 !important;
         padding: 0 !important;
+        visibility: hidden !important;
+        overflow: hidden !important;
+        line-height: 0 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
     }
+    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) [data-baseweb="select"] > div,
+    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) div[data-testid="stSelectbox"] div[role="group"],
     div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) [data-baseweb="select"] > div,
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stSelectbox"] div[role="group"] {
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stSelectbox"] div[role="group"],
+    div[data-testid="stSelectbox"] [data-baseweb="select"] > div,
+    div[data-testid="stSelectbox"] div[role="group"] {
         min-height: 34px !important;
         height: 34px !important;
         padding-top: 2px !important;
@@ -437,8 +466,9 @@ __THEME_VARS__
         flex-direction: column !important;
     }
     
-    /* Top Right Action Card (Backend Status & Dark Mode Toggle) - Scoped exclusively to anchor */
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) {
+    /* Top Right Action Card (Backend Status & Dark Mode Toggle) - Scoped exclusively to action column */
+    div[data-testid="stColumn"]:has(#header-control-card-anchor) > div[data-testid="stVerticalBlock"],
+    div[data-testid="stColumn"]:has(#header-control-card-anchor) {
         background: var(--header-bg) !important;
         border: 1px solid var(--header-border) !important;
         border-radius: 8px !important;
@@ -454,19 +484,19 @@ __THEME_VARS__
         margin-bottom: 0 !important;
         gap: 4px !important;
     }
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stMarkdownContainer"] {
+    div[data-testid="stColumn"]:has(#header-control-card-anchor) div[data-testid="stMarkdownContainer"] {
         width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
     }
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stMarkdownContainer"] > p {
+    div[data-testid="stColumn"]:has(#header-control-card-anchor) div[data-testid="stMarkdownContainer"] > p {
         margin: 0 !important;
     }
 
     /* Header Theme Toggle Capsule & Distinct Badge Styling */
     .st-key-theme_toggle,
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stToggle"],
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div.stCheckbox {
+    div[data-testid="stColumn"]:has(#header-control-card-anchor) div[data-testid="stToggle"],
+    div[data-testid="stColumn"]:has(#header-control-card-anchor) div.stCheckbox {
         margin: 0 !important;
         margin-top: 4px !important;
         padding: 0 !important;
@@ -480,8 +510,7 @@ __THEME_VARS__
         padding: 0 !important;
         width: 100% !important;
     }
-    .st-key-theme_toggle label,
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) label {
+    .st-key-theme_toggle label {
         display: flex !important;
         flex-direction: row-reverse !important;
         align-items: center !important;
@@ -498,22 +527,19 @@ __THEME_VARS__
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
-    .st-key-theme_toggle label:hover,
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) label:hover {
+    .st-key-theme_toggle label:hover {
         border-color: var(--header-border-left) !important;
         box-shadow: 0 0 10px rgba(59, 130, 246, 0.22) !important;
     }
     .st-key-theme_toggle label div[data-testid="stMarkdownContainer"],
-    .st-key-theme_toggle [data-testid="stMarkdownContainer"],
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) [data-testid="stMarkdownContainer"] {
+    .st-key-theme_toggle [data-testid="stMarkdownContainer"] {
         display: flex !important;
         align-items: center !important;
         margin: 0 !important;
         padding: 0 !important;
     }
     .st-key-theme_toggle label div[data-testid="stMarkdownContainer"] p,
-    .st-key-theme_toggle [data-testid="stMarkdownContainer"] p,
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) label p {
+    .st-key-theme_toggle [data-testid="stMarkdownContainer"] p {
         font-family: 'Montserrat', sans-serif !important;
         font-size: 0.70rem !important;
         font-weight: 800 !important;
@@ -535,9 +561,7 @@ __THEME_VARS__
     .st-key-theme_toggle [data-testid="stCheckbox"] span + div,
     .st-key-theme_toggle [role="switch"],
     .st-key-theme_toggle div[data-testid="stCheckboxToggle"] > div,
-    .st-key-theme_toggle span[data-baseweb="toggle"],
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) [role="switch"],
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) span[data-baseweb="toggle"] {
+    .st-key-theme_toggle span[data-baseweb="toggle"] {
         background-color: var(--toggle-track-bg) !important;
         border: 1.5px solid var(--toggle-track-border) !important;
         box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15) !important;
@@ -546,15 +570,13 @@ __THEME_VARS__
     .st-key-theme_toggle [data-testid="stCheckbox"]:has(input:checked) label > div:first-of-type,
     .st-key-theme_toggle [data-testid="stCheckbox"]:has(input:checked) span + div,
     .st-key-theme_toggle [role="switch"][aria-checked="true"],
-    .st-key-theme_toggle [role="switch"][data-checked="true"],
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) [role="switch"][aria-checked="true"] {
+    .st-key-theme_toggle [role="switch"][data-checked="true"] {
         background-color: var(--header-border-left) !important;
         border-color: var(--header-border-left) !important;
     }
     .st-key-theme_toggle [data-testid="stCheckbox"] label > div:first-of-type > div,
     .st-key-theme_toggle [data-testid="stCheckbox"] span + div > div,
-    .st-key-theme_toggle [role="switch"] > div,
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) [role="switch"] > div {
+    .st-key-theme_toggle [role="switch"] > div {
         background-color: #ffffff !important;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) !important;
     }
