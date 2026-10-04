@@ -576,6 +576,126 @@ __THEME_VARS__
         border-color: var(--header-border-left) !important;
         color: var(--header-border-left) !important;
     }
+
+    /* Automated Horizontal Scrolling Ticker for USP Description */
+    @keyframes uspTicker {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+    details.usp-collapsible {
+        background: var(--edge-bg) !important;
+        border: 1px solid var(--edge-border) !important;
+        border-radius: 8px !important;
+        margin-bottom: 12px !important;
+        overflow: hidden !important;
+        transition: all 0.2s ease !important;
+        box-shadow: var(--card-shadow) !important;
+    }
+    details.usp-collapsible summary.usp-summary {
+        list-style: none !important;
+        cursor: pointer !important;
+        padding: 8px 14px !important;
+        user-select: none !important;
+        display: flex !important;
+        align-items: center !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    details.usp-collapsible summary.usp-summary::-webkit-details-marker,
+    details.usp-collapsible summary.usp-summary::marker {
+        display: none !important;
+    }
+    .usp-summary-inner {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        overflow: hidden;
+    }
+    .usp-badge {
+        background: rgba(56, 189, 248, 0.15);
+        border: 1px solid rgba(56, 189, 248, 0.35);
+        color: var(--header-border-left);
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        padding: 3px 8px;
+        border-radius: 4px;
+        text-transform: uppercase;
+        flex-shrink: 0;
+    }
+    .usp-ticker-wrap {
+        overflow: hidden;
+        white-space: nowrap;
+        position: relative;
+        flex: 1 1 auto;
+        mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+        -webkit-mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+    }
+    .usp-ticker-track {
+        display: inline-flex;
+        align-items: center;
+        gap: 20px;
+        animation: uspTicker 32s linear infinite;
+        white-space: nowrap;
+    }
+    .usp-ticker-track:hover {
+        animation-play-state: paused;
+    }
+    .usp-ticker-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 0.80rem;
+        color: var(--edge-text);
+    }
+    .usp-expand-btn {
+        background: rgba(148, 163, 184, 0.12);
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        color: var(--text-secondary);
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 4px;
+        flex-shrink: 0;
+        transition: all 0.2s ease;
+    }
+    details.usp-collapsible summary.usp-summary:hover .usp-expand-btn {
+        background: rgba(59, 130, 246, 0.18);
+        border-color: rgba(59, 130, 246, 0.4);
+        color: #3b82f6;
+    }
+    details.usp-collapsible .usp-collapse-text { display: none; }
+    details.usp-collapsible[open] .usp-expand-text { display: none; }
+    details.usp-collapsible[open] .usp-collapse-text { display: inline; }
+    details.usp-collapsible[open] summary.usp-summary {
+        border-bottom: 1px solid var(--edge-border) !important;
+    }
+    .usp-content {
+        padding: 12px 16px !important;
+    }
+
+    /* Live Intelligence Feed Header Right-Alignment */
+    .st-key-feed_sentiment_pills,
+    .st-key-feed_sentiment_pills > div {
+        display: flex !important;
+        justify-content: flex-end !important;
+        align-items: center !important;
+        width: 100% !important;
+        margin-left: auto !important;
+    }
+    .st-key-feed_sentiment_pills div[data-testid="stPills"],
+    .st-key-feed_sentiment_pills div[data-testid="stSegmentedControl"],
+    .st-key-feed_sentiment_pills ul[data-testid="stPills-list"],
+    .st-key-feed_sentiment_pills div[role="radiogroup"] {
+        display: flex !important;
+        justify-content: flex-end !important;
+        margin-left: auto !important;
+        width: auto !important;
+    }
     
     /* Dedicated Mini Index Grid & Card Styling */
     .mini-kpi-grid {
@@ -912,41 +1032,75 @@ if not df_signals.empty:
         
         st.toggle("🌙 Dark Mode" if is_dark else "☀️ Light Mode", key="theme_toggle")
     
-    with st.expander("ℹ️ How GSP Works • Pure Mathematical Sentiment via Contrastive Language Modeling (CLM)", expanded=False):
-        st.markdown(f"""
-        <div style="background: var(--edge-bg); border: 1px solid var(--edge-border); border-radius: 8px; padding: clamp(10px, 2vw, 12px) clamp(12px, 2.5vw, 18px); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); margin-bottom: 4px;">
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
-        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-        <span style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: {'#0284c7' if is_light else '#38bdf8'}; font-family: 'Montserrat', sans-serif; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; padding: 3px 8px; border-radius: 4px; text-transform: uppercase;">THE QUANTITATIVE EDGE</span>
-        <span style="font-family: 'Montserrat', sans-serif; font-size: clamp(0.82rem, 1.8vw, 0.95rem); font-weight: 700; color: var(--text-primary); letter-spacing: -0.01em;">Pure Mathematical Sentiment via Contrastive Language Modeling</span>
+    st.markdown(f"""
+    <details class="usp-collapsible">
+        <summary class="usp-summary">
+            <div class="usp-summary-inner">
+                <span class="usp-badge">⚡ QUANTITATIVE EDGE</span>
+                <div class="usp-ticker-wrap">
+                    <div class="usp-ticker-track">
+                        <span class="usp-ticker-item"><strong>Pure Mathematical Sentiment</strong> via System-One CLM-8B</span>
+                        <span style="color: var(--text-muted); opacity: 0.6;">•</span>
+                        <span class="usp-ticker-item"><strong style="color: {'#059669' if is_light else '#34d399'};">🎯 Zero Hallucination:</strong> Native Choice Probabilities P(Bullish), P(Bearish), P(Neutral)</span>
+                        <span style="color: var(--text-muted); opacity: 0.6;">•</span>
+                        <span class="usp-ticker-item"><strong style="color: {'#7c3aed' if is_light else '#a78bfa'};">⚖️ OKF-Conditioned:</strong> Regional Macroeconomic Policy Rules Applied in Real-Time</span>
+                        <span style="color: var(--text-muted); opacity: 0.6;">•</span>
+                        <span class="usp-ticker-item"><strong style="color: {'#d97706' if is_light else '#fbbf24'};">📈 Momentum Vectors:</strong> 4P EMA Cross-Sectional Tracking</span>
+                        <span style="color: var(--text-muted); opacity: 0.6;">•</span>
+                        <span class="usp-ticker-item"><strong style="color: {'#0284c7' if is_light else '#38bdf8'};">🛡️ System Online:</strong> Institutional Ingestion & Execution Engine</span>
+                        <span style="color: var(--text-muted); opacity: 0.6;">•</span>
+                        <!-- Infinite loop seamless duplicate -->
+                        <span class="usp-ticker-item"><strong>Pure Mathematical Sentiment</strong> via System-One CLM-8B</span>
+                        <span style="color: var(--text-muted); opacity: 0.6;">•</span>
+                        <span class="usp-ticker-item"><strong style="color: {'#059669' if is_light else '#34d399'};">🎯 Zero Hallucination:</strong> Native Choice Probabilities P(Bullish), P(Bearish), P(Neutral)</span>
+                        <span style="color: var(--text-muted); opacity: 0.6;">•</span>
+                        <span class="usp-ticker-item"><strong style="color: {'#7c3aed' if is_light else '#a78bfa'};">⚖️ OKF-Conditioned:</strong> Regional Macroeconomic Policy Rules Applied in Real-Time</span>
+                        <span style="color: var(--text-muted); opacity: 0.6;">•</span>
+                        <span class="usp-ticker-item"><strong style="color: {'#d97706' if is_light else '#fbbf24'};">📈 Momentum Vectors:</strong> 4P EMA Cross-Sectional Tracking</span>
+                        <span style="color: var(--text-muted); opacity: 0.6;">•</span>
+                        <span class="usp-ticker-item"><strong style="color: {'#0284c7' if is_light else '#38bdf8'};">🛡️ System Online:</strong> Institutional Ingestion & Execution Engine</span>
+                    </div>
+                </div>
+                <div class="usp-expand-btn">
+                    <span class="usp-expand-text">DETAILS ▾</span>
+                    <span class="usp-collapse-text">COLLAPSE ▴</span>
+                </div>
+            </div>
+        </summary>
+        <div class="usp-content">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;">
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <span style="font-family: 'Montserrat', sans-serif; font-size: clamp(0.85rem, 1.8vw, 0.98rem); font-weight: 700; color: var(--text-primary); letter-spacing: -0.01em;">Pure Mathematical Sentiment via Contrastive Language Modeling</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                    <span style="font-size: 0.65rem; font-weight: 700; color: {'#059669' if is_light else '#34d399'}; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">DETERMINISTIC</span>
+                    <span style="font-size: 0.65rem; font-weight: 700; color: {'#7c3aed' if is_light else '#a78bfa'}; background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">OKF-CONDITIONED</span>
+                    <span style="font-size: 0.65rem; font-weight: 700; color: {'#d97706' if is_light else '#fbbf24'}; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">ZERO HALLUCINATION</span>
+                </div>
+            </div>
+            <div style="font-family: 'IBM Plex Sans', sans-serif; font-size: clamp(0.78rem, 1.5vw, 0.83rem); color: var(--edge-text); line-height: 1.6; margin-bottom: 0;">
+                Generative LLMs suffer from prompt drift, hallucination, and confidence clustering. GSP replaces text generation with a <strong>System-One Contrastive Model (CLM-8B)</strong> that projects global news directly onto native choice probabilities: <strong style="color: {'#059669' if is_light else '#34d399'}; font-weight: 700;">P(Bullish)</strong>, <strong style="color: {'#dc2626' if is_light else '#f87171'}; font-weight: 700;">P(Bearish)</strong>, and <strong style="color: var(--text-muted); font-weight: 700;">P(Neutral)</strong>. Headlines are conditioned against regional macroeconomic policy rules (OKF), converting real-time global news into an institutional momentum score [-100, +100].
+            </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-        <span style="font-size: 0.65rem; font-weight: 700; color: {'#059669' if is_light else '#34d399'}; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">DETERMINISTIC</span>
-        <span style="font-size: 0.65rem; font-weight: 700; color: {'#7c3aed' if is_light else '#a78bfa'}; background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">OKF-CONDITIONED</span>
-        <span style="font-size: 0.65rem; font-weight: 700; color: {'#d97706' if is_light else '#fbbf24'}; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.25); padding: 2px 7px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">ZERO HALLUCINATION</span>
-        </div>
-        </div>
-        <div style="font-family: 'IBM Plex Sans', sans-serif; font-size: clamp(0.78rem, 1.5vw, 0.82rem); color: var(--edge-text); line-height: 1.55; margin-bottom: 0;">
-        Generative LLMs suffer from prompt drift, hallucination, and confidence clustering. GSP replaces text generation with a <strong>System-One Contrastive Model (CLM-8B)</strong> that projects global news directly onto native choice probabilities: <strong style="color: {'#059669' if is_light else '#34d399'}; font-weight: 700;">P(Bullish)</strong>, <strong style="color: {'#dc2626' if is_light else '#f87171'}; font-weight: 700;">P(Bearish)</strong>, and <strong style="color: var(--text-muted); font-weight: 700;">P(Neutral)</strong>. Headlines are conditioned against regional macroeconomic policy rules (OKF), converting real-time global news into an institutional momentum score [-100, +100].
-        </div>
-        </div>
-        """, unsafe_allow_html=True)
+    </details>
+    """, unsafe_allow_html=True)
     
     # Helper for segmented filter buttons (resilient across Streamlit versions)
     def render_segmented_filter(label, options, default_ix=0, key=None):
+        default_val = options[default_ix] if (default_ix is not None and 0 <= default_ix < len(options)) else None
         if hasattr(st, "pills"):
-            res = st.pills(label, options, default=options[default_ix], key=key, label_visibility="collapsed")
-            return res if res else options[default_ix]
+            res = st.pills(label, options, default=default_val, key=key, label_visibility="collapsed")
+            return res
         elif hasattr(st, "segmented_control"):
-            res = st.segmented_control(label, options, default=options[default_ix], key=key, label_visibility="collapsed")
-            return res if res else options[default_ix]
+            res = st.segmented_control(label, options, default=default_val, key=key, label_visibility="collapsed")
+            return res
         else:
             return st.radio(label, options, index=default_ix, key=key, horizontal=True, label_visibility="collapsed")
 
-    # --- Top Row: Filter Toolbar Card (Ergonomic 4-Column Layout with Direct Pills & Popover) ---
+    # --- Top Row: Filter Toolbar Card (5 Aligned Controls in 1 Single Line) ---
     with st.container(border=True):
         st.markdown('<div id="filter-toolbar-anchor" style="display: none;"></div>', unsafe_allow_html=True)
-        filter_col1, filter_col2, filter_col3, filter_col4 = st.columns([1.6, 1.4, 1.4, 0.9], gap="small")
+        filter_col1, filter_col2, filter_col3, filter_col4, filter_col5 = st.columns([1.1, 1.25, 1.35, 1.35, 1.05], gap="small")
         lbl_color = "#475569" if is_light else "#94a3b8"
         
         with filter_col1:
@@ -956,16 +1110,9 @@ if not df_signals.empty:
                 <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">TIMEFRAME</span>
             </div>
             """, unsafe_allow_html=True)
-            tf_choices = ["1D", "6H", "7D", "1M", "All"]
-            selected_tf_pill = render_segmented_filter("tf_selector", tf_choices, default_ix=2, key="tf_pill_filter")
-            tf_pill_map = {
-                "1D": "1 Day",
-                "6H": "6 Hours",
-                "7D": "7 Days",
-                "1M": "1 Month",
-                "All": "All"
-            }
-            date_range = tf_pill_map.get(selected_tf_pill, "7 Days")
+            timeframe_options = ["7 Days", "1 Day", "12 Hours", "6 Hours", "4 Hours", "1 Month", "1 Year", "All"]
+            default_tf_ix = 0
+            date_range = st.selectbox("Timeframe", timeframe_options, index=default_tf_ix, label_visibility="collapsed")
             
         with filter_col2:
             st.markdown(f"""
@@ -1010,8 +1157,8 @@ if not df_signals.empty:
         with filter_col4:
             st.markdown(f"""
             <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">OPTIONS</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 10"></polyline></svg>
+                <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">TIMEZONE</span>
             </div>
             """, unsafe_allow_html=True)
             tz_options = {
@@ -1023,22 +1170,19 @@ if not df_signals.empty:
             }
             tz_keys = list(tz_options.keys())
             default_tz_ix = next((i for i, k in enumerate(tz_keys) if "IST" in k), 0)
-            ema_display_options = ["4 Periods", "8 Periods", "12 Periods", "24 Periods"]
-            default_ema_ix = 0
-
-            if hasattr(st, "popover"):
-                with st.popover("⚙️ Options", use_container_width=True):
-                    st.markdown("<span style='font-size: 0.75rem; font-weight: 700; text-transform: uppercase;'>Display Timezone</span>", unsafe_allow_html=True)
-                    display_tz = st.selectbox("Timezone", tz_keys, index=default_tz_ix, key="pop_tz", label_visibility="collapsed")
-                    st.markdown("<span style='font-size: 0.75rem; font-weight: 700; text-transform: uppercase;'>EMA Smoothing Window</span>", unsafe_allow_html=True)
-                    selected_ema_label = st.selectbox("EMA Window", ema_display_options, index=default_ema_ix, key="pop_ema", label_visibility="collapsed")
-            else:
-                with st.expander("⚙️ Options"):
-                    display_tz = st.selectbox("Timezone", tz_keys, index=default_tz_ix, key="exp_tz")
-                    selected_ema_label = st.selectbox("EMA Window", ema_display_options, index=default_ema_ix, key="exp_ema")
-
+            display_tz = st.selectbox("Timezone", tz_keys, index=default_tz_ix, label_visibility="collapsed")
             target_tz = tz_options[display_tz]
             tz_abbr = display_tz.split('(')[-1].replace(')', '').strip() if '(' in display_tz else display_tz
+
+        with filter_col5:
+            st.markdown(f"""
+            <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">EMA WINDOW</span>
+            </div>
+            """, unsafe_allow_html=True)
+            ema_display_options = ["4 Periods", "8 Periods", "12 Periods", "24 Periods"]
+            selected_ema_label = st.selectbox("EMA Window", ema_display_options, index=0, label_visibility="collapsed")
             ema_window = int(selected_ema_label.split()[0])
 
     filtered_signals = df_signals[df_signals['market_region'] == selected_region].copy()
@@ -1137,22 +1281,28 @@ if not df_signals.empty:
             # 3. Telemetry metrics
             total_news_count = len(filtered_signals)
             tracked_count = filtered_signals['index_ticker'].nunique()
+            
+            nv_color = "#0284c7" if is_light else "#38bdf8"
+            nv_bg = "rgba(2, 132, 199, 0.12)" if is_light else "rgba(56, 189, 248, 0.12)"
+            nv_border = "rgba(2, 132, 199, 0.3)" if is_light else "rgba(56, 189, 248, 0.3)"
+            
+            ti_color = "#059669" if is_light else "#34d399"
 
-            # Render Left Column (Consolidated into 3 structured cards)
+            # Render Left Column (4 Symmetrically Stacked KPI Cards)
             kpi_column_html = (
                 '<div class="kpi-column-container">'
-                # Card 1: Headline Hero Metric
-                '<div class="white-card kpi-card kpi-hero-card">'
+                # Card 1: Headline Hero Metric (Aggregate Optimism)
+                '<div class="white-card kpi-card">'
                 '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
                 '<span class="metric-title" style="margin-bottom: 0;">Aggregate Optimism</span>'
-                f'<span style="font-size: 0.74rem; font-weight: 700; color: var(--header-border-left); text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{selected_region}</span>'
+                f'<span style="font-size: 0.72rem; font-weight: 700; color: var(--header-border-left); text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{selected_region}</span>'
                 '</div>'
                 f'<div class="metric-value metric-hero {val_color}">{current_ema:+.1f}</div>'
                 '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
-                f'<span style="font-size: 0.75rem; font-weight: 700; color: {delta_pill_color}; background: {delta_pill_bg}; border: 1px solid {delta_pill_border}; padding: 2px 8px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">{delta_str}</span>'
-                f'<span style="font-size: 0.82rem; color: var(--text-secondary);">vs previous period</span>'
+                f'<span style="font-size: 0.74rem; font-weight: 700; color: {delta_pill_color}; background: {delta_pill_bg}; border: 1px solid {delta_pill_border}; padding: 2px 7px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">{delta_str}</span>'
+                f'<span style="font-size: 0.78rem; color: var(--text-secondary);">vs previous period</span>'
                 '</div>'
-                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.82rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
+                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
                 '<span>Confidence vector</span>'
                 '<span style="color: var(--text-primary); font-weight: 600;">System-One CLM</span>'
                 '</div>'
@@ -1162,39 +1312,48 @@ if not df_signals.empty:
                 '<div class="white-card kpi-card">'
                 '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
                 '<span class="metric-title" style="margin-bottom: 0;">Market Bias</span>'
-                f'<span style="font-size: 0.70rem; font-weight: 800; color: {b_color_hex}; background: {b_pill_bg}; border: 1px solid {b_pill_border}; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif; letter-spacing: 0.04em;">{bias}</span>'
+                f'<span style="font-size: 0.68rem; font-weight: 800; color: {b_color_hex}; background: {b_pill_bg}; border: 1px solid {b_pill_border}; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif; letter-spacing: 0.04em;">{bias}</span>'
                 '</div>'
                 f'<div class="metric-value {b_val_color}" style="font-size: 1.55rem;">{bias}</div>'
                 '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
-                f'<span style="font-size: 0.82rem; color: var(--text-secondary);">{ema_window}-period moving average</span>'
+                f'<span style="font-size: 0.78rem; color: var(--text-secondary);">{ema_window}-period moving average</span>'
                 '</div>'
-                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.82rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
+                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
                 '<span>Signal strategy</span>'
                 '<span style="color: var(--text-primary); font-weight: 600;">EMA Crossover</span>'
                 '</div>'
                 '</div>'
 
-                # Card 3: Market Telemetry (Compact Metadata combining News Volume & Tracked Indices)
+                # Card 3: Total News Volume
                 '<div class="white-card kpi-card">'
-                '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 4px;">'
-                '<span class="metric-title" style="margin-bottom: 0;">Market Telemetry</span>'
-                f'<span style="font-size: 0.70rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">Live Sync</span>'
+                '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
+                '<span class="metric-title" style="margin-bottom: 0;">Total News Volume</span>'
+                f'<span style="font-size: 0.68rem; font-weight: 700; color: {nv_color}; background: {nv_bg}; border: 1px solid {nv_border}; padding: 2px 7px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">{date_range} Window</span>'
                 '</div>'
-                '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 4px 0;">'
-                f'<div style="background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 6px; padding: 6px 10px;">'
-                '<div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">News Volume</div>'
-                f'<div style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary);">{total_news_count}</div>'
-                f'<div style="font-size: 0.72rem; color: var(--text-secondary);">{date_range} window</div>'
+                f'<div class="metric-value" style="color: var(--text-primary); font-size: 1.55rem;">{total_news_count}</div>'
+                '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
+                f'<span style="font-size: 0.78rem; color: var(--text-secondary);">articles ingested</span>'
                 '</div>'
-                f'<div style="background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 6px; padding: 6px 10px;">'
-                '<div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Universe</div>'
-                f'<div style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary);">{tracked_count}</div>'
-                f'<div style="font-size: 0.72rem; color: var(--text-secondary);">100% active</div>'
-                '</div>'
-                '</div>'
-                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.82rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
+                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
                 '<span>Ingestion cadence</span>'
                 '<span style="color: var(--text-primary); font-weight: 600;">Every 2 hours</span>'
+                '</div>'
+                '</div>'
+
+                # Card 4: Tracked Indices
+                '<div class="white-card kpi-card">'
+                '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
+                '<span class="metric-title" style="margin-bottom: 0;">Tracked Indices</span>'
+                f'<span style="font-size: 0.68rem; font-weight: 700; color: {ti_color}; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 2px 7px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{selected_region}</span>'
+                '</div>'
+                f'<div class="metric-value" style="color: var(--text-primary); font-size: 1.55rem;">{tracked_count}</div>'
+                '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
+                f'<span style="font-size: 0.74rem; font-weight: 700; color: {ti_color}; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 2px 6px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">100% Active</span>'
+                f'<span style="font-size: 0.78rem; color: var(--text-secondary);">real-time monitored</span>'
+                '</div>'
+                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
+                '<span>Active universe</span>'
+                '<span style="color: var(--text-primary); font-weight: 600;">20 Global Assets</span>'
                 '</div>'
                 '</div>'
                 '</div>'
@@ -1223,11 +1382,19 @@ if not df_signals.empty:
                 
                 fig_area = go.Figure()
                 
-                # Highly distinct, recognizable color palette avoiding hue collisions
+                # Highly distinct, recognizable color palette with matching soft translucent fills
                 distinct_colors = ["#0284c7", "#f59e0b", "#10b981", "#ec4899", "#8b5cf6", "#06b6d4"]
+                fill_colors = [
+                    "rgba(2, 132, 199, 0.20)",
+                    "rgba(245, 158, 11, 0.20)",
+                    "rgba(16, 185, 129, 0.20)",
+                    "rgba(236, 72, 153, 0.20)",
+                    "rgba(139, 92, 246, 0.20)",
+                    "rgba(6, 182, 212, 0.20)"
+                ]
                 active_tickers = [c for c in filtered_signals['index_ticker'].unique() if c != 'UNKNOWN']
                 
-                # Plot individual index observations without zero-snapping
+                # Plot individual index observations with translucent area fills
                 for i, ticker in enumerate(active_tickers):
                     if chart_display != "All Indices" and ticker != chart_display:
                         continue
@@ -1242,9 +1409,11 @@ if not df_signals.empty:
                     fig_area.add_trace(go.Scatter(
                         x=t_x, y=t_grouped['sentiment_index'],
                         mode='lines+markers', name=ticker,
-                        line=dict(width=1.75, color=distinct_colors[i % len(distinct_colors)]),
-                        marker=dict(size=4.5),
-                        opacity=0.85,
+                        line=dict(width=1.8, color=distinct_colors[i % len(distinct_colors)]),
+                        marker=dict(size=4),
+                        fill='tozeroy',
+                        fillcolor=fill_colors[i % len(fill_colors)],
+                        opacity=0.9,
                         connectgaps=True
                     ))
                 
@@ -1253,12 +1422,12 @@ if not df_signals.empty:
                 fig_area.add_trace(go.Scatter(
                     x=plot_trend_x, y=df_trend['EMA_Index'],
                     mode='lines',
-                    line=dict(color=ema_color, width=3.5, shape='linear'), 
+                    line=dict(color=ema_color, width=3.2, shape='linear'), 
                     name=f'{selected_region} Trend ({ema_window}P EMA)'
                 ))
                 
                 fig_area.update_layout(
-                    height=390, margin=dict(l=0, r=0, t=10, b=0),
+                    height=350, margin=dict(l=0, r=0, t=10, b=0),
                     plot_bgcolor="rgba(255,255,255,0.4)" if is_light else "rgba(0,0,0,0)",
                     paper_bgcolor="rgba(0,0,0,0)",
                     hovermode="x unified",
@@ -1352,7 +1521,7 @@ if not df_signals.empty:
         noise_count = total_events - bullish_count - bearish_count
 
         with st.container(border=True):
-            feed_header_col1, feed_header_col2 = st.columns([0.48, 0.52])
+            feed_header_col1, feed_header_col2 = st.columns([0.42, 0.58], vertical_alignment="center")
             with feed_header_col1:
                 st.markdown(f"""
                 <div style="display: flex; align-items: center; gap: 8px; padding: 4px 0;">
@@ -1367,72 +1536,94 @@ if not df_signals.empty:
                     f"Bearish {bearish_count}",
                     f"Noise {noise_count}"
                 ]
-                selected_feed_pill = render_segmented_filter("feed_filter", feed_pill_options, default_ix=0, key="feed_sentiment_pills")
-                if not selected_feed_pill:
-                    selected_feed_pill = feed_pill_options[0]
+                selected_feed_pill = render_segmented_filter("feed_filter", feed_pill_options, default_ix=None, key="feed_sentiment_pills")
 
-            if "Bullish" in selected_feed_pill:
-                feed_display_payloads = region_payloads[region_payloads['sentiment_index'] >= 0.5]
-            elif "Bearish" in selected_feed_pill:
-                feed_display_payloads = region_payloads[region_payloads['sentiment_index'] <= -0.5]
-            elif "Noise" in selected_feed_pill:
-                feed_display_payloads = region_payloads[(region_payloads['sentiment_index'] > -0.5) & (region_payloads['sentiment_index'] < 0.5)]
+            if selected_feed_pill is None:
+                st.markdown(f"""
+                <div style="display: flex; justify-content: flex-end; align-items: center; padding: 4px 2px 2px 2px;">
+                    <span style="font-size: 0.74rem; color: var(--text-muted); font-family: 'IBM Plex Sans', sans-serif;">
+                        Click any sentiment pill above to expand and explore streaming intelligence
+                    </span>
+                </div>
+                """, unsafe_allow_html=True)
             else:
-                feed_display_payloads = region_payloads
+                if "Bullish" in selected_feed_pill:
+                    feed_display_payloads = region_payloads[region_payloads['sentiment_index'] >= 0.5]
+                    sentiment_label = "Bullish"
+                elif "Bearish" in selected_feed_pill:
+                    feed_display_payloads = region_payloads[region_payloads['sentiment_index'] <= -0.5]
+                    sentiment_label = "Bearish"
+                elif "Noise" in selected_feed_pill:
+                    feed_display_payloads = region_payloads[(region_payloads['sentiment_index'] > -0.5) & (region_payloads['sentiment_index'] < 0.5)]
+                    sentiment_label = "Noise"
+                else:
+                    feed_display_payloads = region_payloads
+                    sentiment_label = "All"
 
-            # Directly render top headlines in a scrollable feed container (top 3-5 visible immediately)
-            html_feed = '<div class="news-feed-scroll">'
-            if not feed_display_payloads.empty:
-                for _, row in feed_display_payloads.iterrows():
-                    sentiment = row['sentiment_index']
-                    if date_range in ["4 Hours", "4 Hour", "4H", "6 Hours", "6 Hour", "6H", "12 Hours", "12 Hour", "12H", "1 Day", "1Day", "1D", "24 Hours", "24 Hour", "24H"]:
-                        time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
-                    else:
-                        time_str = pd.to_datetime(row['timestamp']).strftime('%b %d, %H:%M')
-                    ticker_label = row.get('index_ticker', 'Macro')
-                    
-                    parsed = clean_news_item(row['raw_text'])
-                    clean_headline = parsed['headline']
-                    source = parsed['source']
-                    
-                    # Determine Sentiment & Noise status
-                    if abs(sentiment) < 0.5:
-                        status_badge = f'<span style="background: {"rgba(148, 163, 184, 0.2)" if is_light else "rgba(148, 163, 184, 0.18)"}; border: 1px solid {"rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.45)"}; color: {"#475569" if is_light else "#cbd5e1"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">NOISE</span>'
-                        score_color = "#64748b" if is_light else "#94a3b8"
-                        score_bg = "rgba(148, 163, 184, 0.15)" if is_light else "rgba(148, 163, 184, 0.12)"
-                        score_border = "rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.3)"
-                        card_border = "#94a3b8" if is_light else "#64748b"
-                    elif sentiment >= 0.5:
-                        status_badge = f'<span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: {"#059669" if is_light else "#34d399"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BULLISH</span>'
-                        score_color = "#059669" if is_light else "#10b981"
-                        score_bg = "rgba(16, 185, 129, 0.15)" if is_light else "rgba(16, 185, 129, 0.12)"
-                        score_border = "rgba(16, 185, 129, 0.35)" if is_light else "rgba(16, 185, 129, 0.3)"
-                        card_border = "#10b981"
-                    else:
-                        status_badge = f'<span style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: {"#dc2626" if is_light else "#f87171"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BEARISH</span>'
-                        score_color = "#dc2626" if is_light else "#ef4444"
-                        score_bg = "rgba(239, 68, 68, 0.15)" if is_light else "rgba(239, 68, 68, 0.12)"
-                        score_border = "rgba(239, 68, 68, 0.35)" if is_light else "rgba(239, 68, 68, 0.3)"
-                        card_border = "#ef4444"
-                    
-                    source_badge = f'<span style="background: {"rgba(0, 0, 0, 0.04)" if is_light else "rgba(255, 255, 255, 0.04)"}; border: 1px solid {"rgba(0, 0, 0, 0.08)" if is_light else "rgba(255, 255, 255, 0.08)"}; color: {"#475569" if is_light else "#94a3b8"}; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">{source}</span>' if source else ""
-                    
-                    escaped_headline = html.escape(clean_headline)
-                    badges_markup = (
-                        f'<span style="font-family: \'IBM Plex Sans\', sans-serif; font-size: 0.75rem; font-weight: 500; color: {"#475569" if is_light else "#94a3b8"}; background: {"rgba(0,0,0,0.04)" if is_light else "rgba(255,255,255,0.04)"}; border: 1px solid {"rgba(0,0,0,0.08)" if is_light else "rgba(255,255,255,0.08)"}; padding: 2px 7px; border-radius: 4px; flex-shrink: 0;">{time_str}</span>'
-                        f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.75rem; font-weight: 700; color: {"#0284c7" if is_light else "#f8fafc"}; background: {"rgba(2, 132, 199, 0.12)" if is_light else "rgba(59, 130, 246, 0.15)"}; border: 1px solid {"rgba(2, 132, 199, 0.3)" if is_light else "rgba(59, 130, 246, 0.35)"}; padding: 2px 8px; border-radius: 4px; flex-shrink: 0;">{ticker_label}</span>'
-                        f'{source_badge}{status_badge}'
-                    )
-                    score_markup = f'<div style="flex-shrink: 0;"><span style="font-family: \'Montserrat\', sans-serif; font-size: 0.8rem; font-weight: 700; color: {score_color}; background: {score_bg}; border: 1px solid {score_border}; padding: 3px 9px; border-radius: 4px; letter-spacing: 0.02em;">{sentiment:+.1f}</span></div>'
-                    card_top = f'<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">{badges_markup}</div>{score_markup}</div>'
-                    card_body = f'<div style="font-size: 0.92rem; color: {"#0f172a" if is_light else "#f8fafc"}; font-weight: 500; line-height: 1.5; font-family: \'IBM Plex Sans\', sans-serif;">{escaped_headline}</div>'
-                    
-                    html_feed += f'<div class="news-item-card" style="border-left: 3px solid {card_border};">{card_top}{card_body}</div>'
-            else:
-                html_feed += f'<div style="color: var(--text-muted); font-size: 0.88rem; padding: 18px; text-align: center; font-family: \'IBM Plex Sans\', sans-serif;">No news events matching the selected sentiment filter for {selected_region}.</div>'
+                st.markdown(f"""
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 4px 10px 4px; border-bottom: 1px solid var(--feed-card-border); margin-bottom: 10px;">
+                    <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); font-family: 'Montserrat', sans-serif;">
+                        STREAMING {len(feed_display_payloads)} {sentiment_label.upper()} HEADLINES
+                    </span>
+                    <span style="font-size: 0.72rem; color: var(--text-muted); font-family: 'IBM Plex Sans', sans-serif;">
+                        Click active button again to collapse
+                    </span>
+                </div>
+                """, unsafe_allow_html=True)
 
-            html_feed += '</div>'
-            st.markdown(html_feed, unsafe_allow_html=True)
+                # Directly render top headlines in a scrollable feed container
+                html_feed = '<div class="news-feed-scroll">'
+                if not feed_display_payloads.empty:
+                    for _, row in feed_display_payloads.iterrows():
+                        sentiment = row['sentiment_index']
+                        if date_range in ["4 Hours", "4 Hour", "4H", "6 Hours", "6 Hour", "6H", "12 Hours", "12 Hour", "12H", "1 Day", "1Day", "1D", "24 Hours", "24 Hour", "24H"]:
+                            time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
+                        else:
+                            time_str = pd.to_datetime(row['timestamp']).strftime('%b %d, %H:%M')
+                        ticker_label = row.get('index_ticker', 'Macro')
+                        
+                        parsed = clean_news_item(row['raw_text'])
+                        clean_headline = parsed['headline']
+                        source = parsed['source']
+                        
+                        # Determine Sentiment & Noise status
+                        if abs(sentiment) < 0.5:
+                            status_badge = f'<span style="background: {"rgba(148, 163, 184, 0.2)" if is_light else "rgba(148, 163, 184, 0.18)"}; border: 1px solid {"rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.45)"}; color: {"#475569" if is_light else "#cbd5e1"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">NOISE</span>'
+                            score_color = "#64748b" if is_light else "#94a3b8"
+                            score_bg = "rgba(148, 163, 184, 0.15)" if is_light else "rgba(148, 163, 184, 0.12)"
+                            score_border = "rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.3)"
+                            card_border = "#94a3b8" if is_light else "#64748b"
+                        elif sentiment >= 0.5:
+                            status_badge = f'<span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: {"#059669" if is_light else "#34d399"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BULLISH</span>'
+                            score_color = "#059669" if is_light else "#10b981"
+                            score_bg = "rgba(16, 185, 129, 0.15)" if is_light else "rgba(16, 185, 129, 0.12)"
+                            score_border = "rgba(16, 185, 129, 0.35)" if is_light else "rgba(16, 185, 129, 0.3)"
+                            card_border = "#10b981"
+                        else:
+                            status_badge = f'<span style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: {"#dc2626" if is_light else "#f87171"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BEARISH</span>'
+                            score_color = "#dc2626" if is_light else "#ef4444"
+                            score_bg = "rgba(239, 68, 68, 0.15)" if is_light else "rgba(239, 68, 68, 0.12)"
+                            score_border = "rgba(239, 68, 68, 0.35)" if is_light else "rgba(239, 68, 68, 0.3)"
+                            card_border = "#ef4444"
+                        
+                        source_badge = f'<span style="background: {"rgba(0, 0, 0, 0.04)" if is_light else "rgba(255, 255, 255, 0.04)"}; border: 1px solid {"rgba(0, 0, 0, 0.08)" if is_light else "rgba(255, 255, 255, 0.08)"}; color: {"#475569" if is_light else "#94a3b8"}; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">{source}</span>' if source else ""
+                        
+                        escaped_headline = html.escape(clean_headline)
+                        badges_markup = (
+                            f'<span style="font-family: \'IBM Plex Sans\', sans-serif; font-size: 0.75rem; font-weight: 500; color: {"#475569" if is_light else "#94a3b8"}; background: {"rgba(0,0,0,0.04)" if is_light else "rgba(255,255,255,0.04)"}; border: 1px solid {"rgba(0,0,0,0.08)" if is_light else "rgba(255,255,255,0.08)"}; padding: 2px 7px; border-radius: 4px; flex-shrink: 0;">{time_str}</span>'
+                            f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.75rem; font-weight: 700; color: {"#0284c7" if is_light else "#f8fafc"}; background: {"rgba(2, 132, 199, 0.12)" if is_light else "rgba(59, 130, 246, 0.15)"}; border: 1px solid {"rgba(2, 132, 199, 0.3)" if is_light else "rgba(59, 130, 246, 0.35)"}; padding: 2px 8px; border-radius: 4px; flex-shrink: 0;">{ticker_label}</span>'
+                            f'{source_badge}{status_badge}'
+                        )
+                        score_markup = f'<div style="flex-shrink: 0;"><span style="font-family: \'Montserrat\', sans-serif; font-size: 0.8rem; font-weight: 700; color: {score_color}; background: {score_bg}; border: 1px solid {score_border}; padding: 3px 9px; border-radius: 4px; letter-spacing: 0.02em;">{sentiment:+.1f}</span></div>'
+                        card_top = f'<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">{badges_markup}</div>{score_markup}</div>'
+                        card_body = f'<div style="font-size: 0.92rem; color: {"#0f172a" if is_light else "#f8fafc"}; font-weight: 500; line-height: 1.5; font-family: \'IBM Plex Sans\', sans-serif;">{escaped_headline}</div>'
+                        
+                        html_feed += f'<div class="news-item-card" style="border-left: 3px solid {card_border};">{card_top}{card_body}</div>'
+                else:
+                    html_feed += f'<div style="color: var(--text-muted); font-size: 0.88rem; padding: 18px; text-align: center; font-family: \'IBM Plex Sans\', sans-serif;">No news events matching the selected sentiment filter for {selected_region}.</div>'
+
+                html_feed += '</div>'
+                st.markdown(html_feed, unsafe_allow_html=True)
             
 
     else:

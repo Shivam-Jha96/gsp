@@ -432,22 +432,22 @@ order = trading_client.submit_order(order_data=order_data)
 +------------------------------------------------------------------------------------+
 |  [HEADER BANNER: GSP Platform Identity (Left) | Status & Dark/Light Toggle (Right)]|
 +------------------------------------------------------------------------------------+
-|  [EXPANDER: How GSP Works • Pure Mathematical Sentiment via CLM (Collapsed)]      |
+|  [USP BANNER: Automated Horizontal Scrolling Ticker Preview (Collapsible Details)] |
 +------------------------------------------------------------------------------------+
-|  [ERGONOMIC FILTER BAR: Timeframe Pills | Region | Chart Display | ⚙️ Options Popover]|
+|  [5 ALIGNED CONTROLS: Timeframe | Region | Chart Display | Timezone | EMA Window]  |
 +--------------------------+---------------------------------------------------------+
 |  KPI TILES (LEFT COL)    |  UNIFIED CHART & ASSET CONTAINER (RIGHT COL)            |
 |  - Aggregate Optimism    |  +---------------------------------------------------+  |
-|    (Hero Size: 2.35rem,  |  | Multi-Series Line Chart (390px Height, Bold EMA)  |  |
+|    (Hero Size: 2.35rem,  |  | Multi-Series Area Plot (350px, Translucent Fills) |  |
 |     Directional Delta)   |  | - Symmetrical [-100, +100] Y-Axis, Neutral Gray 0 |  |
-|  - Market Bias Regime    |  | - Smooth Traces (No Zero-Snapping), Distinct Hues |  |
-|  - Market Telemetry      |  | - Unified Tooltip, Unclipped Legends, Hover Bar   |  |
-|    (Volume + Universe)   |  +---------------------------------------------------+  |
-|  (3 Consolidated Cards)  |  - Embedded Mini Asset Tiles (— No change States)       |
+|  - Market Bias Regime    |  | - Translucent tozeroy fills, Bold Prominent EMA   |  |
+|  - Total News Volume     |  | - Unified Tooltip, Unclipped Legends, Hover Bar   |  |
+|  - Tracked Indices       |  +---------------------------------------------------+  |
+|  (4 Symmetrical Cards)   |  - Embedded Mini Asset Tiles (— No change States)       |
 +--------------------------+---------------------------------------------------------+
 |  LIVE INTELLIGENCE FEED (SINGLE UNIFIED INSTITUTIONAL CONTAINER)                   |
-|  - Header: Live Stream Title (Left) | Inline Sentiment Filter Pills (Right)        |
-|  - Direct Visibility: Top 3–5 headlines displayed immediately, smooth scrolling    |
+|  - Header: Live Stream Title (Left) | Right-Aligned Sentiment Filter Pills (Right) |
+|  - Collapsible: Filter buttons directly control expansion & view without clutter   |
 +------------------------------------------------------------------------------------+
 ```
 
