@@ -156,7 +156,7 @@ __THEME_VARS__
     }
     
     .block-container {
-        padding-top: 1rem !important;
+        padding-top: 0.25rem !important;
         padding-bottom: 1.5rem !important;
         max-width: 1600px;
         background: transparent !important;
