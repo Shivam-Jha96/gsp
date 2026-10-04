@@ -46,14 +46,14 @@ if is_light:
     theme_css_vars = """
         color-scheme: light !important;
         --primary-color: #0284c7 !important;
-        --background-color: #f1f5f9 !important;
+        --background-color: #f8fafc !important;
         --secondary-background-color: #ffffff !important;
         --text-color: #0f172a !important;
-        --bg-main: #f1f5f9;
-        --bg-gradient: #f1f5f9;
+        --bg-main: #f8fafc;
+        --bg-gradient: #f8fafc;
         --text-primary: #0f172a;
         --text-secondary: #334155;
-        --text-muted: #64748b;
+        --text-muted: #475569;
         --card-bg: #ffffff;
         --card-border: #cbd5e1;
         --card-shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
@@ -87,6 +87,8 @@ if is_light:
         --action-btn-hover-color: #0369a1;
         --metric-green: #059669;
         --metric-red: #dc2626;
+        --toggle-track-bg: #cbd5e1;
+        --toggle-track-border: #94a3b8;
     """
 else:
     theme_css_vars = """
@@ -133,6 +135,8 @@ else:
         --action-btn-hover-color: #ffffff;
         --metric-green: #10b981;
         --metric-red: #ef4444;
+        --toggle-track-bg: #334155;
+        --toggle-track-border: #475569;
     """
 
 # --- CSS Theme Injection ---
@@ -188,11 +192,13 @@ __THEME_VARS__
         border-color: var(--card-hover-border) !important;
     }
     .kpi-card {
-        border-left: 3px solid var(--card-border) !important;
+        border: 1px solid var(--card-border) !important;
     }
     
-    /* Override Streamlit native container border */
-    [data-testid="stVerticalBlockBorderWrapper"] {
+    /* Override Streamlit native container and expander border */
+    [data-testid="stVerticalBlockBorderWrapper"],
+    div[data-testid="stExpander"],
+    details[data-testid="stExpander"] {
         background: var(--card-bg) !important;
         border-radius: 8px !important;
         border: 1px solid var(--card-border) !important;
@@ -415,13 +421,10 @@ __THEME_VARS__
         flex-direction: column !important;
     }
     
-    /* Top Right Action Card (Backend Status & Dark Mode Toggle) */
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor),
-    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"]:nth-of-type(2) > div[data-testid="stVerticalBlock"],
-    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) > div[data-testid="stVerticalBlock"] {
+    /* Top Right Action Card (Backend Status & Dark Mode Toggle) - Scoped exclusively to anchor */
+    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) {
         background: var(--header-bg) !important;
         border: 1px solid var(--header-border) !important;
-        border-left: 4px solid var(--header-border-left) !important;
         border-radius: 8px !important;
         padding: 8px 12px !important;
         backdrop-filter: blur(10px) !important;
@@ -435,17 +438,12 @@ __THEME_VARS__
         margin-bottom: 0 !important;
         gap: 4px !important;
     }
-    
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stMarkdownContainer"],
-    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"]:nth-of-type(2) div[data-testid="stMarkdownContainer"],
-    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stMarkdownContainer"] {
+    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stMarkdownContainer"] {
         width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
     }
-    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stMarkdownContainer"] > p,
-    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"]:nth-of-type(2) div[data-testid="stMarkdownContainer"] > p,
-    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:nth-of-type(2) div[data-testid="stMarkdownContainer"] > p {
+    div[data-testid="stVerticalBlock"]:has(#header-control-card-anchor) div[data-testid="stMarkdownContainer"] > p {
         margin: 0 !important;
     }
 
@@ -481,7 +479,7 @@ __THEME_VARS__
     }
     div[data-testid="stToggle"] label div[data-testid="stMarkdownContainer"] p {
         font-family: 'Montserrat', sans-serif !important;
-        font-size: 0.75rem !important;
+        font-size: 0.78rem !important;
         font-weight: 700 !important;
         color: var(--text-primary) !important;
         letter-spacing: 0.04em !important;
@@ -494,8 +492,67 @@ __THEME_VARS__
     div[data-testid="stToggle"] div[data-testid="stCheckboxToggle"] {
         margin: 0 !important;
     }
-    div[data-testid="stToggle"] div[data-testid="stCheckboxToggle"] > div {
+    /* Explicit high-contrast toggle switch track and border */
+    div[data-testid="stToggle"] [role="switch"],
+    div[data-testid="stToggle"] div[data-testid="stCheckboxToggle"] > div,
+    div[data-testid="stToggle"] span[data-baseweb="toggle"] {
+        background-color: var(--toggle-track-bg) !important;
+        border: 1.5px solid var(--toggle-track-border) !important;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15) !important;
+        transition: all 0.2s ease !important;
+    }
+    div[data-testid="stToggle"] [role="switch"][aria-checked="true"],
+    div[data-testid="stToggle"] [role="switch"][data-checked="true"] {
+        background-color: var(--header-border-left) !important;
+        border-color: var(--header-border-left) !important;
+    }
+    div[data-testid="stToggle"] [role="switch"] > div {
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) !important;
+    }
+
+    /* Segmented Control & Pills Styling */
+    div[data-testid="stSegmentedControl"],
+    div[data-testid="stPills"] {
+        gap: 4px !important;
+        align-items: center !important;
+    }
+    div[data-testid="stSegmentedControl"] button,
+    div[data-testid="stPills"] button {
+        background: var(--input-bg) !important;
         border: 1px solid var(--input-border) !important;
+        color: var(--text-secondary) !important;
+        font-family: 'Montserrat', sans-serif !important;
+        font-size: 0.74rem !important;
+        font-weight: 600 !important;
+        border-radius: 6px !important;
+        padding: 4px 10px !important;
+        transition: all 0.15s ease !important;
+    }
+    div[data-testid="stSegmentedControl"] button[aria-checked="true"],
+    div[data-testid="stSegmentedControl"] button[data-checked="true"],
+    div[data-testid="stPills"] button[aria-checked="true"],
+    div[data-testid="stPills"] button[data-checked="true"] {
+        background: var(--action-btn-bg) !important;
+        border-color: var(--header-border-left) !important;
+        color: var(--header-border-left) !important;
+        font-weight: 700 !important;
+    }
+    
+    /* Popover button styling */
+    div[data-testid="stPopover"] > button {
+        background: var(--input-bg) !important;
+        border: 1px solid var(--input-border) !important;
+        color: var(--text-primary) !important;
+        font-family: 'Montserrat', sans-serif !important;
+        font-size: 0.78rem !important;
+        font-weight: 600 !important;
+        border-radius: 6px !important;
+        height: 38px !important;
+        padding: 0 12px !important;
+    }
+    div[data-testid="stPopover"] > button:hover {
+        border-color: var(--header-border-left) !important;
+        color: var(--header-border-left) !important;
     }
     
     /* Dedicated Mini Index Grid & Card Styling */
@@ -526,31 +583,31 @@ __THEME_VARS__
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
     
-    /* Metrics */
+    /* Metrics & Institutional Typography */
     .metric-title {
         font-family: 'Montserrat', sans-serif;
-        font-size: 0.78rem;
+        font-size: 0.82rem;
         font-weight: 700;
         color: var(--text-muted) !important;
         text-transform: uppercase;
-        letter-spacing: 0.04em;
+        letter-spacing: 0.05em;
         margin-bottom: 4px;
     }
     .metric-value {
         font-family: 'Montserrat', sans-serif;
-        font-size: 1.55rem;
+        font-size: 1.6rem;
         font-weight: 700;
         color: var(--text-primary) !important;
         letter-spacing: -0.01em;
         margin-bottom: 2px;
     }
     .metric-hero {
-        font-size: 2.2rem !important;
+        font-size: 2.35rem !important;
         font-weight: 800 !important;
         letter-spacing: -0.02em !important;
     }
     .metric-sub {
-        font-size: 0.82rem;
+        font-size: 0.84rem;
         font-weight: 500;
         color: var(--text-secondary) !important;
     }
@@ -559,7 +616,7 @@ __THEME_VARS__
     .gray { color: var(--text-muted) !important; }
     
     .metric-footer {
-        font-size: 0.80rem;
+        font-size: 0.82rem;
         color: var(--text-secondary) !important;
         border-top: 1px solid var(--card-border) !important;
         padding-top: 8px;
@@ -574,7 +631,7 @@ __THEME_VARS__
     
     @media (max-width: 768px) {
         .metric-value { font-size: 1.2rem; }
-        .metric-title { font-size: 0.7rem; }
+        .metric-title { font-size: 0.72rem; }
         .white-card { padding: 10px 12px; margin-bottom: 8px; }
         div[data-testid="stHorizontalBlock"] {
             align-items: initial !important;
@@ -598,27 +655,26 @@ __THEME_VARS__
     [data-testid="collapsedControl"] {display: none !important;}
     
     /* Enhanced Live News Feed Styling */
-    .news-feed-container {
-        background: var(--feed-bg) !important;
-        border: 1px solid var(--feed-border) !important;
-        border-radius: 8px;
-        padding: 14px;
-        max-height: 420px;
+    .news-feed-scroll {
+        background: transparent !important;
+        border: none !important;
+        padding: 4px 0 0 0;
+        max-height: 480px;
         overflow-y: auto;
     }
-    .news-feed-container::-webkit-scrollbar {
+    .news-feed-scroll::-webkit-scrollbar {
         width: 6px;
     }
-    .news-feed-container::-webkit-scrollbar-track {
+    .news-feed-scroll::-webkit-scrollbar-track {
         background: rgba(0, 0, 0, 0.04);
         border-radius: 4px;
     }
-    .news-feed-container::-webkit-scrollbar-thumb {
-        background: rgba(148, 163, 184, 0.3);
+    .news-feed-scroll::-webkit-scrollbar-thumb {
+        background: rgba(148, 163, 184, 0.35);
         border-radius: 4px;
     }
-    .news-feed-container::-webkit-scrollbar-thumb:hover {
-        background: rgba(148, 163, 184, 0.5);
+    .news-feed-scroll::-webkit-scrollbar-thumb:hover {
+        background: rgba(148, 163, 184, 0.55);
     }
     
     .news-item-card {
@@ -631,85 +687,11 @@ __THEME_VARS__
     }
     .news-item-card:hover {
         background: var(--feed-card-hover) !important;
-        border-color: rgba(59, 130, 246, 0.25) !important;
+        border-color: rgba(59, 130, 246, 0.3) !important;
+        transform: translateY(-1px);
     }
     .news-item-card:last-child {
         margin-bottom: 0;
-    }
-    
-    /* Collapsible News Feed Card & Accordion */
-    details.news-feed-accordion {
-        margin-top: 28px;
-        margin-bottom: 14px;
-        background: var(--card-bg) !important;
-        border: 1px solid var(--card-border) !important;
-        border-left: 4px solid #3b82f6 !important;
-        border-radius: 8px;
-        transition: all 0.25s ease;
-        box-shadow: var(--card-shadow) !important;
-    }
-    details.news-feed-accordion:hover {
-        border-color: rgba(59, 130, 246, 0.35) !important;
-    }
-    details.news-feed-accordion summary.news-feed-summary {
-        list-style: none !important;
-        cursor: pointer;
-        user-select: none;
-        outline: none;
-        padding: 12px 18px;
-        transition: all 0.2s ease;
-    }
-    details.news-feed-accordion summary.news-feed-summary::-webkit-details-marker {
-        display: none !important;
-    }
-    details.news-feed-accordion summary.news-feed-summary::marker {
-        display: none !important;
-    }
-    details.news-feed-accordion summary.news-feed-summary:hover {
-        background: rgba(255, 255, 255, 0.025);
-    }
-    details.news-feed-accordion[open] summary.news-feed-summary {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    
-    .expand-action-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: var(--action-btn-bg);
-        border: 1px solid var(--action-btn-border);
-        color: var(--action-btn-color);
-        padding: 4px 12px;
-        border-radius: 5px;
-        font-size: 0.72rem;
-        font-weight: 700;
-        letter-spacing: 0.06em;
-        font-family: 'Montserrat', sans-serif;
-        text-transform: uppercase;
-        transition: all 0.2s ease;
-        flex-shrink: 0;
-    }
-    details.news-feed-accordion summary.news-feed-summary:hover .expand-action-btn {
-        background: var(--action-btn-hover-bg);
-        border-color: var(--action-btn-hover-border);
-        color: var(--action-btn-hover-color);
-        box-shadow: 0 0 12px rgba(59, 130, 246, 0.35);
-    }
-    details.news-feed-accordion .expand-text { display: inline-flex; align-items: center; gap: 5px; }
-    details.news-feed-accordion .collapse-text { display: none; }
-    details.news-feed-accordion[open] .expand-text { display: none; }
-    details.news-feed-accordion[open] .collapse-text { display: inline-flex; align-items: center; gap: 5px; }
-    
-    details.news-feed-accordion[open] .expand-action-btn {
-        background: var(--action-btn-bg);
-        border-color: var(--action-btn-border);
-        color: var(--action-btn-color);
-    }
-    details.news-feed-accordion[open] summary.news-feed-summary:hover .expand-action-btn {
-        background: var(--action-btn-hover-bg);
-        border-color: var(--action-btn-hover-border);
-        color: var(--action-btn-hover-color);
-        box-shadow: 0 0 12px rgba(59, 130, 246, 0.35);
     }
 </style>
 """.replace("__THEME_VARS__", theme_css_vars)
@@ -876,7 +858,7 @@ if not df_signals.empty:
     
     with header_col:
         st.markdown(f"""
-        <div style="background: var(--header-bg); border: 1px solid var(--header-border); border-left: 4px solid var(--header-border-left); border-radius: 8px; padding: clamp(10px, 2vw, 14px) clamp(12px, 2.5vw, 20px); height: 100%; display: flex; align-items: center; backdrop-filter: blur(10px); box-shadow: var(--header-shadow); margin-bottom: 0; box-sizing: border-box;">
+        <div style="background: var(--header-bg); border: 1px solid var(--header-border); border-radius: 8px; padding: clamp(10px, 2vw, 14px) clamp(12px, 2.5vw, 20px); height: 100%; display: flex; align-items: center; backdrop-filter: blur(10px); box-shadow: var(--header-shadow); margin-bottom: 0; box-sizing: border-box;">
             <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
                 <div style="background: linear-gradient(135deg, #2563eb, #3b82f6); color: #ffffff; padding: 4px 10px; border-radius: 5px; font-weight: 800; font-size: 1.1rem; letter-spacing: 1.5px; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 12px rgba(59, 130, 246, 0.45); flex-shrink: 0;">GSP</div>
                 <div>
@@ -910,7 +892,7 @@ if not df_signals.empty:
     
     with st.expander("ℹ️ How GSP Works • Pure Mathematical Sentiment via Contrastive Language Modeling (CLM)", expanded=False):
         st.markdown(f"""
-        <div style="background: var(--edge-bg); border: 1px solid var(--edge-border); border-left: 4px solid var(--edge-accent); border-radius: 8px; padding: clamp(10px, 2vw, 12px) clamp(12px, 2.5vw, 18px); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); margin-bottom: 4px;">
+        <div style="background: var(--edge-bg); border: 1px solid var(--edge-border); border-radius: 8px; padding: clamp(10px, 2vw, 12px) clamp(12px, 2.5vw, 18px); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); margin-bottom: 4px;">
         <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
         <span style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: {'#0284c7' if is_light else '#38bdf8'}; font-family: 'Montserrat', sans-serif; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; padding: 3px 8px; border-radius: 4px; text-transform: uppercase;">THE QUANTITATIVE EDGE</span>
@@ -928,11 +910,22 @@ if not df_signals.empty:
         </div>
         """, unsafe_allow_html=True)
     
-    # --- Top Row: Filter Toolbar Card (5 Aligned Controls) ---
+    # Helper for segmented filter buttons (resilient across Streamlit versions)
+    def render_segmented_filter(label, options, default_ix=0, key=None):
+        if hasattr(st, "pills"):
+            res = st.pills(label, options, default=options[default_ix], key=key, label_visibility="collapsed")
+            return res if res else options[default_ix]
+        elif hasattr(st, "segmented_control"):
+            res = st.segmented_control(label, options, default=options[default_ix], key=key, label_visibility="collapsed")
+            return res if res else options[default_ix]
+        else:
+            return st.radio(label, options, index=default_ix, key=key, horizontal=True, label_visibility="collapsed")
+
+    # --- Top Row: Filter Toolbar Card (Ergonomic 4-Column Layout with Direct Pills & Popover) ---
     with st.container(border=True):
         st.markdown('<div id="filter-toolbar-anchor" style="display: none;"></div>', unsafe_allow_html=True)
-        filter_col1, filter_col2, filter_col3, filter_col4, filter_col5 = st.columns([1.1, 1.3, 1.45, 1.15, 1.25], gap="small")
-        lbl_color = "#64748b" if is_light else "#94a3b8"
+        filter_col1, filter_col2, filter_col3, filter_col4 = st.columns([1.6, 1.4, 1.4, 0.9], gap="small")
+        lbl_color = "#475569" if is_light else "#94a3b8"
         
         with filter_col1:
             st.markdown(f"""
@@ -941,9 +934,16 @@ if not df_signals.empty:
                 <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">TIMEFRAME</span>
             </div>
             """, unsafe_allow_html=True)
-            timeframe_options = ["1 Day", "12 Hours", "6 Hours", "4 Hours", "7 Days", "1 Month", "1 Year", "All"]
-            default_tf_ix = timeframe_options.index("7 Days") if "7 Days" in timeframe_options else 4
-            date_range = st.selectbox("Timeframe", timeframe_options, index=default_tf_ix, label_visibility="collapsed")
+            tf_choices = ["1D", "6H", "7D", "1M", "All"]
+            selected_tf_pill = render_segmented_filter("tf_selector", tf_choices, default_ix=2, key="tf_pill_filter")
+            tf_pill_map = {
+                "1D": "1 Day",
+                "6H": "6 Hours",
+                "7D": "7 Days",
+                "1M": "1 Month",
+                "All": "All"
+            }
+            date_range = tf_pill_map.get(selected_tf_pill, "7 Days")
             
         with filter_col2:
             st.markdown(f"""
@@ -977,8 +977,19 @@ if not df_signals.empty:
         with filter_col3:
             st.markdown(f"""
             <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 10"></polyline></svg>
-                <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">TIMEZONE</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">CHART DISPLAY</span>
+            </div>
+            """, unsafe_allow_html=True)
+            active_indices = df_signals[df_signals['market_region'] == selected_region]['index_ticker'].unique().tolist()
+            active_indices = [x for x in active_indices if x != 'UNKNOWN']
+            chart_display = st.selectbox("Chart Display", ["All Indices"] + active_indices, index=0, label_visibility="collapsed")
+
+        with filter_col4:
+            st.markdown(f"""
+            <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">OPTIONS</span>
             </div>
             """, unsafe_allow_html=True)
             tz_options = {
@@ -990,32 +1001,23 @@ if not df_signals.empty:
             }
             tz_keys = list(tz_options.keys())
             default_tz_ix = next((i for i, k in enumerate(tz_keys) if "IST" in k), 0)
-            display_tz = st.selectbox("tz", tz_keys, index=default_tz_ix, label_visibility="collapsed")
-            target_tz = tz_options[display_tz]
-            tz_abbr = display_tz.split('(')[-1].replace(')', '').strip() if '(' in display_tz else display_tz
-            
-        with filter_col4:
-            st.markdown(f"""
-            <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">EMA WINDOW</span>
-            </div>
-            """, unsafe_allow_html=True)
             ema_display_options = ["4 Periods", "8 Periods", "12 Periods", "24 Periods"]
             default_ema_ix = 0
-            selected_ema_label = st.selectbox("Exponential Moving Average", ema_display_options, index=default_ema_ix, label_visibility="collapsed")
+
+            if hasattr(st, "popover"):
+                with st.popover("⚙️ Options", use_container_width=True):
+                    st.markdown("<span style='font-size: 0.75rem; font-weight: 700; text-transform: uppercase;'>Display Timezone</span>", unsafe_allow_html=True)
+                    display_tz = st.selectbox("Timezone", tz_keys, index=default_tz_ix, key="pop_tz", label_visibility="collapsed")
+                    st.markdown("<span style='font-size: 0.75rem; font-weight: 700; text-transform: uppercase;'>EMA Smoothing Window</span>", unsafe_allow_html=True)
+                    selected_ema_label = st.selectbox("EMA Window", ema_display_options, index=default_ema_ix, key="pop_ema", label_visibility="collapsed")
+            else:
+                with st.expander("⚙️ Options"):
+                    display_tz = st.selectbox("Timezone", tz_keys, index=default_tz_ix, key="exp_tz")
+                    selected_ema_label = st.selectbox("EMA Window", ema_display_options, index=default_ema_ix, key="exp_ema")
+
+            target_tz = tz_options[display_tz]
+            tz_abbr = display_tz.split('(')[-1].replace(')', '').strip() if '(' in display_tz else display_tz
             ema_window = int(selected_ema_label.split()[0])
-            
-        with filter_col5:
-            st.markdown(f"""
-            <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">CHART DISPLAY</span>
-            </div>
-            """, unsafe_allow_html=True)
-            active_indices = df_signals[df_signals['market_region'] == selected_region]['index_ticker'].unique().tolist()
-            active_indices = [x for x in active_indices if x != 'UNKNOWN']
-            chart_display = st.selectbox("Chart Display", ["All Indices"] + active_indices, index=0, label_visibility="collapsed")
 
     filtered_signals = df_signals[df_signals['market_region'] == selected_region].copy()
     display_payloads = df_payloads.copy()
@@ -1066,42 +1068,33 @@ if not df_signals.empty:
         previous_ema = df_trend['EMA_Index'].iloc[-2] if len(df_trend) > 1 else 0
         delta = current_ema - previous_ema
         
-        # Pivot the data onto a strict chronological grid for plotting
-        pivot_df = filtered_signals.pivot_table(
-            index=pd.Grouper(key='timestamp', freq=freq_str),
-            columns='index_ticker',
-            values='sentiment_index',
-            aggfunc='mean'
-        ).fillna(0).reset_index()
-        
         # Ensure plot timestamps are naive in target_tz so Plotly renders exact wall-clock time
         plot_trend_x = df_trend['timestamp'].dt.tz_localize(None) if df_trend['timestamp'].dt.tz is not None else df_trend['timestamp']
-        plot_pivot_x = pivot_df['timestamp'].dt.tz_localize(None) if pivot_df['timestamp'].dt.tz is not None else pivot_df['timestamp']
         
         # --- Main Layout Split (1 Narrow Left, 1 Wide Right) ---
         left_col, right_col = st.columns([1.2, 4])
         
         with left_col:
-            # 1. Global Index
-            if delta > 0:
-                arrow = "▲"
-                delta_pill_color = "#059669" if is_light else "#34d399"
-                delta_pill_bg = "rgba(16, 185, 129, 0.12)" if is_light else "rgba(16, 185, 129, 0.15)"
-                delta_pill_border = "rgba(16, 185, 129, 0.3)"
-            elif delta < 0:
-                arrow = "▼"
-                delta_pill_color = "#dc2626" if is_light else "#f87171"
-                delta_pill_bg = "rgba(239, 68, 68, 0.12)" if is_light else "rgba(239, 68, 68, 0.15)"
-                delta_pill_border = "rgba(239, 68, 68, 0.3)"
-            else:
-                arrow = "▬"
+            # 1. Delta calculation and direction-accurate labeling
+            if abs(delta) < 0.05:
+                delta_str = "— No change"
                 delta_pill_color = "#475569" if is_light else "#94a3b8"
                 delta_pill_bg = "rgba(148, 163, 184, 0.12)" if is_light else "rgba(148, 163, 184, 0.15)"
                 delta_pill_border = "rgba(148, 163, 184, 0.3)"
+            elif delta > 0:
+                delta_str = f"▲ +{abs(delta):.1f}% change"
+                delta_pill_color = "#059669" if is_light else "#34d399"
+                delta_pill_bg = "rgba(16, 185, 129, 0.12)" if is_light else "rgba(16, 185, 129, 0.15)"
+                delta_pill_border = "rgba(16, 185, 129, 0.3)"
+            else:
+                delta_str = f"▼ -{abs(delta):.1f}% change"
+                delta_pill_color = "#dc2626" if is_light else "#f87171"
+                delta_pill_bg = "rgba(239, 68, 68, 0.12)" if is_light else "rgba(239, 68, 68, 0.15)"
+                delta_pill_border = "rgba(239, 68, 68, 0.3)"
                 
             val_color = "green" if current_ema > 0 else "red" if current_ema < 0 else ""
             
-            # 2. Market Bias
+            # 2. Market Bias Regime
             bias = "Bullish" if current_ema > 5 else "Bearish" if current_ema < -5 else "Neutral"
             if bias == "Bullish":
                 b_color_hex = "#059669" if is_light else "#34d399"
@@ -1119,68 +1112,67 @@ if not df_signals.empty:
                 b_pill_border = "rgba(124, 58, 237, 0.3)" if is_light else "rgba(168, 85, 247, 0.3)"
                 b_val_color = ""
 
-            # 3. Volume
+            # 3. Telemetry metrics
             total_news_count = len(filtered_signals)
-
-            # 4. Indices Active
             tracked_count = filtered_signals['index_ticker'].nunique()
 
+            # Render Left Column (Consolidated into 3 structured cards)
             kpi_column_html = (
                 '<div class="kpi-column-container">'
-                '<div class="white-card kpi-card">'
+                # Card 1: Headline Hero Metric
+                '<div class="white-card kpi-card kpi-hero-card">'
                 '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
                 '<span class="metric-title" style="margin-bottom: 0;">Aggregate Optimism</span>'
-                f'<span style="font-size: 0.72rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{selected_region}</span>'
+                f'<span style="font-size: 0.74rem; font-weight: 700; color: var(--header-border-left); text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{selected_region}</span>'
                 '</div>'
                 f'<div class="metric-value metric-hero {val_color}">{current_ema:+.1f}</div>'
                 '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
-                f'<span style="font-size: 0.75rem; font-weight: 700; color: {delta_pill_color}; background: {delta_pill_bg}; border: 1px solid {delta_pill_border}; padding: 2px 8px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">{arrow} {abs(delta):.1f}%</span>'
-                f'<span style="font-size: 0.78rem; color: var(--text-secondary);">vs previous period</span>'
+                f'<span style="font-size: 0.75rem; font-weight: 700; color: {delta_pill_color}; background: {delta_pill_bg}; border: 1px solid {delta_pill_border}; padding: 2px 8px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">{delta_str}</span>'
+                f'<span style="font-size: 0.82rem; color: var(--text-secondary);">vs previous period</span>'
                 '</div>'
-                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
+                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.82rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
                 '<span>Confidence vector</span>'
                 '<span style="color: var(--text-primary); font-weight: 600;">System-One CLM</span>'
                 '</div>'
                 '</div>'
+
+                # Card 2: Strategic Regime (Market Bias)
                 '<div class="white-card kpi-card">'
                 '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
                 '<span class="metric-title" style="margin-bottom: 0;">Market Bias</span>'
                 f'<span style="font-size: 0.70rem; font-weight: 800; color: {b_color_hex}; background: {b_pill_bg}; border: 1px solid {b_pill_border}; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif; letter-spacing: 0.04em;">{bias}</span>'
                 '</div>'
-                f'<div class="metric-value {b_val_color}" style="font-size: 1.45rem;">{bias}</div>'
+                f'<div class="metric-value {b_val_color}" style="font-size: 1.55rem;">{bias}</div>'
                 '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
-                f'<span style="font-size: 0.78rem; color: var(--text-secondary);">{ema_window}-period moving average</span>'
+                f'<span style="font-size: 0.82rem; color: var(--text-secondary);">{ema_window}-period moving average</span>'
                 '</div>'
-                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
+                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.82rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
                 '<span>Signal strategy</span>'
                 '<span style="color: var(--text-primary); font-weight: 600;">EMA Crossover</span>'
                 '</div>'
                 '</div>'
+
+                # Card 3: Market Telemetry (Compact Metadata combining News Volume & Tracked Indices)
                 '<div class="white-card kpi-card">'
-                '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
-                '<span class="metric-title" style="margin-bottom: 0;">Total News Volume</span>'
+                '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 4px;">'
+                '<span class="metric-title" style="margin-bottom: 0;">Market Telemetry</span>'
+                f'<span style="font-size: 0.70rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">Live Sync</span>'
                 '</div>'
-                f'<div class="metric-value" style="font-size: 1.45rem; color: var(--text-primary);">{total_news_count}</div>'
-                '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
-                f'<span style="font-size: 0.78rem; color: var(--text-secondary);">Articles ingested ({date_range})</span>'
+                '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 4px 0;">'
+                f'<div style="background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 6px; padding: 6px 10px;">'
+                '<div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">News Volume</div>'
+                f'<div style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary);">{total_news_count}</div>'
+                f'<div style="font-size: 0.72rem; color: var(--text-secondary);">{date_range} window</div>'
                 '</div>'
-                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
-                '<span>Ingestion cycle</span>'
+                f'<div style="background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 6px; padding: 6px 10px;">'
+                '<div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Universe</div>'
+                f'<div style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary);">{tracked_count}</div>'
+                f'<div style="font-size: 0.72rem; color: var(--text-secondary);">100% active</div>'
+                '</div>'
+                '</div>'
+                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.82rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
+                '<span>Ingestion cadence</span>'
                 '<span style="color: var(--text-primary); font-weight: 600;">Every 2 hours</span>'
-                '</div>'
-                '</div>'
-                '<div class="white-card kpi-card">'
-                '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
-                '<span class="metric-title" style="margin-bottom: 0;">Tracked Indices</span>'
-                f'<span style="font-size: 0.72rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{selected_region}</span>'
-                '</div>'
-                f'<div class="metric-value" style="font-size: 1.45rem; color: var(--text-primary);">{tracked_count}</div>'
-                '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
-                f'<span style="font-size: 0.78rem; color: var(--text-secondary);">100% active coverage</span>'
-                '</div>'
-                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
-                '<span>Active universe</span>'
-                '<span style="color: var(--text-primary); font-weight: 600;">20 Global assets</span>'
                 '</div>'
                 '</div>'
                 '</div>'
@@ -1209,23 +1201,29 @@ if not df_signals.empty:
                 
                 fig_area = go.Figure()
                 
-                # Plot clean multi-series lines for each specific Index (no overlapping translucent fills)
-                colors = ["#2563eb", "#ec4899", "#f59e0b", "#8b5cf6", "#06b6d4", "#10b981"]
-                tickers = [c for c in pivot_df.columns if c != 'timestamp']
+                # Highly distinct, recognizable color palette avoiding hue collisions
+                distinct_colors = ["#0284c7", "#f59e0b", "#10b981", "#ec4899", "#8b5cf6", "#06b6d4"]
+                active_tickers = [c for c in filtered_signals['index_ticker'].unique() if c != 'UNKNOWN']
                 
-                for i, ticker in enumerate(tickers):
-                    if ticker == 'UNKNOWN': 
-                        continue
-                        
+                # Plot individual index observations without zero-snapping
+                for i, ticker in enumerate(active_tickers):
                     if chart_display != "All Indices" and ticker != chart_display:
                         continue
-                        
+                    t_df = filtered_signals[filtered_signals['index_ticker'] == ticker].sort_values('timestamp')
+                    if t_df.empty:
+                        continue
+                    t_grouped = t_df.groupby(pd.Grouper(key='timestamp', freq=freq_str))['sentiment_index'].mean().dropna().reset_index()
+                    if t_grouped.empty:
+                        continue
+                    t_x = t_grouped['timestamp'].dt.tz_localize(None) if t_grouped['timestamp'].dt.tz is not None else t_grouped['timestamp']
+
                     fig_area.add_trace(go.Scatter(
-                        x=plot_pivot_x, y=pivot_df[ticker],
+                        x=t_x, y=t_grouped['sentiment_index'],
                         mode='lines+markers', name=ticker,
-                        line=dict(width=2.0, color=colors[i % len(colors)]),
-                        marker=dict(size=4),
-                        opacity=0.85
+                        line=dict(width=1.75, color=distinct_colors[i % len(distinct_colors)]),
+                        marker=dict(size=4.5),
+                        opacity=0.85,
+                        connectgaps=True
                     ))
                 
                 # Add bold prominent line for Global EMA Trend on top
@@ -1238,7 +1236,7 @@ if not df_signals.empty:
                 ))
                 
                 fig_area.update_layout(
-                    height=345, margin=dict(l=0, r=0, t=10, b=0),
+                    height=390, margin=dict(l=0, r=0, t=10, b=0),
                     plot_bgcolor="rgba(255,255,255,0.4)" if is_light else "rgba(0,0,0,0)",
                     paper_bgcolor="rgba(0,0,0,0)",
                     hovermode="x unified",
@@ -1265,16 +1263,18 @@ if not df_signals.empty:
                         side="right"
                     )
                 )
-                st.plotly_chart(fig_area, use_container_width=True, config={'displayModeBar': True, 'scrollZoom': True, 'displaylogo': False})
+                st.plotly_chart(fig_area, use_container_width=True, config={'displayModeBar': 'hover', 'scrollZoom': True, 'displaylogo': False})
 
                 # --- Mini KPI Tiles for Individual Indices (Inside same container for flush borders) ---
-                valid_tickers = [t for t in tickers if t != 'UNKNOWN']
+                valid_tickers = [t for t in active_tickers if t != 'UNKNOWN']
                 if valid_tickers:
                     kpi_html = '<div class="mini-kpi-grid">'
                     
                     for ticker in valid_tickers:
-                        latest_score = pivot_df[ticker].iloc[-1] if len(pivot_df) > 0 else 0
-                        prev_score = pivot_df[ticker].iloc[-2] if len(pivot_df) > 1 else 0
+                        t_sub = filtered_signals[filtered_signals['index_ticker'] == ticker].sort_values('timestamp')
+                        t_grp = t_sub.groupby(pd.Grouper(key='timestamp', freq=freq_str))['sentiment_index'].mean().dropna()
+                        latest_score = t_grp.iloc[-1] if len(t_grp) > 0 else 0
+                        prev_score = t_grp.iloc[-2] if len(t_grp) > 1 else latest_score
                         delta_idx = latest_score - prev_score
                         
                         if abs(latest_score) < 0.5:
@@ -1299,21 +1299,12 @@ if not df_signals.empty:
                             t_card_border = "#ef4444"
                             t_val_color = "#dc2626" if is_light else "#ef4444"
                         
-                        if delta_idx > 0:
-                            d_arrow = "▲"
-                            d_pill_color = "#059669" if is_light else "#34d399"
-                            d_pill_bg = "rgba(16, 185, 129, 0.12)"
-                            d_pill_border = "rgba(16, 185, 129, 0.25)"
-                        elif delta_idx < 0:
-                            d_arrow = "▼"
-                            d_pill_color = "#dc2626" if is_light else "#f87171"
-                            d_pill_bg = "rgba(239, 68, 68, 0.12)"
-                            d_pill_border = "rgba(239, 68, 68, 0.25)"
+                        if abs(delta_idx) < 0.05:
+                            delta_tag = '<span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">— No change</span>'
+                        elif delta_idx > 0:
+                            delta_tag = f'<span style="font-size: 0.75rem; font-weight: 700; color: #059669; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 1px 6px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">▲ {abs(delta_idx):.1f}%</span> <span style="font-size: 0.75rem; color: var(--text-secondary);">momentum</span>'
                         else:
-                            d_arrow = "▬"
-                            d_pill_color = "#475569" if is_light else "#94a3b8"
-                            d_pill_bg = "rgba(148, 163, 184, 0.12)"
-                            d_pill_border = "rgba(148, 163, 184, 0.25)"
+                            delta_tag = f'<span style="font-size: 0.75rem; font-weight: 700; color: #dc2626; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.25); padding: 1px 6px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">▼ {abs(delta_idx):.1f}%</span> <span style="font-size: 0.75rem; color: var(--text-secondary);">momentum</span>'
                         
                         kpi_html += (
                             f'<div class="mini-index-card" style="border-left: 3px solid {t_card_border}; margin-bottom: 0;">'
@@ -1322,17 +1313,14 @@ if not df_signals.empty:
                             f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.68rem; font-weight: 800; color: {t_status_color}; background: {t_status_bg}; border: 1px solid {t_status_border}; padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">{ticker_status}</span>'
                             '</div>'
                             f'<div style="font-family: \'Montserrat\', sans-serif; font-size: clamp(1.2rem, 2vw, 1.6rem); font-weight: 800; color: {t_val_color}; margin: 2px 0;">{latest_score:+.1f}</div>'
-                            '<div style="display: flex; align-items: center; gap: 5px; margin-top: 4px;">'
-                            f'<span style="font-size: 0.75rem; font-weight: 700; color: {d_pill_color}; background: {d_pill_bg}; border: 1px solid {d_pill_border}; padding: 1px 6px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">{d_arrow} {abs(delta_idx):.1f}%</span>'
-                            f'<span style="font-size: 0.75rem; color: {"#64748b" if is_light else "#94a3b8"};">momentum</span>'
-                            '</div>'
+                            f'<div style="display: flex; align-items: center; gap: 5px; margin-top: 4px;">{delta_tag}</div>'
                             '</div>'
                         )
                     
                     kpi_html += '</div>'
                     st.markdown(kpi_html, unsafe_allow_html=True)
 
-        # --- Regional News Feeds at the Bottom (Full Width) ---
+        # --- Regional News Feed at the Bottom (Single Unified Institutional Container) ---
         region_payloads = display_payloads[display_payloads['market_region'] == selected_region]
         if not region_payloads.empty:
             region_payloads = region_payloads.sort_values('timestamp', ascending=False)
@@ -1341,121 +1329,88 @@ if not df_signals.empty:
         bearish_count = int((region_payloads['sentiment_index'] <= -0.5).sum()) if not region_payloads.empty else 0
         noise_count = total_events - bullish_count - bearish_count
 
-        # Filter news items by sentiment if user desires
-        feed_header_col1, feed_header_col2 = st.columns([0.65, 0.35])
-        with feed_header_col1:
-            st.markdown(f"""
-            <div style="display: flex; align-items: center; gap: 8px; margin-top: 18px; margin-bottom: 2px;">
-                <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 8px #3b82f6;"></span>
-                <span style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); font-family: 'Montserrat', sans-serif;">{selected_region} Live Intelligence Feed</span>
-            </div>
-            """, unsafe_allow_html=True)
-        with feed_header_col2:
-            lbl_color = "#64748b" if is_light else "#94a3b8"
-            st.markdown(f"""
-            <div style="display: flex; align-items: center; gap: 5px; margin-top: 14px; margin-bottom: 2px;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
-                <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">FILTER BY SENTIMENT</span>
-            </div>
-            """, unsafe_allow_html=True)
-            sentiment_filter_options = [
-                f"All Events ({total_events})",
-                f"Bullish Only ({bullish_count})",
-                f"Bearish Only ({bearish_count})",
-                f"Market Noise ({noise_count})"
-            ]
-            selected_sentiment_feed = st.selectbox(
-                "Filter News Feed",
-                sentiment_filter_options,
-                index=0,
-                label_visibility="collapsed",
-                key="feed_sentiment_filter"
-            )
+        with st.container(border=True):
+            feed_header_col1, feed_header_col2 = st.columns([0.48, 0.52])
+            with feed_header_col1:
+                st.markdown(f"""
+                <div style="display: flex; align-items: center; gap: 8px; padding: 4px 0;">
+                    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 8px #3b82f6;"></span>
+                    <span style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); font-family: 'Montserrat', sans-serif;">{selected_region} Live Intelligence Feed</span>
+                </div>
+                """, unsafe_allow_html=True)
+            with feed_header_col2:
+                feed_pill_options = [
+                    f"All {total_events}",
+                    f"Bullish {bullish_count}",
+                    f"Bearish {bearish_count}",
+                    f"Noise {noise_count}"
+                ]
+                selected_feed_pill = render_segmented_filter("feed_filter", feed_pill_options, default_ix=0, key="feed_sentiment_pills")
+                if not selected_feed_pill:
+                    selected_feed_pill = feed_pill_options[0]
 
-        if "Bullish Only" in selected_sentiment_feed:
-            feed_display_payloads = region_payloads[region_payloads['sentiment_index'] >= 0.5]
-        elif "Bearish Only" in selected_sentiment_feed:
-            feed_display_payloads = region_payloads[region_payloads['sentiment_index'] <= -0.5]
-        elif "Market Noise" in selected_sentiment_feed:
-            feed_display_payloads = region_payloads[(region_payloads['sentiment_index'] > -0.5) & (region_payloads['sentiment_index'] < 0.5)]
-        else:
-            feed_display_payloads = region_payloads
+            if "Bullish" in selected_feed_pill:
+                feed_display_payloads = region_payloads[region_payloads['sentiment_index'] >= 0.5]
+            elif "Bearish" in selected_feed_pill:
+                feed_display_payloads = region_payloads[region_payloads['sentiment_index'] <= -0.5]
+            elif "Noise" in selected_feed_pill:
+                feed_display_payloads = region_payloads[(region_payloads['sentiment_index'] > -0.5) & (region_payloads['sentiment_index'] < 0.5)]
+            else:
+                feed_display_payloads = region_payloads
 
-        html_feed = (
-            f'<details class="news-feed-accordion" open>'
-            f'<summary class="news-feed-summary" title="Click anywhere on this card to expand or collapse feed">'
-            f'<div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">'
-            f'<div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">'
-            f'<div style="display: flex; align-items: center; gap: 10px;">'
-            f'<span style="font-size: 0.95rem; font-weight: 700; color: {"#0f172a" if is_light else "#f8fafc"}; font-family: \'Montserrat\', sans-serif;">Streaming Articles ({len(feed_display_payloads)} shown)</span>'
-            f'</div>'
-            f'<div class="expand-action-btn">'
-            f'<span class="expand-text">EXPAND FEED <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span>'
-            f'<span class="collapse-text">COLLAPSE FEED <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg></span>'
-            f'</div>'
-            f'</div>'
-            f'<div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">'
-            f'<span style="font-size: 0.72rem; font-weight: 700; color: {"#0f172a" if is_light else "#f8fafc"}; background: {"rgba(0, 0, 0, 0.05)" if is_light else "rgba(255, 255, 255, 0.06)"}; border: 1px solid {"rgba(0, 0, 0, 0.1)" if is_light else "rgba(255, 255, 255, 0.12)"}; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{total_events} Total</span>'
-            f'<span style="font-size: 0.72rem; font-weight: 700; color: {"#059669" if is_light else "#34d399"}; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{bullish_count} Bullish</span>'
-            f'<span style="font-size: 0.72rem; font-weight: 700; color: {"#dc2626" if is_light else "#f87171"}; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{bearish_count} Bearish</span>'
-            f'<span style="font-size: 0.72rem; font-weight: 700; color: {"#475569" if is_light else "#cbd5e1"}; background: {"rgba(148, 163, 184, 0.2)" if is_light else "rgba(148, 163, 184, 0.18)"}; border: 1px solid {"rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.4)"}; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{noise_count} Noise</span>'
-            f'</div>'
-            f'</div>'
-            f'</summary>'
-            f'<div class="news-feed-container" style="border: none !important; border-top: 1px solid rgba(255,255,255,0.06) !important; border-radius: 0 0 8px 8px; background: transparent !important; padding: 14px 18px; margin-top: 0; max-height: 440px; overflow-y: auto;">'
-        )
+            # Directly render top headlines in a scrollable feed container (top 3-5 visible immediately)
+            html_feed = '<div class="news-feed-scroll">'
+            if not feed_display_payloads.empty:
+                for _, row in feed_display_payloads.iterrows():
+                    sentiment = row['sentiment_index']
+                    if date_range in ["4 Hours", "4 Hour", "4H", "6 Hours", "6 Hour", "6H", "12 Hours", "12 Hour", "12H", "1 Day", "1Day", "1D", "24 Hours", "24 Hour", "24H"]:
+                        time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
+                    else:
+                        time_str = pd.to_datetime(row['timestamp']).strftime('%b %d, %H:%M')
+                    ticker_label = row.get('index_ticker', 'Macro')
+                    
+                    parsed = clean_news_item(row['raw_text'])
+                    clean_headline = parsed['headline']
+                    source = parsed['source']
+                    
+                    # Determine Sentiment & Noise status
+                    if abs(sentiment) < 0.5:
+                        status_badge = f'<span style="background: {"rgba(148, 163, 184, 0.2)" if is_light else "rgba(148, 163, 184, 0.18)"}; border: 1px solid {"rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.45)"}; color: {"#475569" if is_light else "#cbd5e1"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">NOISE</span>'
+                        score_color = "#64748b" if is_light else "#94a3b8"
+                        score_bg = "rgba(148, 163, 184, 0.15)" if is_light else "rgba(148, 163, 184, 0.12)"
+                        score_border = "rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.3)"
+                        card_border = "#94a3b8" if is_light else "#64748b"
+                    elif sentiment >= 0.5:
+                        status_badge = f'<span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: {"#059669" if is_light else "#34d399"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BULLISH</span>'
+                        score_color = "#059669" if is_light else "#10b981"
+                        score_bg = "rgba(16, 185, 129, 0.15)" if is_light else "rgba(16, 185, 129, 0.12)"
+                        score_border = "rgba(16, 185, 129, 0.35)" if is_light else "rgba(16, 185, 129, 0.3)"
+                        card_border = "#10b981"
+                    else:
+                        status_badge = f'<span style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: {"#dc2626" if is_light else "#f87171"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BEARISH</span>'
+                        score_color = "#dc2626" if is_light else "#ef4444"
+                        score_bg = "rgba(239, 68, 68, 0.15)" if is_light else "rgba(239, 68, 68, 0.12)"
+                        score_border = "rgba(239, 68, 68, 0.35)" if is_light else "rgba(239, 68, 68, 0.3)"
+                        card_border = "#ef4444"
+                    
+                    source_badge = f'<span style="background: {"rgba(0, 0, 0, 0.04)" if is_light else "rgba(255, 255, 255, 0.04)"}; border: 1px solid {"rgba(0, 0, 0, 0.08)" if is_light else "rgba(255, 255, 255, 0.08)"}; color: {"#475569" if is_light else "#94a3b8"}; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">{source}</span>' if source else ""
+                    
+                    escaped_headline = html.escape(clean_headline)
+                    badges_markup = (
+                        f'<span style="font-family: \'IBM Plex Sans\', sans-serif; font-size: 0.75rem; font-weight: 500; color: {"#475569" if is_light else "#94a3b8"}; background: {"rgba(0,0,0,0.04)" if is_light else "rgba(255,255,255,0.04)"}; border: 1px solid {"rgba(0,0,0,0.08)" if is_light else "rgba(255,255,255,0.08)"}; padding: 2px 7px; border-radius: 4px; flex-shrink: 0;">{time_str}</span>'
+                        f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.75rem; font-weight: 700; color: {"#0284c7" if is_light else "#f8fafc"}; background: {"rgba(2, 132, 199, 0.12)" if is_light else "rgba(59, 130, 246, 0.15)"}; border: 1px solid {"rgba(2, 132, 199, 0.3)" if is_light else "rgba(59, 130, 246, 0.35)"}; padding: 2px 8px; border-radius: 4px; flex-shrink: 0;">{ticker_label}</span>'
+                        f'{source_badge}{status_badge}'
+                    )
+                    score_markup = f'<div style="flex-shrink: 0;"><span style="font-family: \'Montserrat\', sans-serif; font-size: 0.8rem; font-weight: 700; color: {score_color}; background: {score_bg}; border: 1px solid {score_border}; padding: 3px 9px; border-radius: 4px; letter-spacing: 0.02em;">{sentiment:+.1f}</span></div>'
+                    card_top = f'<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">{badges_markup}</div>{score_markup}</div>'
+                    card_body = f'<div style="font-size: 0.92rem; color: {"#0f172a" if is_light else "#f8fafc"}; font-weight: 500; line-height: 1.5; font-family: \'IBM Plex Sans\', sans-serif;">{escaped_headline}</div>'
+                    
+                    html_feed += f'<div class="news-item-card" style="border-left: 3px solid {card_border};">{card_top}{card_body}</div>'
+            else:
+                html_feed += f'<div style="color: var(--text-muted); font-size: 0.88rem; padding: 18px; text-align: center; font-family: \'IBM Plex Sans\', sans-serif;">No news events matching the selected sentiment filter for {selected_region}.</div>'
 
-        if not feed_display_payloads.empty:
-            for _, row in feed_display_payloads.iterrows():
-                sentiment = row['sentiment_index']
-                if date_range in ["4 Hours", "4 Hour", "4H", "6 Hours", "6 Hour", "6H", "12 Hours", "12 Hour", "12H", "1 Day", "1Day", "24 Hours", "24 Hour", "24H"]:
-                    time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
-                else:
-                    time_str = pd.to_datetime(row['timestamp']).strftime('%b %d, %H:%M')
-                ticker_label = row.get('index_ticker', 'Macro')
-                
-                parsed = clean_news_item(row['raw_text'])
-                clean_headline = parsed['headline']
-                source = parsed['source']
-                
-                # Determine Sentiment & Noise status
-                if abs(sentiment) < 0.5:
-                    status_badge = f'<span style="background: {"rgba(148, 163, 184, 0.2)" if is_light else "rgba(148, 163, 184, 0.18)"}; border: 1px solid {"rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.45)"}; color: {"#475569" if is_light else "#cbd5e1"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">NOISE</span>'
-                    score_color = "#64748b" if is_light else "#94a3b8"
-                    score_bg = "rgba(148, 163, 184, 0.15)" if is_light else "rgba(148, 163, 184, 0.12)"
-                    score_border = "rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.3)"
-                    card_border = "#94a3b8" if is_light else "#64748b"
-                elif sentiment >= 0.5:
-                    status_badge = f'<span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: {"#059669" if is_light else "#34d399"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BULLISH</span>'
-                    score_color = "#059669" if is_light else "#10b981"
-                    score_bg = "rgba(16, 185, 129, 0.15)" if is_light else "rgba(16, 185, 129, 0.12)"
-                    score_border = "rgba(16, 185, 129, 0.35)" if is_light else "rgba(16, 185, 129, 0.3)"
-                    card_border = "#10b981"
-                else:
-                    status_badge = f'<span style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: {"#dc2626" if is_light else "#f87171"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BEARISH</span>'
-                    score_color = "#dc2626" if is_light else "#ef4444"
-                    score_bg = "rgba(239, 68, 68, 0.15)" if is_light else "rgba(239, 68, 68, 0.12)"
-                    score_border = "rgba(239, 68, 68, 0.35)" if is_light else "rgba(239, 68, 68, 0.3)"
-                    card_border = "#ef4444"
-                
-                source_badge = f'<span style="background: {"rgba(0, 0, 0, 0.04)" if is_light else "rgba(255, 255, 255, 0.04)"}; border: 1px solid {"rgba(0, 0, 0, 0.08)" if is_light else "rgba(255, 255, 255, 0.08)"}; color: {"#475569" if is_light else "#94a3b8"}; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">{source}</span>' if source else ""
-                
-                escaped_headline = html.escape(clean_headline)
-                badges_markup = (
-                    f'<span style="font-family: \'IBM Plex Sans\', sans-serif; font-size: 0.75rem; font-weight: 500; color: {"#475569" if is_light else "#94a3b8"}; background: {"rgba(0,0,0,0.04)" if is_light else "rgba(255,255,255,0.04)"}; border: 1px solid {"rgba(0,0,0,0.08)" if is_light else "rgba(255,255,255,0.08)"}; padding: 2px 7px; border-radius: 4px; flex-shrink: 0;">{time_str}</span>'
-                    f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.75rem; font-weight: 700; color: {"#0284c7" if is_light else "#f8fafc"}; background: {"rgba(2, 132, 199, 0.12)" if is_light else "rgba(59, 130, 246, 0.15)"}; border: 1px solid {"rgba(2, 132, 199, 0.3)" if is_light else "rgba(59, 130, 246, 0.35)"}; padding: 2px 8px; border-radius: 4px; flex-shrink: 0;">{ticker_label}</span>'
-                    f'{source_badge}{status_badge}'
-                )
-                score_markup = f'<div style="flex-shrink: 0;"><span style="font-family: \'Montserrat\', sans-serif; font-size: 0.8rem; font-weight: 700; color: {score_color}; background: {score_bg}; border: 1px solid {score_border}; padding: 3px 9px; border-radius: 4px; letter-spacing: 0.02em;">{sentiment:+.1f}</span></div>'
-                card_top = f'<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">{badges_markup}</div>{score_markup}</div>'
-                card_body = f'<div style="font-size: 0.92rem; color: {"#0f172a" if is_light else "#f8fafc"}; font-weight: 500; line-height: 1.5; font-family: \'IBM Plex Sans\', sans-serif;">{escaped_headline}</div>'
-                
-                html_feed += f'<div class="news-item-card" style="border-left: 3px solid {card_border};">{card_top}{card_body}</div>'
-        else:
-            html_feed += f'<div style="color: #94a3b8; font-size: 0.88rem; padding: 18px; text-align: center; font-family: \'IBM Plex Sans\', sans-serif;">No recent news events for {selected_region} in the selected timeframe.</div>'
-
-        html_feed += '</div></details>'
-        st.markdown(html_feed, unsafe_allow_html=True)
+            html_feed += '</div>'
+            st.markdown(html_feed, unsafe_allow_html=True)
             
 
     else:

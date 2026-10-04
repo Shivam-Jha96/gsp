@@ -434,37 +434,46 @@ order = trading_client.submit_order(order_data=order_data)
 +------------------------------------------------------------------------------------+
 |  [EXPANDER: How GSP Works • Pure Mathematical Sentiment via CLM (Collapsed)]      |
 +------------------------------------------------------------------------------------+
-|  [5-COLUMN FILTER BAR: Timeframe | Region | Timezone | EMA Window | Chart Display] |
+|  [ERGONOMIC FILTER BAR: Timeframe Pills | Region | Chart Display | ⚙️ Options Popover]|
 +--------------------------+---------------------------------------------------------+
 |  KPI TILES (LEFT COL)    |  UNIFIED CHART & ASSET CONTAINER (RIGHT COL)            |
 |  - Aggregate Optimism    |  +---------------------------------------------------+  |
-|    (Hero Size: 2.2rem)   |  | Multi-Series Line Chart (Prominent Bold EMA Trend)|  |
-|  - Market Bias           |  | - Symmetrical [-100, +100] Y-Axis, Neutral Gray 0 |  |
-|  - Total Ingested Volume |  | - Unified Tooltip, Unclipped Legends, Zoom/Pan   |  |
-|  - Tracked Indices Count |  +---------------------------------------------------+  |
-|  (Neutral Institutional) |  - Embedded Mini Asset Tiles (Flush Alignment)          |
+|    (Hero Size: 2.35rem,  |  | Multi-Series Line Chart (390px Height, Bold EMA)  |  |
+|     Directional Delta)   |  | - Symmetrical [-100, +100] Y-Axis, Neutral Gray 0 |  |
+|  - Market Bias Regime    |  | - Smooth Traces (No Zero-Snapping), Distinct Hues |  |
+|  - Market Telemetry      |  | - Unified Tooltip, Unclipped Legends, Hover Bar   |  |
+|    (Volume + Universe)   |  +---------------------------------------------------+  |
+|  (3 Consolidated Cards)  |  - Embedded Mini Asset Tiles (— No change States)       |
 +--------------------------+---------------------------------------------------------+
-|  LIVE INTELLIGENCE STREAM (SURFACED ACCORDION CONTAINER WITH SENTIMENT FILTER)    |
-|  - Filter Bar: All Events | Bullish Only | Bearish Only | Market Noise             |
-|  - Open by default: Real-time news items with timestamps, sources & sentiment chips|
+|  LIVE INTELLIGENCE FEED (SINGLE UNIFIED INSTITUTIONAL CONTAINER)                   |
+|  - Header: Live Stream Title (Left) | Inline Sentiment Filter Pills (Right)        |
+|  - Direct Visibility: Top 3–5 headlines displayed immediately, smooth scrolling    |
 +------------------------------------------------------------------------------------+
 ```
 
 #### 1. Visual Design Architecture
 The dashboard implements an institutional financial terminal theme with a unified CSS Design System:
-* **Top-Right Dark/Light Mode Theme Toggle & Telemetry:** Positioned in the upper right control card, allowing seamless switching between deep slate canvas (`#020617`) and high-contrast light mode (`#f1f5f9` with pure white cards `#ffffff`). Uses modern `color-scheme: light / dark` alongside dual Adobe React-Aria (`react-aria-ComboBox`, `div[role="group"]`, `div.react-aria-Popover`) and BaseWeb selectbox overrides, ensuring all inputs, popover lists, and dropdown options render with crisp contrast. The control card displays real-time telemetry (`UPDATED {time_display_str}`), glowing green `SYSTEM ONLINE` indicator, and a custom-styled pill toggle switch with defined track borders.
-* **Above-the-Fold Space Optimization:** The "Quantitative Edge" USP banner is housed in a sleek collapsed expander (`with st.expander(...)`), reclaiming ~150px of vertical space so the entire executive terminal fits cleanly above the fold at 100% browser zoom.
-* **Neutral Institutional KPI Hierarchy:** Excised legacy multi-color card backgrounds in favor of a single neutral card style (`.white-card .kpi-card`). Visual hierarchy is established by hero-sizing `Aggregate Optimism` (`2.2rem`) above secondary supporting metrics (`1.45rem`), with sentence-case typography and pills reserved strictly for directional status (`▲ 6.1%`, `BEARISH`, `BULLISH`).
-* **Unified Glassmorphic Filter Toolbar:** All 5 global controls (`TIMEFRAME`, `REGION`, `TIMEZONE`, `EMA WINDOW`, and `CHART DISPLAY`) are housed in a dedicated frosted-glass toolbar card with uniform muted slate labels (`#64748b` in light mode, `#94a3b8` in dark mode) and enriched descriptive options (e.g. `India (IN)`, `4 Periods`).
+* **High-Contrast Dark/Light Mode Theme Toggle & Telemetry:** Positioned in the upper right control card, allowing seamless switching between deep slate canvas (`#020617`) and high-contrast light mode (`#f8fafc` with pure white cards `#ffffff`). The switch track is engineered with explicit high-contrast borders and slate tracks (`#cbd5e1` / `#94a3b8` in light mode, `#334155` / `#475569` in dark mode) ensuring the toggle is immediately legible against white backgrounds. The control card displays real-time telemetry (`UPDATED {time_display_str}`), glowing green `SYSTEM ONLINE` indicator, and scoped CSS targeting `#header-control-card-anchor` to prevent style leaks to adjacent widgets.
+* **Uniform Border Hierarchy:** Arbitrary 4px left-border accent bars have been replaced with a uniform, institutional `1px solid var(--card-border)` across all headers, expanders, and containers, creating consistent structural framing across both themes.
+* **Consolidated Left-Column KPI Hierarchy:** The left column is consolidated from four equal-weight tiles into three structured cards:
+  1. **Aggregate Optimism (Hero Metric):** Hero-sized value (`2.35rem`, weight 800) with unambiguous directional labeling (`▲ +6.1% change`, `▼ -2.4% change`, or `— No change` vs previous period) and CLM confidence vector telemetry.
+  2. **Market Bias (Strategic Regime):** Color-coded directional regime indicator (`1.55rem`) with moving average window context and EMA crossover strategy metadata.
+  3. **Market Telemetry (Compact Metadata):** A 2-column telemetry grid combining Total News Volume and Active Universe Coverage (100%), with ingestion cadence (`Every 2 hours`) in the footer.
+* **Ergonomic Direct Filter Toolbar:** Replaced 5 consecutive dropdowns with a sleek 4-column toolbar:
+  - Direct clickable pills for Timeframe (`1D`, `6H`, `7D`, `1M`, `All`).
+  - Native selectbox for Region (`India (IN)`, etc.).
+  - Native selectbox for Chart Display (`All Indices`, etc.).
+  - A clean `⚙️ Options` popover collapsing secondary settings (Timezone & EMA Window).
 * **Flush Column Alignment & Unified Chart Container:** Both the Plotly time series and the per-index mini tiles are unified inside the exact same bordered container (`with st.container(border=True):`). Combined with flex stretch layout (`.kpi-column-container`), this guarantees that the left KPI column and the right chart/tiles container align flush at the bottom boundary.
 
 #### 2. Plotly Multi-Series Sentiment Visualization
 The primary visualization renders a clean, multi-line time series without visual clutter:
-* **Clean Multi-Line Traces (Zero Fill Blending):** Individual index series render as distinct lines with markers (`mode='lines+markers'`, `width=2.0`), completely eliminating overlapping translucent fills that previously obscured index differentiation.
+* **Continuous Multi-Line Traces (Elimination of Zero-Snapping):** Rather than artificially filling unobserved intervals with `0.0` (which previously produced false zigzag V-shapes and an illusion of volatility), the engine connects actual observations (`dropna()` with `connectgaps=True`). Small markers (`size=4.5`) clearly denote authentic news event timestamps.
+* **Distinct Color Palette:** Replaced overlapping blue/purple/pink hues with a wide-spectrum palette: Sky Blue (`#0284c7`), Warm Amber (`#f59e0b`), Emerald Green (`#10b981`), Vivid Magenta (`#ec4899`), Violet (`#8b5cf6`), and Cyan (`#06b6d4`).
 * **Prominent Bold EMA Trend:** The aggregate regional EMA is drawn on top as a bold, prominent vector line (`width=3.5`), providing immediate visual salience as the primary directional signal.
-* **Symmetrical Balanced Y-Axis:** Enforces a balanced $[-105, +105]$ range (`dtick=25`) centered on a neutral slate gray zero line (`rgba(148, 163, 184, 0.45)`), preventing negative data from pushing the chart ceiling down and eliminating deceptive green zero lines.
-* **Unclipped Legend & Unified Tooltips:** Legend items use clean ticker names (`name=ticker`) with generous horizontal spacing (`itemgap=18`), preventing dark-mode label clipping. `hovermode="x unified"` displays all series concurrently at any timestamp, with scroll zoom enabled.
-* Plotly timestamps are converted to naive datetimes in the user's selected timezone, eliminating UTC conversion discrepancies on the x-axis.
+* **Enhanced Aspect Ratio & Hover Modebar:** Plot height is increased from 345px to 390px for improved vertical data resolution. The Plotly modebar is set to `displayModeBar="hover"`, keeping the chart area clean until mouseover.
+* **Symmetrical Balanced Y-Axis:** Enforces a balanced $[-105, +105]$ range (`dtick=25`) centered on a neutral slate gray zero line (`rgba(148, 163, 184, 0.45)`), preventing negative data from pushing the chart ceiling down.
+* **Unclipped Legend & Unified Tooltips:** Legend items use clean ticker names (`name=ticker`). `hovermode="x unified"` displays all series concurrently at any timestamp, with scroll zoom enabled.
 
 #### 3. Global Timezone Conversion Engine
 The terminal allows seamless switching across five key financial timezones:
@@ -480,23 +489,23 @@ Timestamp localization occurs on-the-fly via Pandas `dt.tz_convert(target_tz)` w
 To establish a pure Contrastive Language Model (CLM) regime and eliminate legacy model discontinuities, the platform underwent a one-time database purge and maintains an explicit cutoff floor:
 * **Cutoff Baseline:** `2026-09-30 12:00:00+05:30` (06:30 AM UTC).
 * **Database Purge:** All legacy records prior to this timestamp in both `event_signals` and `event_payloads` were permanently excised from Supabase.
-* **Application Floor Filter:** [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py#L258-L270) applies `DATA_CUTOFF_FLOOR = pd.Timestamp("2026-09-30 06:30:00", tz="UTC")` immediately upon ingestion to guarantee all charts, KPI tiles, and news feeds reflect only the modern CLM era.
+* **Application Floor Filter:** [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py) applies `DATA_CUTOFF_FLOOR = pd.Timestamp("2026-09-30 06:30:00", tz="UTC")` immediately upon ingestion to guarantee all charts, KPI tiles, and news feeds reflect only the modern CLM era.
 
 #### 5. Real-Time Regional Relevance & Contaminant Gatekeeper
-To resolve historical data misclassifications (e.g. earlier US Wall Street headlines tagged under India, or non-financial items), [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py#L370-L395) evaluates loaded payloads in real time using [`RegionalAffinityClassifier`](file:///d:/Dev/repos/gsp/src/ingestion/classifier.py):
+To resolve historical data misclassifications (e.g. earlier US Wall Street headlines tagged under India, or non-financial items), [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py) evaluates loaded payloads in real time using [`RegionalAffinityClassifier`](file:///d:/Dev/repos/gsp/src/ingestion/classifier.py):
 * **Live Contaminant Purging:** Any loaded record whose headline fails regional validation ($\text{Affinity}(\text{ExpectedRegion}) = 0$) is immediately excluded from `df_payloads` and `df_signals`.
 * **Zero Chart & KPI Distortion:** Multi-index area charts, EMA momentum vectors, and executive KPI tiles calculate strictly over authenticated regional events.
 * **Storage Layer Maintenance CLI:** For permanent database cleanup, [`scripts/reclassify_database.py`](file:///d:/Dev/repos/gsp/scripts/reclassify_database.py) and [`.github/workflows/reclassify_db.yml`](file:///d:/Dev/repos/gsp/.github/workflows/reclassify_db.yml) provide one-click auditing, contaminant purging (`purge`), deduplication (`dedup`), and sentiment re-scoring (`rescore`).
 
 #### 6. Real-Time Headline Deduplication Gatekeeper
-To guarantee that the user dashboard never renders redundant copies of the same news item (e.g., when a single Reuters or Bloomberg headline appeared across multiple ticker queries prior to database cleanup), [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py#L397-L417) applies [`canonical_fingerprint()`](file:///d:/Dev/repos/gsp/src/ingestion/dedup.py) on the loaded DataFrame:
+To guarantee that the user dashboard never renders redundant copies of the same news item, [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py) applies [`canonical_fingerprint()`](file:///d:/Dev/repos/gsp/src/ingestion/dedup.py) on the loaded DataFrame:
 * **Canonical Collapse:** Groups records by normalized headline fingerprint, retaining only 1 canonical card per story.
 * **Chart Weight Normalization:** Multi-index area charts and EMA calculations receive exactly 1 observation per event, eliminating artificial multi-count weighting.
 
-#### 7. Collapsible Live Feed & Accordion Architecture
-The Live Intelligence Feed uses a native HTML `<details>` and `<summary>` accordion architecture:
-* **Collapsed Executive State (Default):** Shows only the high-level regional header bar containing the interactive rotating SVG chevron, region pulse dot, and real-time count badges (`Total`, `Bullish`, `Bearish`, `Noise`).
-* **Expanded State:** Revealing the underlying news container when clicked, with zero page reloads, zero Streamlit re-renders, and full client-side 60fps interaction.
+#### 7. Surfaced Live Intelligence Feed Architecture
+The Live Intelligence Feed is housed in a single, unified institutional container:
+* **Single Header Row with Inline Filter Pills:** The competing outer headers and floating right-hand dropdown have been eliminated in favor of a single header row featuring inline sentiment filter pills (`All 49 · Bullish 3 · Bearish 46 · Noise 0`).
+* **Immediate Headline Surfacing:** The top 3–5 headlines are rendered directly by default inside a scrollable container (`max-height: 480px; overflow-y: auto;`), eliminating unnecessary accordion friction while preserving full scroll access to all articles.
 * **Feed Sanitization & Noise Classification:** Headlines undergo regex processing in `clean_news_item()` to strip HTML markup, remove trailing publisher signatures, and classify each entry into one of three sentiment buckets:
   * **Bullish Event:** Sentiment Score $\ge +0.5$ (Emerald badge)
   * **Bearish Event:** Sentiment Score $\le -0.5$ (Rose badge)
