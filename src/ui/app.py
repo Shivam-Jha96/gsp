@@ -456,7 +456,7 @@ __THEME_VARS__
 
     /* Top Header Row Layout & Symmetrical Cards */
     .block-container > div[data-testid="stVerticalBlock"] {
-        gap: 0.35rem !important;
+        gap: 0 !important;
     }
     div[data-testid="stHorizontalBlock"]:first-of-type {
         margin-bottom: 0 !important;
