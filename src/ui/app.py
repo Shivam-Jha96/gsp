@@ -156,7 +156,7 @@ __THEME_VARS__
     }
     
     .block-container {
-        padding-top: 0.25rem !important;
+        padding-top: 1rem !important;
         padding-bottom: 1.5rem !important;
         max-width: 1600px;
         background: transparent !important;
@@ -456,7 +456,7 @@ __THEME_VARS__
 
     /* Top Header Row Layout & Symmetrical Cards */
     div[data-testid="stHorizontalBlock"]:first-of-type {
-        margin-bottom: 14px !important;
+        margin-bottom: 4px !important;
         align-items: stretch !important;
     }
     div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"],
