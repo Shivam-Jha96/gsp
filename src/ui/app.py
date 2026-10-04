@@ -208,6 +208,7 @@ __THEME_VARS__
     /* Main Dashboard Content Layout (Align Left KPI Cards and Right Chart Bottoms Flush) */
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) {
         align-items: stretch !important;
+        margin-bottom: 12px !important;
     }
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"],
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"] {
@@ -215,8 +216,8 @@ __THEME_VARS__
         flex-direction: column !important;
         height: 100% !important;
     }
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:first-child > div[data-testid="stVerticalBlock"],
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:first-child > div[data-testid="stVerticalBlock"] {
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"] > div[data-testid="stVerticalBlock"],
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"] > div[data-testid="stVerticalBlock"] {
         display: flex !important;
         flex-direction: column !important;
         height: 100% !important;
@@ -234,8 +235,7 @@ __THEME_VARS__
         flex-direction: column !important;
         justify-content: space-between !important;
         height: 100% !important;
-        min-height: 520px !important;
-        gap: 10px !important;
+        gap: 8px !important;
     }
     .kpi-column-container .kpi-card {
         flex: 1 1 0px !important;
@@ -243,67 +243,70 @@ __THEME_VARS__
         display: flex !important;
         flex-direction: column !important;
         justify-content: space-between !important;
-        padding: 10px 14px !important;
+        padding: 9px 12px !important;
+        box-sizing: border-box !important;
+    }
+    /* Ensure the right column container card stretches to match left column */
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"],
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlock"]:has(div[data-testid="stPlotlyChart"]) {
+        height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
         box-sizing: border-box !important;
     }
 
-    /* Filter Toolbar Card Enclosure & Alignment (Ultra-Compact) */
-    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) {
-        margin: 0 !important;
-        margin-bottom: 8px !important;
-        padding: 0 !important;
-    }
-    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) > div[data-testid="stVerticalBlock"],
-    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) > div[data-testid="stVerticalBlockBorderWrapper"],
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor),
-    div[data-testid="stVerticalBlock"]:has(> div[data-testid="stHorizontalBlock"]):has(#filter-toolbar-anchor):not(.main > div):not(section.main > div) {
-        padding: 6px 12px 6px 12px !important;
-        margin: 0 !important;
-        margin-bottom: 8px !important;
+    /* Filter Toolbar Card Enclosure (Ultra-Compact, Identical Alignment Across All 5 Columns) */
+    div[data-testid="stVerticalBlock"]:has(> div[data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] div[data-testid="stSelectbox"]),
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(div[data-testid="stSelectbox"]),
+    div[data-testid="stElementContainer"]:has(div[data-testid="stSelectbox"]) > div[data-testid="stVerticalBlock"] {
+        padding: 8px 14px 10px 14px !important;
+        margin-top: 0 !important;
+        margin-bottom: 12px !important;
         gap: 0 !important;
     }
-    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) div[data-testid="stHorizontalBlock"],
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stHorizontalBlock"],
-    div[data-testid="stVerticalBlock"]:has(> div[data-testid="stHorizontalBlock"]):has(#filter-toolbar-anchor) div[data-testid="stHorizontalBlock"] {
-        align-items: flex-end !important;
+    div[data-testid="stVerticalBlock"]:has(> div[data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] div[data-testid="stSelectbox"]) > div[data-testid="stHorizontalBlock"],
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(div[data-testid="stSelectbox"]) > div[data-testid="stHorizontalBlock"] {
+        align-items: flex-start !important;
         gap: 8px !important;
         margin: 0 !important;
         padding: 0 !important;
     }
-    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) div[data-testid="stColumn"],
-    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) div[data-testid="column"],
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stColumn"],
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="column"] {
+    /* All 5 Filter Columns - Symmetrical & Uniform */
+    div[data-testid="stColumn"]:has(div[data-testid="stSelectbox"]),
+    div[data-testid="column"]:has(div[data-testid="stSelectbox"]) {
         display: flex !important;
         flex-direction: column !important;
-        justify-content: flex-end !important;
+        justify-content: flex-start !important;
+        align-items: stretch !important;
         padding: 0 !important;
         margin: 0 !important;
     }
-    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) div[data-testid="stColumn"] [data-testid="stVerticalBlock"],
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stColumn"] [data-testid="stVerticalBlock"] {
-        gap: 2px !important;
+    div[data-testid="stColumn"]:has(div[data-testid="stSelectbox"]) > div[data-testid="stVerticalBlock"],
+    div[data-testid="column"]:has(div[data-testid="stSelectbox"]) > div[data-testid="stVerticalBlock"] {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        gap: 4px !important;
         padding: 0 !important;
         margin: 0 !important;
     }
-    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) div[data-testid="stColumn"] [data-testid="stElementContainer"],
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stColumn"] [data-testid="stElementContainer"] {
+    div[data-testid="stColumn"]:has(div[data-testid="stSelectbox"]) [data-testid="stElementContainer"],
+    div[data-testid="column"]:has(div[data-testid="stSelectbox"]) [data-testid="stElementContainer"] {
         margin: 0 !important;
         padding: 0 !important;
     }
-    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) div[data-testid="stMarkdownContainer"],
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stMarkdownContainer"] {
+    div[data-testid="stColumn"]:has(div[data-testid="stSelectbox"]) div[data-testid="stMarkdownContainer"],
+    div[data-testid="column"]:has(div[data-testid="stSelectbox"]) div[data-testid="stMarkdownContainer"] {
         margin: 0 !important;
         padding: 0 !important;
     }
-    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) div[data-testid="stMarkdownContainer"] > p,
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stMarkdownContainer"] > p {
+    div[data-testid="stColumn"]:has(div[data-testid="stSelectbox"]) div[data-testid="stMarkdownContainer"] > p,
+    div[data-testid="column"]:has(div[data-testid="stSelectbox"]) div[data-testid="stMarkdownContainer"] > p {
         margin: 0 !important;
         padding: 0 !important;
-        line-height: 1 !important;
+        line-height: 1.2 !important;
     }
-    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) div[data-testid="stSelectbox"],
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stSelectbox"],
     div[data-testid="stSelectbox"] {
         margin: 0 !important;
         padding: 0 !important;
@@ -323,10 +326,6 @@ __THEME_VARS__
         opacity: 0 !important;
         pointer-events: none !important;
     }
-    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) [data-baseweb="select"] > div,
-    div[data-testid="stElementContainer"]:has(#filter-toolbar-anchor) div[data-testid="stSelectbox"] div[role="group"],
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) [data-baseweb="select"] > div,
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#filter-toolbar-anchor) div[data-testid="stSelectbox"] div[role="group"],
     div[data-testid="stSelectbox"] [data-baseweb="select"] > div,
     div[data-testid="stSelectbox"] div[role="group"] {
         min-height: 34px !important;
@@ -1281,7 +1280,6 @@ if not df_signals.empty:
         with filter_col1:
             st.markdown(f"""
             <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
-                <span id="filter-toolbar-anchor" style="display: none;"></span>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                 <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">TIMEFRAME</span>
             </div>
@@ -1603,7 +1601,7 @@ if not df_signals.empty:
                 ))
                 
                 fig_area.update_layout(
-                    height=350, margin=dict(l=0, r=0, t=10, b=0),
+                    height=375, margin=dict(l=0, r=0, t=10, b=0),
                     plot_bgcolor="rgba(255,255,255,0.4)" if is_light else "rgba(0,0,0,0)",
                     paper_bgcolor="rgba(0,0,0,0)",
                     hovermode="x unified",
