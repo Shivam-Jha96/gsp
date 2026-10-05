@@ -160,6 +160,12 @@ __THEME_VARS__
         background: transparent !important;
     }
     
+    /* Master Vertical Rhythm: Deterministic 10px Spacing Between All Tiers */
+    .block-container > div[data-testid="stVerticalBlock"],
+    div[data-testid="stVerticalBlock"] > div[data-testid="stVerticalBlock"] {
+        gap: 10px !important;
+    }
+    
     /* Professional Headers */
     .main-header, .section-header {
         font-family: 'Montserrat', sans-serif;
@@ -205,9 +211,12 @@ __THEME_VARS__
     
     /* Main Dashboard Content Layout (Align Left KPI Cards and Right Chart Bottoms Flush) */
     div[data-testid="stHorizontalBlock"]:has(.kpi-column-container),
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) {
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]),
+    div[data-testid="stElementContainer"]:has(.kpi-column-container),
+    div[data-testid="stElementContainer"]:has(div[data-testid="stPlotlyChart"]) {
         align-items: stretch !important;
-        margin-bottom: 12px !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
     }
     div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"],
     div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="column"],
@@ -261,7 +270,7 @@ __THEME_VARS__
         height: 100% !important;
         min-height: 100% !important;
         flex: 1 1 auto !important;
-        gap: 10px !important;
+        gap: 8px !important;
         box-sizing: border-box !important;
     }
     .kpi-column-container .kpi-card {
@@ -270,34 +279,44 @@ __THEME_VARS__
         display: flex !important;
         flex-direction: column !important;
         justify-content: space-between !important;
-        padding: 12px 14px !important;
+        padding: 9px 12px !important;
         box-sizing: border-box !important;
     }
     .kpi-card-content {
         display: flex;
         flex-direction: column;
-        gap: 3px;
+        gap: 2px;
     }
-    /* Ensure the right column container card stretches to match left column */
+    /* Right column chart & mini-kpi container: Hug snugly with zero bottom dead void */
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"],
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlock"]:has(div[data-testid="stPlotlyChart"]),
-    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"],
-    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlock"]:has(div[data-testid="stPlotlyChart"]) {
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"] {
         height: 100% !important;
         display: flex !important;
         flex-direction: column !important;
-        justify-content: space-between !important;
+        padding: 10px 14px 12px 14px !important;
+        margin: 0 !important;
         box-sizing: border-box !important;
+    }
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"] > div[data-testid="stVerticalBlock"],
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"] > div[data-testid="stVerticalBlock"] {
+        height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        gap: 6px !important;
+        padding: 0 !important;
+        margin: 0 !important;
     }
 
 
     /* Filter Toolbar Card Enclosure (Ultra-Compact, Identical Alignment Across All 5 Columns) */
     div[data-testid="stVerticalBlock"]:has(> div[data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] div[data-testid="stSelectbox"]),
     div[data-testid="stVerticalBlockBorderWrapper"]:has(div[data-testid="stSelectbox"]),
-    div[data-testid="stElementContainer"]:has(div[data-testid="stSelectbox"]) > div[data-testid="stVerticalBlock"] {
+    div[data-testid="stElementContainer"]:has(div[data-testid="stSelectbox"]) > div[data-testid="stVerticalBlock"],
+    div[data-testid="stElementContainer"]:has(div[data-testid="stSelectbox"]) {
         padding: 8px 14px 10px 14px !important;
         margin-top: 0 !important;
-        margin-bottom: 12px !important;
+        margin-bottom: 0 !important;
         gap: 0 !important;
     }
     div[data-testid="stVerticalBlock"]:has(> div[data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] div[data-testid="stSelectbox"]) > div[data-testid="stHorizontalBlock"],
@@ -492,7 +511,8 @@ __THEME_VARS__
     /* Top Header Row Layout & Symmetrical Cards */
     div[data-testid="stHorizontalBlock"]:has(.header-banner-card),
     div[data-testid="stHorizontalBlock"]:first-of-type {
-        margin-bottom: 12px !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
         align-items: stretch !important;
     }
     div[data-testid="stHorizontalBlock"]:has(.header-banner-card) > div[data-testid="stColumn"],
@@ -598,7 +618,7 @@ __THEME_VARS__
         border: 1px solid var(--edge-border) !important;
         border-radius: 8px !important;
         margin-top: 0 !important;
-        margin-bottom: 12px !important;
+        margin-bottom: 0 !important;
         clear: both !important;
         overflow: hidden !important;
         transition: all 0.2s ease !important;
@@ -693,13 +713,13 @@ __THEME_VARS__
 
     /* Live Intelligence Feed Container Compact Spacing */
     .st-key-live_intelligence_feed_container,
-    div[data-testid="stVerticalBlock"]:has(> div[data-testid="stHorizontalBlock"] .st-key-feed_sentiment_pills),
-    div[data-testid="stVerticalBlock"]:has(.st-key-feed_sentiment_pills),
-    div[data-testid="stVerticalBlock"]:has(#feed-container-anchor),
+    div[data-testid="stElementContainer"]:has(.st-key-live_intelligence_feed_container),
     div[data-testid="stVerticalBlockBorderWrapper"]:has(.st-key-feed_sentiment_pills),
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#feed-container-anchor) {
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(#feed-container-anchor),
+    div[data-testid="stElementContainer"]:has(#feed-container-anchor) {
         padding: 8px 14px 10px 14px !important;
         margin-top: 0 !important;
+        margin-bottom: 0 !important;
         background: var(--card-bg) !important;
         border: 1px solid var(--card-border) !important;
         border-radius: 8px !important;
@@ -889,16 +909,16 @@ __THEME_VARS__
     .mini-kpi-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-        gap: 10px;
-        margin-top: 12px;
-        padding-top: 12px;
+        gap: 8px;
+        margin-top: 8px;
+        padding-top: 8px;
         border-top: 1px solid var(--card-border);
     }
     .mini-index-card {
         background: var(--card-bg) !important;
         border: 1px solid var(--card-border) !important;
         border-radius: 8px;
-        padding: 10px 14px;
+        padding: 8px 12px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -1570,7 +1590,7 @@ if not df_signals.empty:
                 # --- Combined Chart & Mini Index Container (unified alignment & borders) ---
                 with st.container(border=True):
                     st.markdown(f"""
-                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding-bottom: 10px; border-bottom: 1px solid var(--card-border); margin-bottom: 8px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--card-border); margin-bottom: 6px;">
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <div style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.35); padding: 5px; border-radius: 6px; display: flex; align-items: center;">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
@@ -1633,7 +1653,7 @@ if not df_signals.empty:
                     ))
                     
                     fig_area.update_layout(
-                        height=375, margin=dict(l=0, r=0, t=10, b=0),
+                        height=345, margin=dict(l=0, r=0, t=10, b=0),
                         plot_bgcolor="rgba(255,255,255,0.4)" if is_light else "rgba(0,0,0,0)",
                         paper_bgcolor="rgba(0,0,0,0)",
                         hovermode="x unified",
