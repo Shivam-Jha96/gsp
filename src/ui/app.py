@@ -745,27 +745,52 @@ __THEME_VARS__
     }
 
     /* Live Intelligence Feed Container Compact Spacing */
+    .st-key-live_intelligence_feed_container,
+    div[data-testid="stVerticalBlock"]:has(> div[data-testid="stHorizontalBlock"] .st-key-feed_sentiment_pills),
+    div[data-testid="stVerticalBlock"]:has(.st-key-feed_sentiment_pills),
+    div[data-testid="stVerticalBlock"]:has(#feed-container-anchor),
     div[data-testid="stVerticalBlockBorderWrapper"]:has(.st-key-feed_sentiment_pills),
     div[data-testid="stVerticalBlockBorderWrapper"]:has(#feed-container-anchor) {
-        padding: 8px 14px 10px 6px !important;
+        padding: 8px 14px 10px 14px !important;
+        margin-top: 0 !important;
+        background: var(--card-bg) !important;
+        border: 1px solid var(--card-border) !important;
+        border-radius: 8px !important;
+        box-shadow: var(--card-shadow) !important;
+        gap: 6px !important;
     }
+    .st-key-live_intelligence_feed_container > div[data-testid="stVerticalBlock"],
     div[data-testid="stVerticalBlockBorderWrapper"]:has(.st-key-feed_sentiment_pills) > div[data-testid="stVerticalBlock"],
     div[data-testid="stVerticalBlockBorderWrapper"]:has(#feed-container-anchor) > div[data-testid="stVerticalBlock"] {
+        padding: 0 !important;
         gap: 6px !important;
     }
 
     /* Live Intelligence Feed Header Perfect Vertical Alignment & Distinct Sentiment Color Pills */
     div[data-testid="stHorizontalBlock"]:has(.st-key-feed_sentiment_pills) {
         align-items: center !important;
+        margin-top: 0 !important;
         margin-bottom: 0 !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
     }
     div[data-testid="stHorizontalBlock"]:has(.st-key-feed_sentiment_pills) > div[data-testid="stColumn"],
     div[data-testid="stHorizontalBlock"]:has(.st-key-feed_sentiment_pills) > div[data-testid="column"] {
         display: flex !important;
         flex-direction: column !important;
         justify-content: center !important;
+        margin-top: 0 !important;
+        padding-top: 0 !important;
     }
     div[data-testid="stHorizontalBlock"]:has(.st-key-feed_sentiment_pills) div[data-testid="stElementContainer"] {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    div[data-testid="stHorizontalBlock"]:has(.st-key-feed_sentiment_pills) div[data-testid="stMarkdownContainer"] {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    div[data-testid="stHorizontalBlock"]:has(.st-key-feed_sentiment_pills) div[data-testid="stMarkdownContainer"] > p {
         margin: 0 !important;
         padding: 0 !important;
     }
@@ -1747,16 +1772,10 @@ if not df_signals.empty:
                 bearish_count = int((region_payloads['sentiment_index'] <= -0.5).sum()) if not region_payloads.empty else 0
                 neutral_count = total_events - bullish_count - bearish_count
 
-                with st.container(border=True):
-                    st.markdown('<div id="feed-container-anchor" style="display: none;"></div>', unsafe_allow_html=True)
+                with st.container(border=True, key="live_intelligence_feed_container"):
                     feed_header_col1, feed_header_col2 = st.columns([0.42, 0.58], vertical_alignment="center")
                     with feed_header_col1:
-                        st.markdown(f"""
-                        <div style="display: flex; align-items: center; gap: 8px; margin: 0; padding: 0; min-height: 38px;">
-                            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 8px #3b82f6; flex-shrink: 0;"></span>
-                            <span style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); font-family: 'Montserrat', sans-serif; line-height: 1.2;">{selected_region} Live Intelligence Feed</span>
-                        </div>
-                        """, unsafe_allow_html=True)
+                        st.markdown(f"""<div style="display: flex; align-items: center; gap: 8px; margin: 0; padding: 0; min-height: 38px;"><span id="feed-container-anchor" style="display: none;"></span><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 8px #3b82f6; flex-shrink: 0;"></span><span style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); font-family: 'Montserrat', sans-serif; line-height: 1.2;">{selected_region} Live Intelligence Feed</span></div>""", unsafe_allow_html=True)
                     with feed_header_col2:
                         feed_pill_options = [
                             f"All {total_events}",
