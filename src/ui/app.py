@@ -35,12 +35,10 @@ except Exception:
 
 st.set_page_config(page_title="Global Sentiment Platform of Share Markets", layout="wide", initial_sidebar_state="collapsed", page_icon="📈")
 
-# --- Dynamic Theme Mode Detection ---
-if 'theme_toggle' not in st.session_state:
-    st.session_state['theme_toggle'] = True
-
-is_dark = bool(st.session_state.get('theme_toggle', True))
-is_light = not is_dark
+# --- Permanent Dark Theme Enforcement ---
+is_dark = True
+is_light = False
+st.session_state['theme_toggle'] = True
 
 if is_light:
     theme_css_vars = """
@@ -465,21 +463,21 @@ __THEME_VARS__
         flex-direction: column !important;
     }
     
-    /* Top Right Action Card (Backend Status & Dark Mode Toggle) - Scoped exclusively to action column */
+    /* Top Right Action Card (Backend Status & Online Tickers) - Scoped exclusively to action column */
     div[data-testid="stColumn"]:has(#header-control-card-anchor) {
         background: var(--header-bg) !important;
         border: 1px solid var(--header-border) !important;
         border-radius: 8px !important;
-        padding: 8px 12px !important;
+        padding: clamp(10px, 2vw, 14px) 14px !important;
         backdrop-filter: blur(10px) !important;
         box-shadow: var(--header-shadow) !important;
         height: 100% !important;
         display: flex !important;
         flex-direction: column !important;
-        justify-content: space-between !important;
+        justify-content: center !important;
         box-sizing: border-box !important;
         margin-bottom: 0 !important;
-        gap: 4px !important;
+        gap: 0 !important;
     }
     div[data-testid="stColumn"]:has(#header-control-card-anchor) > div[data-testid="stVerticalBlock"] {
         background: transparent !important;
@@ -1260,19 +1258,17 @@ if not df_signals.empty:
 
         st.markdown(f"""
         <div id="header-control-card-anchor" style="display: none;"></div>
-        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-            <div style="display: inline-flex; align-items: center; gap: 5px; background: {'rgba(2, 132, 199, 0.10)' if is_light else 'rgba(56, 189, 248, 0.12)'}; border: 1px solid {'rgba(2, 132, 199, 0.28)' if is_light else 'rgba(56, 189, 248, 0.28)'}; padding: 3px 8px; border-radius: 4px;">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="{'#0284c7' if is_light else '#38bdf8'}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                <span style="font-size: 0.68rem; font-weight: 700; color: {'#0284c7' if is_light else '#38bdf8'}; font-family: 'Montserrat', sans-serif; letter-spacing: 0.04em; text-transform: uppercase;">UPDATED {time_display_str}</span>
+        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; height: 100%; padding: 4px 0;">
+            <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.28); padding: 5px 10px; border-radius: 4px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span style="font-size: 0.72rem; font-weight: 700; color: #38bdf8; font-family: 'Montserrat', sans-serif; letter-spacing: 0.04em; text-transform: uppercase;">UPDATED {time_display_str}</span>
             </div>
-            <div style="display: inline-flex; align-items: center; gap: 6px; background: {status_bg}; border: 1px solid {status_border}; color: {status_text}; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.08em; padding: 3px 9px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);">
-                <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; display: inline-block;"></span>
+            <div style="display: inline-flex; align-items: center; gap: 7px; background: {status_bg}; border: 1px solid {status_border}; color: {status_text}; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; padding: 5px 11px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);">
+                <span style="width: 7px; height: 7px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; display: inline-block;"></span>
                 SYSTEM ONLINE
             </div>
         </div>
         """, unsafe_allow_html=True)
-        
-        st.toggle("🌙 Dark Mode" if is_dark else "☀️ Light Mode", key="theme_toggle")
     
     st.markdown(f"""
     <details class="usp-collapsible">
