@@ -204,16 +204,29 @@ __THEME_VARS__
     }
     
     /* Main Dashboard Content Layout (Align Left KPI Cards and Right Chart Bottoms Flush) */
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container),
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) {
         align-items: stretch !important;
         margin-bottom: 12px !important;
     }
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"],
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="column"],
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"],
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"] {
         display: flex !important;
         flex-direction: column !important;
         height: 100% !important;
     }
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) div[data-testid="stColumn"]:first-child,
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) div[data-testid="column"]:first-child {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100% !important;
+    }
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) div[data-testid="stColumn"]:first-child > div[data-testid="stVerticalBlock"],
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) div[data-testid="column"]:first-child > div[data-testid="stVerticalBlock"],
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"] > div[data-testid="stVerticalBlock"],
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="column"] > div[data-testid="stVerticalBlock"],
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"] > div[data-testid="stVerticalBlock"],
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"] > div[data-testid="stVerticalBlock"] {
         display: flex !important;
@@ -221,19 +234,35 @@ __THEME_VARS__
         height: 100% !important;
         flex: 1 1 auto !important;
     }
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) div[data-testid="stElementContainer"]:has(.kpi-column-container),
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) div[data-testid="element-container"]:has(.kpi-column-container),
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) .stMarkdown:has(.kpi-column-container),
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) div[data-testid="stMarkdown"]:has(.kpi-column-container),
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) div[data-testid="stMarkdownContainer"]:has(.kpi-column-container),
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) div[data-testid="stElementContainer"]:has(.kpi-column-container),
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) div[data-testid="element-container"]:has(.kpi-column-container) {
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) div[data-testid="element-container"]:has(.kpi-column-container),
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) .stMarkdown:has(.kpi-column-container),
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) div[data-testid="stMarkdown"]:has(.kpi-column-container),
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) div[data-testid="stMarkdownContainer"]:has(.kpi-column-container),
+    div:has(> .kpi-column-container),
+    div:has(> div > .kpi-column-container),
+    div:has(> div > div > .kpi-column-container) {
         height: 100% !important;
         flex: 1 1 auto !important;
         display: flex !important;
         flex-direction: column !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     .kpi-column-container {
         display: flex !important;
         flex-direction: column !important;
         justify-content: space-between !important;
         height: 100% !important;
-        gap: 8px !important;
+        min-height: 100% !important;
+        flex: 1 1 auto !important;
+        gap: 10px !important;
+        box-sizing: border-box !important;
     }
     .kpi-column-container .kpi-card {
         flex: 1 1 0px !important;
@@ -241,18 +270,26 @@ __THEME_VARS__
         display: flex !important;
         flex-direction: column !important;
         justify-content: space-between !important;
-        padding: 9px 12px !important;
+        padding: 12px 14px !important;
         box-sizing: border-box !important;
+    }
+    .kpi-card-content {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
     }
     /* Ensure the right column container card stretches to match left column */
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"],
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlock"]:has(div[data-testid="stPlotlyChart"]) {
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlock"]:has(div[data-testid="stPlotlyChart"]),
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"],
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlock"]:has(div[data-testid="stPlotlyChart"]) {
         height: 100% !important;
         display: flex !important;
         flex-direction: column !important;
         justify-content: space-between !important;
         box-sizing: border-box !important;
     }
+
 
     /* Filter Toolbar Card Enclosure (Ultra-Compact, Identical Alignment Across All 5 Columns) */
     div[data-testid="stVerticalBlock"]:has(> div[data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] div[data-testid="stSelectbox"]),
@@ -1454,6 +1491,7 @@ if not df_signals.empty:
                     '<div class="kpi-column-container">'
                     # Card 1: Headline Hero Metric (Aggregate Optimism)
                     '<div class="white-card kpi-card">'
+                    '<div class="kpi-card-content">'
                     '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
                     '<span class="metric-title" style="margin-bottom: 0;">Aggregate Optimism</span>'
                     f'<span style="font-size: 0.72rem; font-weight: 700; color: var(--header-border-left); text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{selected_region}</span>'
@@ -1463,6 +1501,7 @@ if not df_signals.empty:
                     f'<span style="font-size: 0.74rem; font-weight: 700; color: {delta_pill_color}; background: {delta_pill_bg}; border: 1px solid {delta_pill_border}; padding: 2px 7px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">{delta_str}</span>'
                     f'<span style="font-size: 0.78rem; color: var(--text-secondary);">vs previous period</span>'
                     '</div>'
+                    '</div>'
                     '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
                     '<span>Confidence vector</span>'
                     '<span style="color: var(--text-primary); font-weight: 600;">System-One CLM</span>'
@@ -1471,6 +1510,7 @@ if not df_signals.empty:
 
                     # Card 2: Strategic Regime (Market Bias)
                     '<div class="white-card kpi-card">'
+                    '<div class="kpi-card-content">'
                     '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
                     '<span class="metric-title" style="margin-bottom: 0;">Market Bias</span>'
                     f'<span style="font-size: 0.68rem; font-weight: 800; color: {b_color_hex}; background: {b_pill_bg}; border: 1px solid {b_pill_border}; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif; letter-spacing: 0.04em;">{bias}</span>'
@@ -1478,6 +1518,7 @@ if not df_signals.empty:
                     f'<div class="metric-value {b_val_color}" style="font-size: 1.55rem;">{bias}</div>'
                     '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
                     f'<span style="font-size: 0.78rem; color: var(--text-secondary);">{ema_window}-period moving average</span>'
+                    '</div>'
                     '</div>'
                     '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
                     '<span>Signal strategy</span>'
@@ -1487,6 +1528,7 @@ if not df_signals.empty:
 
                     # Card 3: Total News Volume
                     '<div class="white-card kpi-card">'
+                    '<div class="kpi-card-content">'
                     '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
                     '<span class="metric-title" style="margin-bottom: 0;">Total News Volume</span>'
                     f'<span style="font-size: 0.68rem; font-weight: 700; color: {nv_color}; background: {nv_bg}; border: 1px solid {nv_border}; padding: 2px 7px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">{date_range} Window</span>'
@@ -1494,6 +1536,7 @@ if not df_signals.empty:
                     f'<div class="metric-value" style="color: var(--text-primary); font-size: 1.55rem;">{total_news_count}</div>'
                     '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
                     f'<span style="font-size: 0.78rem; color: var(--text-secondary);">articles ingested</span>'
+                    '</div>'
                     '</div>'
                     '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
                     '<span>Ingestion cadence</span>'
@@ -1503,6 +1546,7 @@ if not df_signals.empty:
 
                     # Card 4: Tracked Indices
                     '<div class="white-card kpi-card">'
+                    '<div class="kpi-card-content">'
                     '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
                     '<span class="metric-title" style="margin-bottom: 0;">Tracked Indices</span>'
                     f'<span style="font-size: 0.68rem; font-weight: 700; color: {ti_color}; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 2px 7px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{selected_region}</span>'
@@ -1511,6 +1555,7 @@ if not df_signals.empty:
                     '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
                     f'<span style="font-size: 0.74rem; font-weight: 700; color: {ti_color}; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 2px 6px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">100% Active</span>'
                     f'<span style="font-size: 0.78rem; color: var(--text-secondary);">real-time monitored</span>'
+                    '</div>'
                     '</div>'
                     '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
                     '<span>Active universe</span>'
