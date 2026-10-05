@@ -1,6 +1,13 @@
 ---
-gsd_state_version: '1.0'
+gsd_state_version: "1.0"
+current_phase: 2
+current_phase_name: UI Component Modularization & Operational Hardening
 status: planning
+stopped_at: Completed project initialization (`PROJECT.md`, `config.json`, `REQUIREMENTS.md`, `ROADMAP.md`, `STATE.md`).
+last_updated: "2026-10-05T08:17:50.784Z"
+last_activity: 2026-10-05
+last_activity_desc: "Completed quick task 261005-j14: Implement pipeline_runs telemetry in src/main.py and integrate freshness badge in src/ui/app.py"
+state_head: 4424fda3efd0a6f3289d2c08840e89ee6dd9aadd
 progress:
   total_phases: 2
   completed_phases: 1
@@ -23,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-05)
 Phase: 2 of 2 (UI Component Modularization & Operational Hardening)
 Plan: 0 of 2 in current phase
 Status: Ready to plan
-Last activity: 2026-10-05 — Initialized project planning baseline, permanently locked dark mode, created roadmap.
+Last activity: 2026-10-05 — Completed quick task 261005-j14: Implement pipeline_runs telemetry in src/main.py and integrate freshness badge in src/ui/app.py
 
 Progress: [██████░░░░] 60%
 
@@ -41,6 +48,7 @@ Progress: [██████░░░░] 60%
 - [Phase 1]: Permanently enforce Dark Mode across GSP; remove theme toggle widget to ensure consistent institutional styling.
 - [Phase 1]: Use TypeSafe System-One CLM-8B for continuous directional scores derived from calibrated choice probabilities.
 - [Phase 1]: Wrap filter toolbar and dashboard in `@st.fragment` to prevent full-page script reloads on widget interactions.
+- [Quick 261005-j14]: Store pipeline run completion telemetry in `pipeline_runs` table with composite index to power live dashboard data freshness badge.
 
 ### Pending Todos
 
@@ -48,7 +56,13 @@ None yet.
 
 ### Blockers/Concerns
 
-None. All 12 unit tests passing, working tree clean.
+None. All 17 unit tests passing, working tree clean.
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 261005-j14 | Implement pipeline_runs telemetry in src/main.py and integrate freshness badge in src/ui/app.py | 2026-10-05 | 4424fda | [261005-j14-implement-pipeline-runs-telemetry-in-src](./quick/261005-j14-implement-pipeline-runs-telemetry-in-src/) |
 
 ## Session Continuity
 
