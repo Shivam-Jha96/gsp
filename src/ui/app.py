@@ -101,49 +101,49 @@ else:
     theme_css_vars = """
         color-scheme: dark !important;
         --primary-color: #10b981 !important;
-        --background-color: #020617 !important;
-        --secondary-background-color: #0b1329 !important;
+        --background-color: #08090d !important;
+        --secondary-background-color: #0f1118 !important;
         --text-color: #f8fafc !important;
-        --bg-main: #020617;
-        --bg-gradient: #020617;
+        --bg-main: #08090d;
+        --bg-gradient: #08090d;
         --text-primary: #f8fafc;
-        --text-secondary: #cbd5e1;
-        --text-muted: #94a3b8;
-        --card-bg: rgba(15, 23, 42, 0.65);
+        --text-secondary: #94a3b8;
+        --text-muted: #64748b;
+        --card-bg: rgba(15, 17, 24, 0.75);
         --card-border: rgba(255, 255, 255, 0.08);
-        --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        --card-hover-bg: rgba(30, 41, 59, 0.75);
-        --card-hover-border: rgba(59, 130, 246, 0.4);
-        --input-bg: #0b1329;
-        --input-border: rgba(255, 255, 255, 0.12);
+        --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+        --card-hover-bg: rgba(22, 25, 36, 0.85);
+        --card-hover-border: rgba(255, 255, 255, 0.16);
+        --input-bg: #12141d;
+        --input-border: rgba(255, 255, 255, 0.10);
         --input-text: #f8fafc;
-        --header-bg: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 58, 138, 0.28) 100%);
-        --header-border: rgba(59, 130, 246, 0.35);
-        --header-border-left: #3b82f6;
-        --header-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), 0 0 15px rgba(59, 130, 246, 0.1);
-        --edge-bg: linear-gradient(135deg, rgba(15, 23, 42, 0.88) 0%, rgba(30, 41, 59, 0.5) 50%, rgba(15, 23, 42, 0.88) 100%);
-        --edge-border: rgba(56, 189, 248, 0.25);
-        --edge-accent: #38bdf8;
-        --edge-text: #cbd5e1;
-        --feed-bg: rgba(15, 23, 42, 0.5);
+        --header-bg: linear-gradient(135deg, rgba(15, 17, 24, 0.95) 0%, rgba(20, 24, 33, 0.7) 100%);
+        --header-border: rgba(255, 255, 255, 0.10);
+        --header-border-left: #10b981;
+        --header-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+        --edge-bg: rgba(15, 17, 24, 0.85);
+        --edge-border: rgba(255, 255, 255, 0.08);
+        --edge-accent: #10b981;
+        --edge-text: #94a3b8;
+        --feed-bg: rgba(15, 17, 24, 0.6);
         --feed-border: rgba(255, 255, 255, 0.08);
-        --feed-card-bg: rgba(15, 23, 42, 0.65);
-        --feed-card-border: rgba(255, 255, 255, 0.07);
-        --feed-card-hover: rgba(30, 41, 59, 0.8);
+        --feed-card-bg: rgba(15, 17, 24, 0.75);
+        --feed-card-border: rgba(255, 255, 255, 0.06);
+        --feed-card-hover: rgba(22, 25, 36, 0.85);
         --feed-headline: #f8fafc;
         --feed-badge-bg: rgba(255, 255, 255, 0.04);
         --feed-badge-border: rgba(255, 255, 255, 0.08);
         --feed-badge-text: #94a3b8;
-        --action-btn-bg: rgba(59, 130, 246, 0.18);
-        --action-btn-border: rgba(59, 130, 246, 0.45);
-        --action-btn-color: #60a5fa;
-        --action-btn-hover-bg: rgba(59, 130, 246, 0.3);
-        --action-btn-hover-border: #60a5fa;
+        --action-btn-bg: rgba(255, 255, 255, 0.05);
+        --action-btn-border: rgba(255, 255, 255, 0.15);
+        --action-btn-color: #f8fafc;
+        --action-btn-hover-bg: rgba(16, 185, 129, 0.15);
+        --action-btn-hover-border: #10b981;
         --action-btn-hover-color: #ffffff;
         --metric-green: #10b981;
-        --metric-red: #ef4444;
-        --toggle-track-bg: #334155;
-        --toggle-track-border: #475569;
+        --metric-red: #f43f5e;
+        --toggle-track-bg: #27272a;
+        --toggle-track-border: #3f3f46;
     """
 
 # --- CSS Theme Injection ---
@@ -459,7 +459,7 @@ __THEME_VARS__
     html body [data-baseweb="select"] > div:hover,
     html body div[data-testid="stSelectbox"] [data-baseweb="select"] > div:hover {
         border-color: var(--header-border-left) !important;
-        box-shadow: 0 0 10px rgba(59, 130, 246, 0.2) !important;
+        box-shadow: 0 0 8px rgba(16, 185, 129, 0.2) !important;
     }
     html body div[data-testid="stSelectbox"] input,
     html body div[data-testid="stSelectbox"] input[role="combobox"],
@@ -743,9 +743,9 @@ __THEME_VARS__
         transition: all 0.2s ease;
     }
     details.usp-collapsible summary.usp-summary:hover .usp-expand-btn {
-        background: rgba(59, 130, 246, 0.18);
-        border-color: rgba(59, 130, 246, 0.4);
-        color: #3b82f6;
+        background: rgba(16, 185, 129, 0.12);
+        border-color: rgba(16, 185, 129, 0.35);
+        color: #34d399;
     }
     details.usp-collapsible .usp-collapse-text { display: none; }
     details.usp-collapsible[open] .usp-expand-text { display: none; }
@@ -882,21 +882,21 @@ __THEME_VARS__
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
         letter-spacing: 0.02em !important;
     }
-    /* 1. All Button (Blue Accent) */
+    /* 1. All Button (Clean Neutral) */
     .st-key-feed_sentiment_pills button:nth-of-type(1),
     .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(1),
     .st-key-feed_sentiment_pills div[role="radiogroup"] > button:nth-of-type(1),
     .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(1) button {
-        border: 1px solid rgba(59, 130, 246, 0.4) !important;
+        border: 1px solid rgba(255, 255, 255, 0.14) !important;
         color: var(--text-primary) !important;
-        background: var(--input-bg) !important;
+        background: rgba(255, 255, 255, 0.04) !important;
     }
     .st-key-feed_sentiment_pills button:nth-of-type(1):hover,
     .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(1):hover,
     .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(1) button:hover {
-        border-color: #3b82f6 !important;
-        background: rgba(59, 130, 246, 0.12) !important;
-        color: #60a5fa !important;
+        border-color: rgba(255, 255, 255, 0.28) !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        color: #ffffff !important;
     }
     .st-key-feed_sentiment_pills button:nth-of-type(1)[aria-checked="true"],
     .st-key-feed_sentiment_pills button:nth-of-type(1)[data-checked="true"],
@@ -912,10 +912,10 @@ __THEME_VARS__
     .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(1) button[aria-selected="true"],
     .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(1) button[data-selected="true"],
     .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(1) button[data-selected] {
-        background: rgba(59, 130, 246, 0.25) !important;
-        border-color: #3b82f6 !important;
-        color: #60a5fa !important;
-        box-shadow: 0 0 10px rgba(59, 130, 246, 0.35) !important;
+        background: rgba(255, 255, 255, 0.14) !important;
+        border-color: rgba(255, 255, 255, 0.35) !important;
+        color: #ffffff !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
     }
     /* 2. Bullish Button (Emerald Green Accent) */
     .st-key-feed_sentiment_pills button:nth-of-type(2),
@@ -1155,7 +1155,7 @@ __THEME_VARS__
     }
     .news-item-card:hover {
         background: var(--feed-card-hover) !important;
-        border-color: rgba(59, 130, 246, 0.3) !important;
+        border-color: rgba(255, 255, 255, 0.16) !important;
         transform: translateY(-1px);
     }
     .news-item-card:last-child {
@@ -1330,7 +1330,7 @@ if not df_signals.empty:
         st.markdown(f"""
         <div class="header-banner-card">
             <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-                <div style="background: linear-gradient(135deg, #2563eb, #3b82f6); color: #ffffff; padding: 4px 10px; border-radius: 5px; font-weight: 800; font-size: 1.1rem; letter-spacing: 1.5px; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 12px rgba(59, 130, 246, 0.45); flex-shrink: 0;">GSP</div>
+                <div style="background: linear-gradient(135deg, #059669, #0d9488); color: #ffffff; padding: 4px 10px; border-radius: 5px; font-weight: 800; font-size: 1.1rem; letter-spacing: 1.5px; font-family: 'Montserrat', sans-serif; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); border: 1px solid rgba(16, 185, 129, 0.3); flex-shrink: 0;">GSP</div>
                 <div>
                     <div style="font-size: clamp(0.95rem, 2vw, 1.25rem); font-weight: 700; color: var(--text-primary); letter-spacing: -0.01em; font-family: 'Montserrat', sans-serif; line-height: 1.25;">Global Sentiment Platform of Share Markets</div>
                     <div style="font-size: clamp(0.68rem, 1.3vw, 0.76rem); font-weight: 500; color: var(--text-muted); font-family: 'IBM Plex Sans', sans-serif; line-height: 1.2; margin-top: 2px;">Real-Time Global Quantitative Intelligence &amp; Execution Engine</div>
@@ -1350,9 +1350,9 @@ if not df_signals.empty:
             pill_border = "rgba(239, 68, 68, 0.32)"
             pill_color = "#f87171"
         else: # fresh
-            pill_bg = "rgba(56, 189, 248, 0.12)"
-            pill_border = "rgba(56, 189, 248, 0.28)"
-            pill_color = "#38bdf8"
+            pill_bg = "rgba(16, 185, 129, 0.10)" if not is_light else "rgba(5, 150, 105, 0.10)"
+            pill_border = "rgba(16, 185, 129, 0.25)" if not is_light else "rgba(5, 150, 105, 0.25)"
+            pill_color = "#34d399" if not is_light else "#059669"
 
         status_bg = "rgba(16, 185, 129, 0.15)"
         status_border = "rgba(16, 185, 129, 0.35)"
@@ -1387,7 +1387,7 @@ if not df_signals.empty:
                         <span style="color: var(--text-muted); opacity: 0.6;">•</span>
                         <span class="usp-ticker-item"><strong style="color: {'#d97706' if is_light else '#fbbf24'};">📈 Momentum Vectors:</strong> 4P EMA Cross-Sectional Tracking</span>
                         <span style="color: var(--text-muted); opacity: 0.6;">•</span>
-                        <span class="usp-ticker-item"><strong style="color: {'#0284c7' if is_light else '#38bdf8'};">🛡️ System Online:</strong> Institutional Ingestion & Execution Engine</span>
+                        <span class="usp-ticker-item"><strong style="color: {'#059669' if is_light else '#34d399'};">🛡️ System Online:</strong> Institutional Ingestion & Execution Engine</span>
                         <span style="color: var(--text-muted); opacity: 0.6;">•</span>
                         <!-- Infinite loop seamless duplicate -->
                         <span class="usp-ticker-item"><strong>Pure Mathematical Sentiment</strong> via System-One CLM-8B</span>
@@ -1398,7 +1398,7 @@ if not df_signals.empty:
                         <span style="color: var(--text-muted); opacity: 0.6;">•</span>
                         <span class="usp-ticker-item"><strong style="color: {'#d97706' if is_light else '#fbbf24'};">📈 Momentum Vectors:</strong> 4P EMA Cross-Sectional Tracking</span>
                         <span style="color: var(--text-muted); opacity: 0.6;">•</span>
-                        <span class="usp-ticker-item"><strong style="color: {'#0284c7' if is_light else '#38bdf8'};">🛡️ System Online:</strong> Institutional Ingestion & Execution Engine</span>
+                        <span class="usp-ticker-item"><strong style="color: {'#059669' if is_light else '#34d399'};">🛡️ System Online:</strong> Institutional Ingestion & Execution Engine</span>
                     </div>
                 </div>
                 <div class="usp-expand-btn">
@@ -1646,9 +1646,9 @@ if not df_signals.empty:
                 total_news_count = len(filtered_signals)
                 tracked_count = filtered_signals['index_ticker'].nunique()
                 
-                nv_color = "#0284c7" if is_light else "#38bdf8"
-                nv_bg = "rgba(2, 132, 199, 0.12)" if is_light else "rgba(56, 189, 248, 0.12)"
-                nv_border = "rgba(2, 132, 199, 0.3)" if is_light else "rgba(56, 189, 248, 0.3)"
+                nv_color = "#334155" if is_light else "#cbd5e1"
+                nv_bg = "rgba(0, 0, 0, 0.05)" if is_light else "rgba(255, 255, 255, 0.06)"
+                nv_border = "rgba(0, 0, 0, 0.12)" if is_light else "rgba(255, 255, 255, 0.12)"
                 
                 ti_color = "#059669" if is_light else "#34d399"
 
@@ -1738,8 +1738,8 @@ if not df_signals.empty:
                     st.markdown(f"""
                     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--card-border); margin-bottom: 6px;">
                         <div style="display: flex; align-items: center; gap: 10px;">
-                            <div style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.35); padding: 5px; border-radius: 6px; display: flex; align-items: center;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                            <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.30); padding: 5px; border-radius: 6px; display: flex; align-items: center;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
                             </div>
                             <div>
                                 <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); font-family: 'Montserrat', sans-serif;">Aggregate Market Optimism</div>
@@ -1754,15 +1754,15 @@ if not df_signals.empty:
                     
                     fig_area = go.Figure()
                     
-                    # Highly distinct, recognizable color palette with matching soft translucent fills
-                    distinct_colors = ["#0284c7", "#f59e0b", "#10b981", "#ec4899", "#8b5cf6", "#06b6d4"]
+                    # Refined, high-legibility institutional color palette with soft translucent fills
+                    distinct_colors = ["#10b981", "#f59e0b", "#6366f1", "#06b6d4", "#ec4899", "#84cc16"]
                     fill_colors = [
-                        "rgba(2, 132, 199, 0.20)",
-                        "rgba(245, 158, 11, 0.20)",
-                        "rgba(16, 185, 129, 0.20)",
-                        "rgba(236, 72, 153, 0.20)",
-                        "rgba(139, 92, 246, 0.20)",
-                        "rgba(6, 182, 212, 0.20)"
+                        "rgba(16, 185, 129, 0.12)",
+                        "rgba(245, 158, 11, 0.10)",
+                        "rgba(99, 102, 241, 0.10)",
+                        "rgba(6, 182, 212, 0.10)",
+                        "rgba(236, 72, 153, 0.10)",
+                        "rgba(132, 204, 22, 0.10)"
                     ]
                     active_tickers = [c for c in filtered_signals['index_ticker'].unique() if c != 'UNKNOWN']
                     
@@ -1811,22 +1811,32 @@ if not df_signals.empty:
                             showgrid=True, gridcolor='rgba(148, 163, 184, 0.22)' if is_light else 'rgba(255,255,255,0.06)',
                             showline=True, linecolor='rgba(100, 116, 139, 0.35)' if is_light else 'rgba(255,255,255,0.15)', linewidth=1,
                             ticks='outside', tickcolor='rgba(100, 116, 139, 0.35)' if is_light else 'rgba(255,255,255,0.25)', ticklen=4,
-                            title=dict(text=f"<b>TIMELINE • {tz_abbr}</b>", font=dict(size=11, color="#0284c7" if is_light else "#38bdf8", family="Montserrat")),
+                            title=dict(text=f"<b>TIMELINE • {tz_abbr}</b>", font=dict(size=11, color="#334155" if is_light else "#cbd5e1", family="Montserrat")),
                             tickfont=dict(size=10, color="#334155" if is_light else "#94a3b8", family="IBM Plex Sans")
                         ),
                         yaxis=dict(
                             range=[-105, 105],
                             dtick=25,
+                            fixedrange=True,
                             showgrid=True, gridcolor='rgba(148, 163, 184, 0.22)' if is_light else 'rgba(255,255,255,0.06)',
                             zeroline=True, zerolinecolor='rgba(148, 163, 184, 0.45)' if is_light else 'rgba(148, 163, 184, 0.35)', zerolinewidth=1.5,
                             showline=True, linecolor='rgba(100, 116, 139, 0.35)' if is_light else 'rgba(255,255,255,0.15)', linewidth=1,
                             ticks='outside', tickcolor='rgba(100, 116, 139, 0.35)' if is_light else 'rgba(255,255,255,0.25)', ticklen=4,
-                            title=dict(text="<b>OPTIMISM SCORE</b>", font=dict(size=11, color="#0284c7" if is_light else "#38bdf8", family="Montserrat")),
+                            title=dict(text="<b>OPTIMISM SCORE</b>", font=dict(size=11, color="#334155" if is_light else "#cbd5e1", family="Montserrat")),
                             tickfont=dict(size=10, color="#0f172a" if is_light else "#f8fafc", family="IBM Plex Sans"),
                             side="right"
                         )
                     )
-                    st.plotly_chart(fig_area, use_container_width=True, config={'displayModeBar': 'hover', 'scrollZoom': True, 'displaylogo': False})
+                    st.plotly_chart(
+                        fig_area,
+                        use_container_width=True,
+                        config={
+                            'displayModeBar': 'hover',
+                            'scrollZoom': False,
+                            'displaylogo': False,
+                            'modeBarButtonsToRemove': ['zoom2d', 'zoomIn2d', 'zoomOut2d']
+                        }
+                    )
 
                     # --- Mini KPI Tiles for Individual Indices (Inside same container for flush borders) ---
                     valid_tickers = [t for t in active_tickers if t != 'UNKNOWN']
@@ -1893,7 +1903,7 @@ if not df_signals.empty:
                 with st.container(border=True, key="live_intelligence_feed_container"):
                     feed_header_col1, feed_header_col2 = st.columns([0.42, 0.58], vertical_alignment="center")
                     with feed_header_col1:
-                        st.markdown(f"""<div style="display: flex; align-items: center; gap: 8px; margin: 0; padding: 0; min-height: 38px;"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 8px #3b82f6; flex-shrink: 0;"></span><span style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); font-family: 'Montserrat', sans-serif; line-height: 1.2;">{selected_region} Live Intelligence Feed</span></div>""", unsafe_allow_html=True)
+                        st.markdown(f"""<div style="display: flex; align-items: center; gap: 8px; margin: 0; padding: 0; min-height: 38px;"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.4); flex-shrink: 0;"></span><span style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); font-family: 'Montserrat', sans-serif; line-height: 1.2;">{selected_region} Live Intelligence Feed</span></div>""", unsafe_allow_html=True)
                     with feed_header_col2:
                         feed_pill_options = [
                             f"All {total_events}",
@@ -1964,7 +1974,7 @@ if not df_signals.empty:
                             escaped_headline = html.escape(clean_headline)
                             badges_markup = (
                                 f'<span style="font-family: \'IBM Plex Sans\', sans-serif; font-size: 0.75rem; font-weight: 500; color: {"#475569" if is_light else "#94a3b8"}; background: {"rgba(0,0,0,0.04)" if is_light else "rgba(255,255,255,0.04)"}; border: 1px solid {"rgba(0,0,0,0.08)" if is_light else "rgba(255,255,255,0.08)"}; padding: 2px 7px; border-radius: 4px; flex-shrink: 0;">{time_str}</span>'
-                                f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.75rem; font-weight: 700; color: {"#0284c7" if is_light else "#f8fafc"}; background: {"rgba(2, 132, 199, 0.12)" if is_light else "rgba(59, 130, 246, 0.15)"}; border: 1px solid {"rgba(2, 132, 199, 0.3)" if is_light else "rgba(59, 130, 246, 0.35)"}; padding: 2px 8px; border-radius: 4px; flex-shrink: 0;">{ticker_label}</span>'
+                                f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.75rem; font-weight: 700; color: {"#334155" if is_light else "#f8fafc"}; background: {"rgba(0, 0, 0, 0.05)" if is_light else "rgba(255, 255, 255, 0.06)"}; border: 1px solid {"rgba(0, 0, 0, 0.12)" if is_light else "rgba(255, 255, 255, 0.12)"}; padding: 2px 8px; border-radius: 4px; flex-shrink: 0;">{ticker_label}</span>'
                                 f'{source_badge}{status_badge}'
                             )
                             score_markup = f'<div style="flex-shrink: 0;"><span style="font-family: \'Montserrat\', sans-serif; font-size: 0.8rem; font-weight: 700; color: {score_color}; background: {score_bg}; border: 1px solid {score_border}; padding: 3px 9px; border-radius: 4px; letter-spacing: 0.02em;">{sentiment:+.1f}</span></div>'
