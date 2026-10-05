@@ -1853,7 +1853,7 @@ if not df_signals.empty:
                             f"Bearish {bearish_count}",
                             f"Neutral {neutral_count}"
                         ]
-                        selected_feed_pill = render_segmented_filter("feed_filter", feed_pill_options, default_ix=None, key="feed_sentiment_pills")
+                        selected_feed_pill = render_segmented_filter("feed_filter", feed_pill_options, default_ix=0, key="feed_sentiment_pills")
 
                     if selected_feed_pill is not None:
                         if "Bullish" in selected_feed_pill:

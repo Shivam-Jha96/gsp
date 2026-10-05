@@ -531,6 +531,7 @@ The Live Intelligence Feed is housed in a single, unified institutional containe
   * **Bullish:** Emerald Green accent (`#10b981` / `#34d399`).
   * **Bearish:** Crimson Red accent (`#ef4444` / `#f87171`).
   * **Neutral:** Slate Gray accent (`#94a3b8` / `#cbd5e1`).
+* **Default Expanded State (ALL Selected):** On initial dashboard load, `render_segmented_filter` defaults to `default_ix=0` (`All [N]`), ensuring the live intelligence feed is immediately expanded and displays all headlines for the selected region and timeframe without requiring manual filter activation.
 * **Uncluttered Interface (Instruction Lines Removed):** Extraneous instruction text ("Click any sentiment pill..." and "Click active button again...") has been eliminated for an ultra-clean, institutional user experience.
 * **Feed Sanitization & Neutral Classification:** Headlines undergo regex processing in `clean_news_item()` to strip HTML markup, remove trailing publisher signatures, and classify each entry into one of three sentiment buckets:
   * **Bullish Event:** Sentiment Score $\ge +0.5$ (Emerald badge)
