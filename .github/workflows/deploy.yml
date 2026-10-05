@@ -2,9 +2,11 @@ name: Global Macro-Sentiment Pipeline
 
 on:
   schedule:
-    # Run every 2 hours independently (shifted to off-peak minute 17 to bypass top-of-hour GitHub queue delays)
-    - cron: '17 */2 * * *'
-  workflow_dispatch: # Allows manual trigger from the GitHub UI
+    # Run hourly at off-peak minute 15 to bypass top-of-hour GitHub queue delays.
+    # Deduplication drops already-scored headlines immediately with zero AI OPEX,
+    # ensuring your 25 pilot users always receive sub-2h fresh data even if GitHub delays a cycle.
+    - cron: '15 * * * *'
+  workflow_dispatch: # Allows manual trigger from the GitHub UI or external webhook
 
 concurrency:
   group: sentiment-pipeline
