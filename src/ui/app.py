@@ -900,9 +900,18 @@ __THEME_VARS__
     }
     .st-key-feed_sentiment_pills button:nth-of-type(1)[aria-checked="true"],
     .st-key-feed_sentiment_pills button:nth-of-type(1)[data-checked="true"],
+    .st-key-feed_sentiment_pills button:nth-of-type(1)[aria-selected="true"],
+    .st-key-feed_sentiment_pills button:nth-of-type(1)[data-selected="true"],
+    .st-key-feed_sentiment_pills button:nth-of-type(1)[data-selected],
     .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(1)[aria-checked="true"],
     .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(1)[data-checked="true"],
-    .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(1) button[aria-checked="true"] {
+    .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(1)[aria-selected="true"],
+    .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(1)[data-selected="true"],
+    .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(1)[data-selected],
+    .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(1) button[aria-checked="true"],
+    .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(1) button[aria-selected="true"],
+    .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(1) button[data-selected="true"],
+    .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(1) button[data-selected] {
         background: rgba(59, 130, 246, 0.25) !important;
         border-color: #3b82f6 !important;
         color: #60a5fa !important;
@@ -926,9 +935,18 @@ __THEME_VARS__
     }
     .st-key-feed_sentiment_pills button:nth-of-type(2)[aria-checked="true"],
     .st-key-feed_sentiment_pills button:nth-of-type(2)[data-checked="true"],
+    .st-key-feed_sentiment_pills button:nth-of-type(2)[aria-selected="true"],
+    .st-key-feed_sentiment_pills button:nth-of-type(2)[data-selected="true"],
+    .st-key-feed_sentiment_pills button:nth-of-type(2)[data-selected],
     .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(2)[aria-checked="true"],
     .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(2)[data-checked="true"],
-    .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(2) button[aria-checked="true"] {
+    .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(2)[aria-selected="true"],
+    .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(2)[data-selected="true"],
+    .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(2)[data-selected],
+    .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(2) button[aria-checked="true"],
+    .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(2) button[aria-selected="true"],
+    .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(2) button[data-selected="true"],
+    .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(2) button[data-selected] {
         background: rgba(16, 185, 129, 0.28) !important;
         border-color: #10b981 !important;
         color: #34d399 !important;
@@ -952,9 +970,18 @@ __THEME_VARS__
     }
     .st-key-feed_sentiment_pills button:nth-of-type(3)[aria-checked="true"],
     .st-key-feed_sentiment_pills button:nth-of-type(3)[data-checked="true"],
+    .st-key-feed_sentiment_pills button:nth-of-type(3)[aria-selected="true"],
+    .st-key-feed_sentiment_pills button:nth-of-type(3)[data-selected="true"],
+    .st-key-feed_sentiment_pills button:nth-of-type(3)[data-selected],
     .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(3)[aria-checked="true"],
     .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(3)[data-checked="true"],
-    .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(3) button[aria-checked="true"] {
+    .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(3)[aria-selected="true"],
+    .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(3)[data-selected="true"],
+    .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(3)[data-selected],
+    .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(3) button[aria-checked="true"],
+    .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(3) button[aria-selected="true"],
+    .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(3) button[data-selected="true"],
+    .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(3) button[data-selected] {
         background: rgba(239, 68, 68, 0.28) !important;
         border-color: #ef4444 !important;
         color: #f87171 !important;
@@ -978,9 +1005,18 @@ __THEME_VARS__
     }
     .st-key-feed_sentiment_pills button:nth-of-type(4)[aria-checked="true"],
     .st-key-feed_sentiment_pills button:nth-of-type(4)[data-checked="true"],
+    .st-key-feed_sentiment_pills button:nth-of-type(4)[aria-selected="true"],
+    .st-key-feed_sentiment_pills button:nth-of-type(4)[data-selected="true"],
+    .st-key-feed_sentiment_pills button:nth-of-type(4)[data-selected],
     .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(4)[aria-checked="true"],
     .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(4)[data-checked="true"],
-    .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(4) button[aria-checked="true"] {
+    .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(4)[aria-selected="true"],
+    .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(4)[data-selected="true"],
+    .st-key-feed_sentiment_pills [data-testid="stPills"] button:nth-of-type(4)[data-selected],
+    .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(4) button[aria-checked="true"],
+    .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(4) button[aria-selected="true"],
+    .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(4) button[data-selected="true"],
+    .st-key-feed_sentiment_pills ul[data-testid="stPills-list"] li:nth-of-type(4) button[data-selected] {
         background: rgba(148, 163, 184, 0.25) !important;
         border-color: #94a3b8 !important;
         color: #cbd5e1 !important;
@@ -1392,14 +1428,26 @@ if not df_signals.empty:
     # Helper for segmented filter buttons (resilient across Streamlit versions)
     def render_segmented_filter(label, options, default_ix: int | None = 0, key=None):
         default_val = options[default_ix] if (default_ix is not None and 0 <= default_ix < len(options)) else None
-        if hasattr(st, "pills"):
-            res = st.pills(label, options, default=default_val, key=key, label_visibility="collapsed")
-            return res
-        elif hasattr(st, "segmented_control"):
-            res = st.segmented_control(label, options, default=default_val, key=key, label_visibility="collapsed")
-            return res
+        if key:
+            if key not in st.session_state or st.session_state[key] is None or st.session_state[key] not in options:
+                st.session_state[key] = default_val
+            if hasattr(st, "pills"):
+                res = st.pills(label, options, key=key, label_visibility="collapsed")
+                return res or default_val
+            elif hasattr(st, "segmented_control"):
+                res = st.segmented_control(label, options, key=key, label_visibility="collapsed")
+                return res or default_val
+            else:
+                return st.radio(label, options, index=default_ix, key=key, horizontal=True, label_visibility="collapsed")
         else:
-            return st.radio(label, options, index=default_ix, key=key, horizontal=True, label_visibility="collapsed")
+            if hasattr(st, "pills"):
+                res = st.pills(label, options, default=default_val, label_visibility="collapsed")
+                return res or default_val
+            elif hasattr(st, "segmented_control"):
+                res = st.segmented_control(label, options, default=default_val, label_visibility="collapsed")
+                return res or default_val
+            else:
+                return st.radio(label, options, index=default_ix, horizontal=True, label_visibility="collapsed")
 
     # --- Fragment Decorator for Partial Re-rendering (avoids full-page reloads on widget changes) ---
     if hasattr(st, "fragment"):
@@ -1855,81 +1903,80 @@ if not df_signals.empty:
                         ]
                         selected_feed_pill = render_segmented_filter("feed_filter", feed_pill_options, default_ix=0, key="feed_sentiment_pills")
 
-                    if selected_feed_pill is not None:
-                        if "Bullish" in selected_feed_pill:
-                            feed_display_payloads = region_payloads[region_payloads['sentiment_index'] >= 0.5]
-                            sentiment_label = "Bullish"
-                        elif "Bearish" in selected_feed_pill:
-                            feed_display_payloads = region_payloads[region_payloads['sentiment_index'] <= -0.5]
-                            sentiment_label = "Bearish"
-                        elif "Neutral" in selected_feed_pill or "Noise" in selected_feed_pill:
-                            feed_display_payloads = region_payloads[(region_payloads['sentiment_index'] > -0.5) & (region_payloads['sentiment_index'] < 0.5)]
-                            sentiment_label = "Neutral"
-                        else:
-                            feed_display_payloads = region_payloads
-                            sentiment_label = "All"
+                    if selected_feed_pill and "Bullish" in selected_feed_pill:
+                        feed_display_payloads = region_payloads[region_payloads['sentiment_index'] >= 0.5]
+                        sentiment_label = "Bullish"
+                    elif selected_feed_pill and "Bearish" in selected_feed_pill:
+                        feed_display_payloads = region_payloads[region_payloads['sentiment_index'] <= -0.5]
+                        sentiment_label = "Bearish"
+                    elif selected_feed_pill and ("Neutral" in selected_feed_pill or "Noise" in selected_feed_pill):
+                        feed_display_payloads = region_payloads[(region_payloads['sentiment_index'] > -0.5) & (region_payloads['sentiment_index'] < 0.5)]
+                        sentiment_label = "Neutral"
+                    else:
+                        feed_display_payloads = region_payloads
+                        sentiment_label = "All"
 
-                        st.markdown(f"""
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 4px 10px 4px; border-bottom: 1px solid var(--feed-card-border); margin-bottom: 10px;">
-                            <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); font-family: 'Montserrat', sans-serif; letter-spacing: 0.04em;">
-                                STREAMING {len(feed_display_payloads)} {sentiment_label.upper()} HEADLINES
-                            </span>
-                        </div>
-                        """, unsafe_allow_html=True)
+                    st.markdown(f"""
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 4px 10px 4px; border-bottom: 1px solid var(--feed-card-border); margin-bottom: 10px;">
+                        <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); font-family: 'Montserrat', sans-serif; letter-spacing: 0.04em;">
+                            STREAMING {len(feed_display_payloads)} {sentiment_label.upper()} HEADLINES
+                        </span>
+                    </div>
+                    """, unsafe_allow_html=True)
 
-                        # Directly render top headlines in a scrollable feed container
-                        html_feed = '<div class="news-feed-scroll">'
-                        if not feed_display_payloads.empty:
-                            for _, row in feed_display_payloads.iterrows():
-                                sentiment = row['sentiment_index']
-                                if date_range in ["4 Hours", "4 Hour", "4H", "6 Hours", "6 Hour", "6H", "12 Hours", "12 Hour", "12H", "1 Day", "1Day", "1D", "24 Hours", "24 Hour", "24H"]:
-                                    time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
-                                else:
-                                    time_str = pd.to_datetime(row['timestamp']).strftime('%b %d, %H:%M')
-                                ticker_label = row.get('index_ticker', 'Macro')
-                                
-                                parsed = clean_news_item(row['raw_text'])
-                                clean_headline = parsed['headline']
-                                source = parsed['source']
-                                
-                                # Determine Sentiment & Neutral status
-                                if abs(sentiment) < 0.5:
-                                    status_badge = f'<span style="background: {"rgba(148, 163, 184, 0.2)" if is_light else "rgba(148, 163, 184, 0.18)"}; border: 1px solid {"rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.45)"}; color: {"#475569" if is_light else "#cbd5e1"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">NEUTRAL</span>'
-                                    score_color = "#64748b" if is_light else "#94a3b8"
-                                    score_bg = "rgba(148, 163, 184, 0.15)" if is_light else "rgba(148, 163, 184, 0.12)"
-                                    score_border = "rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.3)"
-                                    card_border = "#94a3b8" if is_light else "#64748b"
-                                elif sentiment >= 0.5:
-                                    status_badge = f'<span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: {"#059669" if is_light else "#34d399"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BULLISH</span>'
-                                    score_color = "#059669" if is_light else "#10b981"
-                                    score_bg = "rgba(16, 185, 129, 0.15)" if is_light else "rgba(16, 185, 129, 0.12)"
-                                    score_border = "rgba(16, 185, 129, 0.35)" if is_light else "rgba(16, 185, 129, 0.3)"
-                                    card_border = "#10b981"
-                                else:
-                                    status_badge = f'<span style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: {"#dc2626" if is_light else "#f87171"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BEARISH</span>'
-                                    score_color = "#dc2626" if is_light else "#ef4444"
-                                    score_bg = "rgba(239, 68, 68, 0.15)" if is_light else "rgba(239, 68, 68, 0.12)"
-                                    score_border = "rgba(239, 68, 68, 0.35)" if is_light else "rgba(239, 68, 68, 0.3)"
-                                    card_border = "#ef4444"
-                                
-                                source_badge = f'<span style="background: {"rgba(0, 0, 0, 0.04)" if is_light else "rgba(255, 255, 255, 0.04)"}; border: 1px solid {"rgba(0, 0, 0, 0.08)" if is_light else "rgba(255, 255, 255, 0.08)"}; color: {"#475569" if is_light else "#94a3b8"}; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">{source}</span>' if source else ""
-                                
-                                escaped_headline = html.escape(clean_headline)
-                                badges_markup = (
-                                    f'<span style="font-family: \'IBM Plex Sans\', sans-serif; font-size: 0.75rem; font-weight: 500; color: {"#475569" if is_light else "#94a3b8"}; background: {"rgba(0,0,0,0.04)" if is_light else "rgba(255,255,255,0.04)"}; border: 1px solid {"rgba(0,0,0,0.08)" if is_light else "rgba(255,255,255,0.08)"}; padding: 2px 7px; border-radius: 4px; flex-shrink: 0;">{time_str}</span>'
-                                    f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.75rem; font-weight: 700; color: {"#0284c7" if is_light else "#f8fafc"}; background: {"rgba(2, 132, 199, 0.12)" if is_light else "rgba(59, 130, 246, 0.15)"}; border: 1px solid {"rgba(2, 132, 199, 0.3)" if is_light else "rgba(59, 130, 246, 0.35)"}; padding: 2px 8px; border-radius: 4px; flex-shrink: 0;">{ticker_label}</span>'
-                                    f'{source_badge}{status_badge}'
-                                )
-                                score_markup = f'<div style="flex-shrink: 0;"><span style="font-family: \'Montserrat\', sans-serif; font-size: 0.8rem; font-weight: 700; color: {score_color}; background: {score_bg}; border: 1px solid {score_border}; padding: 3px 9px; border-radius: 4px; letter-spacing: 0.02em;">{sentiment:+.1f}</span></div>'
-                                card_top = f'<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">{badges_markup}</div>{score_markup}</div>'
-                                card_body = f'<div style="font-size: 0.92rem; color: {"#0f172a" if is_light else "#f8fafc"}; font-weight: 500; line-height: 1.5; font-family: \'IBM Plex Sans\', sans-serif;">{escaped_headline}</div>'
-                                
-                                html_feed += f'<div class="news-item-card" style="border-left: 3px solid {card_border};">{card_top}{card_body}</div>'
-                        else:
-                            html_feed += f'<div style="color: var(--text-muted); font-size: 0.88rem; padding: 18px; text-align: center; font-family: \'IBM Plex Sans\', sans-serif;">No news events matching the selected sentiment filter for {selected_region}.</div>'
+                    # Directly render top headlines in a scrollable feed container
+                    html_feed = '<div class="news-feed-scroll">'
+                    if not feed_display_payloads.empty:
+                        for _, row in feed_display_payloads.iterrows():
+                            sentiment = row['sentiment_index']
+                            if date_range in ["4 Hours", "4 Hour", "4H", "6 Hours", "6 Hour", "6H", "12 Hours", "12 Hour", "12H", "1 Day", "1Day", "1D", "24 Hours", "24 Hour", "24H"]:
+                                time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
+                            else:
+                                time_str = pd.to_datetime(row['timestamp']).strftime('%b %d, %H:%M')
+                            ticker_label = row.get('index_ticker', 'Macro')
+                            
+                            parsed = clean_news_item(row['raw_text'])
+                            clean_headline = parsed['headline']
+                            source = parsed['source']
+                            
+                            # Determine Sentiment & Neutral status
+                            if abs(sentiment) < 0.5:
+                                status_badge = f'<span style="background: {"rgba(148, 163, 184, 0.2)" if is_light else "rgba(148, 163, 184, 0.18)"}; border: 1px solid {"rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.45)"}; color: {"#475569" if is_light else "#cbd5e1"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">NEUTRAL</span>'
+                                score_color = "#64748b" if is_light else "#94a3b8"
+                                score_bg = "rgba(148, 163, 184, 0.15)" if is_light else "rgba(148, 163, 184, 0.12)"
+                                score_border = "rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.3)"
+                                card_border = "#94a3b8" if is_light else "#64748b"
+                            elif sentiment >= 0.5:
+                                status_badge = f'<span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: {"#059669" if is_light else "#34d399"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BULLISH</span>'
+                                score_color = "#059669" if is_light else "#10b981"
+                                score_bg = "rgba(16, 185, 129, 0.15)" if is_light else "rgba(16, 185, 129, 0.12)"
+                                score_border = "rgba(16, 185, 129, 0.35)" if is_light else "rgba(16, 185, 129, 0.3)"
+                                card_border = "#10b981"
+                            else:
+                                status_badge = f'<span style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: {"#dc2626" if is_light else "#f87171"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BEARISH</span>'
+                                score_color = "#dc2626" if is_light else "#ef4444"
+                                score_bg = "rgba(239, 68, 68, 0.15)" if is_light else "rgba(239, 68, 68, 0.12)"
+                                score_border = "rgba(239, 68, 68, 0.35)" if is_light else "rgba(239, 68, 68, 0.3)"
+                                card_border = "#ef4444"
+                            
+                            source_badge = f'<span style="background: {"rgba(0, 0, 0, 0.04)" if is_light else "rgba(255, 255, 255, 0.04)"}; border: 1px solid {"rgba(0, 0, 0, 0.08)" if is_light else "rgba(255, 255, 255, 0.08)"}; color: {"#475569" if is_light else "#94a3b8"}; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">{source}</span>' if source else ""
+                            
+                            escaped_headline = html.escape(clean_headline)
+                            badges_markup = (
+                                f'<span style="font-family: \'IBM Plex Sans\', sans-serif; font-size: 0.75rem; font-weight: 500; color: {"#475569" if is_light else "#94a3b8"}; background: {"rgba(0,0,0,0.04)" if is_light else "rgba(255,255,255,0.04)"}; border: 1px solid {"rgba(0,0,0,0.08)" if is_light else "rgba(255,255,255,0.08)"}; padding: 2px 7px; border-radius: 4px; flex-shrink: 0;">{time_str}</span>'
+                                f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.75rem; font-weight: 700; color: {"#0284c7" if is_light else "#f8fafc"}; background: {"rgba(2, 132, 199, 0.12)" if is_light else "rgba(59, 130, 246, 0.15)"}; border: 1px solid {"rgba(2, 132, 199, 0.3)" if is_light else "rgba(59, 130, 246, 0.35)"}; padding: 2px 8px; border-radius: 4px; flex-shrink: 0;">{ticker_label}</span>'
+                                f'{source_badge}{status_badge}'
+                            )
+                            score_markup = f'<div style="flex-shrink: 0;"><span style="font-family: \'Montserrat\', sans-serif; font-size: 0.8rem; font-weight: 700; color: {score_color}; background: {score_bg}; border: 1px solid {score_border}; padding: 3px 9px; border-radius: 4px; letter-spacing: 0.02em;">{sentiment:+.1f}</span></div>'
+                            card_top = f'<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">{badges_markup}</div>{score_markup}</div>'
+                            card_body = f'<div style="font-size: 0.92rem; color: {"#0f172a" if is_light else "#f8fafc"}; font-weight: 500; line-height: 1.5; font-family: \'IBM Plex Sans\', sans-serif;">{escaped_headline}</div>'
+                            
+                            html_feed += f'<div class="news-item-card" style="border-left: 3px solid {card_border};">{card_top}{card_body}</div>'
+                    else:
+                        html_feed += f'<div style="color: var(--text-muted); font-size: 0.88rem; padding: 18px; text-align: center; font-family: \'IBM Plex Sans\', sans-serif;">No news events matching the selected sentiment filter for {selected_region}.</div>'
 
-                        html_feed += '</div>'
-                        st.markdown(html_feed, unsafe_allow_html=True)
+                    html_feed += '</div>'
+                    st.markdown(html_feed, unsafe_allow_html=True)
 
             region_payloads = display_payloads[display_payloads['market_region'] == selected_region]
             if not region_payloads.empty:
