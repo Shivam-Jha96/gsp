@@ -1,25 +1,25 @@
 # United Kingdom Macro Trading Rules
 
 ## Rule 1: Hawkish Conditional Hold and Front-End Rate Repricing
-- **Condition:** The Bank of England holds the Bank Rate at 3.75% while issuing an explicit forward-guidance warning that persistent Middle East geopolitical conflict and elevated energy prices will trigger late-cycle rate hikes.
+- **Condition:** The Bank of England holds the Bank Rate at 3.75% while explicitly guiding that sustained Middle East conflict and elevated energy prices will trigger late-cycle rate hikes in Q4.
 - **Action:** Bearish on 2Y UK Gilts and short-dated SONIA futures; bullish on SONIA front-month implied volatility.
 
-## Rule 2: Hormuz Energy Supply Shock and Headline Inflation Resurgence
-- **Condition:** Strait of Hormuz transit disruptions and crude supply blockades lift energy prices, driving UK headline CPI above the 3.0% threshold (printing at 3.1% or higher) despite sluggish underlying consumer demand.
-- **Action:** Bullish on UK 5Y and 10Y inflation-linked Gilts (breakevens) and FTSE 100 integrated energy majors; bearish on FTSE 250 Consumer Discretionary and retail equities.
+## Rule 2: Headline Energy Pass-Through and Breakeven Widening
+- **Condition:** The Strait of Hormuz oil transit blockade elevates import prices, driving UK headline CPI to 3.1% even as underlying domestic demand indicators show signs of moderation.
+- **Action:** Bullish on UK 5Y and 10Y inflation-linked Gilts (breakevens) and FTSE 100 integrated energy majors; bearish on FTSE 250 Consumer Discretionary equities.
 
-## Rule 3: Sovereign Issuance Supply and Gilt Term Premia Steepening
-- **Condition:** Increased fiscal spending commitments and debt issuance under the Office for Budget Responsibility's fiscal outlook coincide with 10-year Gilt yields decoupling above nominal GDP growth, driving structural term premia expansion.
+## Rule 3: Fiscal Expansion and Gilt Term Premia Steepening
+- **Condition:** Increased borrowing and public spending commitments under the new Prime Minister coincide with 10-year Gilt yields decoupling above nominal GDP growth, accelerating supply-driven curve steepening.
 - **Action:** Bearish on 10Y and 30Y nominal UK Gilts; bullish on UK Gilt yield curve steepeners (2s10s and 5s30s).
 
-## Rule 4: Stagflationary Terms-of-Trade Deterioration and Sterling Vulnerability
-- **Condition:** A simultaneous surge in imported energy costs and sovereign debt supply ignites stagflation concerns, preventing higher nominal Gilt yields from supporting the currency.
-- **Action:** Bearish on GBP/USD and GBP/EUR; bullish on USD-earning FTSE 100 exporters relative to the broader domestic market.
+## Rule 4: Stagflationary Terms-of-Trade Shock and Sterling Depreciation
+- **Condition:** Elevated imported energy costs coincide with widening fiscal deficits and bond market stress, breaking the positive correlation between rising nominal Gilt yields and currency appreciation.
+- **Action:** Bearish on GBP/USD and GBP/EUR; bullish on USD-earning multinational FTSE 100 equities.
 
-## Rule 5: Mortgage Reset Cliff and Consumer Credit Deterioration
-- **Condition:** Sustained policy rates at or above 3.75% transmit into sharp upward repricing of expiring fixed-rate domestic mortgages, severely elevating household debt-service ratios and suppressing housing turnover.
-- **Action:** Bearish on UK residential homebuilders, domestic retail banks, and real estate investment trusts (REITs); bullish on defensive UK water and power utilities.
+## Rule 5: Policy Rate Transmission and Consumer Credit Impairment
+- **Condition:** The sustained 3.75% Bank Rate precipitates large-scale refinancing into higher fixed-rate mortgages, inflating household debt-servicing ratios and contracting real disposable income.
+- **Action:** Bearish on UK residential homebuilders, domestic retail banks, and real estate investment trusts (REITs); bullish on defensive UK regulated utilities.
 
-## Rule 6: Large-Cap Exporters vs. Domestic Cyclicals Divergence
-- **Condition:** Currency depreciation combines with commodity price rallies, while domestic monthly GDP growth stalls under cost-of-living constraints.
-- **Action:** Bullish on the FTSE 100 / FTSE 250 equity ratio (long FTSE 100, short FTSE 250); bearish on mid-cap domestic cyclicals.
+## Rule 6: Large-Cap Resource Exporters vs. Domestic Cyclicals Divergence
+- **Condition:** Depreciating Sterling and elevated commodity benchmarks support FTSE 100 dollar earnings, while domestic monthly GDP growth remains restrained by severe household cost-of-living pressures.
+- **Action:** Bullish on the FTSE 100 / FTSE 250 equity ratio (long FTSE 100, short FTSE 250); bearish on domestic retail and consumer-facing mid-caps.

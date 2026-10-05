@@ -1,21 +1,21 @@
 # Japan Macro Trading Rules
 
-## Rule 1: BOJ Monetary Normalization, QT, and Ultra-Long Yield Pressures
-- **Condition:** The BOJ advances policy rate hikes and quantitative tightening (QT) while ultra-long JGB yields surge to multi-decade highs, triggering debt sustainability concerns and latent pressure for emergency central bank bond-buying interventions.
-- **Action:** Bearish on long-duration and ultra-long JGBs, Bullish on Japanese banking and financial equities, Bullish on yield-curve steepener strategies.
+## Rule 1: BOJ Monetary Normalization, Ultra-Long Yield Spikes, and Emergency Backstop Friction
+- **Condition:** The Bank of Japan proceeds with policy rate hikes and quantitative tightening while ultra-long JGB yields surge to multi-decade records, intensifying sovereign debt servicing concerns and heightening market speculation of emergency central bank bond-buying operations.
+- **Action:** Bearish on 20Y-40Y JGBs, Bullish on Japanese mega-cap banking equities, Bullish on JGB 10Y-30Y yield-curve steepeners.
 
-## Rule 2: Multi-Decade FX Divergence and MoF Currency Intervention
-- **Condition:** USD/JPY tests multi-decade highs due to persistent global interest rate differentials despite BOJ rate hikes, provoking aggressive Ministry of Finance verbal/direct FX intervention and sharp carry-trade unwind risks.
-- **Action:** Bullish on tactical JPY mean-reversion rallies, Bearish on unhedged export-heavy Nikkei momentum in the immediate aftermath of intervention.
+## Rule 2: Persistent FX Carry Divergence and Asymmetric Intervention Catalysts
+- **Condition:** USD/JPY trades near multi-decade highs despite BOJ policy tightening as wide global interest rate differentials overwhelm domestic CPI prints, triggering sharp verbal or direct Ministry of Finance (MoF) currency intervention and subsequent carry-trade liquidation.
+- **Action:** Bullish on tactical spot JPY and long JPY volatility (gamma), Bearish on unhedged export-heavy Nikkei momentum in the immediate window of official FX intervention.
 
-## Rule 3: Inflation Subsidies vs. Underlying Cost-Push and Wage Pressures
-- **Condition:** Headline CPI experiences transient deceleration from government energy and utility subsidies, but underlying core inflation stays anchored near or above the 2% target due to rising oil import costs and broadening price pass-through.
-- **Action:** Bullish on value equities with strong pricing power and trading houses (sogo shosha), Bearish on margin-squeezed domestic small-caps and rate-sensitive high-valuation growth equities.
+## Rule 3: Subsidy-Distorted Headline CPI vs. Imported Energy Cost-Push
+- **Condition:** Headline inflation decelerates due to government energy and utility tariff subsidies, while underlying core inflation re-accelerates from imported crude oil surges, geopolitical shipping disruptions, and persistent currency depreciation pass-through.
+- **Action:** Bullish on general trading companies (*sogo shosha*) and resource-rich value plays, Bearish on import-reliant domestic consumer staples and margin-squeezed small-and-medium enterprises.
 
-## Rule 4: Domestic Consumption Fragility vs. Capex Resilience
-- **Condition:** Real GDP growth exhibits headline softness or misses consensus due to sluggish private household demand and real wage stagnation, while corporate fixed investment (capex) and corporate balance sheets continue to expand.
-- **Action:** Bearish on mass domestic retail and consumer discretionary cyclicals, Bullish on domestic factory automation, industrial machinery, and capex-beneficiary equities.
+## Rule 4: Capex-Driven Output Expansion vs. Household Consumption Fragility
+- **Condition:** Real GDP growth is anchored by upward revisions in corporate fixed investment (capex) and corporate modernization, while aggregate household consumption and real-wage purchasing power remain subdued.
+- **Action:** Bullish on domestic factory automation, industrial machinery, and capex-beneficiary equities, Bearish on domestic mass-market retail and consumer discretionary cyclicals.
 
-## Rule 5: TSE Governance Reforms and Strategic AI/Semiconductor Inflows
-- **Condition:** Institutional capital flows into Japanese equities sustained by Tokyo Stock Exchange structural governance mandates (unwinding cross-shareholdings, buybacks, ROE optimization) alongside Japan's strategic integration into global AI and semiconductor supply chains.
-- **Action:** Bullish on large-cap TOPIX quality/value leaders, semiconductor manufacturing equipment, and advanced materials producers.
+## Rule 5: TSE Governance Mandates and Structural AI/Semiconductor Inflows
+- **Condition:** Equity benchmarks break multi-decade records driven by Tokyo Stock Exchange structural governance directives (cross-shareholding liquidations, accelerated share buybacks, ROE optimization) combined with foreign institutional capital inflows targeting Japan's global semiconductor equipment supply chain.
+- **Action:** Bullish on semiconductor manufacturing equipment (SME) leaders, advanced silicon wafer/chemicals suppliers, and high-ROE TOPIX quality leaders, Bearish on low-margin governance laggards with persistent price-to-book ratios below 1.0x.
