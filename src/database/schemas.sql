@@ -3,12 +3,13 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- The Math Layer
 CREATE TABLE event_signals (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID DEFAULT uuid_generate_v4(),
     index_ticker VARCHAR(50) NOT NULL,
     market_region VARCHAR(100) NOT NULL,
     timestamp TIMESTAMPTZ NOT NULL,
-    sentiment_score NUMERIC
-);
+    sentiment_score NUMERIC,
+    PRIMARY KEY (id, timestamp)
+) PARTITION BY RANGE (timestamp);
 
 -- Composite B-Tree index on (index_ticker, timestamp DESC)
 CREATE INDEX idx_event_signals_ticker_time ON event_signals USING btree (index_ticker, timestamp DESC);
@@ -16,13 +17,28 @@ CREATE INDEX idx_event_signals_ticker_time ON event_signals USING btree (index_t
 -- BRIN index on the timestamp column
 CREATE INDEX idx_event_signals_timestamp_brin ON event_signals USING brin (timestamp);
 
+-- B-Tree index specifically for sorting the latest events dashboard view (UI Query)
+CREATE INDEX idx_event_signals_time_desc ON event_signals USING btree (timestamp DESC);
+
 -- The Document Layer (Vertical Partitioning via 1-to-1 relationship)
 CREATE TABLE event_payloads (
-    id UUID PRIMARY KEY REFERENCES event_signals(id) ON DELETE CASCADE,
+    id UUID,
+    timestamp TIMESTAMPTZ NOT NULL,
     raw_text TEXT,
-    applied_okf_rules TEXT[],
-    metadata JSONB
-);
+    applied_okf_rules TEXT,
+    metadata JSONB,
+    fingerprint_hash VARCHAR(64),
+    PRIMARY KEY (id, timestamp),
+    FOREIGN KEY (id, timestamp) REFERENCES event_signals(id, timestamp) ON DELETE CASCADE
+) PARTITION BY RANGE (timestamp);
+
+-- Index for fast deduplication lookup
+CREATE INDEX idx_event_payloads_fingerprint ON event_payloads (fingerprint_hash);
+
+-- Default/Current Partitions (Automate creation for future months via cron or triggers)
+CREATE TABLE event_signals_2026_10 PARTITION OF event_signals FOR VALUES FROM ('2026-10-01') TO ('2026-11-01');
+CREATE TABLE event_payloads_2026_10 PARTITION OF event_payloads FOR VALUES FROM ('2026-10-01') TO ('2026-11-01');
+
 
 -- The Telemetry Layer: Tracks execution lifecycle & completion freshness of background pipelines
 CREATE TABLE IF NOT EXISTS pipeline_runs (

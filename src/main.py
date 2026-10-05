@@ -147,15 +147,19 @@ async def run_ingestion_pipeline():
             with db_client.get_connection() as conn:
                 with conn.cursor() as cur:
                     cur.execute("""
-                        SELECT p.raw_text
+                        SELECT p.fingerprint_hash, p.raw_text
                         FROM event_payloads p
                         JOIN event_signals s ON p.id = s.id
                         WHERE s.timestamp >= NOW() - INTERVAL '48 hours';
                     """)
                     rows = cur.fetchall()
                     for r in rows:
-                        if r[0]:
-                            existing_fingerprints.add(canonical_fingerprint(r[0]))
+                        fingerprint_hash, raw_text = r
+                        if fingerprint_hash:
+                            existing_fingerprints.add(fingerprint_hash)
+                        elif raw_text:
+                            # Fallback for old rows before the migration
+                            existing_fingerprints.add(canonical_fingerprint(raw_text))
             logger.info(f"Loaded {len(existing_fingerprints)} existing headline fingerprints from Supabase (last 48h).")
         except Exception as e:
             logger.error(f"Failed to connect to database or fetch recent fingerprints: {e}")
@@ -225,6 +229,10 @@ async def run_ingestion_pipeline():
             
         logger.info(f"AI Verdict: {choice_val} | Score: {directional_score:+.4f} | Noul: {noul_val}")
         
+        # Calculate fingerprint for insertion
+        headline = item['data']['headline']
+        fingerprint_hash = canonical_fingerprint(headline)
+        
         # Insert into DB (Vertical Partitioning)
         if db_client:
             signal_id = str(uuid.uuid4())
@@ -239,9 +247,9 @@ async def run_ingestion_pipeline():
                     
                     # Insert Document Layer
                     cur.execute("""
-                        INSERT INTO event_payloads (id, raw_text, applied_okf_rules, metadata)
-                        VALUES (%s, %s, %s, %s)
-                    """, (signal_id, text, context, json.dumps(item)))
+                        INSERT INTO event_payloads (id, timestamp, raw_text, applied_okf_rules, metadata, fingerprint_hash)
+                        VALUES (%s, %s, %s, %s, %s, %s)
+                    """, (signal_id, item['data']['timestamp'], text, context, json.dumps(item), fingerprint_hash))
                 conn.commit()
                 
         # Mandatory 4.2-second delay to enforce ~14 requests per minute, respecting Gemini's 15 RPM free tier limit
