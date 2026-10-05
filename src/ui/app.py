@@ -33,6 +33,15 @@ except Exception:
     get_db_client = db_client_mod.get_db_client
     reset_db_client = getattr(db_client_mod, 'reset_db_client', None)
 
+try:
+    import database.telemetry as db_telemetry_mod
+    get_latest_successful_pipeline_run = db_telemetry_mod.get_latest_successful_pipeline_run
+    format_pipeline_freshness = db_telemetry_mod.format_pipeline_freshness
+except Exception:
+    import src.database.telemetry as db_telemetry_mod
+    get_latest_successful_pipeline_run = db_telemetry_mod.get_latest_successful_pipeline_run
+    format_pipeline_freshness = db_telemetry_mod.format_pipeline_freshness
+
 st.set_page_config(page_title="Global Sentiment Platform of Share Markets", layout="wide", initial_sidebar_state="collapsed", page_icon="📈")
 
 # --- Permanent Dark Theme Enforcement ---
@@ -1167,7 +1176,7 @@ def load_data():
             "sentiment_score": mock_signals['sentiment_score'].values,
             "raw_text": ["Market opening shows mixed signals..."] * len(dates)
         })
-        return mock_signals, mock_payloads
+        return mock_signals, mock_payloads, None
 
     max_retries = 2
     for attempt in range(max_retries):
@@ -1185,7 +1194,9 @@ def load_data():
                 """
                 df_payloads = pd.read_sql(query_payloads, conn)
                 df_payloads['timestamp'] = pd.to_datetime(df_payloads['timestamp'])
-            return df_signals, df_payloads
+
+            latest_run = get_latest_successful_pipeline_run("macro_sentiment_pipeline", db_client=client)
+            return df_signals, df_payloads, latest_run
         except Exception as e:
             if attempt < max_retries - 1:
                 # Connection may have dropped due to idle timeout; reset pool and retry
@@ -1200,10 +1211,10 @@ def load_data():
                 time.sleep(0.5)
                 continue
             st.error(f"Database error: {e}")
-            return pd.DataFrame(), pd.DataFrame()
-    return pd.DataFrame(), pd.DataFrame()
+            return pd.DataFrame(), pd.DataFrame(), None
+    return pd.DataFrame(), pd.DataFrame(), None
 
-df_signals, df_payloads = load_data()
+df_signals, df_payloads, latest_pipeline_run = load_data()
 
 # Real-time regional relevance and contaminant gatekeeper:
 # Dynamically eliminates legacy misclassified news items (e.g. US news under India)
@@ -1269,13 +1280,12 @@ if not df_signals.empty:
     df_signals['sentiment_index'] = df_signals['sentiment_score'] * 100
     df_payloads['sentiment_index'] = df_payloads['sentiment_score'] * 100
     latest_ts = df_signals['timestamp'].max() if not df_signals.empty else None
-    time_display_str = "14:05 IST"
-    if pd.notna(latest_ts):
-        try:
-            ts_local = latest_ts.tz_convert('Asia/Kolkata') if latest_ts.tzinfo else latest_ts
-            time_display_str = ts_local.strftime('%H:%M IST')
-        except Exception:
-            time_display_str = "LIVE"
+    
+    # Derive pipeline freshness from latest successful run, with fallback to latest signal timestamp
+    pipeline_completed_at = latest_pipeline_run.get('completed_at') if latest_pipeline_run else None
+    time_display_str, relative_display_str, freshness_tooltip, freshness_tier = format_pipeline_freshness(
+        pipeline_completed_at, fallback_ts=latest_ts
+    )
 
     # --- Top Row: Symmetrical Header Banner & Status Action Card ---
     header_col, action_col = st.columns([0.68, 0.32], vertical_alignment="center")
@@ -1294,15 +1304,30 @@ if not df_signals.empty:
         """, unsafe_allow_html=True)
         
     with action_col:
+        # Freshness color accents based on tier (<2h15m fresh, 2h15m-4h aging, >4h stale)
+        if freshness_tier == "aging":
+            pill_bg = "rgba(245, 158, 11, 0.12)"
+            pill_border = "rgba(245, 158, 11, 0.32)"
+            pill_color = "#fbbf24"
+        elif freshness_tier == "stale":
+            pill_bg = "rgba(239, 68, 68, 0.12)"
+            pill_border = "rgba(239, 68, 68, 0.32)"
+            pill_color = "#f87171"
+        else: # fresh
+            pill_bg = "rgba(56, 189, 248, 0.12)"
+            pill_border = "rgba(56, 189, 248, 0.28)"
+            pill_color = "#38bdf8"
+
         status_bg = "rgba(16, 185, 129, 0.15)"
         status_border = "rgba(16, 185, 129, 0.35)"
         status_text = "#34d399"
 
         st.markdown(f"""
         <div class="header-banner-card header-action-card">
-            <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.28); padding: 5px 10px; border-radius: 4px; flex-shrink: 0;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                <span style="font-size: 0.72rem; font-weight: 700; color: #38bdf8; font-family: 'Montserrat', sans-serif; letter-spacing: 0.04em; text-transform: uppercase;">UPDATED {time_display_str}</span>
+            <div title="{freshness_tooltip}" style="display: inline-flex; align-items: center; gap: 6px; background: {pill_bg}; border: 1px solid {pill_border}; padding: 5px 10px; border-radius: 4px; flex-shrink: 0; cursor: default;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{pill_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span style="font-size: 0.72rem; font-weight: 700; color: {pill_color}; font-family: 'Montserrat', sans-serif; letter-spacing: 0.04em; text-transform: uppercase;">UPDATED {time_display_str}</span>
+                <span style="font-size: 0.65rem; font-weight: 600; color: #94a3b8; font-family: 'IBM Plex Sans', sans-serif;">({relative_display_str})</span>
             </div>
             <div style="display: inline-flex; align-items: center; gap: 7px; background: {status_bg}; border: 1px solid {status_border}; color: {status_text}; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; padding: 5px 11px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 10px rgba(16, 185, 129, 0.15); flex-shrink: 0;">
                 <span style="width: 7px; height: 7px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; display: inline-block;"></span>

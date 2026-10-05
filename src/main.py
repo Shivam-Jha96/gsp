@@ -93,6 +93,7 @@ def score_sentiment(client, text: str, region_context: str = "", region_tag: str
 
 # Database
 from database.client import get_db_client
+from database.telemetry import track_pipeline_run
 
 # Signal Engine
 from signal_engine.cron_jobs import cron_ema_trigger
@@ -131,7 +132,7 @@ async def run_ingestion_pipeline():
     
     if not payloads:
         logger.info("No new payloads fetched.")
-        return
+        return 0, 0
 
     # Connect to the custom serverless Modal deployment running Contrastive-LM
     typesafe_api_key = os.environ.get('TYPESAFE_API_KEY')
@@ -178,7 +179,7 @@ async def run_ingestion_pipeline():
     logger.info(f"Deduplication summary: {len(payloads)} polled -> {len(fresh_payloads)} fresh payloads to score and store.")
     if not fresh_payloads:
         logger.info("All polled news items are already recorded in Supabase. Zero OPEX wasted.")
-        return
+        return len(payloads), 0
 
     # 2 & 3. Score and Insert Fresh Payloads
     for item in fresh_payloads:
@@ -248,6 +249,7 @@ async def run_ingestion_pipeline():
         await asyncio.sleep(0.1)
                 
     logger.info("--- Ingestion Pipeline Complete ---\n")
+    return len(payloads), len(fresh_payloads)
 
 def run_signal_engine():
     """
@@ -261,10 +263,20 @@ def run_signal_engine():
 if __name__ == "__main__":
     logger.info("Starting Global Sentiment Platform of Share Markets (GSP) Pipeline...")
     
-    # 1. Run Async Ingestion & Scoring
-    asyncio.run(run_ingestion_pipeline())
-    
-    # 2. Run Signal Engine (Cron)
-    run_signal_engine()
+    db_client = None
+    if os.environ.get("DATABASE_URL"):
+        try:
+            db_client = get_db_client()
+        except Exception as e:
+            logger.warning(f"Could not initialize DB pool for telemetry: {e}")
+
+    # Track pipeline execution telemetry and completion freshness
+    with track_pipeline_run("macro_sentiment_pipeline", db_client=db_client) as tracker:
+        # 1. Run Async Ingestion & Scoring
+        polled_count, scored_count = asyncio.run(run_ingestion_pipeline())
+        tracker.record_counts(items_polled=polled_count, items_scored=scored_count)
+        
+        # 2. Run Signal Engine (Cron)
+        run_signal_engine()
     
     logger.info("Pipeline execution finished.")

@@ -374,6 +374,29 @@ CREATE TABLE event_payloads (
 * **Automatic Exception Recycling:** In `get_connection()`, any query failing with `OperationalError` or `InterfaceError` flags the connection as broken and purges it with `close=True`, preventing dead sockets from returning to contaminate the pool.
 * **Streamlit Transparent 2-Attempt Auto-Retry:** In [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py)'s `load_data()`, database queries run inside a 2-attempt retry loop. If an idle timeout drop occurs, the client invokes `reset_db_client()`, waits 500ms, and reconnects transparently, completely eliminating transient error banners and false "Database empty" warnings for end users.
 
+#### 4. Pipeline Execution Telemetry & Freshness Tracking (`pipeline_runs`)
+[`src/database/telemetry.py`](file:///d:/Dev/repos/gsp/src/database/telemetry.py) introduces a dedicated execution lifecycle tracking layer:
+* **Telemetry Schema:**
+  ```sql
+  CREATE TABLE IF NOT EXISTS pipeline_runs (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      pipeline_name VARCHAR(100) NOT NULL,
+      status VARCHAR(20) NOT NULL, -- 'RUNNING', 'SUCCESS', 'FAILED'
+      started_at TIMESTAMPTZ NOT NULL,
+      completed_at TIMESTAMPTZ,
+      duration_seconds NUMERIC(10, 2),
+      items_polled INT DEFAULT 0,
+      items_scored INT DEFAULT 0,
+      metadata JSONB DEFAULT '{}'::jsonb
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_pipeline_runs_lookup 
+  ON pipeline_runs (pipeline_name, status, completed_at DESC);
+  ```
+* **Context Managed Execution:** In `src/main.py`, background pipeline runs are wrapped with `with track_pipeline_run("macro_sentiment_pipeline", db_client=db_client) as tracker:`. On clean completion, the run updates `completed_at = NOW()`, records duration, items polled, and items scored.
+* **Failure Isolation:** Uncaught runtime exceptions mark `status = 'FAILED'`, preventing aborted runs from advancing the completion timestamp.
+* **Zero-OPEX Deduplication Handling:** When all incoming headlines are cached in Supabase (0 items scored), the run still logs `SUCCESS` and records `completed_at`, accurately demonstrating to dashboard users that the pipeline checked feeds on schedule.
+
 ---
 
 ### Layer 4: Signal & Quantitative Execution Engine
@@ -519,6 +542,15 @@ To guarantee accurate reflection of historical activity across all selectable ti
 * **Chronological Ordering:** Sorted descending (`ORDER BY s.timestamp DESC`) so the freshest catalysts appear at the top of the feed container.
 * **Adaptive Timestamps:** Intraday windows (`4 Hours` through `1 Day`) render compact hour-minute badges (`%H:%M`), while multi-day windows (`7 Days`, `1 Month`, `1 Year`, `All`) render full date-time badges (`%b %d, %H:%M`) to provide unambiguous chronological context across multi-day news streams.
 * **KPI Volume Parity:** Ingested news volume displayed on the left KPI card matches the filtered regional headline count.
+
+#### 7. Symmetrical Header Freshness Badge & Aging Tiers
+In [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py), the header action card displays data freshness anchored directly to the completion timestamp of the last successful run of the Global Macro-Sentiment Pipeline:
+* **Freshness Formatting:** Formatted via [`format_pipeline_freshness`](file:///d:/Dev/repos/gsp/src/database/telemetry.py) into `UPDATED HH:MM IST (Xm ago)` with full inspection tooltip.
+* **Aging Tiers & Color Accents:**
+  * **Fresh ($\le 2\text{h } 15\text{m}$):** Electric Cyan accent (`#38bdf8`) signifying active 2-hour scheduled polling cycles.
+  * **Aging ($2\text{h } 15\text{m} - 4\text{h}$):** Warm Amber accent (`#fbbf24`) indicating scheduled cron delays.
+  * **Stale ($> 4\text{h}$):** Soft Red accent (`#f87171`) alerting users to runner interruptions.
+* **Graceful Fallback:** If `pipeline_runs` has no recorded executions, it automatically falls back to `df_signals['timestamp'].max()` or `LIVE` without throwing UI exceptions.
 
 ---
 

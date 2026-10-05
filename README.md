@@ -195,7 +195,7 @@ gsp/
 │   ├── config/                 # Declarative market registry & constituent loaders
 │   │   ├── asset_classes.json  # Global asset-class dynamic criteria (equity, fixed_income, etc.)
 │   │   └── market_registry.json
-│   ├── database/               # Supabase connection pooler & SQL schemas
+│   ├── database/               # Supabase connection pooler, SQL schemas & pipeline telemetry
 │   ├── ingestion/              # Async RSS poller, regional affinity classifier & deduplicator
 │   ├── knowledge_engine/       # Gemini-powered OKF updater
 │   ├── signal_engine/          # Pandas EMA calculator & Alpaca routing
