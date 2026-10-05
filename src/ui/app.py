@@ -160,8 +160,10 @@ __THEME_VARS__
         background: transparent !important;
     }
     
-    /* Master Vertical Rhythm: Deterministic 10px Spacing Between All Tiers */
+    /* Master Vertical Rhythm: Deterministic 10px Spacing Between All Tiers Across Entire Dashboard */
     .block-container > div[data-testid="stVerticalBlock"],
+    div[data-testid="stFragment"] > div[data-testid="stVerticalBlock"],
+    div[data-testid="stFragment"] div[data-testid="stVerticalBlock"],
     div[data-testid="stVerticalBlock"] > div[data-testid="stVerticalBlock"] {
         gap: 10px !important;
     }
@@ -279,7 +281,7 @@ __THEME_VARS__
         display: flex !important;
         flex-direction: column !important;
         justify-content: space-between !important;
-        padding: 9px 12px !important;
+        padding: 10px 12px !important;
         box-sizing: border-box !important;
     }
     .kpi-card-content {
@@ -287,23 +289,58 @@ __THEME_VARS__
         flex-direction: column;
         gap: 2px;
     }
-    /* Right column chart & mini-kpi container: Hug snugly with zero bottom dead void */
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"],
-    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"] {
-        height: 100% !important;
+    /* Right column chart & mini-kpi container: Complete flex chain to stretch flush with left column */
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child,
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child,
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="column"]:last-child,
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:last-child {
         display: flex !important;
         flex-direction: column !important;
+        height: 100% !important;
+    }
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child > div[data-testid="stVerticalBlock"],
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child > div[data-testid="stVerticalBlock"],
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="column"]:last-child > div[data-testid="stVerticalBlock"],
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:last-child > div[data-testid="stVerticalBlock"] {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100% !important;
+        flex: 1 1 auto !important;
+    }
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child > div[data-testid="stVerticalBlock"] > div[data-testid="stElementContainer"],
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child > div[data-testid="stVerticalBlock"] > div[data-testid="stElementContainer"],
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="column"]:last-child > div[data-testid="stVerticalBlock"] > div[data-testid="stElementContainer"],
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:last-child > div[data-testid="stVerticalBlock"] > div[data-testid="stElementContainer"] {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100% !important;
+        flex: 1 1 auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"],
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"],
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:last-child div[data-testid="stVerticalBlockBorderWrapper"],
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="column"]:last-child div[data-testid="stVerticalBlockBorderWrapper"] {
+        height: 100% !important;
+        flex: 1 1 auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
         padding: 10px 14px 12px 14px !important;
         margin: 0 !important;
         box-sizing: border-box !important;
     }
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"] > div[data-testid="stVerticalBlock"],
-    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"] > div[data-testid="stVerticalBlock"] {
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"] > div[data-testid="stVerticalBlock"],
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:last-child div[data-testid="stVerticalBlockBorderWrapper"] > div[data-testid="stVerticalBlock"],
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="column"]:last-child div[data-testid="stVerticalBlockBorderWrapper"] > div[data-testid="stVerticalBlock"] {
         height: 100% !important;
+        flex: 1 1 auto !important;
         display: flex !important;
         flex-direction: column !important;
-        justify-content: flex-start !important;
-        gap: 6px !important;
+        justify-content: space-between !important;
+        gap: 4px !important;
         padding: 0 !important;
         margin: 0 !important;
     }
@@ -711,12 +748,22 @@ __THEME_VARS__
         padding: 12px 16px !important;
     }
 
-    /* Live Intelligence Feed Container Compact Spacing */
-    .st-key-live_intelligence_feed_container,
+    /* Live Intelligence Feed Container Outer Reset (Prevent Nested Double Borders) */
+    div[data-testid="stElementContainer"].st-key-live_intelligence_feed_container,
     div[data-testid="stElementContainer"]:has(.st-key-live_intelligence_feed_container),
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(.st-key-feed_sentiment_pills),
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#feed-container-anchor),
-    div[data-testid="stElementContainer"]:has(#feed-container-anchor) {
+    .st-key-live_intelligence_feed_container {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* Live Intelligence Feed Unified Container Card */
+    .st-key-live_intelligence_feed_container div[data-testid="stVerticalBlockBorderWrapper"],
+    .st-key-live_intelligence_feed_container > div[data-testid="stVerticalBlockBorderWrapper"],
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(.st-key-feed_sentiment_pills) {
         padding: 8px 14px 10px 14px !important;
         margin-top: 0 !important;
         margin-bottom: 0 !important;
@@ -726,11 +773,37 @@ __THEME_VARS__
         box-shadow: var(--card-shadow) !important;
         gap: 6px !important;
     }
-    .st-key-live_intelligence_feed_container > div[data-testid="stVerticalBlock"],
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(.st-key-feed_sentiment_pills) > div[data-testid="stVerticalBlock"],
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(#feed-container-anchor) > div[data-testid="stVerticalBlock"] {
+    .st-key-live_intelligence_feed_container div[data-testid="stVerticalBlockBorderWrapper"] > div[data-testid="stVerticalBlock"],
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(.st-key-feed_sentiment_pills) > div[data-testid="stVerticalBlock"] {
         padding: 0 !important;
         gap: 6px !important;
+    }
+
+    /* Inner Header Row: Seamless Single Tile with Zero Nested Borders */
+    .st-key-live_intelligence_feed_container div[data-testid="stHorizontalBlock"],
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(.st-key-feed_sentiment_pills) div[data-testid="stHorizontalBlock"],
+    div[data-testid="stHorizontalBlock"]:has(.st-key-feed_sentiment_pills) {
+        align-items: center !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        padding: 0 !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+    .st-key-live_intelligence_feed_container div[data-testid="stHorizontalBlock"] div[data-testid="stElementContainer"],
+    .st-key-live_intelligence_feed_container div[data-testid="stHorizontalBlock"] div[data-testid="stColumn"],
+    .st-key-live_intelligence_feed_container div[data-testid="stHorizontalBlock"] div[data-testid="column"],
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(.st-key-feed_sentiment_pills) div[data-testid="stElementContainer"],
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(.st-key-feed_sentiment_pills) div[data-testid="stColumn"],
+    div[data-testid="stHorizontalBlock"]:has(.st-key-feed_sentiment_pills) div[data-testid="stElementContainer"],
+    div[data-testid="stHorizontalBlock"]:has(.st-key-feed_sentiment_pills) > div[data-testid="stColumn"],
+    div[data-testid="stHorizontalBlock"]:has(.st-key-feed_sentiment_pills) > div[data-testid="column"] {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
     }
 
     /* Live Intelligence Feed Header Perfect Vertical Alignment & Distinct Sentiment Color Pills */
@@ -1456,7 +1529,7 @@ if not df_signals.empty:
             plot_trend_x = df_trend['timestamp'].dt.tz_localize(None) if df_trend['timestamp'].dt.tz is not None else df_trend['timestamp']
             
             # --- Main Layout Split (1 Narrow Left, 1 Wide Right) ---
-            left_col, right_col = st.columns([1.2, 4])
+            left_col, right_col = st.columns([1.25, 3.75])
             
             with left_col:
                 # 1. Delta calculation and direction-accurate labeling
@@ -1653,7 +1726,7 @@ if not df_signals.empty:
                     ))
                     
                     fig_area.update_layout(
-                        height=345, margin=dict(l=0, r=0, t=10, b=0),
+                        height=370, margin=dict(l=0, r=0, t=10, b=0),
                         plot_bgcolor="rgba(255,255,255,0.4)" if is_light else "rgba(0,0,0,0)",
                         paper_bgcolor="rgba(0,0,0,0)",
                         hovermode="x unified",
@@ -1747,7 +1820,7 @@ if not df_signals.empty:
                 with st.container(border=True, key="live_intelligence_feed_container"):
                     feed_header_col1, feed_header_col2 = st.columns([0.42, 0.58], vertical_alignment="center")
                     with feed_header_col1:
-                        st.markdown(f"""<div style="display: flex; align-items: center; gap: 8px; margin: 0; padding: 0; min-height: 38px;"><span id="feed-container-anchor" style="display: none;"></span><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 8px #3b82f6; flex-shrink: 0;"></span><span style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); font-family: 'Montserrat', sans-serif; line-height: 1.2;">{selected_region} Live Intelligence Feed</span></div>""", unsafe_allow_html=True)
+                        st.markdown(f"""<div style="display: flex; align-items: center; gap: 8px; margin: 0; padding: 0; min-height: 38px;"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 8px #3b82f6; flex-shrink: 0;"></span><span style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); font-family: 'Montserrat', sans-serif; line-height: 1.2;">{selected_region} Live Intelligence Feed</span></div>""", unsafe_allow_html=True)
                     with feed_header_col2:
                         feed_pill_options = [
                             f"All {total_events}",
