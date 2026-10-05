@@ -48,7 +48,9 @@ def canonical_fingerprint(raw_text: str) -> str:
     clean = clean_headline_text(raw_text).lower()
     # Retain only letters and numbers
     alpha_num = re.sub(r'[^a-z0-9]', '', clean)
-    return alpha_num
+    if not alpha_num:
+        return ""
+    return hashlib.sha256(alpha_num.encode('utf-8')).hexdigest()
 
 class NewsDeduplicator:
     """
