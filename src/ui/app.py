@@ -453,136 +453,46 @@ __THEME_VARS__
     }
 
     /* Top Header Row Layout & Symmetrical Cards */
+    div[data-testid="stHorizontalBlock"]:has(.header-banner-card),
     div[data-testid="stHorizontalBlock"]:first-of-type {
-        margin-bottom: -0.5rem !important;
+        margin-bottom: 12px !important;
         align-items: stretch !important;
     }
+    div[data-testid="stHorizontalBlock"]:has(.header-banner-card) > div[data-testid="stColumn"],
+    div[data-testid="stHorizontalBlock"]:has(.header-banner-card) > div[data-testid="column"],
     div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"],
     div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"] {
         display: flex !important;
         flex-direction: column !important;
+        justify-content: stretch !important;
     }
-    
-    /* Top Right Action Card (Backend Status & Online Tickers) - Scoped exclusively to action column */
-    div[data-testid="stColumn"]:has(#header-control-card-anchor) {
-        background: var(--header-bg) !important;
-        border: 1px solid var(--header-border) !important;
-        border-radius: 8px !important;
-        padding: clamp(10px, 2vw, 14px) 14px !important;
-        backdrop-filter: blur(10px) !important;
-        box-shadow: var(--header-shadow) !important;
+    div[data-testid="stHorizontalBlock"]:has(.header-banner-card) div[data-testid="stElementContainer"],
+    div[data-testid="stHorizontalBlock"]:has(.header-banner-card) div[data-testid="stMarkdownContainer"],
+    div[data-testid="stHorizontalBlock"]:first-of-type div[data-testid="stElementContainer"],
+    div[data-testid="stHorizontalBlock"]:first-of-type div[data-testid="stMarkdownContainer"] {
         height: 100% !important;
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: center !important;
-        box-sizing: border-box !important;
-        margin-bottom: 0 !important;
-        gap: 0 !important;
-    }
-    div[data-testid="stColumn"]:has(#header-control-card-anchor) > div[data-testid="stVerticalBlock"] {
-        background: transparent !important;
-        border: none !important;
-        border-radius: 0 !important;
-        padding: 0 !important;
-        box-shadow: none !important;
-        margin: 0 !important;
-        gap: 4px !important;
-    }
-    div[data-testid="stColumn"]:has(#header-control-card-anchor) div[data-testid="stMarkdownContainer"] {
-        width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
-    }
-    div[data-testid="stColumn"]:has(#header-control-card-anchor) div[data-testid="stMarkdownContainer"] > p {
-        margin: 0 !important;
     }
 
-    /* Header Theme Toggle Capsule & Distinct Badge Styling */
-    .st-key-theme_toggle,
-    div[data-testid="stColumn"]:has(#header-control-card-anchor) div[data-testid="stToggle"],
-    div[data-testid="stColumn"]:has(#header-control-card-anchor) div.stCheckbox {
-        margin: 0 !important;
-        margin-top: 4px !important;
-        padding: 0 !important;
-        width: 100% !important;
+    .header-banner-card {
+        background: var(--header-bg);
+        border: 1px solid var(--header-border);
+        border-radius: 8px;
+        padding: clamp(10px, 1.8vw, 14px) clamp(12px, 2vw, 18px);
+        min-height: 68px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        backdrop-filter: blur(10px);
+        box-shadow: var(--header-shadow);
+        transition: all 0.2s ease;
     }
-    .st-key-theme_toggle [data-testid="stCheckbox"],
-    .st-key-theme_toggle div[data-testid="stCheckbox"],
-    .st-key-theme_toggle [data-testid="stToggle"],
-    .st-key-theme_toggle div[data-testid="stToggle"] {
-        margin: 0 !important;
-        padding: 0 !important;
-        width: 100% !important;
-    }
-    .st-key-theme_toggle label {
-        display: flex !important;
-        flex-direction: row-reverse !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        width: 100% !important;
-        cursor: pointer !important;
-        user-select: none !important;
-        margin: 0 !important;
-        padding: 5px 10px !important;
-        background: var(--input-bg) !important;
-        border: 1px solid var(--input-border) !important;
-        border-radius: 6px !important;
-        box-sizing: border-box !important;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    }
-    .st-key-theme_toggle label:hover {
-        border-color: var(--header-border-left) !important;
-        box-shadow: 0 0 10px rgba(59, 130, 246, 0.22) !important;
-    }
-    .st-key-theme_toggle label div[data-testid="stMarkdownContainer"],
-    .st-key-theme_toggle [data-testid="stMarkdownContainer"] {
-        display: flex !important;
-        align-items: center !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-    .st-key-theme_toggle label div[data-testid="stMarkdownContainer"] p,
-    .st-key-theme_toggle [data-testid="stMarkdownContainer"] p {
-        font-family: 'Montserrat', sans-serif !important;
-        font-size: 0.70rem !important;
-        font-weight: 800 !important;
-        color: var(--text-primary) !important;
-        letter-spacing: 0.07em !important;
-        text-transform: uppercase !important;
-        margin: 0 !important;
-        padding: 3px 8px !important;
-        border-radius: 4px !important;
-        background: rgba(148, 163, 184, 0.12) !important;
-        border: 1px solid rgba(148, 163, 184, 0.25) !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        gap: 6px !important;
-        line-height: 1.2 !important;
-    }
-    /* Explicit high-contrast toggle switch track and border across all Streamlit DOM variants */
-    .st-key-theme_toggle [data-testid="stCheckbox"] label > div:first-of-type,
-    .st-key-theme_toggle [data-testid="stCheckbox"] span + div,
-    .st-key-theme_toggle [role="switch"],
-    .st-key-theme_toggle div[data-testid="stCheckboxToggle"] > div,
-    .st-key-theme_toggle span[data-baseweb="toggle"] {
-        background-color: var(--toggle-track-bg) !important;
-        border: 1.5px solid var(--toggle-track-border) !important;
-        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15) !important;
-        transition: all 0.2s ease !important;
-    }
-    .st-key-theme_toggle [data-testid="stCheckbox"]:has(input:checked) label > div:first-of-type,
-    .st-key-theme_toggle [data-testid="stCheckbox"]:has(input:checked) span + div,
-    .st-key-theme_toggle [role="switch"][aria-checked="true"],
-    .st-key-theme_toggle [role="switch"][data-checked="true"] {
-        background-color: var(--header-border-left) !important;
-        border-color: var(--header-border-left) !important;
-    }
-    .st-key-theme_toggle [data-testid="stCheckbox"] label > div:first-of-type > div,
-    .st-key-theme_toggle [data-testid="stCheckbox"] span + div > div,
-    .st-key-theme_toggle [role="switch"] > div {
-        background-color: #ffffff !important;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) !important;
+    .header-action-card {
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
     }
 
     /* Segmented Control & Pills Styling */
@@ -650,7 +560,9 @@ __THEME_VARS__
         background: var(--edge-bg) !important;
         border: 1px solid var(--edge-border) !important;
         border-radius: 8px !important;
+        margin-top: 0 !important;
         margin-bottom: 12px !important;
+        clear: both !important;
         overflow: hidden !important;
         transition: all 0.2s ease !important;
         box-shadow: var(--card-shadow) !important;
@@ -1235,35 +1147,34 @@ if not df_signals.empty:
         except Exception:
             time_display_str = "LIVE"
 
-    # --- Top Row: Header Banner (Left) & Top-Right Control Card (System Status + Theme Toggle) ---
-    header_col, action_col = st.columns([0.72, 0.28])
+    # --- Top Row: Symmetrical Header Banner & Status Action Card ---
+    header_col, action_col = st.columns([0.68, 0.32], vertical_alignment="center")
     
     with header_col:
         st.markdown(f"""
-        <div style="background: var(--header-bg); border: 1px solid var(--header-border); border-radius: 8px; padding: clamp(10px, 2vw, 14px) clamp(12px, 2.5vw, 20px); height: 100%; display: flex; align-items: center; backdrop-filter: blur(10px); box-shadow: var(--header-shadow); margin-bottom: 0; box-sizing: border-box;">
+        <div class="header-banner-card">
             <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
                 <div style="background: linear-gradient(135deg, #2563eb, #3b82f6); color: #ffffff; padding: 4px 10px; border-radius: 5px; font-weight: 800; font-size: 1.1rem; letter-spacing: 1.5px; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 12px rgba(59, 130, 246, 0.45); flex-shrink: 0;">GSP</div>
                 <div>
-                    <div style="font-size: clamp(1.02rem, 2.3vw, 1.3rem); font-weight: 700; color: var(--text-primary); letter-spacing: -0.01em; font-family: 'Montserrat', sans-serif;">Global Sentiment Platform of Share Markets</div>
-                    <div style="font-size: clamp(0.70rem, 1.5vw, 0.78rem); font-weight: 500; color: var(--text-muted); font-family: 'IBM Plex Sans', sans-serif;">Real-Time Global Quantitative Intelligence & Execution Engine</div>
+                    <div style="font-size: clamp(0.95rem, 2vw, 1.25rem); font-weight: 700; color: var(--text-primary); letter-spacing: -0.01em; font-family: 'Montserrat', sans-serif; line-height: 1.25;">Global Sentiment Platform of Share Markets</div>
+                    <div style="font-size: clamp(0.68rem, 1.3vw, 0.76rem); font-weight: 500; color: var(--text-muted); font-family: 'IBM Plex Sans', sans-serif; line-height: 1.2; margin-top: 2px;">Real-Time Global Quantitative Intelligence &amp; Execution Engine</div>
                 </div>
             </div>
         </div>
         """, unsafe_allow_html=True)
         
     with action_col:
-        status_bg = "rgba(16, 185, 129, 0.12)" if is_light else "rgba(16, 185, 129, 0.15)"
-        status_border = "rgba(16, 185, 129, 0.4)" if is_light else "rgba(16, 185, 129, 0.35)"
-        status_text = "#059669" if is_light else "#34d399"
+        status_bg = "rgba(16, 185, 129, 0.15)"
+        status_border = "rgba(16, 185, 129, 0.35)"
+        status_text = "#34d399"
 
         st.markdown(f"""
-        <div id="header-control-card-anchor" style="display: none;"></div>
-        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; height: 100%; padding: 4px 0;">
-            <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.28); padding: 5px 10px; border-radius: 4px;">
+        <div class="header-banner-card header-action-card">
+            <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.28); padding: 5px 10px; border-radius: 4px; flex-shrink: 0;">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                 <span style="font-size: 0.72rem; font-weight: 700; color: #38bdf8; font-family: 'Montserrat', sans-serif; letter-spacing: 0.04em; text-transform: uppercase;">UPDATED {time_display_str}</span>
             </div>
-            <div style="display: inline-flex; align-items: center; gap: 7px; background: {status_bg}; border: 1px solid {status_border}; color: {status_text}; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; padding: 5px 11px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);">
+            <div style="display: inline-flex; align-items: center; gap: 7px; background: {status_bg}; border: 1px solid {status_border}; color: {status_text}; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; padding: 5px 11px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 10px rgba(16, 185, 129, 0.15); flex-shrink: 0;">
                 <span style="width: 7px; height: 7px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; display: inline-block;"></span>
                 SYSTEM ONLINE
             </div>
