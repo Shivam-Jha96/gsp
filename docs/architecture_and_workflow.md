@@ -637,7 +637,7 @@ GitHub Actions orchestrates all recurring pipelines on isolated, non-blocking sc
 
 +-------------------------------------------------------+
 |  .github/workflows/deploy.yml                         |
-|  - Triggers on: Cron '0 */2 * * *' (Every 2 hours)   |
+|  - Triggers on: Cron '17 */2 * * *' (Every 2 hours)  |
 |                 workflow_dispatch (Manual trigger)    |
 |  - Concurrency: 'sentiment-pipeline'                  |
 |  - Timeout: 15 minutes                                |

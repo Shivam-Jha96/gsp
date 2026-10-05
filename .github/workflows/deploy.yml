@@ -2,8 +2,8 @@ name: Global Macro-Sentiment Pipeline
 
 on:
   schedule:
-    # Run every 2 hours independently
-    - cron: '0 */2 * * *'
+    # Run every 2 hours independently (shifted to off-peak minute 17 to bypass top-of-hour GitHub queue delays)
+    - cron: '17 */2 * * *'
   workflow_dispatch: # Allows manual trigger from the GitHub UI
 
 concurrency:
