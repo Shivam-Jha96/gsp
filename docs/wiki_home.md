@@ -1,6 +1,9 @@
 # Valence — Quantitative Macro-Sentiment Platform & Institutional Terminal
 
-![Valence Social Preview Banner](https://raw.githubusercontent.com/Shivam-Jha96/gsp/master/assets/valence_social_preview.png)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Shivam-Jha96/gsp/master/assets/valence_social_preview.png" alt="Valence Social Preview Banner" width="100%" style="border-radius: 8px;" />
+</p>
+
 
 Welcome to the official technical wiki for **Valence** (formerly Global Sentiment Platform of Share Markets / GSP). 
 
