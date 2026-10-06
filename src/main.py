@@ -269,7 +269,7 @@ def run_signal_engine():
     logger.info("--- Signal Engine Complete ---\n")
 
 if __name__ == "__main__":
-    logger.info("Starting Global Sentiment Platform of Share Markets (GSP) Pipeline...")
+    logger.info("Starting Valence (formerly GSP) Pipeline...")
     
     db_client = None
     if os.environ.get("DATABASE_URL"):

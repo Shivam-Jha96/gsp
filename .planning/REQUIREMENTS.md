@@ -1,4 +1,4 @@
-# Requirements: Global Sentiment Platform of Share Markets (GSP)
+# Requirements: Valence
 
 **Defined:** 2026-10-05
 **Core Value:** Zero-hallucination, deterministic macroeconomic directional sentiment projection grounded in regional OKF rules with high-performance institutional visualization.

@@ -188,7 +188,7 @@ def run_rescoring(conn, batch_limit=None):
         print(f"Re-scoring complete: {updated_count} records updated with grounded sentiment.")
 
 def main():
-    parser = argparse.ArgumentParser(description="Database maintenance CLI for GSP.")
+    parser = argparse.ArgumentParser(description="Database maintenance CLI for Valence.")
     parser.add_argument(
         "--mode",
         choices=["dry-run", "purge", "dedup", "rescore", "full-clean"],

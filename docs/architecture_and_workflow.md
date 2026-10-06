@@ -1,12 +1,12 @@
 # End-to-End System Architecture and Technical Workflow
-
+ 
 ## 1. Executive Summary & Architectural Philosophy
-
-The **Global Sentiment Platform of Share Markets (GSP)** is an autonomous, production-grade quantitative intelligence and execution platform. The system continuously digests unstructured global macroeconomic news streams across 20 international asset classes in 4 geopolitical regions (United States, India, United Kingdom, and Japan), evaluates deterministic market sentiment using Contrastive Language Models (**CLM-8B System-One**), stores vertically partitioned time-series signals in PostgreSQL, computes multi-period Exponential Moving Average (**EMA**) momentum indicators, executes automated paper trades via Alpaca's REST API, and renders low-latency telemetry to an institutional Streamlit terminal.
-
+ 
+**Valence** (formerly Global Sentiment Platform of Share Markets / GSP) is an autonomous, production-grade quantitative intelligence and execution platform. The system continuously digests unstructured global macroeconomic news streams across 20 international asset classes in 4 geopolitical regions (United States, India, United Kingdom, and Japan), evaluates deterministic market sentiment using Contrastive Language Models (**CLM-8B System-One**), stores vertically partitioned time-series signals in PostgreSQL, computes multi-period Exponential Moving Average (**EMA**) momentum indicators, executes automated paper trades via Alpaca's REST API, and renders low-latency telemetry to an institutional Streamlit terminal.
+ 
 ```
 +---------------------------------------------------------------------------------------------------------+
-|                                    GSP CORE ARCHITECTURAL PARADIGMS                                     |
+|                                  VALENCE CORE ARCHITECTURAL PARADIGMS                                   |
 +------------------------------------+------------------------------------+-------------------------------+
 |       SYSTEM-ONE INFERENCE         |       VERTICAL PARTITIONING        |      GITOPS FOR KNOWLEDGE     |
 | Contrastive state-action mapping   | Decoupling math & document layers  | Macro heuristics versioned    |
@@ -14,10 +14,10 @@ The **Global Sentiment Platform of Share Markets (GSP)** is an autonomous, produ
 | with zero cold-boot overhead.      | preserving rich raw contexts.      | Google Gemini cron jobs.      |
 +------------------------------------+------------------------------------+-------------------------------+
 ```
-
+ 
 ### Core Design Principles
-
-1. **Deterministic System-One Decision Making:** Unlike traditional autoregressive large language models that generate verbose text and suffer from high latency and non-deterministic formatting errors, GSP deploys **CLM-8B** hosted on serverless GPU infrastructure. CLM utilizes contrastive learning (InfoNCE) over a frozen Qwen3-8B embedding backbone with lightweight 20M-parameter projection heads to directly score directional action candidates (`Bullish`, `Bearish`, `Neutral`) with mathematical probability vectors.
+ 
+1. **Deterministic System-One Decision Making:** Unlike traditional autoregressive large language models that generate verbose text and suffer from high latency and non-deterministic formatting errors, Valence deploys **CLM-8B** hosted on serverless GPU infrastructure. CLM utilizes contrastive learning (InfoNCE) over a frozen Qwen3-8B embedding backbone with lightweight 20M-parameter projection heads to directly score directional action candidates (`Bullish`, `Bearish`, `Neutral`) with mathematical probability vectors.
 2. **Strict Vertical Partitioning:** The database tier separates high-frequency numerical time-series queries from heavy unstructured document storage. Analytical aggregation queries scan only the lightweight `event_signals` table (leveraging composite B-Tree and BRIN indices), completely bypassing heavy text and JSON blobs located in `event_payloads`.
 3. **GitOps-Driven Knowledge Evolution:** Macroeconomic policy regimes change dynamically. Instead of baking heuristics into model prompts or hardcoding them in Python logic, rules reside in standalone Objective Knowledge Framework (`*.okf.md`) files. An autonomous crawler powered by Google Gemini analyzes global central bank shifts daily, updating these files via automated Git commits without requiring software redeployments.
 4. **Decoupled Serverless Topologies:** Ingestion, AI inference, relational storage, quantitative trade execution, and user presentation execute across independently scalable, fault-isolated serverless environments: GitHub Actions runners, Modal serverless GPU containers, Supabase managed PostgreSQL, and Streamlit Community Cloud.
@@ -201,7 +201,7 @@ To mathematically prevent cross-region contamination (e.g., US Wall Street marke
   - **Broad-Market Equity Action Heuristic:** If a feed item exhibits zero cross-region contaminant signals and contains market price-action vocabulary (`stocks`, `equities`, `rally`, `selloff`, `jobs data`), it is validated for the expected region rather than falsely discarded as noise.
 
 #### 4. Region-Wise Declarative Index Constituents (`knowledge/*_constituents.okf.json`)
-Indices are baskets of constituent companies. In practice, high-impact financial news frequently mentions individual companies rather than the abstract index ticker. GSP maintains declarative constituent registries per region:
+Indices are baskets of constituent companies. In practice, high-impact financial news frequently mentions individual companies rather than the abstract index ticker. Valence maintains declarative constituent registries per region:
 * [`knowledge/us_constituents.okf.json`](file:///d:/Dev/repos/gsp/knowledge/us_constituents.okf.json): S&P 500, NASDAQ, Dow Jones, Russell 2000 mega-caps and mid-caps.
 * [`knowledge/india_constituents.okf.json`](file:///d:/Dev/repos/gsp/knowledge/india_constituents.okf.json): Nifty 50, Sensex, Nifty Bank, Nifty IT leaders.
 * [`knowledge/uk_constituents.okf.json`](file:///d:/Dev/repos/gsp/knowledge/uk_constituents.okf.json): FTSE 100, FTSE 250, FTSE All-Share, and FTSE AIM constituents.
@@ -240,7 +240,7 @@ To eliminate OPEX/CAPEX waste (redundant inference costs and duplicate database 
 * **Runtime & Dependencies:** Modal Cloud (NVIDIA A10G), `vllm`, `contrastive-lm`, `typesafe-sdk>=0.7.2`, `torch`, `hf_transfer`
 
 #### 1. System-One CLM-8B Inference Architecture
-Conventional generative AI models (System-Two) rely on autoregressive token-by-token generation, requiring hundreds of milliseconds to produce formatted JSON responses that frequently fail schema validation. GSP implements a **System-One Contrastive Language Model (CLM-8B)**:
+Conventional generative AI models (System-Two) rely on autoregressive token-by-token generation, requiring hundreds of milliseconds to produce formatted JSON responses that frequently fail schema validation. Valence implements a **System-One Contrastive Language Model (CLM-8B)**:
 * **Backbone:** Frozen `Qwen/Qwen3-8B` language model acting as a semantic text encoder.
 * **Projection Heads:** Lightweight 20M-parameter contrastive heads (`Contrastive-LM/CLM-v0.1-8B`) trained via bidirectional InfoNCE loss.
 * **Disaggregated Embeddings:** State text and candidate criteria vectors are embedded separately and compared in metric space, yielding latencies under 60 milliseconds.
@@ -451,9 +451,9 @@ order = trading_client.submit_order(order_data=order_data)
 
 ```
 +------------------------------------------------------------------------------------+
-|         GLOBAL SENTIMENT PLATFORM OF SHARE MARKETS (GSP) - TERMINAL LAYOUT         |
+|                       VALENCE - INSTITUTIONAL TERMINAL LAYOUT                      |
 +------------------------------------------------------------------------------------+
-|  [HEADER BANNER: GSP Platform Identity (Left) | Status & Dark/Light Toggle (Right)]|
+|  [HEADER BANNER: Valence Identity & Vector SVG (Left) | Pipeline Telemetry (Right)]|
 +------------------------------------------------------------------------------------+
 |  [USP BANNER: Automated Horizontal Scrolling Ticker Preview (Collapsible Details)] |
 +------------------------------------------------------------------------------------+
@@ -662,7 +662,7 @@ Pipelines operate in headless containerized environments using repository-level 
 
 ## 4. Infrastructure & Service Dependency Matrix
 
-The table below provides a detailed breakdown of all third-party services and infrastructure components supporting the GSP production environment:
+The table below provides a detailed breakdown of all third-party services and infrastructure components supporting the Valence production environment:
 
 | Service / Infrastructure Component | Cloud Provider / Host | SLA Target | Resource / Pricing Tier | Primary Architectural Role | Failure Mode & Impact | Resiliency & Recovery Policy |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |

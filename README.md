@@ -1,10 +1,15 @@
-# Global Sentiment Platform of Share Markets (GSP) 📊📈
+# Valence 📊📈
+### Institutional Quantitative Macroeconomic Sentiment & Directional Signal Engine
 
 [![Pipeline Status](https://github.com/Shivam-Jha96/gsp/actions/workflows/deploy.yml/badge.svg)](https://github.com/Shivam-Jha96/gsp/actions/workflows/deploy.yml)
 [![OKF Updater](https://github.com/Shivam-Jha96/gsp/actions/workflows/update_okf.yml/badge.svg)](https://github.com/Shivam-Jha96/gsp/actions/workflows/update_okf.yml)
 [![Dashboard](https://img.shields.io/badge/Live_Dashboard-Streamlit-FF4B4B?logo=streamlit)](https://macro-sentiment-tracker.streamlit.app/)
 
-An AI-driven macro-sentiment analysis terminal that reads thousands of breaking global financial news events in real-time, scores their market impact using a custom **Contrastive-LM System-One** model on a serverless GPU, and triggers automated paper trading signals — all while dynamically updating its own knowledge base.
+<p align="center">
+  <img src="assets/valence_social_preview.png" alt="Valence Social Preview Banner" width="100%" style="border-radius: 12px; border: 1px solid #1e293b;" />
+</p>
+
+**Valence** (formerly Global Sentiment Platform of Share Markets / GSP) is an institutional-grade quantitative macroeconomic sentiment and directional signal engine. It reads thousands of breaking global financial news events in real time, scores their market impact using a custom **Contrastive-LM System-One (CLM-8B)** model on a serverless GPU, and triggers automated paper trading signals — all while dynamically updating its own knowledge base.
 
 ---
 
@@ -18,13 +23,13 @@ Conventional financial NLP platforms rely on generative Large Language Models (L
 
 ### ⚡ The CLM System-One Solution
 
-The **Global Sentiment Platform of Share Markets (GSP)** eliminates generative token decoding entirely. Instead, our AI Engine uses **Contrastive Language Modeling (CLM-8B)** hosted on a dedicated serverless A10G GPU via Modal. By projecting financial text and macro rules directly into contrastive representation space, the engine evaluates market states using pure mathematical probability vectors:
+**Valence** eliminates generative token decoding entirely. Instead, our AI Engine uses **Contrastive Language Modeling (CLM-8B)** hosted on a dedicated serverless A10G GPU via Modal. By projecting financial text and macro rules directly into contrastive representation space, the engine evaluates market states using pure mathematical probability vectors:
 
 * **Sub-Second Latency**: Single-pass contrastive scoring runs in **< 250 ms** (>10x faster than generative LLMs).
 * **Zero Hallucination Risk**: No text generation or token sampling; outputs are pure deterministic probability distributions.
 * **Calibrated Probability Simplex**: Directly computes native probabilities over orthogonal market states where $P(\text{Bullish}) + P(\text{Bearish}) + P(\text{Neutral}) = 1.0$.
 
-| Dimension | Generative LLMs (Autoregressive) | GSP CLM System-One Engine |
+| Dimension | Generative LLMs (Autoregressive) | Valence CLM System-One Engine |
 | :--- | :--- | :--- |
 | **Scoring Mechanism** | Generates text tokens / Prompted JSON | Contrastive representation probability simplex |
 | **Inference Latency** | 2,000 – 5,000 ms / headline | **< 250 ms** / headline |

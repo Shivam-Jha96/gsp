@@ -2,7 +2,7 @@
 
 **Deterministic Directional Conviction Extraction, Tri-Partite Softmax Geometries, and Time-Series Signal Aggregation**
 
-*Global Sentiment Platform (GSP) — Quantitative Research & AI Engineering Specifications*  
+*Valence (formerly GSP) — Quantitative Research & AI Engineering Specifications*  
 *Document Version: 2.4.0 | Classification: Production Quantitative Architecture*
 
 ---
@@ -11,7 +11,7 @@
 
 Natural Language Processing (NLP) models in quantitative macro-trading have historically suffered from high variance, lack of calibrated confidence, auto-regressive hallucination, prompt drift, token decoding latency, and ad-hoc sentiment scoring heuristics. Traditional dictionary-based methods (e.g., Loughran-McDonald) fail to capture macroeconomic context, while autoregressive Generative Large Language Models (LLMs) like GPT-4 or Gemini incur non-deterministic token sampling entropy, high per-call latency ($>800\text{ ms}$), and severe logit uncalibration.
 
-This document formalizes the mathematical and algorithmic architecture of the **Global Sentiment Platform (GSP)** sentiment scoring engine. The system employs a **System-One Contrastive Language Model (CLM)** backbone (built on a frozen $8\text{B}$-parameter encoder, such as Qwen3-8B / TypeSafe Jev architecture) conditioned on a dynamically updated **Ontological Knowledge Framework (OKF)**. Rather than generating explanatory tokens, the model projects text directly into a metric embedding space $\mathbb{S}^{k-1}$, evaluating cosine similarities against canonical macroeconomic directional hypotheses to yield a calibrated tri-partite probability vector:
+This document formalizes the mathematical and algorithmic architecture of the **Valence** sentiment scoring engine. The system employs a **System-One Contrastive Language Model (CLM)** backbone (built on a frozen $8\text{B}$-parameter encoder, such as Qwen3-8B / TypeSafe Jev architecture) conditioned on a dynamically updated **Ontological Knowledge Framework (OKF)**. Rather than generating explanatory tokens, the model projects text directly into a metric embedding space $\mathbb{S}^{k-1}$, evaluating cosine similarities against canonical macroeconomic directional hypotheses to yield a calibrated tri-partite probability vector:
 
 $$\mathbf{p} = \begin{bmatrix} P(\text{Bullish}) \\ P(\text{Bearish}) \\ P(\text{Neutral}) \end{bmatrix} \in \Delta^2 \subset \mathbb{R}^3_+$$
 
@@ -23,7 +23,7 @@ From this probability distribution on the standard 2-simplex $\Delta^2$, we deri
 
 ```
 +-----------------------------------------------------------------------------------+
-|                            GSP PIPELINE FLOWCHART                                 |
+|                         VALENCE PIPELINE FLOWCHART                                |
 +-----------------------------------------------------------------------------------+
 |  [OKF Regional Rules] + [Real-Time Headline / Payload]                           |
 |                         |                                                         |
@@ -89,7 +89,7 @@ $$\text{sim}(\mathbf{z}, \mathbf{a}_c) = \langle \mathbf{z}, \mathbf{a}_c \rangl
 
 Modern quantitative trading systems require bounded latency, deterministic reproducibility, and well-calibrated confidence metrics. Generative auto-regressive LLMs (e.g., GPT-4o, Claude 3.5, Gemini 1.5) suffer from structural disadvantages when deployed in sub-second signal pipelines:
 
-| Metric / Property | System-One CLM (GSP Design) | Generative LLM (Autoregressive Decoder) | Mathematical & Operational Consequence |
+| Metric / Property | System-One CLM (Valence Design) | Generative LLM (Autoregressive Decoder) | Mathematical & Operational Consequence |
 | :--- | :--- | :--- | :--- |
 | **Computational Complexity** | $\mathcal{O}(1)$ single forward pass ($N$ tokens) | $\mathcal{O}(L)$ forward passes ($N$ input + $L$ output tokens) | CLM executes in $10\text{--}15\text{ ms}$; generative models take $600\text{--}2500\text{ ms}$, missing market liquidity windows. |
 | **Stochastic Invariance** | Strictly deterministic: $\text{Var}_{\text{sample}}(\mathbf{z}) = 0$ | Non-zero token sampling entropy unless $T=0$; prone to greedy decoding path bifurcation | Eliminates non-deterministic hedging decisions across replicated worker nodes. |
@@ -365,7 +365,7 @@ For an effective moving average lookback window of span $W$ periods:
 
 $$\alpha = \frac{2}{W + 1}$$
 
-In the GSP default deployment for hourly sentiment tracking ($W = 4$ hours):
+In the Valence default deployment for hourly sentiment tracking ($W = 4$ hours):
 
 $$\alpha = \frac{2}{4 + 1} = \frac{2}{5} = 0.40$$
 
@@ -518,7 +518,7 @@ $$C^* = \arg\max \lbrace 0.18, 0.12, 0.70 \rbrace = \mathbf{Neutral}$$
 
 #### Step 2: Comparative Analysis of Gated vs. Ungated Mapping
 
-##### Case 1: Standard GSP Gated Implementation ($C^* = \text{Neutral}$)
+##### Case 1: Standard Valence Gated Implementation ($C^* = \text{Neutral}$)
 By design:
 $$\mathcal{S}_{\text{dir}} = \mathbf{0.0000} \implies I_t = \mathbf{0.00}$$
 The headline is recognized as uninformative baseline noise and yields zero directional disturbance.
@@ -533,7 +533,7 @@ $$I_t^{\text{ungated}} = +13.00$$
 
 Notice how the high neutral probability ($0.70$) attenuates the magnitude by $35\%$ (from $+20.00$ down to $+13.00$). However, the primary verdict gate $C^* = \text{Neutral}$ enforces $I_t = 0.00$, completely preventing this routine bulletin from polluting the macroeconomic time series.
 
-#### Step 3: Time-Series EMA Update under GSP Architecture
+#### Step 3: Time-Series EMA Update under Valence Architecture
 Assume prior moving average $\text{EMA}_{t-1} = +6.50$, $\alpha = 0.40$:
 $$\text{EMA}_t = 0.40 \cdot (0.00) + 0.60 \cdot (+6.50) = \mathbf{+3.90}$$
 
@@ -546,7 +546,7 @@ $\text{EMA}_t$ gracefully decays from $+6.50$ to $+3.90$, dropping below the $+5
 
 The following matrix contrasts the **System-One Contrastive Language Model (CLM)** architecture against conventional **Generative Autoregressive LLM Scoring** (e.g., GPT-4o, Gemini 1.5 Pro):
 
-| Engineering & Mathematical Dimension | GSP System-One CLM (TypeSafe Jev / Qwen3-8B) | Generative LLM Scoring (GPT-4o / Gemini 1.5 Pro) |
+| Engineering & Mathematical Dimension | Valence System-One CLM (TypeSafe Jev / Qwen3-8B) | Generative LLM Scoring (GPT-4o / Gemini 1.5 Pro) |
 | :--- | :--- | :--- |
 | **Output Representation** | Continuous probability vector $\mathbf{p} \in \Delta^2$ on unit hypersphere $\mathbb{S}^{k-1}$. | Token string sequence parsed via regex or structured JSON schema. |
 | **Logit Calibration** | Directly calibrated via temperature $\tau$ over canonical hypothesis anchors. | Uncalibrated; token probabilities are contaminated by syntax tokens, commas, and punctuation. |
@@ -570,7 +570,7 @@ The mathematical framework formulated herein establishes an end-to-end, mathemat
 5. **Neutral Noise Attenuation** ($M$), and
 6. **Time-Series Recursive Smoothing** ($\text{EMA}_\alpha$),
 
-the Global Sentiment Platform eliminates the latency, non-determinism, and hallucination risks of generative language models. The system guarantees robust signal-to-noise separation, enabling automated execution algorithms to operate with quantitative confidence across global macro regimes.
+the Valence platform eliminates the latency, non-determinism, and hallucination risks of generative language models. The system guarantees robust signal-to-noise separation, enabling automated execution algorithms to operate with quantitative confidence across global macro regimes.
 
 ### Source Code Cross-References
 - **Scoring Pipeline**: [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py#L13-L77)

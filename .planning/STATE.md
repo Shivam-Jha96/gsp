@@ -45,7 +45,7 @@ Progress: [██████░░░░] 60%
 
 ### Decisions
 
-- [Phase 1]: Permanently enforce Dark Mode across GSP; remove theme toggle widget to ensure consistent institutional styling.
+- [Phase 1]: Permanently enforce Dark Mode across Valence; remove theme toggle widget to ensure consistent institutional styling.
 - [Phase 1]: Use TypeSafe System-One CLM-8B for continuous directional scores derived from calibrated choice probabilities.
 - [Phase 1]: Wrap filter toolbar and dashboard in `@st.fragment` to prevent full-page script reloads on widget interactions.
 - [Quick 261005-j14]: Store pipeline run completion telemetry in `pipeline_runs` table with composite index to power live dashboard data freshness badge.

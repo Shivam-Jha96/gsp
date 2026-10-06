@@ -2,9 +2,9 @@
 
 ## Project
 
-**Global Sentiment Platform of Share Markets (GSP)**
+**Valence (formerly Global Sentiment Platform of Share Markets / GSP)**
 
-Global Sentiment Platform of Share Markets (GSP) is an institutional-grade quantitative macroeconomic sentiment and directional signal engine. It ingests global financial news, filters regional affinity and noise via compiled regex classifiers and fingerprint deduplication, generates continuous directional sentiment scores using serverless Contrastive Language Models (CLM-8B System-One), and presents live multi-index surfaces on a permanently dark-themed reactive Streamlit dashboard.
+Valence is an institutional-grade quantitative macroeconomic sentiment and directional signal engine. It ingests global financial news, filters regional affinity and noise via compiled regex classifiers and fingerprint deduplication, generates continuous directional sentiment scores using serverless Contrastive Language Models (CLM-8B System-One), and presents live multi-index surfaces on a permanently dark-themed reactive Streamlit dashboard.
 
 **Core Value:** Zero-hallucination, deterministic macroeconomic directional sentiment projection grounded in regional Objective Knowledge Framework (OKF) rules, coupled with ultra-low latency interactive multi-market visualization.
 

@@ -1,8 +1,8 @@
-# Roadmap: Global Sentiment Platform of Share Markets (GSP)
+# Roadmap: Valence
 
 ## Overview
 
-GSP provides real-time quantitative macroeconomic directional sentiment calculation across four major global equity hubs (India, US, UK, Japan). This milestone organizes the platform into two clear phases: Phase 1 captures the complete validated baseline (ingestion, regex classification, deduplication, Gemini OKF rule updating, System-One CLM-8B probability scoring, resilient database pooling, EMA paper trading, and the permanently dark-themed reactive Streamlit dashboard). Phase 2 focuses on modular architectural refactoring, comprehensive test suites, and operational pipeline health probes.
+Valence provides real-time quantitative macroeconomic directional sentiment calculation across four major global equity hubs (India, US, UK, Japan). This milestone organizes the platform into two clear phases: Phase 1 captures the complete validated baseline (ingestion, regex classification, deduplication, Gemini OKF rule updating, System-One CLM-8B probability scoring, resilient database pooling, EMA paper trading, and the permanently dark-themed reactive Streamlit dashboard). Phase 2 focuses on modular architectural refactoring, comprehensive test suites, and operational pipeline health probes.
 
 ## Phases
 

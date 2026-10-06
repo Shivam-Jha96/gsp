@@ -1462,7 +1462,7 @@ if not df_signals.empty:
                 </div>
             </div>
             <div style="font-family: 'IBM Plex Sans', sans-serif; font-size: clamp(0.78rem, 1.5vw, 0.83rem); color: var(--edge-text); line-height: 1.6; margin-bottom: 0;">
-                Generative LLMs suffer from prompt drift, hallucination, and confidence clustering. GSP replaces text generation with a <strong>System-One Contrastive Model (CLM-8B)</strong> that projects global news directly onto native choice probabilities: <strong style="color: {'#059669' if is_light else '#34d399'}; font-weight: 700;">P(Bullish)</strong>, <strong style="color: {'#dc2626' if is_light else '#f87171'}; font-weight: 700;">P(Bearish)</strong>, and <strong style="color: var(--text-muted); font-weight: 700;">P(Neutral)</strong>. Headlines are conditioned against regional macroeconomic policy rules (OKF), converting real-time global news into an institutional momentum score [-100, +100].
+                Generative LLMs suffer from prompt drift, hallucination, and confidence clustering. Valence replaces text generation with a <strong>System-One Contrastive Model (CLM-8B)</strong> that projects global news directly onto native choice probabilities: <strong style="color: {'#059669' if is_light else '#34d399'}; font-weight: 700;">P(Bullish)</strong>, <strong style="color: {'#dc2626' if is_light else '#f87171'}; font-weight: 700;">P(Bearish)</strong>, and <strong style="color: var(--text-muted); font-weight: 700;">P(Neutral)</strong>. Headlines are conditioned against regional macroeconomic policy rules (OKF), converting real-time global news into an institutional momentum score [-100, +100].
             </div>
         </div>
     </details>
