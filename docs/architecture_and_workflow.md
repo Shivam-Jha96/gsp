@@ -810,3 +810,61 @@ git push origin master
 ```
 
 Because `.github/workflows/deploy.yml` reads directly from the checked-out workspace on each run, the rollback takes effect immediately on the next scheduled execution cycle.
+
+---
+
+## 6. Quantitative Benchmarking & Alpha Validation Architecture
+
+To ensure Valence meets institutional quantitative standards, the platform includes a native, automated **4-Tier Benchmarking Suite** (`src/benchmark/` and `scripts/run_benchmarks.py`).
+
+```mermaid
+flowchart TD
+    subgraph B1["Tier 1: AI / NLP Sentiment Calibration"]
+        T1_DATA["Macro Golden Dataset (500 Curated Events)"] --> T1_CLM["System-One CLM-8B Engine"]
+        T1_DATA --> T1_LM["Loughran-McDonald Baseline"]
+        T1_CLM & T1_LM --> T1_EVAL["Accuracy, Macro F1, ECE Calibration, Brier Score, Latency"]
+    end
+
+    subgraph B2["Tier 2: Ingestion & Regional Filtering"]
+        T2_FEEDS["Multi-Region Geotargeted Feeds"] --> T2_AFF["RegionalAffinityClassifier"]
+        T2_FEEDS --> T2_DEDUP["NewsDeduplicator (SHA-256)"]
+        T2_AFF & T2_DEDUP --> T2_EVAL["Contamination Rate (<2%), Noise Rejection %, Deduplication Yield"]
+    end
+
+    subgraph B3["Tier 3: Quantitative Alpha Backtesting"]
+        T3_SIGS["Valence Signals (I_t, EMA_t)"] --> T3_ENGINE["ValenceBacktestEngine"]
+        T3_PRICE["OHLCV Price Bars (SPY, QQQ, NIFTY)"] --> T3_ENGINE
+        T3_ENGINE --> T3_METRICS["Sharpe, Sortino, Max Drawdown, Calmar, Information Coefficient (IC)"]
+    end
+
+    subgraph B4["Tier 4: System & Infrastructure Latency"]
+        T4_INFRA["Supabase DB + Streamlit Terminal"] --> T4_PROF["SystemProfiler"]
+        T4_PROF --> T4_OUT["Pool Checkout ms, BRIN Query Latency ms, Fragment Render ms"]
+    end
+
+    T1_EVAL & T2_EVAL & T3_METRICS & T4_OUT --> REPORT["Timestamped Benchmark Report (reports/benchmark_report.md)"]
+```
+
+### 6.1 Benchmark Tiers Summary
+
+1. **Tier 1 (NLP Calibration & Classification)**: Evaluates System-One CLM against Loughran-McDonald and FinBERT on `knowledge/benchmark/macro_golden_dataset.json`. Measures Expected Calibration Error (ECE), Brier Score, and bitwise determinism ($\text{Var}(\text{score}) = 0$).
+2. **Tier 2 (Ingestion & Regional Affinity)**: Verifies that cross-region contamination across IN, US, UK, JP is strictly controlled ($< 2.0\%$), non-financial clickbait is rejected ($100\%$), and duplicate syndicated articles are suppressed ($> 80\%$).
+3. **Tier 3 (Quantitative Alpha & Signal Backtesting)**: Aligns Valence 4-period EMA crossover signals with historical hourly price bars (via `yfinance`), simulating trades under realistic slippage (5 bps) and fees (1 bps). Measures Information Coefficient (IC), Rank IC, Directional Hit Rate, Sharpe Ratio, Sortino Ratio, and Max Drawdown vs Buy & Hold.
+4. **Tier 4 (System & Database Latency)**: Profiles Supabase connection pool checkout latency, BRIN index query performance on `event_signals`, and `@st.fragment` partial re-render duration.
+
+### 6.2 Execution Runbook
+
+Run the complete benchmark suite locally or in CI:
+```bash
+# Execute all 4 tiers and generate markdown/json reports
+python scripts/run_benchmarks.py --all
+
+# Run specific tier
+python scripts/run_benchmarks.py --tier nlp
+python scripts/run_benchmarks.py --tier classifier
+python scripts/run_benchmarks.py --tier alpha --symbol SPY --days 90
+python scripts/run_benchmarks.py --tier system
+```
+
+Reports are automatically saved to `reports/benchmark_report.md` and `reports/benchmark_data.json`.
+

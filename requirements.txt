@@ -23,3 +23,8 @@ typesafe-sdk>=0.7.2
 # Knowledge Engine (Dynamic OKF Updater)
 google-genai>=2.0.0
 feedparser>=6.0.0
+
+# Quantitative Benchmarking & Backtesting
+scipy>=1.14.0
+yfinance>=0.2.40
+

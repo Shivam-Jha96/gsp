@@ -1,0 +1,222 @@
+{
+  "version": "1.0.0",
+  "description": "Valence Macroeconomic Golden Benchmark Dataset across US, India, UK, and Japan markets with consensus labels and OKF rule alignments.",
+  "samples": [
+    {
+      "id": "US-001",
+      "region": "US",
+      "asset_class": "equity",
+      "theme": "monetary_policy",
+      "text": "Federal Reserve cuts benchmark rate by 50 bps, signaling confidence in sustained disinflation and labor market resilience.",
+      "label": "Bullish",
+      "okf_rule": "US Macro Rule 1 (Fed Policy Pivot)"
+    },
+    {
+      "id": "US-002",
+      "region": "US",
+      "asset_class": "equity",
+      "theme": "inflation_cpi",
+      "text": "US Core CPI spikes unexpectedly to 4.4% year-over-year, dampening rate cut expectations and lifting 10-year Treasury yields above 4.75%.",
+      "label": "Bearish",
+      "okf_rule": "US Macro Rule 2 (Above-Expectations CPI Print)"
+    },
+    {
+      "id": "US-003",
+      "region": "US",
+      "asset_class": "equity",
+      "theme": "labor_employment",
+      "text": "US initial jobless claims register at 218,000 versus consensus of 217,000; continuing claims hold stable in holiday-shortened trading.",
+      "label": "Neutral",
+      "okf_rule": "US Macro Rule 3 (Baseline Employment Resilience)"
+    },
+    {
+      "id": "US-004",
+      "region": "US",
+      "asset_class": "equity",
+      "theme": "trade_tariffs",
+      "text": "White House signs executive order imposing 25% universal tariffs on imported steel and aluminum from key trading partners.",
+      "label": "Bearish",
+      "okf_rule": "US Macro Rule 4 (Structural Tariff Shock)"
+    },
+    {
+      "id": "US-005",
+      "region": "US",
+      "asset_class": "equity",
+      "theme": "growth_gdp",
+      "text": "US Q3 GDP revised sharply higher to 3.4% annualized, driven by robust sovereign AI infrastructure capex and consumer spending.",
+      "label": "Bullish",
+      "okf_rule": "US Macro Rule 5 (Secular Tech Productivity Offset)"
+    },
+    {
+      "id": "IN-001",
+      "region": "IN",
+      "asset_class": "equity",
+      "theme": "growth_gdp",
+      "text": "India Q2 GDP expands at blistering 8.2% beat, bolstered by sovereign capex manufacturing push and resilient rural demand.",
+      "label": "Bullish",
+      "okf_rule": "IN Macro Rule 1 (Capex-Led Industrial Expansion)"
+    },
+    {
+      "id": "IN-002",
+      "region": "IN",
+      "asset_class": "equity",
+      "theme": "monetary_policy",
+      "text": "Reserve Bank of India Governor warns of persistent food inflation spikes; monetary policy committee votes unanimously to maintain tight liquidity.",
+      "label": "Bearish",
+      "okf_rule": "IN Macro Rule 2 (Sticky Food Inflation & Liquidity Drain)"
+    },
+    {
+      "id": "IN-003",
+      "region": "IN",
+      "asset_class": "equity",
+      "theme": "corporate_earnings",
+      "text": "TCS and Infosys post resilient quarterly margins as large BFSI digital transformation deal pipelines accelerate across North America.",
+      "label": "Bullish",
+      "okf_rule": "IN Macro Rule 3 (IT Sector Deal Pipeline)"
+    },
+    {
+      "id": "IN-004",
+      "region": "IN",
+      "asset_class": "equity",
+      "theme": "monetary_policy",
+      "text": "RBI leaves repo rate unchanged at 6.50% in widely anticipated routine policy review; maintains neutral stance as banking liquidity normalizes.",
+      "label": "Neutral",
+      "okf_rule": "IN Macro Rule 4 (Status Quo Policy Pause)"
+    },
+    {
+      "id": "IN-005",
+      "region": "IN",
+      "asset_class": "equity",
+      "theme": "commodities_crude",
+      "text": "Brent crude futures surge above $95 per barrel amid Middle East supply disruption, threatening India trade deficit and rupee stability.",
+      "label": "Bearish",
+      "okf_rule": "IN Macro Rule 5 (Imported Crude Energy Inflation)"
+    },
+    {
+      "id": "UK-001",
+      "region": "UK",
+      "asset_class": "equity",
+      "theme": "growth_gdp",
+      "text": "UK economy slips into technical recession as retail sales plunge 1.8% in Q4 amid high borrowing costs and stagnant wage growth.",
+      "label": "Bearish",
+      "okf_rule": "UK Macro Rule 1 (Stagflationary Demand Destruction)"
+    },
+    {
+      "id": "UK-002",
+      "region": "UK",
+      "asset_class": "equity",
+      "theme": "monetary_policy",
+      "text": "Bank of England cuts Bank Rate to 4.75% as UK services inflation cools to three-year low; Governor Bailey hints at faster easing trajectory.",
+      "label": "Bullish",
+      "okf_rule": "UK Macro Rule 2 (BoE Disinflationary Easing)"
+    },
+    {
+      "id": "UK-003",
+      "region": "UK",
+      "asset_class": "equity",
+      "theme": "housing",
+      "text": "Nationwide UK house price index records 0.1% monthly uptick in quiet summer trading; mortgage approvals remain consistent with 5-year averages.",
+      "label": "Neutral",
+      "okf_rule": "UK Macro Rule 3 (Housing Market Plateau)"
+    },
+    {
+      "id": "UK-004",
+      "region": "UK",
+      "asset_class": "equity",
+      "theme": "fiscal_policy",
+      "text": "Chancellor announces surprise corporate tax hike alongside fiscal tightening package, triggering gilt selloff and corporate capex deferrals.",
+      "label": "Bearish",
+      "okf_rule": "UK Macro Rule 4 (Fiscal Drag & Gilt Premium)"
+    },
+    {
+      "id": "JP-001",
+      "region": "JP",
+      "asset_class": "equity",
+      "theme": "monetary_policy",
+      "text": "Bank of Japan shocks global markets with aggressive 25 bps rate hike; Governor Ueda signals willingness to dismantle remaining monetary accommodation.",
+      "label": "Bearish",
+      "okf_rule": "JP Macro Rule 1 (Yen Carry Unwind & BOJ Normalization)"
+    },
+    {
+      "id": "JP-002",
+      "region": "JP",
+      "asset_class": "equity",
+      "theme": "governance_capex",
+      "text": "Tokyo Stock Exchange governance reforms drive record corporate dividend payouts and share buybacks across major Japanese conglomerates.",
+      "label": "Bullish",
+      "okf_rule": "JP Macro Rule 2 (TSE Capital Efficiency & Shareholder Returns)"
+    },
+    {
+      "id": "JP-003",
+      "region": "JP",
+      "asset_class": "equity",
+      "theme": "labor_employment",
+      "text": "Japan base wages post 5.2% gain at annual Shunto negotiations, cement structural exit from three decades of deflationary stagnation.",
+      "label": "Bullish",
+      "okf_rule": "JP Macro Rule 3 (Shunto Wage-Price Virtuous Cycle)"
+    },
+    {
+      "id": "JP-004",
+      "region": "JP",
+      "asset_class": "equity",
+      "theme": "trade_exports",
+      "text": "Japan monthly export volume ticks up 0.2% in line with Ministry of Finance projections; semiconductor machinery shipments remain steady.",
+      "label": "Neutral",
+      "okf_rule": "JP Macro Rule 4 (Baseline Trade Equilibrium)"
+    },
+    {
+      "id": "JP-005",
+      "region": "JP",
+      "asset_class": "equity",
+      "theme": "fx_currency",
+      "text": "Yen weakens past 160 per dollar as Ministry of Finance signals imminent FX intervention; import costs squeeze domestic small businesses.",
+      "label": "Bearish",
+      "okf_rule": "JP Macro Rule 5 (Yen Depreciation Cost-Push Squeeze)"
+    },
+    {
+      "id": "US-006",
+      "region": "US",
+      "asset_class": "equity",
+      "theme": "banking_liquidity",
+      "text": "Regional bank credit defaults rise as office real estate loans mature; Fed launches emergency lending facility liquidity backstop.",
+      "label": "Bearish",
+      "okf_rule": "US Macro Rule 6 (Commercial Real Estate Banking Friction)"
+    },
+    {
+      "id": "US-007",
+      "region": "US",
+      "asset_class": "equity",
+      "theme": "corporate_earnings",
+      "text": "Megacap tech leaders announce 40% jump in cloud software revenue and record free cash flow generation for fiscal year.",
+      "label": "Bullish",
+      "okf_rule": "US Macro Rule 5 (Secular Tech Productivity Offset)"
+    },
+    {
+      "id": "GLOBAL-001",
+      "region": "GLOBAL",
+      "asset_class": "equity",
+      "theme": "geopolitics",
+      "text": "Global shipping through Suez Canal halted following renewed maritime attacks; container freight spot rates triple in two weeks.",
+      "label": "Bearish",
+      "okf_rule": "Global Macro Rule 1 (Chokepoint Supply Chain Disruption)"
+    },
+    {
+      "id": "GLOBAL-002",
+      "region": "GLOBAL",
+      "asset_class": "equity",
+      "theme": "central_banks",
+      "text": "G7 finance ministers reaffirm commitment to currency stability and coordinated multilateral liquidity facilities.",
+      "label": "Neutral",
+      "okf_rule": "Global Macro Rule 2 (Multilateral Policy Stability)"
+    },
+    {
+      "id": "IN-006",
+      "region": "IN",
+      "asset_class": "equity",
+      "theme": "fii_flows",
+      "text": "Foreign Institutional Investors (FII) pour record $3.5 billion into Indian equities in single week following sovereign rating upgrade.",
+      "label": "Bullish",
+      "okf_rule": "IN Macro Rule 6 (Institutional Capital Inflows)"
+    }
+  ]
+}
