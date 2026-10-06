@@ -492,8 +492,8 @@ The primary visualization renders a clean, multi-line area time series:
 * **Area Plot with Soft Translucent Fills:** Renders index traces with soft translucent fills (`fill='tozeroy'`) under the lines and small markers (`size=4.5`) denoting authentic news timestamps.
 * **Distinct Color Palette:** Wide-spectrum palette for constituent indices: Sky Blue (`#0284c7`), Warm Amber (`#f59e0b`), Emerald Green (`#10b981`), Vivid Magenta (`#ec4899`), Violet (`#8b5cf6`), and Cyan (`#06b6d4`).
 * **Prominent Bold EMA Trend:** The aggregate regional EMA is drawn on top as a bold, prominent vector line (`width=3.5`), providing immediate visual salience as the primary directional signal.
-* **Enhanced Aspect Ratio & Hover Modebar:** Plot height is set to 350px for balanced aspect ratio. The Plotly modebar is set to `displayModeBar="hover"`, keeping the chart area clean until mouseover.
-* **Symmetrical Balanced Y-Axis:** Enforces a balanced $[-105, +105]$ range (`dtick=25`) centered on a neutral slate gray zero line (`rgba(148, 163, 184, 0.45)`).
+* **Enhanced Aspect Ratio & Hover Modebar:** Plot height is set to 370px for balanced aspect ratio. The Plotly modebar is set to `displayModeBar="hover"`, keeping the chart area clean until mouseover. Zoom options (`zoom2d`, `zoomIn2d`, `zoomOut2d`) are removed and `scrollZoom` is disabled to prevent accidental scale distortions while preserving horizontal timeline panning.
+* **Symmetrical Balanced Y-Axis:** Enforces a locked $[-105, +105]$ range (`dtick=25`, `fixedrange=True`) centered on a neutral slate gray zero line (`rgba(148, 163, 184, 0.45)`).
 * **Unclipped Legend & Unified Tooltips:** Legend items use clean ticker names (`name=ticker`). `hovermode="x unified"` displays all series concurrently at any timestamp.
 
 #### 3. Global Timezone Conversion Engine

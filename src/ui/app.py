@@ -42,7 +42,8 @@ except Exception:
     get_latest_successful_pipeline_run = db_telemetry_mod.get_latest_successful_pipeline_run
     format_pipeline_freshness = db_telemetry_mod.format_pipeline_freshness
 
-st.set_page_config(page_title="Global Sentiment Platform of Share Markets", layout="wide", initial_sidebar_state="collapsed", page_icon="📈")
+valence_favicon_path = os.path.join(current_dir, "assets", "valence_logo_flat.svg")
+st.set_page_config(page_title="Valence", layout="wide", initial_sidebar_state="collapsed", page_icon=valence_favicon_path if os.path.exists(valence_favicon_path) else "📈")
 
 # --- Permanent Dark Theme Enforcement ---
 is_dark = True
@@ -1329,10 +1330,44 @@ if not df_signals.empty:
     with header_col:
         st.markdown(f"""
         <div class="header-banner-card">
-            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-                <div style="background: linear-gradient(135deg, #059669, #0d9488); color: #ffffff; padding: 4px 10px; border-radius: 5px; font-weight: 800; font-size: 1.1rem; letter-spacing: 1.5px; font-family: 'Montserrat', sans-serif; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); border: 1px solid rgba(16, 185, 129, 0.3); flex-shrink: 0;">GSP</div>
+            <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+                <svg width="44" height="40" viewBox="15 15 70 75" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.45)); flex-shrink: 0;">
+                    <defs>
+                        <linearGradient id="vFlatCyanAreaH" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#0284c7" stop-opacity="0.45"/>
+                            <stop offset="100%" stop-color="#0369a1" stop-opacity="0.05"/>
+                        </linearGradient>
+                        <linearGradient id="vFlatGreenAreaH" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#10b981" stop-opacity="0.5"/>
+                            <stop offset="100%" stop-color="#047857" stop-opacity="0.05"/>
+                        </linearGradient>
+                        <radialGradient id="vFlatAuraGradH" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#34d399" stop-opacity="0.45"/>
+                            <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+                        </radialGradient>
+                    </defs>
+                    <line x1="18" y1="72" x2="82" y2="72" stroke="#0e7490" stroke-width="1.2" stroke-dasharray="2.5 3" opacity="0.6"/>
+                    <path d="M 21 28 L 29 36 L 36 32 L 50 72 L 50 86 L 21 86 Z" fill="url(#vFlatCyanAreaH)"/>
+                    <path d="M 50 72 L 58 58 L 62 60 L 68 42 L 72 47 L 76 27 L 76 86 L 50 86 Z" fill="url(#vFlatGreenAreaH)"/>
+                    <line x1="35" y1="26" x2="35" y2="40" stroke="#38bdf8" stroke-width="1.5"/>
+                    <rect x="33.5" y="30" width="3" height="7" rx="0.8" fill="#0284c7"/>
+                    <line x1="43" y1="46" x2="43" y2="60" stroke="#38bdf8" stroke-width="1.5"/>
+                    <rect x="41.5" y="50" width="3" height="6" rx="0.8" fill="#0284c7"/>
+                    <line x1="62" y1="52" x2="62" y2="67" stroke="#34d399" stroke-width="1.5"/>
+                    <rect x="60.5" y="56" width="3" height="7" rx="0.8" fill="#10b981"/>
+                    <line x1="72" y1="38" x2="72" y2="52" stroke="#34d399" stroke-width="1.5"/>
+                    <rect x="70.5" y="42" width="3" height="6" rx="0.8" fill="#10b981"/>
+                    <path d="M 21 34 L 29 42 L 36 38 L 50 78 L 58 64 L 62 66 L 68 48 L 72 53 L 74 38" stroke="rgba(255, 255, 255, 0.15)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M 21 28 L 29 36 L 36 32 L 50 72" stroke="#38bdf8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M 50 72 L 58 58 L 62 60 L 68 42 L 72 47 L 76 27" stroke="#10b981" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="50" cy="72" r="4.5" fill="#020617" stroke="#38bdf8" stroke-width="2.5"/>
+                    <circle cx="50" cy="72" r="1.5" fill="#38bdf8"/>
+                    <circle cx="76" cy="24" r="11" fill="url(#vFlatAuraGradH)"/>
+                    <circle cx="76" cy="24" r="6" fill="rgba(16, 185, 129, 0.25)"/>
+                    <polygon points="76,17 71,28 81,28" fill="#34d399"/>
+                </svg>
                 <div>
-                    <div style="font-size: clamp(0.95rem, 2vw, 1.25rem); font-weight: 700; color: var(--text-primary); letter-spacing: -0.01em; font-family: 'Montserrat', sans-serif; line-height: 1.25;">Global Sentiment Platform of Share Markets</div>
+                    <div style="font-size: clamp(1.15rem, 2.2vw, 1.45rem); font-weight: 800; color: var(--text-primary); letter-spacing: -0.02em; font-family: 'Montserrat', sans-serif; line-height: 1.2;">Valence</div>
                     <div style="font-size: clamp(0.68rem, 1.3vw, 0.76rem); font-weight: 500; color: var(--text-muted); font-family: 'IBM Plex Sans', sans-serif; line-height: 1.2; margin-top: 2px;">Real-Time Global Quantitative Intelligence &amp; Execution Engine</div>
                 </div>
             </div>
