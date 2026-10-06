@@ -546,17 +546,17 @@ $\text{EMA}_t$ gracefully decays from $+6.50$ to $+3.90$, dropping below the $+5
 
 The following matrix contrasts the **System-One Contrastive Language Model (CLM)** architecture against conventional **Generative Autoregressive LLM Scoring** (e.g., GPT-4o, Gemini 1.5 Pro):
 
-| Engineering & Mathematical Dimension | Valence System-One CLM (TypeSafe Jev / Qwen3-8B) | Generative LLM Scoring (GPT-4o / Gemini 1.5 Pro) |
-| :--- | :--- | :--- |
-| **Output Representation** | Continuous probability vector $\mathbf{p} \in \Delta^2$ on unit hypersphere $\mathbb{S}^{k-1}$. | Token string sequence parsed via regex or structured JSON schema. |
-| **Logit Calibration** | Directly calibrated via temperature $\tau$ over canonical hypothesis anchors. | Uncalibrated; token probabilities are contaminated by syntax tokens, commas, and punctuation. |
-| **Execution Latency** | **$10\text{--}18\text{ ms}$** per payload (single-pass forward evaluation on ZeroGPU). | **$650\text{--}2,200\text{ ms}$** per payload (multi-token auto-regressive generation over network API). |
-| **Determinism Guarantee** | **$100\%$ Bitwise Deterministic** ($\text{Var} = 0$, zero decoding temperature sensitivity). | Stochastic variance across runs; susceptible to prompt phrasing sensitivity and API provider updates. |
-| **Neutral Attenuation** | Endogenous mathematical operator: $M = \|S_{\text{rel}}\| \cdot (1 - 0.5 \cdot p_{\text{neut}})$. | Dependent on heuristic prompt engineering (e.g., *"give a score between -1 and 1"*). |
-| **Parsing Failure Rate** | **$0.00\%$** (Native tensor dot-product returns float values directly). | Non-zero ($0.5\%\text{--}3.0\%$ JSON parse failures, schema violations, markdown code-fence issues). |
-| **Context Conditioning** | Cross-attention tensor alignment between static OKF priors and dynamic news tokens. | Variable system-prompt in-context learning with token position decay and context stuffing. |
-| **Time-Series Compatibility** | Emits bounded continuous variables $I_t \in [-100, +100]$ suitable for recursive filters. | Emits discrete step classifications or unscaled integers prone to extreme swings. |
-| **Operational Cost** | High-throughput local batched inference ($>2,500\text{ payloads/sec}$ per cluster node). | Token-based API billing with rate-limit bottlenecks during high-volatility news events. |
+| Engineering & Mathematical Dimension | Generative LLM Scoring (GPT-4o / Gemini 1.5 Pro) | TypeSafe AI (Vanilla Jev Baseline) | Valence System-One CLM Engine |
+| :--- | :--- | :--- | :--- |
+| **Output Representation** | Token string sequence parsed via regex or structured JSON schema. | Raw discrete probability vector $\mathbf{p} \in \Delta^2$ over static choices. | Continuous calibrated probability vector $\mathbf{p} \in \Delta^2$ on unit hypersphere $\mathbb{S}^{k-1}$. |
+| **Logit Calibration** | Uncalibrated; token probabilities are contaminated by syntax tokens. | Calibrated over generic choices; uncalibrated for macro market spread. | Directly calibrated via temperature $\tau$ over canonical hypothesis anchors & $S_{\text{rel}}$. |
+| **Execution Latency** | **$650\text{--}2,200\text{ ms}$** per payload (multi-token generation over API). | **$300\text{--}600\text{ ms}$** per payload (standard hosted HTTP/REST API). | **$< 250\text{ ms}$** pipeline ($10\text{--}18\text{ ms}$ single-pass forward evaluation on A10G ASGI). |
+| **Determinism Guarantee** | Stochastic variance across runs; temperature sensitive. | 100% Deterministic choice probabilities ($P_i \in [0, 1]$). | **100% Bitwise Deterministic** ($\text{Var} = 0$, zero decoding temperature sensitivity). |
+| **Neutral Attenuation** | Dependent on heuristic prompt engineering (e.g., *"score between -1 and 1"*). | No neutral damping; prone to neutral flatlining ($P \ge 0.90$) under dense rules. | Endogenous mathematical operator: $M = \|S_{\text{rel}}\| \cdot (1 - 0.5 \cdot p_{\text{neut}})$. |
+| **Parsing Failure Rate** | Non-zero ($0.5\%\text{--}3.0\%$ JSON parse failures, schema violations). | **$0.00\%$** (Native Choice schema returns probability dictionary). | **$0.00\%$** (Native tensor dot-product returns float values directly). |
+| **Context Conditioning** | Variable system-prompt in-context learning with token position decay. | Static criteria strings; no dynamic macro regime awareness. | Dynamic regional OKF priors + asset-class-aware bipolar criteria. |
+| **Time-Series Compatibility** | Emits discrete step classifications or unscaled integers. | Emits raw probabilities; requires external continuous normalization. | Emits bounded continuous variables $I_t \in [-100, +100]$ suitable for recursive filters. |
+| **Operational Cost** | Token-based API billing with rate-limit bottlenecks during volatility. | Pay-per-query SaaS API tier. | High-throughput serverless batching ($>2,500\text{ payloads/sec}$ per GPU cluster). |
 
 ---
 

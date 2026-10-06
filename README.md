@@ -23,19 +23,21 @@ Conventional financial NLP platforms rely on generative Large Language Models (L
 
 ### ⚡ The CLM System-One Solution
 
-**Valence** eliminates generative token decoding entirely. Instead, our AI Engine uses **Contrastive Language Modeling (CLM-8B)** hosted on a dedicated serverless A10G GPU via Modal. By projecting financial text and macro rules directly into contrastive representation space, the engine evaluates market states using pure mathematical probability vectors:
+**Valence** eliminates generative token decoding entirely. Instead, our AI Engine builds upon the foundation of **TypeSafe AI's Jev** System-One contrastive architecture, deployed on a dedicated serverless A10G GPU via Modal. By projecting financial text and macro rules directly into contrastive representation space and applying rigorous financial mathematics, the engine evaluates market states using pure mathematical probability vectors:
 
 * **Sub-Second Latency**: Single-pass contrastive scoring runs in **< 250 ms** (>10x faster than generative LLMs).
 * **Zero Hallucination Risk**: No text generation or token sampling; outputs are pure deterministic probability distributions.
 * **Calibrated Probability Simplex**: Directly computes native probabilities over orthogonal market states where $P(\text{Bullish}) + P(\text{Bearish}) + P(\text{Neutral}) = 1.0$.
 
-| Dimension | Generative LLMs (Autoregressive) | Valence CLM System-One Engine |
-| :--- | :--- | :--- |
-| **Scoring Mechanism** | Generates text tokens / Prompted JSON | Contrastive representation probability simplex |
-| **Inference Latency** | 2,000 – 5,000 ms / headline | **< 250 ms** / headline |
-| **Output Stability** | Prone to formatting errors and hallucinations | **100% deterministic mathematical vectors** |
-| **Confidence Calibration** | Qualitative clustering (e.g. 0.8 vs 0.2) | **Calibrated relative directional spread** |
-| **Signal Noise Handling** | Neutral sentiment easily misclassified | **Explicit neutral attenuation factor** |
+| Dimension | Generative LLMs (Autoregressive) | TypeSafe AI (Vanilla Jev) | Valence CLM System-One Engine |
+| :--- | :--- | :--- | :--- |
+| **Scoring Mechanism** | Generates text tokens / Prompted JSON | Contrastive representation / Choice probabilities | **Focused Bipolar Simplex + Quantitative Spread ($S_{\text{rel}}$)** |
+| **Inference Latency** | 2,000 – 5,000 ms / headline | 300 – 600 ms / call (standard hosted API) | **< 250 ms** / headline (dedicated serverless A10G ASGI) |
+| **Output Stability** | Prone to formatting errors and hallucinations | Deterministic choice probabilities ($P_i \in [0, 1]$) | **100% deterministic continuous momentum ($-100$ to $+100$)** |
+| **Confidence Calibration** | Qualitative clustering (e.g. 0.8 vs 0.2) | Raw probabilities; uncalibrated directional spread | **Calibrated relative directional conviction ($S_{\text{rel}}$)** |
+| **Signal Noise Handling** | Neutral sentiment easily misclassified | Prone to neutral flatlining ($P \ge 0.90$) on dense context | **Explicit non-linear neutral attenuation factor ($M$)** |
+| **Macro & Asset Conditioning** | Unstructured prompts; prone to attention drift | Static criteria; no dynamic macro regime awareness | **Dynamic regional OKF priors + asset-class-aware criteria** |
+| **Execution Integration** | Requires regex parsing & ad-hoc heuristics | Discrete outputs; no native temporal smoothing | **Vectorized 4P EMA recursive filtering & Alpaca paper trading** |
 
 ---
 
