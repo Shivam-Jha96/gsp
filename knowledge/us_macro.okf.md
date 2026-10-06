@@ -5,7 +5,7 @@
 - **Action:** Bullish on the US Dollar (USD), Bullish on Short-End Treasury Yields (2Y UST), Bearish on Broad Equities (SPY), and Bearish on Long-Duration Treasuries (TLT).
 
 ## Rule 2: Persistent Consumer Price Pressures and Elevated Inflation
-- **Condition:** Monthly headline or core CPI prints accelerate or hold stubbornly elevated (e.g., holding near 3.4% annualized), confirming entrenched cost pressures that validate Fed tightening.
+- **Condition:** Monthly headline or core CPI prints accelerate or hold stubbornly elevated (holding near 3.4% annualized), confirming entrenched cost pressures that validate Fed tightening.
 - **Action:** Bullish on USD, Bearish on Long-Duration Fixed Income (TLT), and Bearish on High-Multiple/Unprofitable Growth Equities.
 
 ## Rule 3: Resilient Labor Market Underlying Strength
@@ -17,7 +17,7 @@
 - **Action:** Bullish on Tech-Heavy Equities (QQQ) and Semiconductors (SMH), Bearish on Non-Tech Defensive Value and Capital-Intensive Small-Caps (IWM).
 
 ## Rule 5: Geopolitical Supply Shock and Energy Escalation
-- **Condition:** Military friction or geopolitical conflict involving major global energy corridors (e.g., Iran war escalations) triggers risk-off sentiment and upward price shocks in crude oil.
+- **Condition:** Military friction or geopolitical conflict involving major global energy corridors (such as Iran war escalations) triggers risk-off sentiment and upward price shocks in crude oil.
 - **Action:** Bullish on Energy Commodities (WTI/Brent Crude), Bullish on USD as a global liquidity reserve, and Bearish on Consumer Discretionary (XLY) and Transportation Equities.
 
 ## Rule 6: Trade Tariffs and Industrial Supply Chain Friction
