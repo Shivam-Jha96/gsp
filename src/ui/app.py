@@ -1367,8 +1367,16 @@ if not df_signals.empty:
                     <polygon points="76,17 71,28 81,28" fill="#34d399"/>
                 </svg>
                 <div>
-                    <div style="font-size: clamp(1.15rem, 2.2vw, 1.45rem); font-weight: 800; color: var(--text-primary); letter-spacing: -0.02em; font-family: 'Montserrat', sans-serif; line-height: 1.2;">Valence</div>
-                    <div style="font-size: clamp(0.68rem, 1.3vw, 0.76rem); font-weight: 500; color: var(--text-muted); font-family: 'IBM Plex Sans', sans-serif; line-height: 1.2; margin-top: 2px;">Real-Time Global Quantitative Intelligence &amp; Execution Engine</div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-family: 'Montserrat', sans-serif; font-size: clamp(1.25rem, 2.4vw, 1.55rem); font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; background: linear-gradient(135deg, #ffffff 30%, #e2e8f0 70%, #6ee7b7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 2px 10px rgba(0,0,0,0.5)); line-height: 1.1;">VALENCE</span>
+                        <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981;"></span>
+                        <span style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.32); color: #34d399; font-size: 0.62rem; font-weight: 800; padding: 2px 7px; border-radius: 4px; letter-spacing: 0.08em; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">QUANT</span>
+                    </div>
+                    <div style="font-size: clamp(0.66rem, 1.2vw, 0.74rem); font-weight: 600; color: #94a3b8; font-family: 'IBM Plex Sans', sans-serif; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 3px; display: flex; align-items: center; gap: 6px;">
+                        <span>Global Macro Sentiment</span>
+                        <span style="color: rgba(255,255,255,0.25);">•</span>
+                        <span style="color: #34d399;">Directional Signal Engine</span>
+                    </div>
                 </div>
             </div>
         </div>

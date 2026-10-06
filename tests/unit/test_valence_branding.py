@@ -22,7 +22,7 @@ class TestValenceBranding(unittest.TestCase):
 
     def test_app_title_is_valence(self):
         self.assertIn('page_title="Valence"', self.app_content)
-        self.assertIn('>Valence</div>', self.app_content)
+        self.assertIn('>VALENCE</span>', self.app_content)
 
 if __name__ == '__main__':
     unittest.main()
