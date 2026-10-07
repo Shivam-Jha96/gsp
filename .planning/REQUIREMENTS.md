@@ -20,6 +20,7 @@
 ### Refactoring & Expansion (Current Milestone)
 
 - [ ] **MOD-01**: Refactor `src/ui/app.py` into dedicated component modules under `src/ui/components/` (header, filters, chart, feed, styling)
+- [ ] **MOD-02**: Implement an automated fortnightly GitHub Action to fetch and update `*_constituents.okf.json` files using a free API (FMP or Finnhub)
 - [ ] **TEST-01**: Expand automated unit and regression test coverage for signal EMA crossover and edge case calculation
 - [ ] **MON-01**: Integrate proactive health probe reporting across scheduled GitHub Actions pipelines
 
@@ -53,12 +54,13 @@
 | UI-01 | Phase 1 | Complete |
 | UI-02 | Phase 1 | Complete |
 | MOD-01 | Phase 2 | Pending |
+| MOD-02 | Phase 2 | Pending |
 | TEST-01 | Phase 2 | Pending |
 | MON-01 | Phase 2 | Pending |
 
 **Coverage:**
-- v1 requirements: 12 total
-- Mapped to phases: 12
+- v1 requirements: 13 total
+- Mapped to phases: 13
 - Unmapped: 0 ✓
 
 ---
