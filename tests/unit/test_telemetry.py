@@ -230,6 +230,13 @@ class TestDatabaseTelemetry(unittest.TestCase):
         disp_tok, _, _, _ = format_pipeline_freshness(fixed_now, now_utc=fixed_now, target_tz_str="Asia/Tokyo")
         self.assertIn("JST", disp_tok)
 
+        # Test explicit tz_abbr overrides (e.g. from UI selectbox options)
+        disp_est, _, _, _ = format_pipeline_freshness(fixed_now, now_utc=fixed_now, target_tz_str="America/New_York", tz_abbr="EST")
+        self.assertIn("EST", disp_est)
+
+        disp_gmt, _, _, _ = format_pipeline_freshness(fixed_now, now_utc=fixed_now, target_tz_str="Europe/London", tz_abbr="GMT")
+        self.assertIn("GMT", disp_gmt)
+
 
 if __name__ == "__main__":
     unittest.main()

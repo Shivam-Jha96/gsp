@@ -35,6 +35,7 @@ class TestValenceBranding(unittest.TestCase):
         
         # 3. Dynamic timezone support in telemetry call
         self.assertIn('target_tz_str=current_target_tz', self.app_content)
+        self.assertIn('tz_abbr=current_tz_abbr', self.app_content)
         
         # 4. Spacing deconfliction
         self.assertIn('margin-bottom: 10px !important;', self.app_content)

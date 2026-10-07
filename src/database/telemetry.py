@@ -190,12 +190,13 @@ def format_pipeline_freshness(
     completed_at: Optional[datetime],
     fallback_ts: Optional[datetime] = None,
     now_utc: Optional[datetime] = None,
-    target_tz_str: str = "Asia/Kolkata"
+    target_tz_str: str = "Asia/Kolkata",
+    tz_abbr: Optional[str] = None
 ) -> Tuple[str, str, str, str]:
     """
     Formats the freshness badge strings:
     Returns (time_display_str, relative_str, tooltip_str, freshness_tier)
-    - time_display_str: e.g. "13:30 IST"
+    - time_display_str: e.g. "13:30 IST", "08:00 UTC", "04:00 EDT"
     - relative_str: e.g. "5m ago", "just now", "2h ago"
     - tooltip_str: Detailed inspection string for HTML title attribute
     - freshness_tier: "fresh" (< 2h15m), "aging" (2h15m - 4h), "stale" (> 4h)
@@ -245,9 +246,10 @@ def format_pipeline_freshness(
         now_local = now
         target_tz_str = "UTC"
 
-    tz_abbr = local_dt.strftime("%Z")
-    if not tz_abbr or tz_abbr.startswith(("+", "-")):
-        tz_abbr = target_tz_str.split("/")[-1].replace("_", " ")
+    if tz_abbr is None:
+        tz_abbr = local_dt.strftime("%Z")
+        if not tz_abbr or tz_abbr.startswith(("+", "-")):
+            tz_abbr = target_tz_str.split("/")[-1].replace("_", " ")
 
     try:
         if local_dt.date() == now_local.date():

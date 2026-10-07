@@ -35,10 +35,14 @@ except Exception:
 
 try:
     import database.telemetry as db_telemetry_mod
+    import importlib
+    importlib.reload(db_telemetry_mod)
     get_latest_successful_pipeline_run = db_telemetry_mod.get_latest_successful_pipeline_run
     format_pipeline_freshness = db_telemetry_mod.format_pipeline_freshness
 except Exception:
     import src.database.telemetry as db_telemetry_mod
+    import importlib
+    importlib.reload(db_telemetry_mod)
     get_latest_successful_pipeline_run = db_telemetry_mod.get_latest_successful_pipeline_run
     format_pipeline_freshness = db_telemetry_mod.format_pipeline_freshness
 
@@ -1373,12 +1377,15 @@ def render_dashboard():
     default_tz_ix = next((i for i, k in enumerate(tz_keys) if "IST" in k), 0)
     current_selected_tz = st.session_state.get("filter_timezone", tz_keys[default_tz_ix])
     current_target_tz = tz_options.get(current_selected_tz, "Asia/Kolkata")
+    current_tz_abbr = current_selected_tz.split('(')[-1].replace(')', '').strip() if '(' in current_selected_tz else current_selected_tz
 
     latest_ts = df_signals['timestamp'].max() if not df_signals.empty else None
     pipeline_completed_at = latest_pipeline_run.get('completed_at') if latest_pipeline_run else None
     time_display_str, relative_display_str, freshness_tooltip, freshness_tier = format_pipeline_freshness(
-        pipeline_completed_at, fallback_ts=latest_ts, target_tz_str=current_target_tz
+        pipeline_completed_at, fallback_ts=latest_ts, target_tz_str=current_target_tz, tz_abbr=current_tz_abbr
     )
+    if current_tz_abbr != "IST" and time_display_str.endswith(" IST"):
+        time_display_str = time_display_str[:-4] + f" {current_tz_abbr}"
 
     # --- Top Row: Unified Institutional Header Banner with Branding & Telemetry Status ---
     if freshness_tier == "aging":
