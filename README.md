@@ -3,7 +3,7 @@
 
 [![Pipeline Status](https://github.com/Shivam-Jha96/gsp/actions/workflows/deploy.yml/badge.svg)](https://github.com/Shivam-Jha96/gsp/actions/workflows/deploy.yml)
 [![OKF Updater](https://github.com/Shivam-Jha96/gsp/actions/workflows/update_okf.yml/badge.svg)](https://github.com/Shivam-Jha96/gsp/actions/workflows/update_okf.yml)
-[![Dashboard](https://img.shields.io/badge/Live_Dashboard-Streamlit-FF4B4B?logo=streamlit)](https://macro-sentiment-tracker.streamlit.app/)
+[![Dashboard](https://img.shields.io/badge/Live_Dashboard-Streamlit-FF4B4B?logo=streamlit)](https://valence.streamlit.app/)
 
 <p align="center">
   <img src="assets/valence_social_preview.png" alt="Valence Social Preview Banner" width="100%" style="border-radius: 12px; border: 1px solid #1e293b;" />
@@ -313,4 +313,4 @@ All workflows can also be triggered manually via `workflow_dispatch` from the Gi
 
 The live dashboard is deployed on Streamlit Community Cloud:
 
-**🔗 [macro-sentiment-tracker.streamlit.app](https://macro-sentiment-tracker.streamlit.app/)**
+**🔗 [valence.streamlit.app](https://valence.streamlit.app/)**
