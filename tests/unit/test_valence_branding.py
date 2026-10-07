@@ -26,7 +26,7 @@ class TestValenceBranding(unittest.TestCase):
 
     def test_ui_enhancements_structure(self):
         # 1. Fragment auto-polling decorator
-        self.assertIn('@make_fragment_decorator(run_every="30s")', self.app_content)
+        self.assertIn('@make_fragment_decorator(run_every="5m")', self.app_content)
         self.assertIn('def render_dashboard():', self.app_content)
         
         # 2. Updated timestamp pill displays only timestamp and timezone

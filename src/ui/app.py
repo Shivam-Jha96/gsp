@@ -1183,7 +1183,7 @@ def clean_news_item(raw_text: str) -> dict:
         
     return {"headline": headline, "source": source}
 
-@st.cache_data(ttl=30)
+@st.cache_data(ttl=300)
 def load_data():
     db_url = os.environ.get("DATABASE_URL")
     if not db_url:
@@ -1342,7 +1342,7 @@ def render_segmented_filter(label, options, default_ix: int | None = 0, key=None
 
 
 # Helper for resilient fragment decorator supporting auto-run intervals
-def make_fragment_decorator(run_every="30s"):
+def make_fragment_decorator(run_every="5m"):
     if hasattr(st, "fragment"):
         return st.fragment(run_every=run_every)
     elif hasattr(st, "experimental_fragment"):
@@ -1353,7 +1353,7 @@ def make_fragment_decorator(run_every="30s"):
         return noop_dec
 
 
-@make_fragment_decorator(run_every="30s")
+@make_fragment_decorator(run_every="5m")
 def render_dashboard():
     df_signals, df_payloads, latest_pipeline_run = get_processed_data()
 

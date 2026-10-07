@@ -86,8 +86,8 @@ flowchart TD
         KPI_TILES["Dynamic Responsive KPI Cards<br/>(Optimism, Bias, Volume, Momentum)"]
         PLOTLY_AREA["Plotly Multi-Index Sentiment Surface<br/>(Overlapping Filled Areas + Region Mean)"]
         LIVE_FEED["Sanitized Live Intelligence Stream<br/>(Bullish/Bearish/Noise Badging)"]
-        MATH_LAYER -->|st.cache_data ttl=30s| ST_APP
-        DOC_LAYER -->|st.cache_data ttl=30s| ST_APP
+        MATH_LAYER -->|st.cache_data ttl=5m| ST_APP
+        DOC_LAYER -->|st.cache_data ttl=5m| ST_APP
         ST_APP --> CALIBRATE
         CALIBRATE --> TZ_ENGINE
         TZ_ENGINE --> KPI_TILES
@@ -555,7 +555,7 @@ In [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py), the header action 
 
 #### 8. Reactive Zero-Reload Polling & Structural Boundary Deconfliction
 To deliver real-time terminal synchronization and resolve visual boundary collisions across varying viewport sizes:
-* **Background Data Polling (`run_every="30s"`):** The dashboard is encapsulated within a master `@st.fragment(run_every="30s")` coupled with `@st.cache_data(ttl=30)` on `get_processed_data()`. When new sentiment pipeline runs complete in Supabase, the terminal automatically updates charts, KPIs, and news feeds in the background with zero manual page refreshes.
+* **Background Data Polling (`run_every="5m"`):** The dashboard is encapsulated within a master `@st.fragment(run_every="5m")` coupled with `@st.cache_data(ttl=300)` on `get_processed_data()`. When new sentiment pipeline runs complete in Supabase, the terminal automatically updates charts, KPIs, and news feeds in the background with zero manual page refreshes.
 * **Unified Header Banner Enclosure:** The branding typography and live telemetry status pills (`UPDATED {time_display_str}` and `SYSTEM ONLINE`) are unified inside a single continuous institutional `.header-banner-card` (`display: flex; justify-content: space-between; align-items: center;`), eliminating disconnected column cards, horizontal border offsets, and dead interior voids.
 * **Boundary Deconfliction, Margin Rhythm & Chart Clearance:**
   * The chart section container enforces `padding: 14px 18px 14px 18px` with `justify-content: flex-start` paired with Plotly chart height calibrated to `height=460` and internal margins (`margin=dict(l=8, r=44, t=28, b=24)`), providing 24px of breathing clearance above the mini index grid divider, insulating the right Y-axis `OPTIMISM SCORE` label, numerical ticks, timeline axis, and upper legend from colliding with container borders.
@@ -677,7 +677,7 @@ The table below provides a detailed breakdown of all third-party services and in
 | **Modal Serverless GPU** | Modal Labs (AWS us-east-1) | 99.9% | Serverless NVIDIA A10G (24GB VRAM), pay-per-second | Serves vLLM Qwen3-8B and CLM-8B System-One contrastive inference | Container cold boot stalls runner; out of memory crashes inference | Pre-baked container images via `hf_transfer`; keep-alive scale-down window (120s); fallback neutral score on network timeout |
 | **Supabase PostgreSQL** | Supabase (AWS us-east-1) | 99.95% | Managed PostgreSQL 15+, PgBouncer pooler (Port 6543) | Stores vertically partitioned `event_signals` and `event_payloads` | Connection pool exhaustion under concurrent runner load | Thread-safe connection pool (`ThreadedConnectionPool`); transaction-mode pooling; explicit connection close on exit |
 | **GitHub Actions Runners** | GitHub / Microsoft Azure | 99.9% | Ubuntu-latest standard runners, free-tier minutes | Schedulers for 2-hour pipeline and daily OKF knowledge evolution | Runner scheduling queue delays during peak GitHub hours | Retries via workflow dispatch; independent cron triggers; resilient idempotent pipeline execution |
-| **Streamlit Community Cloud** | Snowflake / Streamlit | 99.5% | Shared cloud container, free hosting tier | Institutional user presentation dashboard and terminal interface | Container memory sleep after 7 days of inactivity; app crash on database disconnect | In-memory `@st.cache_data(ttl=30)` to minimize DB strain; graceful fallback to mock data on DB failure |
+| **Streamlit Community Cloud** | Snowflake / Streamlit | 99.5% | Shared cloud container, free hosting tier | Institutional user presentation dashboard and terminal interface | Container memory sleep after 7 days of inactivity; app crash on database disconnect | In-memory `@st.cache_data(ttl=300)` to minimize DB strain; graceful fallback to mock data on DB failure |
 | **Alpaca Paper Trading API** | Alpaca Securities LLC | 99.95% | Free Paper Trading API tier (REST/WebSocket) | Algorithmic order submission (`MarketOrderRequest`) and portfolio execution | Order rejected due to market hours, invalid symbol, or API timeout | Handled via try/except logging blocks; trade execution failures do not interrupt database ingestion |
 | **Google Gemini API** | Google Cloud Vertex / AI Studio | 99.9% | Free / Pay-as-you-go Gemini Flash API | Macroeconomic regime reasoning and dynamic OKF rule authoring | HTTP 503 high-load errors; 15 RPM rate-limiting throttling | Multi-model fallback chain (`3.8-flash` $\rightarrow$ `3.7-flash` $\rightarrow$ `3.5-flash-lite`); 5s rate-limiting delays |
 | **Google News RSS Aggregators** | Google LLC | Best-effort | Public web endpoints (Rate-limited) | Ingestion source for global financial and macroeconomic news | Network timeout; IP rate-limiting blocking requests | 10-second `aiohttp` client timeout; max 3 headlines per ticker cap; dual search channels (Google + Reuters) |
