@@ -1247,6 +1247,7 @@ def load_data():
             return pd.DataFrame(), pd.DataFrame(), None
     return pd.DataFrame(), pd.DataFrame(), None
 
+@st.cache_data(ttl=300)
 def get_processed_data():
     df_signals, df_payloads, latest_pipeline_run = load_data()
     if df_signals.empty and df_payloads.empty:
@@ -1321,49 +1322,74 @@ def get_processed_data():
 
 
 # Helper for segmented filter buttons (resilient across Streamlit versions)
-def render_segmented_filter(label, options, default_ix: int | None = 0, key=None):
+def render_segmented_filter(label, options, default_ix: int | None = 0, key=None, on_change=None):
     default_val = options[default_ix] if (default_ix is not None and 0 <= default_ix < len(options)) else None
     if key:
         if key not in st.session_state or st.session_state[key] is None or st.session_state[key] not in options:
             st.session_state[key] = default_val
+        kwargs = {"key": key, "label_visibility": "collapsed"}
+        if on_change is not None:
+            kwargs["on_change"] = on_change
         if hasattr(st, "pills"):
-            res = st.pills(label, options, key=key, label_visibility="collapsed")
+            res = st.pills(label, options, **kwargs)
             return res or default_val
         elif hasattr(st, "segmented_control"):
-            res = st.segmented_control(label, options, key=key, label_visibility="collapsed")
+            res = st.segmented_control(label, options, **kwargs)
             return res or default_val
         else:
-            return st.radio(label, options, index=default_ix, key=key, horizontal=True, label_visibility="collapsed")
+            return st.radio(label, options, index=default_ix, horizontal=True, **kwargs)
     else:
+        kwargs = {"default": default_val, "label_visibility": "collapsed"}
         if hasattr(st, "pills"):
-            res = st.pills(label, options, default=default_val, label_visibility="collapsed")
+            res = st.pills(label, options, **kwargs)
             return res or default_val
         elif hasattr(st, "segmented_control"):
-            res = st.segmented_control(label, options, default=default_val, label_visibility="collapsed")
+            res = st.segmented_control(label, options, **kwargs)
             return res or default_val
         else:
             return st.radio(label, options, index=default_ix, horizontal=True, label_visibility="collapsed")
 
 
-# Helper for resilient fragment decorator supporting auto-run intervals
-def make_fragment_decorator(run_every="5m"):
-    if hasattr(st, "fragment"):
-        return st.fragment(run_every=run_every)
-    elif hasattr(st, "experimental_fragment"):
-        return st.experimental_fragment(run_every=run_every)  # type: ignore[attr-defined]
-    else:
-        def noop_dec(func):
-            return func
-        return noop_dec
+# Helper for resilient fragment decorator supporting auto-run intervals and targeted rerun keys
+def make_fragment_decorator(run_every="5m", key=None):
+    def decorator(func):
+        frag_key = key or func.__name__
+        if hasattr(st, "fragment"):
+            kwargs = {}
+            if run_every is not None:
+                kwargs["run_every"] = run_every
+            if frag_key is not None:
+                kwargs["key"] = frag_key
+            return st.fragment(**kwargs)(func)
+        elif hasattr(st, "experimental_fragment"):
+            kwargs = {}
+            if run_every is not None:
+                kwargs["run_every"] = run_every
+            return st.experimental_fragment(**kwargs)(func)  # type: ignore[attr-defined]
+        return func
+    return decorator
+
+
+def rerun_scoped(target):
+    try:
+        st.rerun(scope=target)
+    except TypeError:
+        try:
+            st.rerun(target)
+        except Exception:
+            st.rerun()
+    except Exception:
+        st.rerun()
 
 
 @make_fragment_decorator(run_every="5m")
-def render_dashboard():
-    df_signals, df_payloads, latest_pipeline_run = get_processed_data()
-
-    if df_signals.empty:
-        st.info("Database empty. Run the ingestion engine to populate.")
-        return
+def render_header_banner(df_signals=None, latest_pipeline_run=None):
+    if df_signals is None or latest_pipeline_run is None:
+        fresh_signals, _, fresh_run = get_processed_data()
+        if df_signals is None:
+            df_signals = fresh_signals
+        if latest_pipeline_run is None:
+            latest_pipeline_run = fresh_run
 
     # Dynamic timezone selection: resolve active timezone from session state or default
     tz_options = {
@@ -1379,7 +1405,7 @@ def render_dashboard():
     current_target_tz = tz_options.get(current_selected_tz, "Asia/Kolkata")
     current_tz_abbr = current_selected_tz.split('(')[-1].replace(')', '').strip() if '(' in current_selected_tz else current_selected_tz
 
-    latest_ts = df_signals['timestamp'].max() if not df_signals.empty else None
+    latest_ts = df_signals['timestamp'].max() if (df_signals is not None and not df_signals.empty) else None
     pipeline_completed_at = latest_pipeline_run.get('completed_at') if latest_pipeline_run else None
     time_display_str, relative_display_str, freshness_tooltip, freshness_tier = format_pipeline_freshness(
         pipeline_completed_at, fallback_ts=latest_ts, target_tz_str=current_target_tz, tz_abbr=current_tz_abbr
@@ -1468,7 +1494,9 @@ def render_dashboard():
         </div>
     </div>
     """, unsafe_allow_html=True)
-    
+
+
+def render_usp_banner():
     st.markdown(f"""
     <details class="usp-collapsible">
         <summary class="usp-summary">
@@ -1521,7 +1549,9 @@ def render_dashboard():
         </div>
     </details>
     """, unsafe_allow_html=True)
-    # --- Top Row: Filter Toolbar Card (5 Aligned Controls in 1 Single Line) ---
+
+
+def render_filter_toolbar(df_signals):
     with st.container(border=True):
         filter_col1, filter_col2, filter_col3, filter_col4, filter_col5 = st.columns([1.1, 1.25, 1.35, 1.35, 1.05], gap="small")
         lbl_color = "#475569" if is_light else "#94a3b8"
@@ -1535,7 +1565,14 @@ def render_dashboard():
             """, unsafe_allow_html=True)
             timeframe_options = ["7 Days", "1 Day", "12 Hours", "6 Hours", "4 Hours", "1 Month", "1 Year", "All"]
             default_tf_ix = 0
-            date_range = st.selectbox("Timeframe", timeframe_options, index=default_tf_ix, label_visibility="collapsed", key="filter_timeframe")
+            st.selectbox(
+                "Timeframe",
+                timeframe_options,
+                index=default_tf_ix,
+                label_visibility="collapsed",
+                key="filter_timeframe",
+                on_change=lambda: rerun_scoped(["render_analytics_surface", "render_live_intelligence_feed"])
+            )
             
         with filter_col2:
             st.markdown(f"""
@@ -1563,8 +1600,14 @@ def render_dashboard():
             display_regions = [region_name_map.get(r, r) for r in regions]
             default_reg_name = region_name_map.get("IN", "IN")
             default_ix = display_regions.index(default_reg_name) if default_reg_name in display_regions else 0
-            selected_region_display = st.selectbox("Region", display_regions, index=default_ix, label_visibility="collapsed", key="filter_region")
-            selected_region = next((code for code, name in region_name_map.items() if name == selected_region_display), selected_region_display)
+            st.selectbox(
+                "Region",
+                display_regions,
+                index=default_ix,
+                label_visibility="collapsed",
+                key="filter_region",
+                on_change=lambda: rerun_scoped("app")
+            )
 
         with filter_col3:
             st.markdown(f"""
@@ -1573,9 +1616,22 @@ def render_dashboard():
                 <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">CHART DISPLAY</span>
             </div>
             """, unsafe_allow_html=True)
+            selected_region_display = st.session_state.get("filter_region", display_regions[default_ix])
+            selected_region = next((code for code, name in region_name_map.items() if name == selected_region_display), selected_region_display)
+            if "(" in selected_region_display and ")" in selected_region_display and selected_region not in ["IN", "US", "UK", "JP"]:
+                selected_region = selected_region_display.split("(")[-1].replace(")", "").strip()
             active_indices = df_signals[df_signals['market_region'] == selected_region]['index_ticker'].unique().tolist()
             active_indices = [x for x in active_indices if x != 'UNKNOWN']
-            chart_display = st.selectbox("Chart Display", ["All Indices"] + active_indices, index=0, label_visibility="collapsed", key="filter_chart_display")
+            chart_options = ["All Indices"] + active_indices
+            if st.session_state.get("filter_chart_display") not in chart_options:
+                st.session_state["filter_chart_display"] = "All Indices"
+            st.selectbox(
+                "Chart Display",
+                chart_options,
+                label_visibility="collapsed",
+                key="filter_chart_display",
+                on_change=lambda: rerun_scoped("render_analytics_surface")
+            )
 
         with filter_col4:
             st.markdown(f"""
@@ -1593,9 +1649,14 @@ def render_dashboard():
             }
             tz_keys = list(tz_options.keys())
             default_tz_ix = next((i for i, k in enumerate(tz_keys) if "IST" in k), 0)
-            display_tz = st.selectbox("Timezone", tz_keys, index=default_tz_ix, label_visibility="collapsed", key="filter_timezone")
-            target_tz = tz_options[display_tz]
-            tz_abbr = display_tz.split('(')[-1].replace(')', '').strip() if '(' in display_tz else display_tz
+            st.selectbox(
+                "Timezone",
+                tz_keys,
+                index=default_tz_ix,
+                label_visibility="collapsed",
+                key="filter_timezone",
+                on_change=lambda: rerun_scoped(["render_header_banner", "render_analytics_surface", "render_live_intelligence_feed"])
+            )
 
         with filter_col5:
             st.markdown(f"""
@@ -1605,22 +1666,67 @@ def render_dashboard():
             </div>
             """, unsafe_allow_html=True)
             ema_display_options = ["4 Periods", "8 Periods", "12 Periods", "24 Periods"]
-            selected_ema_label = st.selectbox("EMA Window", ema_display_options, index=0, label_visibility="collapsed", key="filter_ema_window")
-            ema_window = int(selected_ema_label.split()[0])
+            st.selectbox(
+                "EMA Window",
+                ema_display_options,
+                index=0,
+                label_visibility="collapsed",
+                key="filter_ema_window",
+                on_change=lambda: rerun_scoped("render_analytics_surface")
+            )
+
+
+@make_fragment_decorator(run_every="5m")
+def render_analytics_surface(df_signals=None):
+    if df_signals is None:
+        df_signals, _, _ = get_processed_data()
+
+    if df_signals.empty:
+        st.warning("No data found for the selected parameters.")
+        return
+
+    region_name_map = {
+        "IN": "India (IN)",
+        "US": "United States (US)",
+        "UK": "United Kingdom (UK)",
+        "JP": "Japan (JP)"
+    }
+    selected_region_display = st.session_state.get("filter_region", "India (IN)")
+    selected_region = next((code for code, name in region_name_map.items() if name == selected_region_display), selected_region_display)
+    if "(" in selected_region_display and ")" in selected_region_display and selected_region not in ["IN", "US", "UK", "JP"]:
+        selected_region = selected_region_display.split("(")[-1].replace(")", "").strip()
+
+    date_range = st.session_state.get("filter_timeframe", "7 Days")
+    chart_display = st.session_state.get("filter_chart_display", "All Indices")
+
+    tz_options = {
+        "Asia/Kolkata (IST)": "Asia/Kolkata",
+        "UTC": "UTC",
+        "America/New_York (EST)": "America/New_York",
+        "Europe/London (GMT)": "Europe/London",
+        "Asia/Tokyo (JST)": "Asia/Tokyo"
+    }
+    tz_keys = list(tz_options.keys())
+    default_tz_ix = next((i for i, k in enumerate(tz_keys) if "IST" in k), 0)
+    current_selected_tz = st.session_state.get("filter_timezone", tz_keys[default_tz_ix])
+    target_tz = tz_options.get(current_selected_tz, "Asia/Kolkata")
+    tz_abbr = current_selected_tz.split('(')[-1].replace(')', '').strip() if '(' in current_selected_tz else current_selected_tz
+
+    selected_ema_label = st.session_state.get("filter_ema_window", "4 Periods")
+    try:
+        ema_window = int(str(selected_ema_label).split()[0])
+    except Exception:
+        ema_window = 4
 
     filtered_signals = df_signals[df_signals['market_region'] == selected_region].copy()
-    display_payloads = df_payloads.copy()
-    
+
     # --- Implement Timeframe Filtering ---
     if not filtered_signals.empty and date_range != "All":
-        # Ensure timestamp is tz-aware for accurate Timedelta math
         if filtered_signals['timestamp'].dt.tz is None:
             filtered_signals['timestamp'] = filtered_signals['timestamp'].dt.tz_localize('UTC')
-        if display_payloads['timestamp'].dt.tz is None:
-            display_payloads['timestamp'] = display_payloads['timestamp'].dt.tz_localize('UTC')
             
         now = pd.Timestamp.utcnow()
-        cutoff = now  # default: no filtering if date_range is unrecognized
+        cutoff = now
         if date_range in ["4 Hours", "4 Hour", "4H"]: cutoff = now - pd.Timedelta(hours=4)
         elif date_range in ["6 Hours", "6 Hour", "6H"]: cutoff = now - pd.Timedelta(hours=6)
         elif date_range in ["12 Hours", "12 Hour", "12H"]: cutoff = now - pd.Timedelta(hours=12)
@@ -1630,17 +1736,12 @@ def render_dashboard():
         elif date_range in ["1 Year", "1Y"]: cutoff = now - pd.Timedelta(days=365)
         
         filtered_signals = filtered_signals[filtered_signals['timestamp'] >= cutoff]
-        display_payloads = display_payloads[display_payloads['timestamp'] >= cutoff]
     
     if not filtered_signals.empty:
         # Convert DataFrames to User Selected Timezone
         if filtered_signals['timestamp'].dt.tz is None:
             filtered_signals['timestamp'] = filtered_signals['timestamp'].dt.tz_localize('UTC')
         filtered_signals['timestamp'] = filtered_signals['timestamp'].dt.tz_convert(target_tz)
-        
-        if display_payloads['timestamp'].dt.tz is None:
-            display_payloads['timestamp'] = display_payloads['timestamp'].dt.tz_localize('UTC')
-        display_payloads['timestamp'] = display_payloads['timestamp'].dt.tz_convert(target_tz)
 
         filtered_signals.sort_values('timestamp', inplace=True)
         
@@ -1958,110 +2059,175 @@ def render_dashboard():
                     
                     kpi_html += '</div>'
                     st.markdown(kpi_html, unsafe_allow_html=True)
-
-        # --- Regional News Feed at the Bottom (Isolated Fragment for Dynamic Rendering) ---
-        def render_live_intelligence_feed(region_payloads, selected_region, is_light, date_range):
-            total_events = len(region_payloads)
-            bullish_count = int((region_payloads['sentiment_index'] >= 0.5).sum()) if not region_payloads.empty else 0
-            bearish_count = int((region_payloads['sentiment_index'] <= -0.5).sum()) if not region_payloads.empty else 0
-            neutral_count = total_events - bullish_count - bearish_count
-
-            with st.container(border=True, key="live_intelligence_feed_container"):
-                feed_header_col1, feed_header_col2 = st.columns([0.42, 0.58], vertical_alignment="center")
-                with feed_header_col1:
-                    st.markdown(f"""<div style="display: flex; align-items: center; gap: 8px; margin: 0; padding: 0; min-height: 38px;"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.4); flex-shrink: 0;"></span><span style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); font-family: 'Montserrat', sans-serif; line-height: 1.2;">{selected_region} Live Intelligence Feed</span></div>""", unsafe_allow_html=True)
-                with feed_header_col2:
-                    feed_pill_options = [
-                        f"All {total_events}",
-                        f"Bullish {bullish_count}",
-                        f"Bearish {bearish_count}",
-                        f"Neutral {neutral_count}"
-                    ]
-                    selected_feed_pill = render_segmented_filter("feed_filter", feed_pill_options, default_ix=0, key="feed_sentiment_pills")
-
-                if selected_feed_pill and "Bullish" in selected_feed_pill:
-                    feed_display_payloads = region_payloads[region_payloads['sentiment_index'] >= 0.5]
-                    sentiment_label = "Bullish"
-                elif selected_feed_pill and "Bearish" in selected_feed_pill:
-                    feed_display_payloads = region_payloads[region_payloads['sentiment_index'] <= -0.5]
-                    sentiment_label = "Bearish"
-                elif selected_feed_pill and ("Neutral" in selected_feed_pill or "Noise" in selected_feed_pill):
-                    feed_display_payloads = region_payloads[(region_payloads['sentiment_index'] > -0.5) & (region_payloads['sentiment_index'] < 0.5)]
-                    sentiment_label = "Neutral"
-                else:
-                    feed_display_payloads = region_payloads
-                    sentiment_label = "All"
-
-                st.markdown(f"""
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 4px 10px 4px; border-bottom: 1px solid var(--feed-card-border); margin-bottom: 10px;">
-                    <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); font-family: 'Montserrat', sans-serif; letter-spacing: 0.04em;">
-                        STREAMING {len(feed_display_payloads)} {sentiment_label.upper()} HEADLINES
-                    </span>
-                </div>
-                """, unsafe_allow_html=True)
-
-                # Directly render top headlines in a scrollable feed container
-                html_feed = '<div class="news-feed-scroll">'
-                if not feed_display_payloads.empty:
-                    for _, row in feed_display_payloads.iterrows():
-                        sentiment = row['sentiment_index']
-                        if date_range in ["4 Hours", "4 Hour", "4H", "6 Hours", "6 Hour", "6H", "12 Hours", "12 Hour", "12H", "1 Day", "1Day", "1D", "24 Hours", "24 Hour", "24H"]:
-                            time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
-                        else:
-                            time_str = pd.to_datetime(row['timestamp']).strftime('%b %d, %H:%M')
-                        ticker_label = row.get('index_ticker', 'Macro')
-                        
-                        parsed = clean_news_item(row['raw_text'])
-                        clean_headline = parsed['headline']
-                        source = parsed['source']
-                        
-                        # Determine Sentiment & Neutral status
-                        if abs(sentiment) < 0.5:
-                            status_badge = f'<span style="background: {"rgba(148, 163, 184, 0.2)" if is_light else "rgba(148, 163, 184, 0.18)"}; border: 1px solid {"rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.45)"}; color: {"#475569" if is_light else "#cbd5e1"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">NEUTRAL</span>'
-                            score_color = "#64748b" if is_light else "#94a3b8"
-                            score_bg = "rgba(148, 163, 184, 0.15)" if is_light else "rgba(148, 163, 184, 0.12)"
-                            score_border = "rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.3)"
-                            card_border = "#94a3b8" if is_light else "#64748b"
-                        elif sentiment >= 0.5:
-                            status_badge = f'<span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: {"#059669" if is_light else "#34d399"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BULLISH</span>'
-                            score_color = "#059669" if is_light else "#10b981"
-                            score_bg = "rgba(16, 185, 129, 0.15)" if is_light else "rgba(16, 185, 129, 0.12)"
-                            score_border = "rgba(16, 185, 129, 0.35)" if is_light else "rgba(16, 185, 129, 0.3)"
-                            card_border = "#10b981"
-                        else:
-                            status_badge = f'<span style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: {"#dc2626" if is_light else "#f87171"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BEARISH</span>'
-                            score_color = "#dc2626" if is_light else "#ef4444"
-                            score_bg = "rgba(239, 68, 68, 0.15)" if is_light else "rgba(239, 68, 68, 0.12)"
-                            score_border = "rgba(239, 68, 68, 0.35)" if is_light else "rgba(239, 68, 68, 0.3)"
-                            card_border = "#ef4444"
-                        
-                        source_badge = f'<span style="background: {"rgba(0, 0, 0, 0.04)" if is_light else "rgba(255, 255, 255, 0.04)"}; border: 1px solid {"rgba(0, 0, 0, 0.08)" if is_light else "rgba(255, 255, 255, 0.08)"}; color: {"#475569" if is_light else "#94a3b8"}; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">{source}</span>' if source else ""
-                        
-                        escaped_headline = html.escape(clean_headline)
-                        badges_markup = (
-                            f'<span style="font-family: \'IBM Plex Sans\', sans-serif; font-size: 0.75rem; font-weight: 500; color: {"#475569" if is_light else "#94a3b8"}; background: {"rgba(0,0,0,0.04)" if is_light else "rgba(255,255,255,0.04)"}; border: 1px solid {"rgba(0,0,0,0.08)" if is_light else "rgba(255,255,255,0.08)"}; padding: 2px 7px; border-radius: 4px; flex-shrink: 0;">{time_str}</span>'
-                            f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.75rem; font-weight: 700; color: {"#334155" if is_light else "#f8fafc"}; background: {"rgba(0, 0, 0, 0.05)" if is_light else "rgba(255, 255, 255, 0.06)"}; border: 1px solid {"rgba(0, 0, 0, 0.12)" if is_light else "rgba(255, 255, 255, 0.12)"}; padding: 2px 8px; border-radius: 4px; flex-shrink: 0;">{ticker_label}</span>'
-                            f'{source_badge}{status_badge}'
-                        )
-                        score_markup = f'<div style="flex-shrink: 0;"><span style="font-family: \'Montserrat\', sans-serif; font-size: 0.8rem; font-weight: 700; color: {score_color}; background: {score_bg}; border: 1px solid {score_border}; padding: 3px 9px; border-radius: 4px; letter-spacing: 0.02em;">{sentiment:+.1f}</span></div>'
-                        card_top = f'<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">{badges_markup}</div>{score_markup}</div>'
-                        card_body = f'<div style="font-size: 0.92rem; color: {"#0f172a" if is_light else "#f8fafc"}; font-weight: 500; line-height: 1.5; font-family: \'IBM Plex Sans\', sans-serif;">{escaped_headline}</div>'
-                        
-                        html_feed += f'<div class="news-item-card" style="border-left: 3px solid {card_border};">{card_top}{card_body}</div>'
-                else:
-                    html_feed += f'<div style="color: var(--text-muted); font-size: 0.88rem; padding: 18px; text-align: center; font-family: \'IBM Plex Sans\', sans-serif;">No news events matching the selected sentiment filter for {selected_region}.</div>'
-
-                html_feed += '</div>'
-                st.markdown(html_feed, unsafe_allow_html=True)
-
-        region_payloads = display_payloads[display_payloads['market_region'] == selected_region]
-        if not region_payloads.empty:
-            region_payloads = region_payloads.sort_values('timestamp', ascending=False)
-        render_live_intelligence_feed(region_payloads, selected_region, is_light, date_range)
-            
-
     else:
         st.warning("No data found for the selected parameters.")
 
-render_dashboard()
 
+@make_fragment_decorator(run_every="5m")
+def render_live_intelligence_feed(df_payloads=None):
+    if df_payloads is None:
+        _, df_payloads, _ = get_processed_data()
+
+    if df_payloads.empty:
+        return
+
+    region_name_map = {
+        "IN": "India (IN)",
+        "US": "United States (US)",
+        "UK": "United Kingdom (UK)",
+        "JP": "Japan (JP)"
+    }
+    selected_region_display = st.session_state.get("filter_region", "India (IN)")
+    selected_region = next((code for code, name in region_name_map.items() if name == selected_region_display), selected_region_display)
+    if "(" in selected_region_display and ")" in selected_region_display and selected_region not in ["IN", "US", "UK", "JP"]:
+        selected_region = selected_region_display.split("(")[-1].replace(")", "").strip()
+
+    date_range = st.session_state.get("filter_timeframe", "7 Days")
+
+    tz_options = {
+        "Asia/Kolkata (IST)": "Asia/Kolkata",
+        "UTC": "UTC",
+        "America/New_York (EST)": "America/New_York",
+        "Europe/London (GMT)": "Europe/London",
+        "Asia/Tokyo (JST)": "Asia/Tokyo"
+    }
+    tz_keys = list(tz_options.keys())
+    default_tz_ix = next((i for i, k in enumerate(tz_keys) if "IST" in k), 0)
+    current_selected_tz = st.session_state.get("filter_timezone", tz_keys[default_tz_ix])
+    target_tz = tz_options.get(current_selected_tz, "Asia/Kolkata")
+
+    display_payloads = df_payloads[df_payloads['market_region'] == selected_region].copy()
+
+    # --- Implement Timeframe Filtering ---
+    if not display_payloads.empty and date_range != "All":
+        if display_payloads['timestamp'].dt.tz is None:
+            display_payloads['timestamp'] = display_payloads['timestamp'].dt.tz_localize('UTC')
+            
+        now = pd.Timestamp.utcnow()
+        cutoff = now
+        if date_range in ["4 Hours", "4 Hour", "4H"]: cutoff = now - pd.Timedelta(hours=4)
+        elif date_range in ["6 Hours", "6 Hour", "6H"]: cutoff = now - pd.Timedelta(hours=6)
+        elif date_range in ["12 Hours", "12 Hour", "12H"]: cutoff = now - pd.Timedelta(hours=12)
+        elif date_range in ["1 Day", "1Day", "24 Hours", "24 Hour", "24H"]: cutoff = now - pd.Timedelta(hours=24)
+        elif date_range in ["7 Days", "7 Day", "7D"]: cutoff = now - pd.Timedelta(days=7)
+        elif date_range in ["1 Month", "1M"]: cutoff = now - pd.Timedelta(days=30)
+        elif date_range in ["1 Year", "1Y"]: cutoff = now - pd.Timedelta(days=365)
+        
+        display_payloads = display_payloads[display_payloads['timestamp'] >= cutoff]
+    
+    if not display_payloads.empty:
+        if display_payloads['timestamp'].dt.tz is None:
+            display_payloads['timestamp'] = display_payloads['timestamp'].dt.tz_localize('UTC')
+        display_payloads['timestamp'] = display_payloads['timestamp'].dt.tz_convert(target_tz)
+        display_payloads = display_payloads.sort_values('timestamp', ascending=False)
+
+    region_payloads = display_payloads
+    total_events = len(region_payloads)
+    bullish_count = int((region_payloads['sentiment_index'] >= 0.5).sum()) if not region_payloads.empty else 0
+    bearish_count = int((region_payloads['sentiment_index'] <= -0.5).sum()) if not region_payloads.empty else 0
+    neutral_count = total_events - bullish_count - bearish_count
+
+    with st.container(border=True, key="live_intelligence_feed_container"):
+        feed_header_col1, feed_header_col2 = st.columns([0.42, 0.58], vertical_alignment="center")
+        with feed_header_col1:
+            st.markdown(f"""<div style="display: flex; align-items: center; gap: 8px; margin: 0; padding: 0; min-height: 38px;"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.4); flex-shrink: 0;"></span><span style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); font-family: 'Montserrat', sans-serif; line-height: 1.2;">{selected_region} Live Intelligence Feed</span></div>""", unsafe_allow_html=True)
+        with feed_header_col2:
+            feed_pill_options = [
+                f"All {total_events}",
+                f"Bullish {bullish_count}",
+                f"Bearish {bearish_count}",
+                f"Neutral {neutral_count}"
+            ]
+            selected_feed_pill = render_segmented_filter("feed_filter", feed_pill_options, default_ix=0, key="feed_sentiment_pills")
+
+        if selected_feed_pill and "Bullish" in selected_feed_pill:
+            feed_display_payloads = region_payloads[region_payloads['sentiment_index'] >= 0.5]
+            sentiment_label = "Bullish"
+        elif selected_feed_pill and "Bearish" in selected_feed_pill:
+            feed_display_payloads = region_payloads[region_payloads['sentiment_index'] <= -0.5]
+            sentiment_label = "Bearish"
+        elif selected_feed_pill and ("Neutral" in selected_feed_pill or "Noise" in selected_feed_pill):
+            feed_display_payloads = region_payloads[(region_payloads['sentiment_index'] > -0.5) & (region_payloads['sentiment_index'] < 0.5)]
+            sentiment_label = "Neutral"
+        else:
+            feed_display_payloads = region_payloads
+            sentiment_label = "All"
+
+        st.markdown(f"""
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 4px 10px 4px; border-bottom: 1px solid var(--feed-card-border); margin-bottom: 10px;">
+            <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); font-family: 'Montserrat', sans-serif; letter-spacing: 0.04em;">
+                STREAMING {len(feed_display_payloads)} {sentiment_label.upper()} HEADLINES
+            </span>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # Directly render top headlines in a scrollable feed container
+        html_feed = '<div class="news-feed-scroll">'
+        if not feed_display_payloads.empty:
+            for _, row in feed_display_payloads.iterrows():
+                sentiment = row['sentiment_index']
+                if date_range in ["4 Hours", "4 Hour", "4H", "6 Hours", "6 Hour", "6H", "12 Hours", "12 Hour", "12H", "1 Day", "1Day", "1D", "24 Hours", "24 Hour", "24H"]:
+                    time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
+                else:
+                    time_str = pd.to_datetime(row['timestamp']).strftime('%b %d, %H:%M')
+                ticker_label = row.get('index_ticker', 'Macro')
+                
+                parsed = clean_news_item(row['raw_text'])
+                clean_headline = parsed['headline']
+                source = parsed['source']
+                
+                # Determine Sentiment & Neutral status
+                if abs(sentiment) < 0.5:
+                    status_badge = f'<span style="background: {"rgba(148, 163, 184, 0.2)" if is_light else "rgba(148, 163, 184, 0.18)"}; border: 1px solid {"rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.45)"}; color: {"#475569" if is_light else "#cbd5e1"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">NEUTRAL</span>'
+                    score_color = "#64748b" if is_light else "#94a3b8"
+                    score_bg = "rgba(148, 163, 184, 0.15)" if is_light else "rgba(148, 163, 184, 0.12)"
+                    score_border = "rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.3)"
+                    card_border = "#94a3b8" if is_light else "#64748b"
+                elif sentiment >= 0.5:
+                    status_badge = f'<span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: {"#059669" if is_light else "#34d399"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BULLISH</span>'
+                    score_color = "#059669" if is_light else "#10b981"
+                    score_bg = "rgba(16, 185, 129, 0.15)" if is_light else "rgba(16, 185, 129, 0.12)"
+                    score_border = "rgba(16, 185, 129, 0.35)" if is_light else "rgba(16, 185, 129, 0.3)"
+                    card_border = "#10b981"
+                else:
+                    status_badge = f'<span style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: {"#dc2626" if is_light else "#f87171"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BEARISH</span>'
+                    score_color = "#dc2626" if is_light else "#ef4444"
+                    score_bg = "rgba(239, 68, 68, 0.15)" if is_light else "rgba(239, 68, 68, 0.12)"
+                    score_border = "rgba(239, 68, 68, 0.35)" if is_light else "rgba(239, 68, 68, 0.3)"
+                    card_border = "#ef4444"
+                
+                source_badge = f'<span style="background: {"rgba(0, 0, 0, 0.04)" if is_light else "rgba(255, 255, 255, 0.04)"}; border: 1px solid {"rgba(0, 0, 0, 0.08)" if is_light else "rgba(255, 255, 255, 0.08)"}; color: {"#475569" if is_light else "#94a3b8"}; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">{source}</span>' if source else ""
+                
+                escaped_headline = html.escape(clean_headline)
+                badges_markup = (
+                    f'<span style="font-family: \'IBM Plex Sans\', sans-serif; font-size: 0.75rem; font-weight: 500; color: {"#475569" if is_light else "#94a3b8"}; background: {"rgba(0,0,0,0.04)" if is_light else "rgba(255,255,255,0.04)"}; border: 1px solid {"rgba(0,0,0,0.08)" if is_light else "rgba(255,255,255,0.08)"}; padding: 2px 7px; border-radius: 4px; flex-shrink: 0;">{time_str}</span>'
+                    f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.75rem; font-weight: 700; color: {"#334155" if is_light else "#f8fafc"}; background: {"rgba(0, 0, 0, 0.05)" if is_light else "rgba(255, 255, 255, 0.06)"}; border: 1px solid {"rgba(0, 0, 0, 0.12)" if is_light else "rgba(255, 255, 255, 0.12)"}; padding: 2px 8px; border-radius: 4px; flex-shrink: 0;">{ticker_label}</span>'
+                    f'{source_badge}{status_badge}'
+                )
+                score_markup = f'<div style="flex-shrink: 0;"><span style="font-family: \'Montserrat\', sans-serif; font-size: 0.8rem; font-weight: 700; color: {score_color}; background: {score_bg}; border: 1px solid {score_border}; padding: 3px 9px; border-radius: 4px; letter-spacing: 0.02em;">{sentiment:+.1f}</span></div>'
+                card_top = f'<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">{badges_markup}</div>{score_markup}</div>'
+                card_body = f'<div style="font-size: 0.92rem; color: {"#0f172a" if is_light else "#f8fafc"}; font-weight: 500; line-height: 1.5; font-family: \'IBM Plex Sans\', sans-serif;">{escaped_headline}</div>'
+                
+                html_feed += f'<div class="news-item-card" style="border-left: 3px solid {card_border};">{card_top}{card_body}</div>'
+        else:
+            html_feed += f'<div style="color: var(--text-muted); font-size: 0.88rem; padding: 18px; text-align: center; font-family: \'IBM Plex Sans\', sans-serif;">No news events matching the selected sentiment filter for {selected_region}.</div>'
+
+        html_feed += '</div>'
+        st.markdown(html_feed, unsafe_allow_html=True)
+
+
+def render_dashboard():
+    df_signals, df_payloads, latest_pipeline_run = get_processed_data()
+
+    if df_signals.empty:
+        st.info("Database empty. Run the ingestion engine to populate.")
+        return
+
+    render_header_banner(df_signals, latest_pipeline_run)
+    render_usp_banner()
+    render_filter_toolbar(df_signals)
+    render_analytics_surface(df_signals)
+    render_live_intelligence_feed(df_payloads)
+
+
+render_dashboard()
