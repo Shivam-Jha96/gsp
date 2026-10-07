@@ -3,80 +3,537 @@
   "name": "India Index Constituents",
   "indices": {
     "Nifty 50": [
-      {"symbol": "RELIANCE.NS", "name": "Reliance Industries", "aliases": ["reliance industries", "reliance", "ril"]},
-      {"symbol": "TCS.NS", "name": "Tata Consultancy Services", "aliases": ["tata consultancy services", "tcs"]},
-      {"symbol": "HDFCBANK.NS", "name": "HDFC Bank", "aliases": ["hdfc bank", "hdfc"]},
-      {"symbol": "ICICIBANK.NS", "name": "ICICI Bank", "aliases": ["icici bank", "icici"]},
-      {"symbol": "INFY.NS", "name": "Infosys", "aliases": ["infosys", "infy"]},
-      {"symbol": "BHARTIARTL.NS", "name": "Bharti Airtel", "aliases": ["bharti airtel", "airtel"]},
-      {"symbol": "ITC.NS", "name": "ITC", "aliases": ["itc limited", "itc"]},
-      {"symbol": "SBIN.NS", "name": "State Bank of India", "aliases": ["state bank of india", "sbi"]},
-      {"symbol": "LT.NS", "name": "Larsen & Toubro", "aliases": ["larsen & toubro", "larsen and toubro", "l&t"]},
-      {"symbol": "HINDUNILVR.NS", "name": "Hindustan Unilever", "aliases": ["hindustan unilever", "hul"]},
-      {"symbol": "TATAMOTORS.NS", "name": "Tata Motors", "aliases": ["tata motors", "tatamotors", "jlr"]},
-      {"symbol": "AXISBANK.NS", "name": "Axis Bank", "aliases": ["axis bank"]},
-      {"symbol": "KOTAKBANK.NS", "name": "Kotak Mahindra Bank", "aliases": ["kotak mahindra bank", "kotak bank", "kotak"]},
-      {"symbol": "BAJFINANCE.NS", "name": "Bajaj Finance", "aliases": ["bajaj finance"]},
-      {"symbol": "HCLTECH.NS", "name": "HCL Technologies", "aliases": ["hcl technologies", "hcl tech"]},
-      {"symbol": "SUNPHARMA.NS", "name": "Sun Pharmaceutical", "aliases": ["sun pharmaceutical", "sun pharma"]},
-      {"symbol": "MARUTI.NS", "name": "Maruti Suzuki", "aliases": ["maruti suzuki", "maruti"]},
-      {"symbol": "NTPC.NS", "name": "NTPC", "aliases": ["ntpc limited", "ntpc"]},
-      {"symbol": "ONGC.NS", "name": "Oil & Natural Gas Corp", "aliases": ["oil and natural gas corp", "ongc"]},
-      {"symbol": "TATASTEEL.NS", "name": "Tata Steel", "aliases": ["tata steel"]},
-      {"symbol": "WIPRO.NS", "name": "Wipro", "aliases": ["wipro limited", "wipro"]},
-      {"symbol": "ADANIENT.NS", "name": "Adani Enterprises", "aliases": ["adani enterprises", "adani"]},
-      {"symbol": "ADANIPORTS.NS", "name": "Adani Ports", "aliases": ["adani ports"]},
-      {"symbol": "POWERGRID.NS", "name": "Power Grid Corp", "aliases": ["power grid corp", "powergrid"]},
-      {"symbol": "TITAN.NS", "name": "Titan Company", "aliases": ["titan company", "titan"]},
-      {"symbol": "ULTRACEMCO.NS", "name": "UltraTech Cement", "aliases": ["ultratech cement", "ultratech"]},
-      {"symbol": "COALINDIA.NS", "name": "Coal India", "aliases": ["coal india"]},
-      {"symbol": "BAJAJFINSV.NS", "name": "Bajaj Finserv", "aliases": ["bajaj finserv"]},
-      {"symbol": "ZOMATO.NS", "name": "Zomato", "aliases": ["zomato"]},
-      {"symbol": "JIOFIN.NS", "name": "Jio Financial Services", "aliases": ["jio financial services", "jio financial", "jfs"]}
+      {
+        "symbol": "RELIANCE.NS",
+        "name": "Reliance Industries",
+        "aliases": [
+          "reliance industries",
+          "reliance",
+          "ril"
+        ]
+      },
+      {
+        "symbol": "TCS.NS",
+        "name": "Tata Consultancy Services",
+        "aliases": [
+          "tata consultancy services",
+          "tcs"
+        ]
+      },
+      {
+        "symbol": "HDFCBANK.NS",
+        "name": "HDFC Bank",
+        "aliases": [
+          "hdfc bank",
+          "hdfc"
+        ]
+      },
+      {
+        "symbol": "ICICIBANK.NS",
+        "name": "ICICI Bank",
+        "aliases": [
+          "icici bank",
+          "icici"
+        ]
+      },
+      {
+        "symbol": "INFY.NS",
+        "name": "Infosys",
+        "aliases": [
+          "infosys",
+          "infy"
+        ]
+      },
+      {
+        "symbol": "BHARTIARTL.NS",
+        "name": "Bharti Airtel",
+        "aliases": [
+          "bharti airtel",
+          "airtel"
+        ]
+      },
+      {
+        "symbol": "ITC.NS",
+        "name": "ITC",
+        "aliases": [
+          "itc limited",
+          "itc"
+        ]
+      },
+      {
+        "symbol": "SBIN.NS",
+        "name": "State Bank of India",
+        "aliases": [
+          "state bank of india",
+          "sbi"
+        ]
+      },
+      {
+        "symbol": "LT.NS",
+        "name": "Larsen & Toubro",
+        "aliases": [
+          "larsen & toubro",
+          "larsen and toubro",
+          "l&t"
+        ]
+      },
+      {
+        "symbol": "HINDUNILVR.NS",
+        "name": "Hindustan Unilever",
+        "aliases": [
+          "hindustan unilever",
+          "hul"
+        ]
+      },
+      {
+        "symbol": "TATAMOTORS.NS",
+        "name": "Tata Motors",
+        "aliases": [
+          "tata motors",
+          "tatamotors",
+          "jlr"
+        ]
+      },
+      {
+        "symbol": "AXISBANK.NS",
+        "name": "Axis Bank",
+        "aliases": [
+          "axis bank"
+        ]
+      },
+      {
+        "symbol": "KOTAKBANK.NS",
+        "name": "Kotak Mahindra Bank",
+        "aliases": [
+          "kotak mahindra bank",
+          "kotak bank",
+          "kotak"
+        ]
+      },
+      {
+        "symbol": "BAJFINANCE.NS",
+        "name": "Bajaj Finance",
+        "aliases": [
+          "bajaj finance"
+        ]
+      },
+      {
+        "symbol": "HCLTECH.NS",
+        "name": "HCL Technologies",
+        "aliases": [
+          "hcl technologies",
+          "hcl tech"
+        ]
+      },
+      {
+        "symbol": "SUNPHARMA.NS",
+        "name": "Sun Pharmaceutical",
+        "aliases": [
+          "sun pharmaceutical",
+          "sun pharma"
+        ]
+      },
+      {
+        "symbol": "MARUTI.NS",
+        "name": "Maruti Suzuki",
+        "aliases": [
+          "maruti suzuki",
+          "maruti"
+        ]
+      },
+      {
+        "symbol": "NTPC.NS",
+        "name": "NTPC",
+        "aliases": [
+          "ntpc limited",
+          "ntpc"
+        ]
+      },
+      {
+        "symbol": "ONGC.NS",
+        "name": "Oil & Natural Gas Corp",
+        "aliases": [
+          "oil and natural gas corp",
+          "ongc"
+        ]
+      },
+      {
+        "symbol": "TATASTEEL.NS",
+        "name": "Tata Steel",
+        "aliases": [
+          "tata steel"
+        ]
+      },
+      {
+        "symbol": "WIPRO.NS",
+        "name": "Wipro",
+        "aliases": [
+          "wipro limited",
+          "wipro"
+        ]
+      },
+      {
+        "symbol": "ADANIENT.NS",
+        "name": "Adani Enterprises",
+        "aliases": [
+          "adani enterprises",
+          "adani"
+        ]
+      },
+      {
+        "symbol": "ADANIPORTS.NS",
+        "name": "Adani Ports",
+        "aliases": [
+          "adani ports"
+        ]
+      },
+      {
+        "symbol": "POWERGRID.NS",
+        "name": "Power Grid Corp",
+        "aliases": [
+          "power grid corp",
+          "powergrid"
+        ]
+      },
+      {
+        "symbol": "TITAN.NS",
+        "name": "Titan Company",
+        "aliases": [
+          "titan company",
+          "titan"
+        ]
+      },
+      {
+        "symbol": "ULTRACEMCO.NS",
+        "name": "UltraTech Cement",
+        "aliases": [
+          "ultratech cement",
+          "ultratech"
+        ]
+      },
+      {
+        "symbol": "COALINDIA.NS",
+        "name": "Coal India",
+        "aliases": [
+          "coal india"
+        ]
+      },
+      {
+        "symbol": "BAJAJFINSV.NS",
+        "name": "Bajaj Finserv",
+        "aliases": [
+          "bajaj finserv"
+        ]
+      },
+      {
+        "symbol": "ZOMATO.NS",
+        "name": "Zomato",
+        "aliases": [
+          "zomato"
+        ]
+      },
+      {
+        "symbol": "JIOFIN.NS",
+        "name": "Jio Financial Services",
+        "aliases": [
+          "jio financial services",
+          "jio financial",
+          "jfs"
+        ]
+      }
     ],
     "Sensex": [
-      {"symbol": "RELIANCE.BO", "name": "Reliance Industries", "aliases": ["reliance industries", "reliance", "ril"]},
-      {"symbol": "TCS.BO", "name": "Tata Consultancy Services", "aliases": ["tata consultancy services", "tcs"]},
-      {"symbol": "HDFCBANK.BO", "name": "HDFC Bank", "aliases": ["hdfc bank", "hdfc"]},
-      {"symbol": "ICICIBANK.BO", "name": "ICICI Bank", "aliases": ["icici bank", "icici"]},
-      {"symbol": "INFY.BO", "name": "Infosys", "aliases": ["infosys", "infy"]},
-      {"symbol": "BHARTIARTL.BO", "name": "Bharti Airtel", "aliases": ["bharti airtel", "airtel"]},
-      {"symbol": "SBIN.BO", "name": "State Bank of India", "aliases": ["state bank of india", "sbi"]},
-      {"symbol": "LT.BO", "name": "Larsen & Toubro", "aliases": ["larsen & toubro", "l&t"]},
-      {"symbol": "ITC.BO", "name": "ITC", "aliases": ["itc limited", "itc"]}
+      {
+        "symbol": "RELIANCE.BO",
+        "name": "Reliance Industries",
+        "aliases": [
+          "reliance industries",
+          "reliance",
+          "ril"
+        ]
+      },
+      {
+        "symbol": "TCS.BO",
+        "name": "Tata Consultancy Services",
+        "aliases": [
+          "tata consultancy services",
+          "tcs"
+        ]
+      },
+      {
+        "symbol": "HDFCBANK.BO",
+        "name": "HDFC Bank",
+        "aliases": [
+          "hdfc bank",
+          "hdfc"
+        ]
+      },
+      {
+        "symbol": "ICICIBANK.BO",
+        "name": "ICICI Bank",
+        "aliases": [
+          "icici bank",
+          "icici"
+        ]
+      },
+      {
+        "symbol": "INFY.BO",
+        "name": "Infosys",
+        "aliases": [
+          "infosys",
+          "infy"
+        ]
+      },
+      {
+        "symbol": "BHARTIARTL.BO",
+        "name": "Bharti Airtel",
+        "aliases": [
+          "bharti airtel",
+          "airtel"
+        ]
+      },
+      {
+        "symbol": "SBIN.BO",
+        "name": "State Bank of India",
+        "aliases": [
+          "state bank of india",
+          "sbi"
+        ]
+      },
+      {
+        "symbol": "LT.BO",
+        "name": "Larsen & Toubro",
+        "aliases": [
+          "larsen & toubro",
+          "l&t"
+        ]
+      },
+      {
+        "symbol": "ITC.BO",
+        "name": "ITC",
+        "aliases": [
+          "itc limited",
+          "itc"
+        ]
+      }
     ],
     "Nifty Bank": [
-      {"symbol": "HDFCBANK.NS", "name": "HDFC Bank", "aliases": ["hdfc bank", "hdfc"]},
-      {"symbol": "ICICIBANK.NS", "name": "ICICI Bank", "aliases": ["icici bank", "icici"]},
-      {"symbol": "SBIN.NS", "name": "State Bank of India", "aliases": ["state bank of india", "sbi"]},
-      {"symbol": "AXISBANK.NS", "name": "Axis Bank", "aliases": ["axis bank"]},
-      {"symbol": "KOTAKBANK.NS", "name": "Kotak Mahindra Bank", "aliases": ["kotak mahindra bank", "kotak bank"]},
-      {"symbol": "INDUSINDBK.NS", "name": "IndusInd Bank", "aliases": ["indusind bank", "indusind"]},
-      {"symbol": "BANKBARODA.NS", "name": "Bank of Baroda", "aliases": ["bank of baroda", "bob"]},
-      {"symbol": "PNB.NS", "name": "Punjab National Bank", "aliases": ["punjab national bank", "pnb"]},
-      {"symbol": "FEDERALBNK.NS", "name": "Federal Bank", "aliases": ["federal bank"]},
-      {"symbol": "IDFCFIRSTB.NS", "name": "IDFC First Bank", "aliases": ["idfc first bank", "idfc first"]}
+      {
+        "symbol": "HDFCBANK.NS",
+        "name": "HDFC Bank",
+        "aliases": [
+          "hdfc bank",
+          "hdfc"
+        ]
+      },
+      {
+        "symbol": "ICICIBANK.NS",
+        "name": "ICICI Bank",
+        "aliases": [
+          "icici bank",
+          "icici"
+        ]
+      },
+      {
+        "symbol": "SBIN.NS",
+        "name": "State Bank of India",
+        "aliases": [
+          "state bank of india",
+          "sbi"
+        ]
+      },
+      {
+        "symbol": "AXISBANK.NS",
+        "name": "Axis Bank",
+        "aliases": [
+          "axis bank"
+        ]
+      },
+      {
+        "symbol": "KOTAKBANK.NS",
+        "name": "Kotak Mahindra Bank",
+        "aliases": [
+          "kotak mahindra bank",
+          "kotak bank"
+        ]
+      },
+      {
+        "symbol": "INDUSINDBK.NS",
+        "name": "IndusInd Bank",
+        "aliases": [
+          "indusind bank",
+          "indusind"
+        ]
+      },
+      {
+        "symbol": "BANKBARODA.NS",
+        "name": "Bank of Baroda",
+        "aliases": [
+          "bank of baroda",
+          "bob"
+        ]
+      },
+      {
+        "symbol": "PNB.NS",
+        "name": "Punjab National Bank",
+        "aliases": [
+          "punjab national bank",
+          "pnb"
+        ]
+      },
+      {
+        "symbol": "FEDERALBNK.NS",
+        "name": "Federal Bank",
+        "aliases": [
+          "federal bank"
+        ]
+      },
+      {
+        "symbol": "IDFCFIRSTB.NS",
+        "name": "IDFC First Bank",
+        "aliases": [
+          "idfc first bank",
+          "idfc first"
+        ]
+      }
     ],
     "Nifty IT": [
-      {"symbol": "TCS.NS", "name": "Tata Consultancy Services", "aliases": ["tata consultancy services", "tcs"]},
-      {"symbol": "INFY.NS", "name": "Infosys", "aliases": ["infosys", "infy"]},
-      {"symbol": "HCLTECH.NS", "name": "HCL Technologies", "aliases": ["hcl technologies", "hcl tech"]},
-      {"symbol": "WIPRO.NS", "name": "Wipro", "aliases": ["wipro limited", "wipro"]},
-      {"symbol": "TECHM.NS", "name": "Tech Mahindra", "aliases": ["tech mahindra", "techm"]},
-      {"symbol": "LTIM.NS", "name": "LTIMindtree", "aliases": ["ltimindtree", "mindtree"]},
-      {"symbol": "PERSISTENT.NS", "name": "Persistent Systems", "aliases": ["persistent systems", "persistent"]},
-      {"symbol": "COFORGE.NS", "name": "Coforge", "aliases": ["coforge"]},
-      {"symbol": "MPHASIS.NS", "name": "Mphasis", "aliases": ["mphasis"]}
+      {
+        "symbol": "TCS.NS",
+        "name": "Tata Consultancy Services",
+        "aliases": [
+          "tata consultancy services",
+          "tcs"
+        ]
+      },
+      {
+        "symbol": "INFY.NS",
+        "name": "Infosys",
+        "aliases": [
+          "infosys",
+          "infy"
+        ]
+      },
+      {
+        "symbol": "HCLTECH.NS",
+        "name": "HCL Technologies",
+        "aliases": [
+          "hcl technologies",
+          "hcl tech"
+        ]
+      },
+      {
+        "symbol": "WIPRO.NS",
+        "name": "Wipro",
+        "aliases": [
+          "wipro limited",
+          "wipro"
+        ]
+      },
+      {
+        "symbol": "TECHM.NS",
+        "name": "Tech Mahindra",
+        "aliases": [
+          "tech mahindra",
+          "techm"
+        ]
+      },
+      {
+        "symbol": "LTIM.NS",
+        "name": "LTIMindtree",
+        "aliases": [
+          "ltimindtree",
+          "mindtree"
+        ]
+      },
+      {
+        "symbol": "PERSISTENT.NS",
+        "name": "Persistent Systems",
+        "aliases": [
+          "persistent systems",
+          "persistent"
+        ]
+      },
+      {
+        "symbol": "COFORGE.NS",
+        "name": "Coforge",
+        "aliases": [
+          "coforge"
+        ]
+      },
+      {
+        "symbol": "MPHASIS.NS",
+        "name": "Mphasis",
+        "aliases": [
+          "mphasis"
+        ]
+      }
     ],
     "BSE Midcap": [
-      {"symbol": "BEL.BO", "name": "Bharat Electronics", "aliases": ["bharat electronics", "bel"]},
-      {"symbol": "HAL.BO", "name": "Hindustan Aeronautics", "aliases": ["hindustan aeronautics", "hal"]},
-      {"symbol": "TRENT.BO", "name": "Trent Limited", "aliases": ["trent limited", "trent"]},
-      {"symbol": "SUZLON.BO", "name": "Suzlon Energy", "aliases": ["suzlon energy", "suzlon"]},
-      {"symbol": "PFC.BO", "name": "Power Finance Corp", "aliases": ["power finance corp", "pfc"]},
-      {"symbol": "RECLTD.BO", "name": "REC Limited", "aliases": ["rec limited", "rec"]},
-      {"symbol": "IRFC.BO", "name": "Indian Railway Finance Corp", "aliases": ["indian railway finance", "irfc"]},
-      {"symbol": "POLYCAB.BO", "name": "Polycab India", "aliases": ["polycab india", "polycab"]}
+      {
+        "symbol": "BEL.BO",
+        "name": "Bharat Electronics",
+        "aliases": [
+          "bharat electronics",
+          "bel"
+        ]
+      },
+      {
+        "symbol": "HAL.BO",
+        "name": "Hindustan Aeronautics",
+        "aliases": [
+          "hindustan aeronautics",
+          "hal"
+        ]
+      },
+      {
+        "symbol": "TRENT.BO",
+        "name": "Trent Limited",
+        "aliases": [
+          "trent limited",
+          "trent"
+        ]
+      },
+      {
+        "symbol": "SUZLON.BO",
+        "name": "Suzlon Energy",
+        "aliases": [
+          "suzlon energy",
+          "suzlon"
+        ]
+      },
+      {
+        "symbol": "PFC.BO",
+        "name": "Power Finance Corp",
+        "aliases": [
+          "power finance corp",
+          "pfc"
+        ]
+      },
+      {
+        "symbol": "RECLTD.BO",
+        "name": "REC Limited",
+        "aliases": [
+          "rec limited",
+          "rec"
+        ]
+      },
+      {
+        "symbol": "IRFC.BO",
+        "name": "Indian Railway Finance Corp",
+        "aliases": [
+          "indian railway finance",
+          "irfc"
+        ]
+      },
+      {
+        "symbol": "POLYCAB.BO",
+        "name": "Polycab India",
+        "aliases": [
+          "polycab india",
+          "polycab"
+        ]
+      }
     ]
   }
 }
