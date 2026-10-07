@@ -303,15 +303,18 @@ __THEME_VARS__
     div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child,
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child,
     div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="column"]:last-child,
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:last-child {
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:last-child,
+    div[data-testid="stColumn"]:has(div[data-testid="stPlotlyChart"]) {
         display: flex !important;
         flex-direction: column !important;
         height: 100% !important;
+        flex: 1 1 auto !important;
     }
     div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child > div[data-testid="stVerticalBlock"],
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child > div[data-testid="stVerticalBlock"],
     div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="column"]:last-child > div[data-testid="stVerticalBlock"],
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:last-child > div[data-testid="stVerticalBlock"] {
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:last-child > div[data-testid="stVerticalBlock"],
+    div[data-testid="stColumn"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stVerticalBlock"] {
         display: flex !important;
         flex-direction: column !important;
         height: 100% !important;
@@ -328,6 +331,8 @@ __THEME_VARS__
         margin: 0 !important;
         padding: 0 !important;
     }
+    .st-key-market_optimism_chart_container,
+    div[data-testid="stVerticalBlock"].st-key-market_optimism_chart_container,
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"],
     div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"],
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:last-child div[data-testid="stVerticalBlockBorderWrapper"],
@@ -337,10 +342,15 @@ __THEME_VARS__
         display: flex !important;
         flex-direction: column !important;
         justify-content: space-between !important;
+        background: var(--card-bg) !important;
+        border: 1px solid var(--card-border) !important;
+        border-radius: 8px !important;
+        box-shadow: var(--card-shadow) !important;
         padding: 14px 18px 12px 18px !important;
         margin: 0 !important;
         box-sizing: border-box !important;
     }
+    .st-key-market_optimism_chart_container > div[data-testid="stVerticalBlock"],
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"] > div[data-testid="stVerticalBlock"],
     div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"] > div[data-testid="stVerticalBlock"],
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:last-child div[data-testid="stVerticalBlockBorderWrapper"] > div[data-testid="stVerticalBlock"],
@@ -355,7 +365,11 @@ __THEME_VARS__
         margin: 0 !important;
     }
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]),
-    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) {
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container),
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"],
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"],
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"],
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="column"] {
         margin-bottom: 0 !important;
         padding-bottom: 0 !important;
     }
@@ -744,14 +758,17 @@ __THEME_VARS__
 
     /* Live Intelligence Feed Demarcated Container Card */
     div[data-testid="stElementContainer"]:has(.st-key-live_intelligence_feed_container),
-    div[data-testid="element-container"]:has(.st-key-live_intelligence_feed_container) {
+    div[data-testid="element-container"]:has(.st-key-live_intelligence_feed_container),
+    div[data-testid="stElementContainer"].st-key-live_intelligence_feed_container,
+    div[data-testid="element-container"].st-key-live_intelligence_feed_container {
         margin-top: 0 !important;
         padding-top: 0 !important;
     }
+    .st-key-live_intelligence_feed_container,
+    div[data-testid="stVerticalBlock"].st-key-live_intelligence_feed_container,
     div[data-testid="stVerticalBlockBorderWrapper"].st-key-live_intelligence_feed_container,
     .st-key-live_intelligence_feed_container[data-testid="stVerticalBlockBorderWrapper"],
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(.st-key-feed_sentiment_pills),
-    .st-key-live_intelligence_feed_container {
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(.st-key-feed_sentiment_pills) {
         display: block !important;
         box-sizing: border-box !important;
         clear: both !important;
@@ -760,7 +777,7 @@ __THEME_VARS__
         border-radius: 8px !important;
         box-shadow: var(--card-shadow) !important;
         padding: 12px 16px 14px 16px !important;
-        margin-top: 10px !important;
+        margin-top: 0 !important;
         margin-bottom: 12px !important;
         position: relative !important;
         z-index: 1 !important;
@@ -1787,7 +1804,7 @@ def render_dashboard():
 
         with right_col:
             # --- Combined Chart & Mini Index Container (unified alignment & borders) ---
-            with st.container(border=True):
+            with st.container(border=True, key="market_optimism_chart_container"):
                 st.markdown(f"""
                 <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 2px 2px 8px 2px; border-bottom: 1px solid var(--card-border); margin-bottom: 6px;">
                     <div style="display: flex; align-items: center; gap: 10px;">
