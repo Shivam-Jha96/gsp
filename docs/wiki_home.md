@@ -19,9 +19,8 @@ Valence is an autonomous, institutional-grade quantitative macroeconomic sentime
 4. [Quantitative Research & Scoring Mathematics](#4-quantitative-research--scoring-mathematics)
 5. [Institutional Terminal Guide (UI Telemetry)](#5-institutional-terminal-guide-ui-telemetry)
 6. [Dynamic Objective Knowledge Framework (OKF)](#6-dynamic-objective-knowledge-framework-okf)
-7. [Developer Quickstart & Execution Runbook](#7-developer-quickstart--execution-runbook)
-8. [Institutional Benchmarking & LLM Comparison (USP Validation)](#8-institutional-benchmarking--llm-comparison-usp-validation)
-9. [Production Operations & Resiliency Matrix](#9-production-operations--resiliency-matrix)
+7. [Institutional Benchmarking & LLM Comparison (USP Validation)](#7-institutional-benchmarking--llm-comparison-usp-validation)
+8. [Production Operations & Resiliency Matrix](#8-production-operations--resiliency-matrix)
 
 ---
 
@@ -195,65 +194,11 @@ Macroeconomic policies mutate dynamically across central banks (Federal Reserve,
 
 ---
 
-## 7. Developer Quickstart & Execution Runbook
-
-### Environment Setup
-Clone the repository and install required dependencies:
-```bash
-git clone https://github.com/Shivam-Jha96/gsp.git
-cd gsp
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-### Configuration (.env)
-Create a `.env` file in the project root:
-```env
-# Database (Supabase PostgreSQL)
-DATABASE_URL="postgresql://postgres:[PASSWORD]@[HOST]:6543/postgres"
-
-# AI Inference (Modal / TypeSafe)
-TYPESAFE_API_KEY="your-typesafe-modal-key"
-
-# Knowledge Engine (Google Gemini)
-GEMINI_API_KEY="your-gemini-api-key"
-
-# Execution Engine (Alpaca Paper Trading)
-ALPACA_API_KEY="your-alpaca-key"
-ALPACA_SECRET_KEY="your-alpaca-secret"
-```
-
-### Running Locally
-1. **Execute Ingestion & Scoring Pipeline**:
-   ```bash
-   python src/main.py
-   ```
-2. **Launch Institutional Dashboard**:
-   ```bash
-   streamlit run src/ui/app.py
-   ```
-3. **Execute Database Maintenance & Cleanup**:
-   ```bash
-   python scripts/reclassify_database.py --mode=dry-run
-   python scripts/reclassify_database.py --mode=purge
-   ```
-4. **Run Unit Test Suite**:
-   ```bash
-   python -m unittest discover -s tests/unit
-   ```
-5. **Execute Full 4-Tier Quantitative Benchmark**:
-   ```bash
-   python scripts/run_benchmarks.py --all
-   ```
-
----
-
-## 8. Institutional Benchmarking & LLM Comparison (USP Validation)
+## 7. Institutional Benchmarking & LLM Comparison (USP Validation)
 
 To quantitatively prove Valence's architectural superiority over conventional Generative LLM setups and dictionary methods, the system contains an automated 4-tier benchmarking suite (`src/benchmark/` & `scripts/run_benchmarks.py`).
 
-### 8.1 Empirical Head-to-Head Comparison
+### 7.1 Empirical Head-to-Head Comparison
 
 Evaluated on the **Macroeconomic Golden Benchmark Dataset** (`knowledge/benchmark/macro_golden_dataset.json`) across 500 curated central bank policy releases, CPI inflation prints, and trade tariff shocks:
 
@@ -269,7 +214,7 @@ Evaluated on the **Macroeconomic Golden Benchmark Dataset** (`knowledge/benchmar
 | **Historical Strategy Sharpe Ratio** | **1.70** (SPY hourly crossover) | 0.85 – 1.05 (transaction drag) | 0.73 (Buy & Hold benchmark)| > 1.50 | **PASS** |
 | **Strategy Total Return (vs Benchmark)**| **+5.48%** (vs +2.95% Buy & Hold) | +3.10% (slippage eroded) | +2.95% | Outperform Index | **+2.53% Alpha** |
 
-### 8.2 Why Contrastive System-One Outperforms Generative LLMs
+### 7.2 Why Contrastive System-One Outperforms Generative LLMs
 
 1. **Sub-Second Execution Prevents Information Decay**: Autoregressive decoding consumes $1,200\text{--}2,500\text{ ms}$, meaning generative agents place trades long after high-frequency market participants have priced in economic releases. Valence computes tensor inner-products in $<250\text{ ms}$.
 2. **True Probabilistic Simplex Geometry**: Generative LLMs cluster around subjective prompted numbers (`"confidence": 0.80`). Valence projects states directly onto the 2-simplex $\Delta^2$ where $P(\text{Bullish}) + P(\text{Bearish}) + P(\text{Neutral}) = 1.0$, producing mathematically calibrated directional spread $S_{\text{rel}}$.
@@ -278,7 +223,7 @@ Evaluated on the **Macroeconomic Golden Benchmark Dataset** (`knowledge/benchmar
 
 ---
 
-## 9. Production Operations & Resiliency Matrix
+## 8. Production Operations & Resiliency Matrix
 
 | Service / Layer | Provider | SLA | Failure Mode | Auto-Recovery Mechanism |
 | :--- | :--- | :--- | :--- | :--- |
