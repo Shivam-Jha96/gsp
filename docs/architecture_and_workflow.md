@@ -556,10 +556,10 @@ In [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py), the header action 
 #### 8. Reactive Zero-Reload Polling & Structural Boundary Deconfliction
 To deliver real-time terminal synchronization and resolve visual boundary collisions across varying viewport sizes:
 * **Background Data Polling (`run_every="30s"`):** The dashboard is encapsulated within a master `@st.fragment(run_every="30s")` coupled with `@st.cache_data(ttl=30)` on `get_processed_data()`. When new sentiment pipeline runs complete in Supabase, the terminal automatically updates charts, KPIs, and news feeds in the background with zero manual page refreshes.
-* **Colinear Header & Action Card Alignment:** Left header banner and right status action card use `st.columns([0.60, 0.40], vertical_alignment="top")` with flex stretching (`height: 100%`), ensuring top and bottom card boundaries align horizontally.
-* **Boundary Deconfliction & Container Demarcation:**
-  * A 10px margin rhythm separates the collapsible Quantitative Edge preview (`details.usp-collapsible`) and the 5-control filter toolbar container (`div[data-testid="stVerticalBlockBorderWrapper"]:has(div[data-testid="stSelectbox"])`).
-  * The Live Intelligence Feed (`.st-key-live_intelligence_feed_container`) is styled with an explicit institutional card border (`border: 1px solid var(--card-border); background: var(--card-bg);`) and isolated with `margin-top: 14px !important;` and `clear: both !important;` to ensure strict demarcation with zero boundary overlap against adjacent sections.
+* **Unified Header Banner Enclosure:** The branding typography and live telemetry status pills (`UPDATED {time_display_str}` and `SYSTEM ONLINE`) are unified inside a single continuous institutional `.header-banner-card` (`display: flex; justify-content: space-between; align-items: center;`), eliminating disconnected column cards, horizontal border offsets, and dead interior voids.
+* **Boundary Deconfliction, Margin Rhythm & Chart Clearance:**
+  * A deterministic 10px vertical rhythm separates the collapsible Quantitative Edge preview (`details.usp-collapsible`), the 5-control filter toolbar container, and the Live Intelligence Feed (`.st-key-live_intelligence_feed_container`).
+  * The chart section container enforces `padding: 14px 18px 12px 18px` paired with Plotly internal margins (`margin=dict(l=8, r=44, t=28, b=0)`), completely insulating the right Y-axis `OPTIMISM SCORE` label, numerical ticks, and the upper horizontal legend from colliding with container borders.
 
 ---
 

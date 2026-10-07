@@ -41,7 +41,7 @@ class TestValenceBranding(unittest.TestCase):
         
         # 5. Live Intelligence feed container demarcation
         self.assertIn('.st-key-live_intelligence_feed_container', self.app_content)
-        self.assertIn('margin-top: 14px !important;', self.app_content)
+        self.assertIn('margin-top: 10px !important;', self.app_content)
         self.assertIn('border: 1px solid var(--card-border) !important;', self.app_content)
 
 if __name__ == '__main__':

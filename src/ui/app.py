@@ -337,7 +337,7 @@ __THEME_VARS__
         display: flex !important;
         flex-direction: column !important;
         justify-content: space-between !important;
-        padding: 10px 14px 12px 14px !important;
+        padding: 14px 18px 12px 18px !important;
         margin: 0 !important;
         box-sizing: border-box !important;
     }
@@ -353,6 +353,16 @@ __THEME_VARS__
         gap: 4px !important;
         padding: 0 !important;
         margin: 0 !important;
+    }
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]),
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+    }
+    div[data-testid="stElementContainer"]:has(> div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"])),
+    div[data-testid="element-container"]:has(> div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"])) {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
     }
 
 
@@ -555,70 +565,22 @@ __THEME_VARS__
         -webkit-text-fill-color: var(--header-border-left) !important;
     }
 
-    /* Top Header Row Layout & Symmetrical Cards */
-    div[data-testid="stHorizontalBlock"]:has(.header-banner-card),
-    div[data-testid="stHorizontalBlock"]:first-of-type {
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-        align-items: stretch !important;
-    }
-    div[data-testid="stHorizontalBlock"]:has(.header-banner-card) > div[data-testid="stColumn"],
-    div[data-testid="stHorizontalBlock"]:has(.header-banner-card) > div[data-testid="column"],
-    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"],
-    div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"] {
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: stretch !important;
-        height: 100% !important;
-    }
-    div[data-testid="stHorizontalBlock"]:has(.header-banner-card) div[data-testid="stVerticalBlock"],
-    div[data-testid="stHorizontalBlock"]:has(.header-banner-card) div[data-testid="stElementContainer"],
-    div[data-testid="stHorizontalBlock"]:has(.header-banner-card) div[data-testid="stMarkdownContainer"],
-    div[data-testid="stHorizontalBlock"]:first-of-type div[data-testid="stVerticalBlock"],
-    div[data-testid="stHorizontalBlock"]:first-of-type div[data-testid="stElementContainer"],
-    div[data-testid="stHorizontalBlock"]:first-of-type div[data-testid="stMarkdownContainer"] {
-        height: 100% !important;
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: stretch !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-
+    /* Top Header Banner Card (Unified Single-Enclosure Institutional Layout) */
     .header-banner-card {
         background: var(--header-bg);
         border: 1px solid var(--header-border);
         border-radius: 8px;
         padding: clamp(10px, 1.8vw, 14px) clamp(12px, 2vw, 18px);
-        min-height: 68px;
-        height: 100%;
+        min-height: 64px;
+        width: 100%;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         box-sizing: border-box;
         backdrop-filter: blur(10px);
         box-shadow: var(--header-shadow);
         transition: all 0.2s ease;
-    }
-    .header-action-card {
-        justify-content: flex-end;
-        gap: 8px;
-        flex-wrap: wrap;
-        width: 100%;
-    }
-
-    @media (max-width: 920px) {
-        div[data-testid="stHorizontalBlock"]:has(.header-banner-card) {
-            flex-direction: column !important;
-            gap: 8px !important;
-        }
-        div[data-testid="stHorizontalBlock"]:has(.header-banner-card) > div[data-testid="stColumn"],
-        div[data-testid="stHorizontalBlock"]:has(.header-banner-card) > div[data-testid="column"] {
-            width: 100% !important;
-            flex: 1 1 100% !important;
-        }
-        .header-action-card {
-            justify-content: flex-start !important;
-        }
+        margin-bottom: 10px !important;
     }
 
     /* Segmented Control & Pills Styling */
@@ -781,6 +743,11 @@ __THEME_VARS__
     }
 
     /* Live Intelligence Feed Demarcated Container Card */
+    div[data-testid="stElementContainer"]:has(.st-key-live_intelligence_feed_container),
+    div[data-testid="element-container"]:has(.st-key-live_intelligence_feed_container) {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
     div[data-testid="stVerticalBlockBorderWrapper"].st-key-live_intelligence_feed_container,
     .st-key-live_intelligence_feed_container[data-testid="stVerticalBlockBorderWrapper"],
     div[data-testid="stVerticalBlockBorderWrapper"]:has(.st-key-feed_sentiment_pills),
@@ -793,7 +760,7 @@ __THEME_VARS__
         border-radius: 8px !important;
         box-shadow: var(--card-shadow) !important;
         padding: 12px 16px 14px 16px !important;
-        margin-top: 14px !important;
+        margin-top: 10px !important;
         margin-bottom: 12px !important;
         position: relative !important;
         z-index: 1 !important;
@@ -1413,85 +1380,76 @@ def render_dashboard():
         pipeline_completed_at, fallback_ts=latest_ts, target_tz_str=current_target_tz
     )
 
-    # --- Top Row: Symmetrical Header Banner & Status Action Card ---
-    header_col, action_col = st.columns([0.60, 0.40], vertical_alignment="top")
-    
-    with header_col:
-        st.markdown(f"""
-        <div class="header-banner-card">
-            <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
-                <svg width="44" height="40" viewBox="15 15 70 75" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.45)); flex-shrink: 0;">
-                    <defs>
-                        <linearGradient id="vFlatCyanAreaH" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stop-color="#0284c7" stop-opacity="0.45"/>
-                            <stop offset="100%" stop-color="#0369a1" stop-opacity="0.05"/>
-                        </linearGradient>
-                        <linearGradient id="vFlatGreenAreaH" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stop-color="#10b981" stop-opacity="0.5"/>
-                            <stop offset="100%" stop-color="#047857" stop-opacity="0.05"/>
-                        </linearGradient>
-                        <radialGradient id="vFlatAuraGradH" cx="50%" cy="50%" r="50%">
-                            <stop offset="0%" stop-color="#34d399" stop-opacity="0.45"/>
-                            <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
-                        </radialGradient>
-                    </defs>
-                    <line x1="18" y1="72" x2="82" y2="72" stroke="#0e7490" stroke-width="1.2" stroke-dasharray="2.5 3" opacity="0.6"/>
-                    <path d="M 21 28 L 29 36 L 36 32 L 50 72 L 50 86 L 21 86 Z" fill="url(#vFlatCyanAreaH)"/>
-                    <path d="M 50 72 L 58 58 L 62 60 L 68 42 L 72 47 L 76 27 L 76 86 L 50 86 Z" fill="url(#vFlatGreenAreaH)"/>
-                    <line x1="35" y1="26" x2="35" y2="40" stroke="#38bdf8" stroke-width="1.5"/>
-                    <rect x="33.5" y="30" width="3" height="7" rx="0.8" fill="#0284c7"/>
-                    <line x1="43" y1="46" x2="43" y2="60" stroke="#38bdf8" stroke-width="1.5"/>
-                    <rect x="41.5" y="50" width="3" height="6" rx="0.8" fill="#0284c7"/>
-                    <line x1="62" y1="52" x2="62" y2="67" stroke="#34d399" stroke-width="1.5"/>
-                    <rect x="60.5" y="56" width="3" height="7" rx="0.8" fill="#10b981"/>
-                    <line x1="72" y1="38" x2="72" y2="52" stroke="#34d399" stroke-width="1.5"/>
-                    <rect x="70.5" y="42" width="3" height="6" rx="0.8" fill="#10b981"/>
-                    <path d="M 21 34 L 29 42 L 36 38 L 50 78 L 58 64 L 62 66 L 68 48 L 72 53 L 74 38" stroke="rgba(255, 255, 255, 0.15)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M 21 28 L 29 36 L 36 32 L 50 72" stroke="#38bdf8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M 50 72 L 58 58 L 62 60 L 68 42 L 72 47 L 76 27" stroke="#10b981" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <circle cx="50" cy="72" r="4.5" fill="#020617" stroke="#38bdf8" stroke-width="2.5"/>
-                    <circle cx="50" cy="72" r="1.5" fill="#38bdf8"/>
-                    <circle cx="76" cy="24" r="11" fill="url(#vFlatAuraGradH)"/>
-                    <circle cx="76" cy="24" r="6" fill="rgba(16, 185, 129, 0.25)"/>
-                    <polygon points="76,17 71,28 81,28" fill="#34d399"/>
-                </svg>
-                <div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <span style="font-family: 'Montserrat', sans-serif; font-size: clamp(1.25rem, 2.4vw, 1.55rem); font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; background: linear-gradient(135deg, #ffffff 30%, #e2e8f0 70%, #6ee7b7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 2px 10px rgba(0,0,0,0.5)); line-height: 1.1;">VALENCE</span>
-                        <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981;"></span>
-                        <span style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.32); color: #34d399; font-size: 0.62rem; font-weight: 800; padding: 2px 7px; border-radius: 4px; letter-spacing: 0.08em; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">QUANT</span>
-                    </div>
-                    <div style="font-size: clamp(0.66rem, 1.2vw, 0.74rem); font-weight: 600; color: #94a3b8; font-family: 'IBM Plex Sans', sans-serif; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 3px; display: flex; align-items: center; gap: 6px;">
-                        <span>Global Macro Sentiment</span>
-                        <span style="color: rgba(255,255,255,0.25);">•</span>
-                        <span style="color: #34d399;">Directional Signal Engine</span>
-                    </div>
+    # --- Top Row: Unified Institutional Header Banner with Branding & Telemetry Status ---
+    if freshness_tier == "aging":
+        pill_bg = "rgba(245, 158, 11, 0.12)"
+        pill_border = "rgba(245, 158, 11, 0.32)"
+        pill_color = "#fbbf24"
+    elif freshness_tier == "stale":
+        pill_bg = "rgba(239, 68, 68, 0.12)"
+        pill_border = "rgba(239, 68, 68, 0.32)"
+        pill_color = "#f87171"
+    else: # fresh
+        pill_bg = "rgba(16, 185, 129, 0.10)" if not is_light else "rgba(5, 150, 105, 0.10)"
+        pill_border = "rgba(16, 185, 129, 0.25)" if not is_light else "rgba(5, 150, 105, 0.25)"
+        pill_color = "#34d399" if not is_light else "#059669"
+
+    status_bg = "rgba(16, 185, 129, 0.15)"
+    status_border = "rgba(16, 185, 129, 0.35)"
+    status_text = "#34d399"
+
+    st.markdown(f"""
+    <div class="header-banner-card">
+        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+            <svg width="44" height="40" viewBox="15 15 70 75" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.45)); flex-shrink: 0;">
+                <defs>
+                    <linearGradient id="vFlatCyanAreaH" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#0284c7" stop-opacity="0.45"/>
+                        <stop offset="100%" stop-color="#0369a1" stop-opacity="0.05"/>
+                    </linearGradient>
+                    <linearGradient id="vFlatGreenAreaH" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#10b981" stop-opacity="0.5"/>
+                        <stop offset="100%" stop-color="#047857" stop-opacity="0.05"/>
+                    </linearGradient>
+                    <radialGradient id="vFlatAuraGradH" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="#34d399" stop-opacity="0.45"/>
+                        <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+                    </radialGradient>
+                </defs>
+                <line x1="18" y1="72" x2="82" y2="72" stroke="#0e7490" stroke-width="1.2" stroke-dasharray="2.5 3" opacity="0.6"/>
+                <path d="M 21 28 L 29 36 L 36 32 L 50 72 L 50 86 L 21 86 Z" fill="url(#vFlatCyanAreaH)"/>
+                <path d="M 50 72 L 58 58 L 62 60 L 68 42 L 72 47 L 76 27 L 76 86 L 50 86 Z" fill="url(#vFlatGreenAreaH)"/>
+                <line x1="35" y1="26" x2="35" y2="40" stroke="#38bdf8" stroke-width="1.5"/>
+                <rect x="33.5" y="30" width="3" height="7" rx="0.8" fill="#0284c7"/>
+                <line x1="43" y1="46" x2="43" y2="60" stroke="#38bdf8" stroke-width="1.5"/>
+                <rect x="41.5" y="50" width="3" height="6" rx="0.8" fill="#0284c7"/>
+                <line x1="62" y1="52" x2="62" y2="67" stroke="#34d399" stroke-width="1.5"/>
+                <rect x="60.5" y="56" width="3" height="7" rx="0.8" fill="#10b981"/>
+                <line x1="72" y1="38" x2="72" y2="52" stroke="#34d399" stroke-width="1.5"/>
+                <rect x="70.5" y="42" width="3" height="6" rx="0.8" fill="#10b981"/>
+                <path d="M 21 34 L 29 42 L 36 38 L 50 78 L 58 64 L 62 66 L 68 48 L 72 53 L 74 38" stroke="rgba(255, 255, 255, 0.15)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M 21 28 L 29 36 L 36 32 L 50 72" stroke="#38bdf8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M 50 72 L 58 58 L 62 60 L 68 42 L 72 47 L 76 27" stroke="#10b981" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="50" cy="72" r="4.5" fill="#020617" stroke="#38bdf8" stroke-width="2.5"/>
+                <circle cx="50" cy="72" r="1.5" fill="#38bdf8"/>
+                <circle cx="76" cy="24" r="11" fill="url(#vFlatAuraGradH)"/>
+                <circle cx="76" cy="24" r="6" fill="rgba(16, 185, 129, 0.25)"/>
+                <polygon points="76,17 71,28 81,28" fill="#34d399"/>
+            </svg>
+            <div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-family: 'Montserrat', sans-serif; font-size: clamp(1.25rem, 2.4vw, 1.55rem); font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; background: linear-gradient(135deg, #ffffff 30%, #e2e8f0 70%, #6ee7b7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 2px 10px rgba(0,0,0,0.5)); line-height: 1.1;">VALENCE</span>
+                    <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981;"></span>
+                    <span style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.32); color: #34d399; font-size: 0.62rem; font-weight: 800; padding: 2px 7px; border-radius: 4px; letter-spacing: 0.08em; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">QUANT</span>
+                </div>
+                <div style="font-size: clamp(0.66rem, 1.2vw, 0.74rem); font-weight: 600; color: #94a3b8; font-family: 'IBM Plex Sans', sans-serif; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 3px; display: flex; align-items: center; gap: 6px;">
+                    <span>Global Macro Sentiment</span>
+                    <span style="color: rgba(255,255,255,0.25);">•</span>
+                    <span style="color: #34d399;">Directional Signal Engine</span>
                 </div>
             </div>
         </div>
-        """, unsafe_allow_html=True)
-        
-    with action_col:
-        # Freshness color accents based on tier (<2h15m fresh, 2h15m-4h aging, >4h stale)
-        if freshness_tier == "aging":
-            pill_bg = "rgba(245, 158, 11, 0.12)"
-            pill_border = "rgba(245, 158, 11, 0.32)"
-            pill_color = "#fbbf24"
-        elif freshness_tier == "stale":
-            pill_bg = "rgba(239, 68, 68, 0.12)"
-            pill_border = "rgba(239, 68, 68, 0.32)"
-            pill_color = "#f87171"
-        else: # fresh
-            pill_bg = "rgba(16, 185, 129, 0.10)" if not is_light else "rgba(5, 150, 105, 0.10)"
-            pill_border = "rgba(16, 185, 129, 0.25)" if not is_light else "rgba(5, 150, 105, 0.25)"
-            pill_color = "#34d399" if not is_light else "#059669"
-
-        status_bg = "rgba(16, 185, 129, 0.15)"
-        status_border = "rgba(16, 185, 129, 0.35)"
-        status_text = "#34d399"
-
-        st.markdown(f"""
-        <div class="header-banner-card header-action-card">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end;">
             <div title="{freshness_tooltip}" style="display: inline-flex; align-items: center; gap: 6px; background: {pill_bg}; border: 1px solid {pill_border}; padding: 5px 10px; border-radius: 4px; flex-shrink: 0; cursor: default; white-space: nowrap;">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{pill_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                 <span style="font-size: 0.72rem; font-weight: 700; color: {pill_color}; font-family: 'Montserrat', sans-serif; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap;">UPDATED {time_display_str}</span>
@@ -1501,7 +1459,8 @@ def render_dashboard():
                 SYSTEM ONLINE
             </div>
         </div>
-        """, unsafe_allow_html=True)
+    </div>
+    """, unsafe_allow_html=True)
     
     st.markdown(f"""
     <details class="usp-collapsible">
@@ -1830,13 +1789,13 @@ def render_dashboard():
             # --- Combined Chart & Mini Index Container (unified alignment & borders) ---
             with st.container(border=True):
                 st.markdown(f"""
-                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--card-border); margin-bottom: 6px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 2px 2px 8px 2px; border-bottom: 1px solid var(--card-border); margin-bottom: 6px;">
                     <div style="display: flex; align-items: center; gap: 10px;">
                         <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.30); padding: 5px; border-radius: 6px; display: flex; align-items: center;">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
                         </div>
                         <div>
-                            <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); font-family: 'Montserrat', sans-serif;">Aggregate Market Optimism</div>
+                            <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); font-family: 'Montserrat', sans-serif; line-height: 1.2;">Aggregate Market Optimism</div>
                             <div style="font-size: 0.78rem; color: var(--text-muted); font-family: 'IBM Plex Sans', sans-serif;">Multi-index sentiment surface & {selected_region} moving average</div>
                         </div>
                     </div>
@@ -1893,7 +1852,7 @@ def render_dashboard():
                 ))
                 
                 fig_area.update_layout(
-                    height=370, margin=dict(l=0, r=0, t=10, b=0),
+                    height=370, margin=dict(l=8, r=44, t=28, b=0),
                     plot_bgcolor="rgba(255,255,255,0.4)" if is_light else "rgba(0,0,0,0)",
                     paper_bgcolor="rgba(0,0,0,0)",
                     hovermode="x unified",
