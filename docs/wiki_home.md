@@ -95,6 +95,9 @@ Valence builds upon the contrastive foundation of **TypeSafe AI's Jev** architec
 [7. Dynamic OKF Knowledge Updater (Daily Cron at 00:00 UTC via Google Gemini Flash)]
 - Scrapes central bank speeches & CPI releases -> Auto-commits updated rules to GitHub
 +-----------------------------------------------------------------------------------------+
+[8. Autonomous Constituents Sync (Fortnightly Cron via Open-Source Financial APIs)]
+- Updates regional index constituent JSON registries -> Auto-commits to GitHub
++-----------------------------------------------------------------------------------------+
 ```
 
 ### Architectural Breakdown
@@ -106,6 +109,7 @@ Valence builds upon the contrastive foundation of **TypeSafe AI's Jev** architec
 5. **Vertical Partitioning**: Separates numerical vector fields (id, created_at, sentiment_score, region_tag, index_ticker) into event_signals and stores raw JSON metadata in event_payloads.
 6. **Execution Engine**: Vectorizes EMA calculation (alpha = 0.40), executing market orders on Alpaca when crossing directional boundaries.
 7. **Institutional Terminal**: Renders continuous area plots and @st.fragment-isolated news feeds in permanent dark mode (#020617).
+8. **Knowledge & Constituents Engines**: Gemini updates OKF macro rules daily, while a fortnightly cron dynamically maintains regional index constituent registries via financial APIs.
 
 ---
 
@@ -177,12 +181,17 @@ Macroeconomic policies mutate dynamically across central banks (Federal Reserve,
 - `knowledge/uk_macro.okf.md` — Bank of England stance, Gilt yields, Sterling exchange rates, FTSE trends.
 - `knowledge/japan_macro.okf.md` — BoJ Yield Curve Control (YCC), negative rate exits, Yen carry trades.
 
-### Autonomous Updater (`src/knowledge_engine/okf_updater.py`)
+### Autonomous Macro Rules Updater (`src/knowledge_engine/okf_updater.py`)
 - Runs daily at `00:00 UTC` via GitHub Actions (`.github/workflows/update_okf.yml`).
 - Scrapes central bank speeches and macro releases, prompting Google Gemini to detect regime shifts.
 - Implements dynamic model discovery (`client.models.list()`) with automatic fallback (`gemini-3.8-flash` -> `gemini-3.7-flash` -> `gemini-2.0-flash`).
 - Strict rate pacing (`MIN_REQUEST_INTERVAL = 6.0s`) prevents free-tier API quota exhaustion.
 - Pushes verified rule updates back to `master` via automated Git bot commits.
+
+### Autonomous Index Constituents Updater (`scripts/update_constituents.py`)
+- Runs fortnightly via GitHub Actions (`.github/workflows/update_constituents.yml`).
+- Automatically fetches active index constituents (e.g., S&P 500, Nifty 50, FTSE 100) using free open-source repository APIs.
+- Pushes updated constituent JSONs to `knowledge/*_constituents.okf.json` via automated Git bot commits.
 
 ---
 

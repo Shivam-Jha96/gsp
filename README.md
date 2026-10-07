@@ -181,6 +181,7 @@ gsp/
 ├── .github/workflows/
 │   ├── deploy.yml              # Sentiment pipeline (every 2 hours)
 │   ├── update_okf.yml          # Dynamic OKF updater (daily)
+│   ├── update_constituents.yml # Index constituents updater (fortnightly)
 │   └── reclassify_db.yml       # Database integrity, deduplication & re-scoring workflow
 ├── docs/                       # Quantitative & architectural documentation
 │   ├── architecture_and_workflow.md  # End-to-end architecture & workflows
@@ -200,7 +201,8 @@ gsp/
 ├── scripts/
 │   ├── run_benchmarks.py       # Unified 4-tier quantitative benchmark CLI runner
 │   ├── db_cleanup.py           # Database purge & retention maintenance
-│   └── reclassify_database.py  # Historical contaminant scan & purge utility
+│   ├── reclassify_database.py  # Historical contaminant scan & purge utility
+│   └── update_constituents.py  # Fortnightly constituent synchronizer
 ├── src/
 │   ├── ai_engine/              # Modal serverless GPU (CLM System-One)
 │   ├── benchmark/              # 4-tier benchmarking engine & econometric metrics
@@ -300,6 +302,7 @@ PYTHONPATH=src python src/main.py
 |----------|----------|-------------|
 | **Sentiment Pipeline** (`deploy.yml`) | Every 2 hours | Ingestion → AI Scoring → Database → Paper Trading |
 | **OKF Knowledge Updater** (`update_okf.yml`) | Daily at 00:00 UTC | Gemini analyzes macro policy news and auto-commits updated OKF trading rules |
+| **Index Constituents Updater** (`update_constituents.yml`) | Fortnightly | Automated update of regional index constituents using open-source financial APIs |
 | **Reclassification & Purge** (`reclassify_db.yml`) | Manual (`workflow_dispatch`) | Scans historical Supabase records and audits/purges regional contaminants |
 
 All workflows can also be triggered manually via `workflow_dispatch` from the GitHub Actions UI.

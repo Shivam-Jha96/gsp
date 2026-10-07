@@ -209,6 +209,7 @@ Indices are baskets of constituent companies. In practice, high-impact financial
 
 [`src/config/market_registry.py`](file:///d:/Dev/repos/gsp/src/config/market_registry.py#L39-L68) provides `load_region_constituents(region_code)` with memoized caching.
 
+**Autonomous Constituents Sync**: A fortnightly GitHub Actions cron job (`.github/workflows/update_constituents.yml`) executes [`scripts/update_constituents.py`](file:///d:/Dev/repos/gsp/scripts/update_constituents.py). This synchronizes and updates the constituent registries dynamically using open-source financial APIs, ensuring indices stay current as companies are added or removed, without manual oversight.
 #### 5. XML Parsing, Rate Control & Deduplication Logic
 * **Lightweight Parsing:** Rather than incurring the overhead of heavy third-party RSS libraries, [`RSSClient.parse_feed`](file:///d:/Dev/repos/gsp/src/ingestion/api_clients.py#L24-L54) uses Python's built-in `xml.etree.ElementTree` to parse raw XML into standard Python dictionaries containing title, link, published timestamp, and summary.
 * **Volume Limiting & Free-Tier Guard:** The parser applies a strict `items[:3]` slice per endpoint. Across 40 feeds, this generates a deterministic ceiling of at most 120 items per ingestion cycle, ensuring the downstream inference process stays well within API quotas and completes within standard CI/CD timeouts.
@@ -630,7 +631,7 @@ Each rule maintains a concise, institutional-grade format (1–2 sentence condit
 ---
 
 ### Layer 7: CI/CD & Orchestration Layer
-* **Source Files:** [`.github/workflows/deploy.yml`](file:///d:/Dev/repos/gsp/.github/workflows/deploy.yml), [`.github/workflows/update_okf.yml`](file:///d:/Dev/repos/gsp/.github/workflows/update_okf.yml), [`.github/workflows/ci.yml`](file:///d:/Dev/repos/gsp/.github/workflows/ci.yml)
+* **Source Files:** [`.github/workflows/deploy.yml`](file:///d:/Dev/repos/gsp/.github/workflows/deploy.yml), [`.github/workflows/update_okf.yml`](file:///d:/Dev/repos/gsp/.github/workflows/update_okf.yml), [`.github/workflows/update_constituents.yml`](file:///d:/Dev/repos/gsp/.github/workflows/update_constituents.yml), [`.github/workflows/ci.yml`](file:///d:/Dev/repos/gsp/.github/workflows/ci.yml)
 
 #### 1. Workflow Architecture & Decoupled Execution Graph
 GitHub Actions orchestrates all recurring pipelines on isolated, non-blocking schedules with dedicated concurrency groups:
@@ -650,6 +651,14 @@ GitHub Actions orchestrates all recurring pipelines on isolated, non-blocking sc
 |  - Timeout: 15 minutes                                |
 |  - Tasks: Run okf_updater.py, commit updated rules    |
 |           with [skip ci] and git pull --rebase        |
++-------------------------------------------------------+
+
++-------------------------------------------------------+
+|  .github/workflows/update_constituents.yml            |
+|  - Triggers on: Cron '0 0 1,15 * *' (Fortnightly)     |
+|                 workflow_dispatch (Manual trigger)    |
+|  - Tasks: Run update_constituents.py, commit updated  |
+|           knowledge JSON registries with [skip ci]    |
 +-------------------------------------------------------+
 
 +-------------------------------------------------------+
