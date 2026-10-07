@@ -4,17 +4,21 @@ import json
 import logging
 import requests
 from pathlib import Path
+from datetime import datetime
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 KNOWLEDGE_DIR = ROOT_DIR / "knowledge"
 
-# Common index mappings for Financial Modeling Prep (FMP)
-FMP_ENDPOINTS = {
-    "S&P 500": "sp500_constituent",
-    "NASDAQ": "nasdaq_constituent",
-    "Dow Jones": "dowjones_constituent"
+# Mapping to the free open-source repository yfiua/index-constituents
+# Format: https://yfiua.github.io/index-constituents/constituents-{code}.json
+YFIUA_ENDPOINTS = {
+    "S&P 500": "sp500",
+    "NASDAQ": "nasdaq100",
+    "Dow Jones": "dowjones",
+    "FTSE 100": "ftse100",
+    "Nikkei 225": "nikkei225"
 }
 
 def load_local_constituents(filepath: Path) -> dict:
@@ -28,25 +32,31 @@ def save_local_constituents(filepath: Path, data: dict):
         json.dump(data, f, indent=2)
         f.write("\n")
 
-def fetch_from_fmp(index_name: str, api_key: str) -> list:
-    endpoint = FMP_ENDPOINTS.get(index_name)
-    if not endpoint:
-        logging.warning(f"No FMP endpoint mapped for {index_name}")
+def fetch_from_yfiua(index_name: str) -> list:
+    code = YFIUA_ENDPOINTS.get(index_name)
+    if not code:
+        logging.warning(f"No yfiua endpoint mapped for {index_name}")
         return []
         
-    url = f"https://financialmodelingprep.com/api/v3/{endpoint}?apikey={api_key}"
-    response = requests.get(url)
-    response.raise_for_status()
-    data = response.json()
+    url = f"https://yfiua.github.io/index-constituents/constituents-{code}.json"
+    
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+    except Exception as e:
+        logging.error(f"Failed to fetch {index_name} from {url}: {e}")
+        return []
     
     constituents = []
     for item in data:
-        symbol = item.get("symbol")
-        name = item.get("name")
+        # yfiua JSON structure often varies but typically has Symbol and Name
+        symbol = item.get("Symbol", item.get("symbol"))
+        name = item.get("Name", item.get("name", item.get("Company", "")))
+        
         if not symbol or not name:
             continue
             
-        # Create a simple aliases list
         aliases = [name.lower()]
         if symbol.lower() not in aliases:
             aliases.append(symbol.lower())
@@ -58,7 +68,7 @@ def fetch_from_fmp(index_name: str, api_key: str) -> list:
         })
     return constituents
 
-def update_region_file(region_file: Path, api_key: str):
+def update_region_file(region_file: Path):
     logging.info(f"Processing {region_file.name}")
     data = load_local_constituents(region_file)
     if not data or "indices" not in data:
@@ -69,25 +79,22 @@ def update_region_file(region_file: Path, api_key: str):
     for index_name, current_list in data["indices"].items():
         logging.info(f"  Fetching updates for {index_name}...")
         
-        # Try fetching from API
-        new_list = fetch_from_fmp(index_name, api_key)
+        # Try fetching from free repository
+        new_list = fetch_from_yfiua(index_name)
         
         if new_list:
-            # Preserve existing aliases if symbol already existed
             existing_map = {c["symbol"]: c for c in current_list}
             merged_list = []
             
             for new_c in new_list:
                 symbol = new_c["symbol"]
                 if symbol in existing_map:
-                    # Keep existing aliases to not break classifiers
                     new_c["aliases"] = existing_map[symbol].get("aliases", new_c["aliases"])
                 merged_list.append(new_c)
                 
             updated_indices[index_name] = merged_list
             logging.info(f"    -> Updated {index_name} with {len(merged_list)} constituents.")
         else:
-            # Fallback to existing list if API fails or unsupported
             updated_indices[index_name] = current_list
             logging.info(f"    -> Kept existing {len(current_list)} constituents for {index_name}.")
 
@@ -96,14 +103,11 @@ def update_region_file(region_file: Path, api_key: str):
     logging.info(f"Saved {region_file.name}")
 
 def main():
-    api_key = os.environ.get("MARKET_DATA_API_KEY")
-    if not api_key:
-        logging.error("MARKET_DATA_API_KEY environment variable is missing.")
-        sys.exit(1)
-        
+    # Fallback to keyless open-source due to FMP free-tier 403 Forbidden limits
+    logging.info("Starting index constituents update using yfiua open-source project...")
     for file_path in KNOWLEDGE_DIR.glob("*_constituents.okf.json"):
         try:
-            update_region_file(file_path, api_key)
+            update_region_file(file_path)
         except Exception as e:
             logging.error(f"Failed to update {file_path.name}: {e}")
 
