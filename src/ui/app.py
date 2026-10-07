@@ -300,13 +300,30 @@ __THEME_VARS__
         gap: 2px;
     }
     /* Right column chart & mini-kpi container: Symmetrical layout with left column */
-    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child,
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child,
-    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="column"]:last-child,
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:last-child,
-    div[data-testid="stColumn"]:has(div[data-testid="stPlotlyChart"]) {
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) {
+        align-items: stretch !important;
+    }
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"],
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="column"],
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"],
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"] {
         display: flex !important;
         flex-direction: column !important;
+        align-self: stretch !important;
+        height: auto !important;
+    }
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child > div[data-testid="stVerticalBlock"],
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:last-child > div[data-testid="stVerticalBlock"],
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child > div[data-testid="stVerticalBlock"],
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="column"]:last-child > div[data-testid="stVerticalBlock"],
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child div:has(> .st-key-market_optimism_chart_container),
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child div:has(> .st-key-market_optimism_chart_container),
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:last-child div:has(> .st-key-market_optimism_chart_container),
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="column"]:last-child div:has(> .st-key-market_optimism_chart_container) {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100% !important;
+        flex: 1 1 auto !important;
     }
     .st-key-market_optimism_chart_container,
     div[data-testid="stVerticalBlock"].st-key-market_optimism_chart_container,
@@ -318,19 +335,18 @@ __THEME_VARS__
         border: 1px solid var(--card-border) !important;
         border-radius: 8px !important;
         box-shadow: var(--card-shadow) !important;
-        padding: 14px 18px 12px 18px !important;
+        padding: 14px 18px 14px 18px !important;
         margin: 0 !important;
         box-sizing: border-box !important;
         display: flex !important;
         flex-direction: column !important;
+        justify-content: space-between !important;
+        height: 100% !important;
+        flex: 1 1 auto !important;
         gap: 0 !important;
     }
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]),
-    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container),
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"],
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"],
-    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"],
-    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="column"] {
+    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) {
         margin-bottom: 0 !important;
         padding-bottom: 0 !important;
     }
@@ -722,7 +738,7 @@ __THEME_VARS__
     div[data-testid="element-container"]:has(.st-key-live_intelligence_feed_container),
     div[data-testid="stElementContainer"].st-key-live_intelligence_feed_container,
     div[data-testid="element-container"].st-key-live_intelligence_feed_container {
-        margin-top: 0 !important;
+        margin-top: 10px !important;
         padding-top: 0 !important;
     }
     .st-key-live_intelligence_feed_container,
@@ -738,7 +754,7 @@ __THEME_VARS__
         border-radius: 8px !important;
         box-shadow: var(--card-shadow) !important;
         padding: 12px 16px 14px 16px !important;
-        margin-top: 0 !important;
+        margin-top: 10px !important;
         margin-bottom: 12px !important;
         position: relative !important;
         z-index: 1 !important;
@@ -999,7 +1015,7 @@ __THEME_VARS__
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
         gap: 6px;
-        margin-top: 8px;
+        margin-top: auto !important;
         padding-top: 8px;
         border-top: 1px solid var(--card-border);
         box-sizing: border-box;
@@ -1834,7 +1850,7 @@ def render_dashboard():
                 ))
                 
                 fig_area.update_layout(
-                    height=370, margin=dict(l=8, r=44, t=28, b=24),
+                    height=425, margin=dict(l=8, r=44, t=28, b=24),
                     plot_bgcolor="rgba(255,255,255,0.4)" if is_light else "rgba(0,0,0,0)",
                     paper_bgcolor="rgba(0,0,0,0)",
                     hovermode="x unified",
