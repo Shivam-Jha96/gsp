@@ -4,48 +4,310 @@
   "indices": {
     "FTSE 100": [
       {
+        "symbol": "AAF.L",
+        "name": "Airtel Africa PLC",
+        "aliases": [
+          "airtel africa plc",
+          "aaf.l"
+        ]
+      },
+      {
+        "symbol": "AAL.L",
+        "name": "Anglo American PLC",
+        "aliases": [
+          "anglo american plc",
+          "aal.l"
+        ]
+      },
+      {
+        "symbol": "ABF.L",
+        "name": "Associated British Foods PLC",
+        "aliases": [
+          "associated british foods plc",
+          "abf.l"
+        ]
+      },
+      {
+        "symbol": "ADM.L",
+        "name": "Admiral Group PLC",
+        "aliases": [
+          "admiral group plc",
+          "adm.l"
+        ]
+      },
+      {
+        "symbol": "AHT.L",
+        "name": "Ashtead Group PLC",
+        "aliases": [
+          "ashtead group plc",
+          "aht.l"
+        ]
+      },
+      {
+        "symbol": "ALW.L",
+        "name": "Alliance Witan PLC",
+        "aliases": [
+          "alliance witan plc",
+          "alw.l"
+        ]
+      },
+      {
+        "symbol": "ANTO.L",
+        "name": "Antofagasta PLC",
+        "aliases": [
+          "antofagasta plc",
+          "anto.l"
+        ]
+      },
+      {
+        "symbol": "AUTO.L",
+        "name": "Auto Trader Group PLC",
+        "aliases": [
+          "auto trader group plc",
+          "auto.l"
+        ]
+      },
+      {
+        "symbol": "AV/.L",
+        "name": "Aviva PLC",
+        "aliases": [
+          "aviva plc",
+          "av/.l"
+        ]
+      },
+      {
         "symbol": "AZN.L",
-        "name": "AstraZeneca",
+        "name": "AstraZeneca PLC",
         "aliases": [
           "astrazeneca",
           "astra"
         ]
       },
       {
-        "symbol": "SHEL.L",
-        "name": "Shell",
+        "symbol": "BA/.L",
+        "name": "BAE Systems PLC",
         "aliases": [
-          "shell plc",
-          "shell"
+          "bae systems plc",
+          "ba/.l"
         ]
       },
       {
-        "symbol": "HSBA.L",
-        "name": "HSBC Holdings",
+        "symbol": "BAB.L",
+        "name": "Babcock International Group PLC",
         "aliases": [
-          "hsbc holdings",
-          "hsbc"
+          "babcock international group plc",
+          "bab.l"
         ]
       },
       {
-        "symbol": "ULVR.L",
-        "name": "Unilever",
+        "symbol": "BARC.L",
+        "name": "Barclays PLC",
         "aliases": [
-          "unilever"
+          "barclays plc",
+          "barclays"
         ]
       },
       {
-        "symbol": "BP.L",
-        "name": "BP",
+        "symbol": "BATS.L",
+        "name": "British American Tobacco PLC",
+        "aliases": [
+          "british american tobacco",
+          "bat"
+        ]
+      },
+      {
+        "symbol": "BEZ.L",
+        "name": "Beazley PLC",
+        "aliases": [
+          "beazley plc",
+          "bez.l"
+        ]
+      },
+      {
+        "symbol": "BKG.L",
+        "name": "Berkeley Group Holdings PLC",
+        "aliases": [
+          "berkeley group holdings plc",
+          "bkg.l"
+        ]
+      },
+      {
+        "symbol": "BNZL.L",
+        "name": "Bunzl PLC",
+        "aliases": [
+          "bunzl plc",
+          "bnzl.l"
+        ]
+      },
+      {
+        "symbol": "BP/.L",
+        "name": "BP PLC",
         "aliases": [
           "bp plc",
-          "british petroleum",
-          "bp"
+          "bp/.l"
+        ]
+      },
+      {
+        "symbol": "BRBY.L",
+        "name": "Burberry Group PLC",
+        "aliases": [
+          "burberry group plc",
+          "brby.l"
+        ]
+      },
+      {
+        "symbol": "BT/A.L",
+        "name": "BT Group PLC",
+        "aliases": [
+          "bt group plc",
+          "bt/a.l"
+        ]
+      },
+      {
+        "symbol": "BTRW.L",
+        "name": "Barratt Redrow PLC",
+        "aliases": [
+          "barratt redrow plc",
+          "btrw.l"
+        ]
+      },
+      {
+        "symbol": "CCEP.L",
+        "name": "Coca-Cola Europacific Partners PLC",
+        "aliases": [
+          "coca-cola europacific partners plc",
+          "ccep.l"
+        ]
+      },
+      {
+        "symbol": "CCH.L",
+        "name": "Coca-Cola HBC AG",
+        "aliases": [
+          "coca-cola hbc ag",
+          "cch.l"
+        ]
+      },
+      {
+        "symbol": "CNA.L",
+        "name": "Centrica PLC",
+        "aliases": [
+          "centrica plc",
+          "cna.l"
+        ]
+      },
+      {
+        "symbol": "CPG.L",
+        "name": "Compass Group PLC",
+        "aliases": [
+          "compass group plc",
+          "cpg.l"
+        ]
+      },
+      {
+        "symbol": "CRDA.L",
+        "name": "Croda International PLC",
+        "aliases": [
+          "croda international plc",
+          "crda.l"
+        ]
+      },
+      {
+        "symbol": "CTEC.L",
+        "name": "Convatec Group PLC",
+        "aliases": [
+          "convatec group plc",
+          "ctec.l"
+        ]
+      },
+      {
+        "symbol": "DCC.L",
+        "name": "DCC PLC",
+        "aliases": [
+          "dcc plc",
+          "dcc.l"
+        ]
+      },
+      {
+        "symbol": "DGE.L",
+        "name": "Diageo PLC",
+        "aliases": [
+          "diageo"
+        ]
+      },
+      {
+        "symbol": "DPLM.L",
+        "name": "Diploma PLC",
+        "aliases": [
+          "diploma plc",
+          "dplm.l"
+        ]
+      },
+      {
+        "symbol": "EDV.L",
+        "name": "Endeavour Mining PLC",
+        "aliases": [
+          "endeavour mining plc",
+          "edv.l"
+        ]
+      },
+      {
+        "symbol": "ENT.L",
+        "name": "Entain PLC",
+        "aliases": [
+          "entain plc",
+          "ent.l"
+        ]
+      },
+      {
+        "symbol": "EXPN.L",
+        "name": "Experian PLC",
+        "aliases": [
+          "experian plc",
+          "expn.l"
+        ]
+      },
+      {
+        "symbol": "EZJ.L",
+        "name": "easyJet PLC",
+        "aliases": [
+          "easyjet plc",
+          "ezj.l"
+        ]
+      },
+      {
+        "symbol": "FCIT.L",
+        "name": "F&C Investment Trust PLC",
+        "aliases": [
+          "f&c investment trust plc",
+          "fcit.l"
+        ]
+      },
+      {
+        "symbol": "FRES.L",
+        "name": "Fresnillo PLC",
+        "aliases": [
+          "fresnillo plc",
+          "fres.l"
+        ]
+      },
+      {
+        "symbol": "GAW.L",
+        "name": "Games Workshop Group PLC",
+        "aliases": [
+          "games workshop group plc",
+          "gaw.l"
+        ]
+      },
+      {
+        "symbol": "GLEN.L",
+        "name": "Glencore PLC",
+        "aliases": [
+          "glencore"
         ]
       },
       {
         "symbol": "GSK.L",
-        "name": "GSK",
+        "name": "GSK PLC",
         "aliases": [
           "gsk plc",
           "glaxosmithkline",
@@ -53,45 +315,152 @@
         ]
       },
       {
-        "symbol": "BATS.L",
-        "name": "British American Tobacco",
+        "symbol": "HIK.L",
+        "name": "Hikma Pharmaceuticals PLC",
         "aliases": [
-          "british american tobacco",
-          "bat"
+          "hikma pharmaceuticals plc",
+          "hik.l"
         ]
       },
       {
-        "symbol": "DGE.L",
-        "name": "Diageo",
+        "symbol": "HLMA.L",
+        "name": "Halma PLC",
         "aliases": [
-          "diageo"
+          "halma plc",
+          "hlma.l"
         ]
       },
       {
-        "symbol": "RIO.L",
-        "name": "Rio Tinto",
+        "symbol": "HLN.L",
+        "name": "Haleon PLC",
         "aliases": [
-          "rio tinto"
+          "haleon plc",
+          "hln.l"
         ]
       },
       {
-        "symbol": "GLEN.L",
-        "name": "Glencore",
+        "symbol": "HSBA.L",
+        "name": "HSBC Holdings PLC",
         "aliases": [
-          "glencore"
+          "hsbc holdings",
+          "hsbc"
         ]
       },
       {
-        "symbol": "BARC.L",
-        "name": "Barclays",
+        "symbol": "HSX.L",
+        "name": "Hiscox Ltd",
         "aliases": [
-          "barclays plc",
-          "barclays"
+          "hiscox ltd",
+          "hsx.l"
+        ]
+      },
+      {
+        "symbol": "HWDN.L",
+        "name": "Howden Joinery Group PLC",
+        "aliases": [
+          "howden joinery group plc",
+          "hwdn.l"
+        ]
+      },
+      {
+        "symbol": "IAG.L",
+        "name": "International Consolidated Airlines Group SA",
+        "aliases": [
+          "international consolidated airlines group sa",
+          "iag.l"
+        ]
+      },
+      {
+        "symbol": "ICG.L",
+        "name": "ICG PLC",
+        "aliases": [
+          "icg plc",
+          "icg.l"
+        ]
+      },
+      {
+        "symbol": "IHG.L",
+        "name": "InterContinental Hotels Group PLC",
+        "aliases": [
+          "intercontinental hotels group plc",
+          "ihg.l"
+        ]
+      },
+      {
+        "symbol": "III.L",
+        "name": "3i Group PLC",
+        "aliases": [
+          "3i group plc",
+          "iii.l"
+        ]
+      },
+      {
+        "symbol": "IMB.L",
+        "name": "Imperial Brands PLC",
+        "aliases": [
+          "imperial brands plc",
+          "imb.l"
+        ]
+      },
+      {
+        "symbol": "IMI.L",
+        "name": "IMI PLC",
+        "aliases": [
+          "imi plc",
+          "imi.l"
+        ]
+      },
+      {
+        "symbol": "INF.L",
+        "name": "Informa PLC",
+        "aliases": [
+          "informa plc",
+          "inf.l"
+        ]
+      },
+      {
+        "symbol": "ITRK.L",
+        "name": "Intertek Group PLC",
+        "aliases": [
+          "intertek group plc",
+          "itrk.l"
+        ]
+      },
+      {
+        "symbol": "JD/.L",
+        "name": "JD Sports Fashion PLC",
+        "aliases": [
+          "jd sports fashion plc",
+          "jd/.l"
+        ]
+      },
+      {
+        "symbol": "KGF.L",
+        "name": "Kingfisher PLC",
+        "aliases": [
+          "kingfisher plc",
+          "kgf.l"
+        ]
+      },
+      {
+        "symbol": "LAND.L",
+        "name": "Land Securities Group PLC",
+        "aliases": [
+          "land securities group plc",
+          "land.l"
+        ]
+      },
+      {
+        "symbol": "LGEN.L",
+        "name": "Legal & General Group PLC",
+        "aliases": [
+          "legal & general group plc",
+          "lgen.l"
         ]
       },
       {
         "symbol": "LLOY.L",
-        "name": "Lloyds Banking Group",
+        "name": "Lloyds Banking Group PLC",
         "aliases": [
           "lloyds banking group",
           "lloyds bank",
@@ -99,51 +468,337 @@
         ]
       },
       {
-        "symbol": "NWG.L",
-        "name": "NatWest Group",
+        "symbol": "LMP.L",
+        "name": "LondonMetric Property PLC",
         "aliases": [
-          "natwest group",
-          "natwest"
+          "londonmetric property plc",
+          "lmp.l"
         ]
       },
       {
         "symbol": "LSEG.L",
-        "name": "London Stock Exchange Group",
+        "name": "London Stock Exchange Group PLC",
         "aliases": [
           "london stock exchange group",
           "lseg"
         ]
       },
       {
-        "symbol": "RR.L",
-        "name": "Rolls-Royce Holdings",
+        "symbol": "MKS.L",
+        "name": "Marks & Spencer Group PLC",
         "aliases": [
-          "rolls-royce",
-          "rolls royce"
+          "marks & spencer group plc",
+          "mks.l"
         ]
       },
       {
-        "symbol": "BA.L",
-        "name": "BAE Systems",
+        "symbol": "MNDI.L",
+        "name": "Mondi PLC",
         "aliases": [
-          "bae systems",
-          "bae"
+          "mondi plc",
+          "mndi.l"
+        ]
+      },
+      {
+        "symbol": "MNG.L",
+        "name": "M&G PLC",
+        "aliases": [
+          "m&g plc",
+          "mng.l"
+        ]
+      },
+      {
+        "symbol": "MRO.L",
+        "name": "Melrose Industries PLC",
+        "aliases": [
+          "melrose industries plc",
+          "mro.l"
+        ]
+      },
+      {
+        "symbol": "MTLN.L",
+        "name": "Metlen Energy & Metals PLC",
+        "aliases": [
+          "metlen energy & metals plc",
+          "mtln.l"
+        ]
+      },
+      {
+        "symbol": "NG/.L",
+        "name": "National Grid PLC",
+        "aliases": [
+          "national grid plc",
+          "ng/.l"
+        ]
+      },
+      {
+        "symbol": "NWG.L",
+        "name": "NatWest Group PLC",
+        "aliases": [
+          "natwest group",
+          "natwest"
+        ]
+      },
+      {
+        "symbol": "NXT.L",
+        "name": "Next PLC",
+        "aliases": [
+          "next plc",
+          "nxt.l"
+        ]
+      },
+      {
+        "symbol": "PCT.L",
+        "name": "Polar Capital Technology Trust PLC",
+        "aliases": [
+          "polar capital technology trust plc",
+          "pct.l"
+        ]
+      },
+      {
+        "symbol": "PHNX.L",
+        "name": "Phoenix Group Holdings PLC",
+        "aliases": [
+          "phoenix group holdings plc",
+          "phnx.l"
+        ]
+      },
+      {
+        "symbol": "PRU.L",
+        "name": "Prudential PLC",
+        "aliases": [
+          "prudential plc",
+          "pru.l"
+        ]
+      },
+      {
+        "symbol": "PSH.L",
+        "name": "Pershing Square Holdings Ltd/Fund",
+        "aliases": [
+          "pershing square holdings ltd/fund",
+          "psh.l"
+        ]
+      },
+      {
+        "symbol": "PSN.L",
+        "name": "Persimmon PLC",
+        "aliases": [
+          "persimmon plc",
+          "psn.l"
+        ]
+      },
+      {
+        "symbol": "PSON.L",
+        "name": "Pearson PLC",
+        "aliases": [
+          "pearson plc",
+          "pson.l"
+        ]
+      },
+      {
+        "symbol": "REL.L",
+        "name": "RELX PLC",
+        "aliases": [
+          "relx plc",
+          "rel.l"
+        ]
+      },
+      {
+        "symbol": "RIO.L",
+        "name": "Rio Tinto PLC",
+        "aliases": [
+          "rio tinto"
+        ]
+      },
+      {
+        "symbol": "RKT.L",
+        "name": "Reckitt Benckiser Group PLC",
+        "aliases": [
+          "reckitt benckiser group plc",
+          "rkt.l"
+        ]
+      },
+      {
+        "symbol": "RMV.L",
+        "name": "Rightmove PLC",
+        "aliases": [
+          "rightmove plc",
+          "rmv.l"
+        ]
+      },
+      {
+        "symbol": "RR/.L",
+        "name": "Rolls-Royce Holdings PLC",
+        "aliases": [
+          "rolls-royce holdings plc",
+          "rr/.l"
+        ]
+      },
+      {
+        "symbol": "RTO.L",
+        "name": "Rentokil Initial PLC",
+        "aliases": [
+          "rentokil initial plc",
+          "rto.l"
+        ]
+      },
+      {
+        "symbol": "SBRY.L",
+        "name": "J Sainsbury PLC",
+        "aliases": [
+          "j sainsbury plc",
+          "sbry.l"
+        ]
+      },
+      {
+        "symbol": "SDR.L",
+        "name": "Schroders PLC",
+        "aliases": [
+          "schroders plc",
+          "sdr.l"
+        ]
+      },
+      {
+        "symbol": "SGE.L",
+        "name": "Sage Group PLC/The",
+        "aliases": [
+          "sage group plc/the",
+          "sge.l"
+        ]
+      },
+      {
+        "symbol": "SGRO.L",
+        "name": "Segro PLC",
+        "aliases": [
+          "segro plc",
+          "sgro.l"
+        ]
+      },
+      {
+        "symbol": "SHEL.L",
+        "name": "Shell PLC",
+        "aliases": [
+          "shell plc",
+          "shell"
+        ]
+      },
+      {
+        "symbol": "SMIN.L",
+        "name": "Smiths Group PLC",
+        "aliases": [
+          "smiths group plc",
+          "smin.l"
+        ]
+      },
+      {
+        "symbol": "SMT.L",
+        "name": "Scottish Mortgage Investment Trust PLC",
+        "aliases": [
+          "scottish mortgage investment trust plc",
+          "smt.l"
+        ]
+      },
+      {
+        "symbol": "SN/.L",
+        "name": "Smith & Nephew PLC",
+        "aliases": [
+          "smith & nephew plc",
+          "sn/.l"
+        ]
+      },
+      {
+        "symbol": "SPX.L",
+        "name": "Spirax Group PLC",
+        "aliases": [
+          "spirax group plc",
+          "spx.l"
+        ]
+      },
+      {
+        "symbol": "SSE.L",
+        "name": "SSE PLC",
+        "aliases": [
+          "sse plc",
+          "sse.l"
+        ]
+      },
+      {
+        "symbol": "STAN.L",
+        "name": "Standard Chartered PLC",
+        "aliases": [
+          "standard chartered plc",
+          "stan.l"
+        ]
+      },
+      {
+        "symbol": "STJ.L",
+        "name": "St James's Place PLC",
+        "aliases": [
+          "st james's place plc",
+          "stj.l"
+        ]
+      },
+      {
+        "symbol": "SVT.L",
+        "name": "Severn Trent PLC",
+        "aliases": [
+          "severn trent plc",
+          "svt.l"
+        ]
+      },
+      {
+        "symbol": "TSCO.L",
+        "name": "Tesco PLC",
+        "aliases": [
+          "tesco plc",
+          "tesco"
+        ]
+      },
+      {
+        "symbol": "ULVR.L",
+        "name": "Unilever PLC",
+        "aliases": [
+          "unilever"
+        ]
+      },
+      {
+        "symbol": "UU/.L",
+        "name": "United Utilities Group PLC",
+        "aliases": [
+          "united utilities group plc",
+          "uu/.l"
         ]
       },
       {
         "symbol": "VOD.L",
-        "name": "Vodafone Group",
+        "name": "Vodafone Group PLC",
         "aliases": [
           "vodafone group",
           "vodafone"
         ]
       },
       {
-        "symbol": "TSCO.L",
-        "name": "Tesco",
+        "symbol": "WEIR.L",
+        "name": "Weir Group PLC/The",
         "aliases": [
-          "tesco plc",
-          "tesco"
+          "weir group plc/the",
+          "weir.l"
+        ]
+      },
+      {
+        "symbol": "WPP.L",
+        "name": "WPP PLC",
+        "aliases": [
+          "wpp plc",
+          "wpp.l"
+        ]
+      },
+      {
+        "symbol": "WTB.L",
+        "name": "Whitbread PLC",
+        "aliases": [
+          "whitbread plc",
+          "wtb.l"
         ]
       }
     ],
