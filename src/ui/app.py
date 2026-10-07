@@ -340,8 +340,9 @@ __THEME_VARS__
         box-sizing: border-box !important;
         display: flex !important;
         flex-direction: column !important;
-        justify-content: space-between !important;
-        height: 100% !important;
+        justify-content: flex-start !important;
+        height: auto !important;
+        min-height: 100% !important;
         flex: 1 1 auto !important;
         gap: 0 !important;
     }
@@ -1015,10 +1016,11 @@ __THEME_VARS__
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
         gap: 6px;
-        margin-top: auto !important;
-        padding-top: 8px;
-        border-top: 1px solid var(--card-border);
-        box-sizing: border-box;
+        margin-top: 10px !important;
+        margin-bottom: 0 !important;
+        padding-top: 10px !important;
+        border-top: 1px solid var(--card-border) !important;
+        box-sizing: border-box !important;
         width: 100%;
     }
     .mini-index-card {
@@ -1850,7 +1852,7 @@ def render_dashboard():
                 ))
                 
                 fig_area.update_layout(
-                    height=425, margin=dict(l=8, r=44, t=28, b=24),
+                    height=460, margin=dict(l=8, r=44, t=28, b=24),
                     plot_bgcolor="rgba(255,255,255,0.4)" if is_light else "rgba(0,0,0,0)",
                     paper_bgcolor="rgba(0,0,0,0)",
                     hovermode="x unified",
