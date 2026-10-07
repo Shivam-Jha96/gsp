@@ -559,7 +559,8 @@ To deliver real-time terminal synchronization and resolve visual boundary collis
 * **Unified Header Banner Enclosure:** The branding typography and live telemetry status pills (`UPDATED {time_display_str}` and `SYSTEM ONLINE`) are unified inside a single continuous institutional `.header-banner-card` (`display: flex; justify-content: space-between; align-items: center;`), eliminating disconnected column cards, horizontal border offsets, and dead interior voids.
 * **Boundary Deconfliction, Margin Rhythm & Chart Clearance:**
   * A deterministic 10px vertical rhythm separates the collapsible Quantitative Edge preview (`details.usp-collapsible`), the 5-control filter toolbar container, the multi-index KPI / Chart grid (`.st-key-market_optimism_chart_container`), and the Live Intelligence Feed (`.st-key-live_intelligence_feed_container`), with bottom borders flush across both columns and outer margin inflation collapsed.
-  * The chart section container enforces `padding: 14px 18px 12px 18px` paired with Plotly internal margins (`margin=dict(l=8, r=44, t=28, b=0)`), completely insulating the right Y-axis `OPTIMISM SCORE` label, numerical ticks, and the upper horizontal legend from colliding with container borders.
+  * The chart section container enforces `padding: 14px 18px 12px 18px` paired with Plotly internal margins (`margin=dict(l=8, r=44, t=28, b=24)`), providing 24px of breathing clearance above the mini index grid divider, insulating the right Y-axis `OPTIMISM SCORE` label, numerical ticks, timeline axis, and upper legend from colliding with container borders.
+  * The mini-index asset grid utilizes responsive `minmax(105px, 1fr)` columns with 6px gaps, compact 6px card padding, and defensive CSS (`white-space: nowrap; flex-shrink: 0; min-width: 0;`) for ticker headers, status pills, and delta momentum tags, preventing text wrapping, clipping, and element overlap.
 
 ---
 

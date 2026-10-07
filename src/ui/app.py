@@ -299,7 +299,7 @@ __THEME_VARS__
         flex-direction: column;
         gap: 2px;
     }
-    /* Right column chart & mini-kpi container: Complete flex chain to stretch flush with left column */
+    /* Right column chart & mini-kpi container: Symmetrical layout with left column */
     div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child,
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child,
     div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="column"]:last-child,
@@ -307,29 +307,6 @@ __THEME_VARS__
     div[data-testid="stColumn"]:has(div[data-testid="stPlotlyChart"]) {
         display: flex !important;
         flex-direction: column !important;
-        height: 100% !important;
-        flex: 1 1 auto !important;
-    }
-    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child > div[data-testid="stVerticalBlock"],
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child > div[data-testid="stVerticalBlock"],
-    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="column"]:last-child > div[data-testid="stVerticalBlock"],
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:last-child > div[data-testid="stVerticalBlock"],
-    div[data-testid="stColumn"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stVerticalBlock"] {
-        display: flex !important;
-        flex-direction: column !important;
-        height: 100% !important;
-        flex: 1 1 auto !important;
-    }
-    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child > div[data-testid="stVerticalBlock"] > div[data-testid="stElementContainer"],
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child > div[data-testid="stVerticalBlock"] > div[data-testid="stElementContainer"],
-    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="column"]:last-child > div[data-testid="stVerticalBlock"] > div[data-testid="stElementContainer"],
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:last-child > div[data-testid="stVerticalBlock"] > div[data-testid="stElementContainer"] {
-        display: flex !important;
-        flex-direction: column !important;
-        height: 100% !important;
-        flex: 1 1 auto !important;
-        margin: 0 !important;
-        padding: 0 !important;
     }
     .st-key-market_optimism_chart_container,
     div[data-testid="stVerticalBlock"].st-key-market_optimism_chart_container,
@@ -337,11 +314,6 @@ __THEME_VARS__
     div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"],
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:last-child div[data-testid="stVerticalBlockBorderWrapper"],
     div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="column"]:last-child div[data-testid="stVerticalBlockBorderWrapper"] {
-        height: 100% !important;
-        flex: 1 1 auto !important;
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: space-between !important;
         background: var(--card-bg) !important;
         border: 1px solid var(--card-border) !important;
         border-radius: 8px !important;
@@ -349,20 +321,9 @@ __THEME_VARS__
         padding: 14px 18px 12px 18px !important;
         margin: 0 !important;
         box-sizing: border-box !important;
-    }
-    .st-key-market_optimism_chart_container > div[data-testid="stVerticalBlock"],
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"] > div[data-testid="stVerticalBlock"],
-    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="stColumn"]:last-child div[data-testid="stVerticalBlockBorderWrapper"] > div[data-testid="stVerticalBlock"],
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]) > div[data-testid="column"]:last-child div[data-testid="stVerticalBlockBorderWrapper"] > div[data-testid="stVerticalBlock"],
-    div[data-testid="stHorizontalBlock"]:has(.kpi-column-container) > div[data-testid="column"]:last-child div[data-testid="stVerticalBlockBorderWrapper"] > div[data-testid="stVerticalBlock"] {
-        height: 100% !important;
-        flex: 1 1 auto !important;
         display: flex !important;
         flex-direction: column !important;
-        justify-content: space-between !important;
-        gap: 4px !important;
-        padding: 0 !important;
-        margin: 0 !important;
+        gap: 0 !important;
     }
     div[data-testid="stHorizontalBlock"]:has(div[data-testid="stPlotlyChart"]),
     div[data-testid="stHorizontalBlock"]:has(.kpi-column-container),
@@ -1036,23 +997,27 @@ __THEME_VARS__
     /* Dedicated Mini Index Grid & Card Styling */
     .mini-kpi-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-        gap: 8px;
+        grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+        gap: 6px;
         margin-top: 8px;
         padding-top: 8px;
         border-top: 1px solid var(--card-border);
+        box-sizing: border-box;
+        width: 100%;
     }
     .mini-index-card {
         background: var(--card-bg) !important;
         border: 1px solid var(--card-border) !important;
-        border-radius: 8px;
-        padding: 8px 12px;
+        border-radius: 6px;
+        padding: 6px 7px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         box-sizing: border-box;
         box-shadow: var(--card-shadow);
+        min-width: 0;
+        overflow: hidden;
     }
     .mini-index-card:hover {
         background: var(--card-hover-bg) !important;
@@ -1869,7 +1834,7 @@ def render_dashboard():
                 ))
                 
                 fig_area.update_layout(
-                    height=370, margin=dict(l=8, r=44, t=28, b=0),
+                    height=370, margin=dict(l=8, r=44, t=28, b=24),
                     plot_bgcolor="rgba(255,255,255,0.4)" if is_light else "rgba(0,0,0,0)",
                     paper_bgcolor="rgba(0,0,0,0)",
                     hovermode="x unified",
@@ -1943,20 +1908,26 @@ def render_dashboard():
                             t_val_color = "#dc2626" if is_light else "#ef4444"
                         
                         if abs(delta_idx) < 0.05:
-                            delta_tag = '<span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">— No change</span>'
+                            delta_tag = '<span style="font-size: 0.64rem; color: var(--text-muted); font-weight: 600; white-space: nowrap;">— No change</span>'
                         elif delta_idx > 0:
-                            delta_tag = f'<span style="font-size: 0.75rem; font-weight: 700; color: #059669; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 1px 6px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">▲ {abs(delta_idx):.1f}%</span> <span style="font-size: 0.75rem; color: var(--text-secondary);">momentum</span>'
+                            delta_tag = (
+                                f'<span style="font-size: 0.64rem; font-weight: 700; color: #059669; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 1px 4px; border-radius: 3px; font-family: \'Montserrat\', sans-serif; white-space: nowrap; flex-shrink: 0;">▲ {abs(delta_idx):.1f}%</span>'
+                                f'<span style="font-size: 0.60rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">momentum</span>'
+                            )
                         else:
-                            delta_tag = f'<span style="font-size: 0.75rem; font-weight: 700; color: #dc2626; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.25); padding: 1px 6px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">▼ {abs(delta_idx):.1f}%</span> <span style="font-size: 0.75rem; color: var(--text-secondary);">momentum</span>'
+                            delta_tag = (
+                                f'<span style="font-size: 0.64rem; font-weight: 700; color: #dc2626; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.25); padding: 1px 4px; border-radius: 3px; font-family: \'Montserrat\', sans-serif; white-space: nowrap; flex-shrink: 0;">▼ {abs(delta_idx):.1f}%</span>'
+                                f'<span style="font-size: 0.60rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">momentum</span>'
+                            )
                         
                         kpi_html += (
                             f'<div class="mini-index-card" style="border-left: 3px solid {t_card_border}; margin-bottom: 0;">'
-                            '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">'
-                            f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.78rem; font-weight: 700; color: {"#0f172a" if is_light else "#f8fafc"}; text-transform: uppercase; letter-spacing: 0.03em;">{ticker}</span>'
-                            f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.68rem; font-weight: 800; color: {t_status_color}; background: {t_status_bg}; border: 1px solid {t_status_border}; padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">{ticker_status}</span>'
+                            '<div style="display: flex; justify-content: space-between; align-items: center; gap: 4px; margin-bottom: 2px; overflow: hidden;">'
+                            f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.66rem; font-weight: 700; color: {"#0f172a" if is_light else "#f8fafc"}; text-transform: uppercase; letter-spacing: -0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{ticker}</span>'
+                            f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.55rem; font-weight: 800; color: {t_status_color}; background: {t_status_bg}; border: 1px solid {t_status_border}; padding: 0px 3px; border-radius: 3px; letter-spacing: 0; white-space: nowrap; flex-shrink: 0;">{ticker_status}</span>'
                             '</div>'
-                            f'<div style="font-family: \'Montserrat\', sans-serif; font-size: clamp(1.2rem, 2vw, 1.6rem); font-weight: 800; color: {t_val_color}; margin: 2px 0;">{latest_score:+.1f}</div>'
-                            f'<div style="display: flex; align-items: center; gap: 5px; margin-top: 4px;">{delta_tag}</div>'
+                            f'<div style="font-family: \'Montserrat\', sans-serif; font-size: clamp(1.15rem, 1.8vw, 1.40rem); font-weight: 800; color: {t_val_color}; margin: 1px 0; line-height: 1.1;">{latest_score:+.1f}</div>'
+                            f'<div style="display: flex; align-items: center; justify-content: space-between; gap: 4px; margin-top: 3px; min-width: 0; overflow: hidden;">{delta_tag}</div>'
                             '</div>'
                         )
                     
