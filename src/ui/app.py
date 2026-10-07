@@ -46,6 +46,21 @@ except Exception:
     get_latest_successful_pipeline_run = db_telemetry_mod.get_latest_successful_pipeline_run
     format_pipeline_freshness = db_telemetry_mod.format_pipeline_freshness
 
+try:
+    import ui.state_persistence as state_persistence_mod
+    init_session_persistence = state_persistence_mod.init_session_persistence
+    sync_preference_to_query_params = state_persistence_mod.sync_preference_to_query_params
+    sync_all_preferences_to_query_params = state_persistence_mod.sync_all_preferences_to_query_params
+    get_persisted_feed_index = state_persistence_mod.get_persisted_feed_index
+    render_local_storage_sync_script = state_persistence_mod.render_local_storage_sync_script
+except Exception:
+    import src.ui.state_persistence as state_persistence_mod
+    init_session_persistence = state_persistence_mod.init_session_persistence
+    sync_preference_to_query_params = state_persistence_mod.sync_preference_to_query_params
+    sync_all_preferences_to_query_params = state_persistence_mod.sync_all_preferences_to_query_params
+    get_persisted_feed_index = state_persistence_mod.get_persisted_feed_index
+    render_local_storage_sync_script = state_persistence_mod.render_local_storage_sync_script
+
 valence_favicon_path = os.path.join(current_dir, "assets", "valence_logo_flat.svg")
 st.set_page_config(page_title="Valence", layout="wide", initial_sidebar_state="collapsed", page_icon=valence_favicon_path if os.path.exists(valence_favicon_path) else "📈")
 
@@ -1372,6 +1387,10 @@ def make_fragment_decorator(run_every="5m", key=None):
 
 def rerun_scoped(target):
     try:
+        sync_all_preferences_to_query_params()
+    except Exception:
+        pass
+    try:
         st.rerun(scope=target)
     except TypeError:
         try:
@@ -1564,7 +1583,8 @@ def render_filter_toolbar(df_signals):
             </div>
             """, unsafe_allow_html=True)
             timeframe_options = ["7 Days", "1 Day", "12 Hours", "6 Hours", "4 Hours", "1 Month", "1 Year", "All"]
-            default_tf_ix = 0
+            current_tf = st.session_state.get("filter_timeframe", timeframe_options[0])
+            default_tf_ix = timeframe_options.index(current_tf) if current_tf in timeframe_options else 0
             st.selectbox(
                 "Timeframe",
                 timeframe_options,
@@ -1598,8 +1618,9 @@ def render_filter_toolbar(df_signals):
                 "JP": "Japan (JP)"
             }
             display_regions = [region_name_map.get(r, r) for r in regions]
-            default_reg_name = region_name_map.get("IN", "IN")
-            default_ix = display_regions.index(default_reg_name) if default_reg_name in display_regions else 0
+            default_reg_name = region_name_map.get("IN", "India (IN)")
+            current_reg = st.session_state.get("filter_region", default_reg_name)
+            default_ix = display_regions.index(current_reg) if current_reg in display_regions else (display_regions.index(default_reg_name) if default_reg_name in display_regions else 0)
             st.selectbox(
                 "Region",
                 display_regions,
@@ -1623,11 +1644,15 @@ def render_filter_toolbar(df_signals):
             active_indices = df_signals[df_signals['market_region'] == selected_region]['index_ticker'].unique().tolist()
             active_indices = [x for x in active_indices if x != 'UNKNOWN']
             chart_options = ["All Indices"] + active_indices
-            if st.session_state.get("filter_chart_display") not in chart_options:
+            current_chart = st.session_state.get("filter_chart_display", "All Indices")
+            if current_chart not in chart_options:
+                current_chart = "All Indices"
                 st.session_state["filter_chart_display"] = "All Indices"
+            chart_ix = chart_options.index(current_chart) if current_chart in chart_options else 0
             st.selectbox(
                 "Chart Display",
                 chart_options,
+                index=chart_ix,
                 label_visibility="collapsed",
                 key="filter_chart_display",
                 on_change=lambda: rerun_scoped("render_analytics_surface")
@@ -1648,7 +1673,9 @@ def render_filter_toolbar(df_signals):
                 "Asia/Tokyo (JST)": "Asia/Tokyo"
             }
             tz_keys = list(tz_options.keys())
-            default_tz_ix = next((i for i, k in enumerate(tz_keys) if "IST" in k), 0)
+            base_default_tz_ix = next((i for i, k in enumerate(tz_keys) if "IST" in k), 0)
+            current_tz = st.session_state.get("filter_timezone", tz_keys[base_default_tz_ix])
+            default_tz_ix = tz_keys.index(current_tz) if current_tz in tz_keys else base_default_tz_ix
             st.selectbox(
                 "Timezone",
                 tz_keys,
@@ -1666,10 +1693,12 @@ def render_filter_toolbar(df_signals):
             </div>
             """, unsafe_allow_html=True)
             ema_display_options = ["4 Periods", "8 Periods", "12 Periods", "24 Periods"]
+            current_ema = st.session_state.get("filter_ema_window", ema_display_options[0])
+            default_ema_ix = ema_display_options.index(current_ema) if current_ema in ema_display_options else 0
             st.selectbox(
                 "EMA Window",
                 ema_display_options,
-                index=0,
+                index=default_ema_ix,
                 label_visibility="collapsed",
                 key="filter_ema_window",
                 on_change=lambda: rerun_scoped("render_analytics_surface")
@@ -2138,7 +2167,12 @@ def render_live_intelligence_feed(df_payloads=None):
                 f"Bearish {bearish_count}",
                 f"Neutral {neutral_count}"
             ]
-            selected_feed_pill = render_segmented_filter("feed_filter", feed_pill_options, default_ix=0, key="feed_sentiment_pills")
+            default_feed_ix = get_persisted_feed_index(feed_pill_options, default_ix=0)
+            selected_feed_pill = render_segmented_filter("feed_filter", feed_pill_options, default_ix=default_feed_ix, key="feed_sentiment_pills")
+            if selected_feed_pill:
+                pill_prefix = selected_feed_pill.split()[0]
+                st.session_state["feed_sentiment_category"] = pill_prefix
+                sync_preference_to_query_params("feed", pill_prefix)
 
         if selected_feed_pill and "Bullish" in selected_feed_pill:
             feed_display_payloads = region_payloads[region_payloads['sentiment_index'] >= 0.5]
@@ -2222,6 +2256,9 @@ def render_dashboard():
     if df_signals.empty:
         st.info("Database empty. Run the ingestion engine to populate.")
         return
+
+    init_session_persistence(df_signals)
+    render_local_storage_sync_script()
 
     render_header_banner(df_signals, latest_pipeline_run)
     render_usp_banner()

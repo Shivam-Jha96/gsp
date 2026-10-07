@@ -561,6 +561,15 @@ To deliver real-time terminal synchronization and resolve visual boundary collis
   * The chart section container enforces `padding: 14px 18px 14px 18px` with `justify-content: flex-start` paired with Plotly chart height calibrated to `height=460` and internal margins (`margin=dict(l=8, r=44, t=28, b=24)`), providing 24px of breathing clearance above the mini index grid divider, insulating the right Y-axis `OPTIMISM SCORE` label, numerical ticks, timeline axis, and upper legend from colliding with container borders.
   * The mini-index asset grid utilizes responsive `minmax(105px, 1fr)` columns with 6px gaps, natural `margin-top: 10px !important` placement below the timeline divider, compact 6px card padding, and defensive CSS (`white-space: nowrap; flex-shrink: 0; min-width: 0;`), providing a clean 22px breathing margin above the bottom container boundary without overlapping demarcation borders.
 
+#### 9. Dual-Layer Session & Filter Persistence Architecture
+To ensure an uninterrupted user experience across browser reloads (F5), page refreshes, and new tab sessions, [`src/ui/state_persistence.py`](file:///d:/Dev/repos/gsp/src/ui/state_persistence.py) and [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py) provide seamless dual-layer state persistence:
+* **Primary Layer: Bidirectional URL Query Parameter Synchronization (`st.query_params`):**
+  Every user control (`Timeframe`, `Region`, `Chart Display`, `Timezone`, `EMA Window`, and the live intelligence feed sentiment pills) is synchronized bidirectionally with URL query parameters (`?tf=...&region=...&chart=...&tz=...&ema=...&feed=...`). Whenever a user selects a dropdown option or sentiment pill, the scoped rerun handler flushes the active preferences to query parameters. On browser reload or when sharing the dashboard URL, preferences are restored server-side directly during the initial render pass with zero visual flicker.
+* **Secondary Layer: Browser `localStorage` Fallback:**
+  A lightweight client-side script persists the active query string in HTML5 `localStorage` (`valence_persisted_query`). If a user opens a clean root URL (`localhost:8501/` or the root domain) in a new browser tab, the client-side script automatically rehydrates the query string without user intervention.
+* **Cross-Region Dynamic Validation:**
+  When switching regions (e.g. from US to India), the state persistence engine validates whether the active `chart` parameter exists in the selected region's constituent universe; if not, it gracefully resets the selection to `"All Indices"` to prevent empty chart states.
+
 ---
 
 ### Layer 6: Autonomous Knowledge Engine

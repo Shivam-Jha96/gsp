@@ -216,7 +216,7 @@ gsp/
 │   ├── ingestion/              # Async RSS poller, regional affinity classifier & deduplicator
 │   ├── knowledge_engine/       # Gemini-powered OKF updater
 │   ├── signal_engine/          # Pandas EMA calculator & Alpaca routing
-│   ├── ui/                     # Streamlit dashboard
+│   ├── ui/                     # Streamlit dashboard & dual-layer session persistence
 │   └── main.py                 # Unified pipeline entry point
 └── requirements.txt
 ```
