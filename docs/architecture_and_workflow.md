@@ -544,14 +544,22 @@ To guarantee accurate reflection of historical activity across all selectable ti
 * **Adaptive Timestamps:** Intraday windows (`4 Hours` through `1 Day`) render compact hour-minute badges (`%H:%M`), while multi-day windows (`7 Days`, `1 Month`, `1 Year`, `All`) render full date-time badges (`%b %d, %H:%M`) to provide unambiguous chronological context across multi-day news streams.
 * **KPI Volume Parity:** Ingested news volume displayed on the left KPI card matches the filtered regional headline count.
 
-#### 7. Symmetrical Header Freshness Badge & Aging Tiers
+#### 7. Symmetrical Header Freshness Badge & Dynamic Timezone Synchronization
 In [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py), the header action card displays data freshness anchored directly to the completion timestamp of the last successful run of the Global Macro-Sentiment Pipeline:
-* **Freshness Formatting:** Formatted via [`format_pipeline_freshness`](file:///d:/Dev/repos/gsp/src/database/telemetry.py) into `UPDATED HH:MM IST (Xm ago)` with full inspection tooltip.
+* **Dynamic Timezone & Compact Display:** Formatted via [`format_pipeline_freshness`](file:///d:/Dev/repos/gsp/src/database/telemetry.py) into `UPDATED HH:MM {TZ}` (e.g. `UPDATED 16:03 IST`, `UPDATED 06:33 EDT`, `UPDATED 10:33 UTC`), dynamically reflecting the active timezone selected in the filter toolbar without full-page reloads. The relative elapsed time (e.g. `1h 16m ago`) is preserved inside an HTML tooltip (`title="..."`) on hover.
 * **Aging Tiers & Color Accents:**
   * **Fresh ($\le 2\text{h } 15\text{m}$):** Electric Cyan accent (`#38bdf8`) signifying active 2-hour scheduled polling cycles.
   * **Aging ($2\text{h } 15\text{m} - 4\text{h}$):** Warm Amber accent (`#fbbf24`) indicating scheduled cron delays.
   * **Stale ($> 4\text{h}$):** Soft Red accent (`#f87171`) alerting users to runner interruptions.
 * **Graceful Fallback:** If `pipeline_runs` has no recorded executions, it automatically falls back to `df_signals['timestamp'].max()` or `LIVE` without throwing UI exceptions.
+
+#### 8. Reactive Zero-Reload Polling & Structural Boundary Deconfliction
+To deliver real-time terminal synchronization and resolve visual boundary collisions across varying viewport sizes:
+* **Background Data Polling (`run_every="30s"`):** The dashboard is encapsulated within a master `@st.fragment(run_every="30s")` coupled with `@st.cache_data(ttl=30)` on `get_processed_data()`. When new sentiment pipeline runs complete in Supabase, the terminal automatically updates charts, KPIs, and news feeds in the background with zero manual page refreshes.
+* **Colinear Header & Action Card Alignment:** Left header banner and right status action card use `st.columns([0.60, 0.40], vertical_alignment="top")` with flex stretching (`height: 100%`), ensuring top and bottom card boundaries align horizontally.
+* **Boundary Deconfliction & Container Demarcation:**
+  * A 10px margin rhythm separates the collapsible Quantitative Edge preview (`details.usp-collapsible`) and the 5-control filter toolbar container (`div[data-testid="stVerticalBlockBorderWrapper"]:has(div[data-testid="stSelectbox"])`).
+  * The Live Intelligence Feed (`.st-key-live_intelligence_feed_container`) is styled with an explicit institutional card border (`border: 1px solid var(--card-border); background: var(--card-bg);`) and isolated with `margin-top: 14px !important;` and `clear: both !important;` to ensure strict demarcation with zero boundary overlap against adjacent sections.
 
 ---
 

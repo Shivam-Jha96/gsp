@@ -211,6 +211,25 @@ class TestDatabaseTelemetry(unittest.TestCase):
         self.assertEqual(disp, "LIVE")
         self.assertEqual(rel, "live stream")
 
+    def test_format_freshness_dynamic_timezones(self):
+        fixed_now = datetime(2026, 10, 5, 12, 0, 0, tzinfo=timezone.utc)
+        # Test UTC
+        disp_utc, _, _, _ = format_pipeline_freshness(fixed_now, now_utc=fixed_now, target_tz_str="UTC")
+        self.assertIn("UTC", disp_utc)
+        self.assertEqual(disp_utc, "12:00 UTC")
+
+        # Test New York (EDT)
+        disp_ny, _, _, _ = format_pipeline_freshness(fixed_now, now_utc=fixed_now, target_tz_str="America/New_York")
+        self.assertTrue("EDT" in disp_ny or "EST" in disp_ny, f"Expected EDT/EST in {disp_ny}")
+
+        # Test London (BST)
+        disp_lon, _, _, _ = format_pipeline_freshness(fixed_now, now_utc=fixed_now, target_tz_str="Europe/London")
+        self.assertTrue("BST" in disp_lon or "GMT" in disp_lon, f"Expected BST/GMT in {disp_lon}")
+
+        # Test Tokyo (JST)
+        disp_tok, _, _, _ = format_pipeline_freshness(fixed_now, now_utc=fixed_now, target_tz_str="Asia/Tokyo")
+        self.assertIn("JST", disp_tok)
+
 
 if __name__ == "__main__":
     unittest.main()

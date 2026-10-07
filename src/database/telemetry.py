@@ -235,16 +235,27 @@ def format_pipeline_freshness(
     else:
         relative_str = f"{days}d ago"
 
-    # Time display formatting
-    # If today in target timezone: "%H:%M IST", else "%d %b %H:%M IST"
-    now_local = now.astimezone(ZoneInfo(target_tz_str)) if hasattr(ZoneInfo(target_tz_str), "localize") or True else now
+    # Time display formatting with dynamic timezone abbreviation
+    try:
+        tz = ZoneInfo(target_tz_str)
+        local_dt = target_dt.astimezone(tz)
+        now_local = now.astimezone(tz)
+    except Exception:
+        local_dt = target_dt
+        now_local = now
+        target_tz_str = "UTC"
+
+    tz_abbr = local_dt.strftime("%Z")
+    if not tz_abbr or tz_abbr.startswith(("+", "-")):
+        tz_abbr = target_tz_str.split("/")[-1].replace("_", " ")
+
     try:
         if local_dt.date() == now_local.date():
-            time_display_str = local_dt.strftime("%H:%M IST")
+            time_display_str = local_dt.strftime(f"%H:%M {tz_abbr}")
         else:
-            time_display_str = local_dt.strftime("%d %b %H:%M IST")
+            time_display_str = local_dt.strftime(f"%d %b %H:%M {tz_abbr}")
     except Exception:
-        time_display_str = local_dt.strftime("%H:%M IST")
+        time_display_str = local_dt.strftime(f"%H:%M {tz_abbr}")
 
     # Determine freshness tier (since pipeline runs every 2 hours)
     if minutes <= 135:  # 2h 15m

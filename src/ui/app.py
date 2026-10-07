@@ -363,7 +363,7 @@ __THEME_VARS__
     div[data-testid="stElementContainer"]:has(div[data-testid="stSelectbox"]) {
         padding: 8px 14px 10px 14px !important;
         margin-top: 0 !important;
-        margin-bottom: 0 !important;
+        margin-bottom: 10px !important;
         gap: 0 !important;
     }
     div[data-testid="stVerticalBlock"]:has(> div[data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] div[data-testid="stSelectbox"]) > div[data-testid="stHorizontalBlock"],
@@ -569,12 +569,18 @@ __THEME_VARS__
         display: flex !important;
         flex-direction: column !important;
         justify-content: stretch !important;
+        height: 100% !important;
     }
+    div[data-testid="stHorizontalBlock"]:has(.header-banner-card) div[data-testid="stVerticalBlock"],
     div[data-testid="stHorizontalBlock"]:has(.header-banner-card) div[data-testid="stElementContainer"],
     div[data-testid="stHorizontalBlock"]:has(.header-banner-card) div[data-testid="stMarkdownContainer"],
+    div[data-testid="stHorizontalBlock"]:first-of-type div[data-testid="stVerticalBlock"],
     div[data-testid="stHorizontalBlock"]:first-of-type div[data-testid="stElementContainer"],
     div[data-testid="stHorizontalBlock"]:first-of-type div[data-testid="stMarkdownContainer"] {
         height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: stretch !important;
         margin: 0 !important;
         padding: 0 !important;
     }
@@ -594,9 +600,25 @@ __THEME_VARS__
         transition: all 0.2s ease;
     }
     .header-action-card {
-        justify-content: space-between;
-        gap: 10px;
+        justify-content: flex-end;
+        gap: 8px;
         flex-wrap: wrap;
+        width: 100%;
+    }
+
+    @media (max-width: 920px) {
+        div[data-testid="stHorizontalBlock"]:has(.header-banner-card) {
+            flex-direction: column !important;
+            gap: 8px !important;
+        }
+        div[data-testid="stHorizontalBlock"]:has(.header-banner-card) > div[data-testid="stColumn"],
+        div[data-testid="stHorizontalBlock"]:has(.header-banner-card) > div[data-testid="column"] {
+            width: 100% !important;
+            flex: 1 1 100% !important;
+        }
+        .header-action-card {
+            justify-content: flex-start !important;
+        }
     }
 
     /* Segmented Control & Pills Styling */
@@ -665,7 +687,7 @@ __THEME_VARS__
         border: 1px solid var(--edge-border) !important;
         border-radius: 8px !important;
         margin-top: 0 !important;
-        margin-bottom: 0 !important;
+        margin-bottom: 10px !important;
         clear: both !important;
         overflow: hidden !important;
         transition: all 0.2s ease !important;
@@ -758,30 +780,33 @@ __THEME_VARS__
         padding: 12px 16px !important;
     }
 
-    /* Live Intelligence Feed Container Outer Reset (Prevent Nested Double Borders) */
-    div[data-testid="stElementContainer"].st-key-live_intelligence_feed_container,
-    div[data-testid="stElementContainer"]:has(.st-key-live_intelligence_feed_container),
+    /* Live Intelligence Feed Demarcated Container Card */
+    div[data-testid="stVerticalBlockBorderWrapper"].st-key-live_intelligence_feed_container,
+    .st-key-live_intelligence_feed_container[data-testid="stVerticalBlockBorderWrapper"],
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(.st-key-feed_sentiment_pills),
     .st-key-live_intelligence_feed_container {
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-        padding: 0 !important;
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-    }
-
-    /* Live Intelligence Feed Unified Container Card */
-    .st-key-live_intelligence_feed_container div[data-testid="stVerticalBlockBorderWrapper"],
-    .st-key-live_intelligence_feed_container > div[data-testid="stVerticalBlockBorderWrapper"],
-    div[data-testid="stVerticalBlockBorderWrapper"]:has(.st-key-feed_sentiment_pills) {
-        padding: 8px 14px 10px 14px !important;
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
+        display: block !important;
+        box-sizing: border-box !important;
+        clear: both !important;
         background: var(--card-bg) !important;
         border: 1px solid var(--card-border) !important;
         border-radius: 8px !important;
         box-shadow: var(--card-shadow) !important;
+        padding: 12px 16px 14px 16px !important;
+        margin-top: 14px !important;
+        margin-bottom: 12px !important;
+        position: relative !important;
+        z-index: 1 !important;
         gap: 6px !important;
+    }
+
+    /* Prevent inner double nested border if Streamlit renders child border wrapper */
+    .st-key-live_intelligence_feed_container div[data-testid="stVerticalBlockBorderWrapper"]:not(.st-key-live_intelligence_feed_container) {
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
     }
     .st-key-live_intelligence_feed_container div[data-testid="stVerticalBlockBorderWrapper"] > div[data-testid="stVerticalBlock"],
     div[data-testid="stVerticalBlockBorderWrapper"]:has(.st-key-feed_sentiment_pills) > div[data-testid="stVerticalBlock"] {
@@ -1251,81 +1276,145 @@ def load_data():
             return pd.DataFrame(), pd.DataFrame(), None
     return pd.DataFrame(), pd.DataFrame(), None
 
-df_signals, df_payloads, latest_pipeline_run = load_data()
+def get_processed_data():
+    df_signals, df_payloads, latest_pipeline_run = load_data()
+    if df_signals.empty and df_payloads.empty:
+        return df_signals, df_payloads, latest_pipeline_run
 
-# Real-time regional relevance and contaminant gatekeeper:
-# Dynamically eliminates legacy misclassified news items (e.g. US news under India)
-if os.environ.get("DATABASE_URL") and not df_payloads.empty and 'raw_text' in df_payloads.columns and 'id' in df_payloads.columns:
-    try:
-        from ingestion.classifier import RegionalAffinityClassifier
-        classifier = RegionalAffinityClassifier()
-        valid_ids = set()
-        for _, row in df_payloads.iterrows():
-            res = classifier.classify_and_validate(
-                headline=str(row.get('raw_text', '')),
-                summary="",
-                expected_region=str(row.get('market_region', '')),
-                expected_ticker=str(row.get('index_ticker', '')),
-                allow_reroute=False
-            )
-            if res is not None:
-                valid_ids.add(row['id'])
+    # Real-time regional relevance and contaminant gatekeeper:
+    # Dynamically eliminates legacy misclassified news items (e.g. US news under India)
+    if os.environ.get("DATABASE_URL") and not df_payloads.empty and 'raw_text' in df_payloads.columns and 'id' in df_payloads.columns:
+        try:
+            from ingestion.classifier import RegionalAffinityClassifier
+            classifier = RegionalAffinityClassifier()
+            valid_ids = set()
+            for _, row in df_payloads.iterrows():
+                res = classifier.classify_and_validate(
+                    headline=str(row.get('raw_text', '')),
+                    summary="",
+                    expected_region=str(row.get('market_region', '')),
+                    expected_ticker=str(row.get('index_ticker', '')),
+                    allow_reroute=False
+                )
+                if res is not None:
+                    valid_ids.add(row['id'])
 
-        if valid_ids:
-            df_payloads = df_payloads[df_payloads['id'].isin(valid_ids)].copy()
-            if 'id' in df_signals.columns:
-                df_signals = df_signals[df_signals['id'].isin(valid_ids)].copy()
-    except Exception as filter_err:
-        pass
+            if valid_ids:
+                df_payloads = df_payloads[df_payloads['id'].isin(valid_ids)].copy()
+                if 'id' in df_signals.columns:
+                    df_signals = df_signals[df_signals['id'].isin(valid_ids)].copy()
+        except Exception:
+            pass
 
-# Real-time deduplication gatekeeper:
-# Dynamically eliminates redundant entries for the same headline across multiple index tickers
-if not df_payloads.empty and 'raw_text' in df_payloads.columns and 'id' in df_payloads.columns:
-    try:
-        from ingestion.dedup import canonical_fingerprint
-        seen_fps = set()
-        unique_ids = set()
-        df_sorted = df_payloads.sort_values('timestamp', ascending=False)
-        for _, row in df_sorted.iterrows():
-            fp = canonical_fingerprint(str(row.get('raw_text', '')))
-            if fp and fp not in seen_fps:
-                seen_fps.add(fp)
-                unique_ids.add(row['id'])
+    # Real-time deduplication gatekeeper:
+    # Dynamically eliminates redundant entries for the same headline across multiple index tickers
+    if not df_payloads.empty and 'raw_text' in df_payloads.columns and 'id' in df_payloads.columns:
+        try:
+            from ingestion.dedup import canonical_fingerprint
+            seen_fps = set()
+            unique_ids = set()
+            df_sorted = df_payloads.sort_values('timestamp', ascending=False)
+            for _, row in df_sorted.iterrows():
+                fp = canonical_fingerprint(str(row.get('raw_text', '')))
+                if fp and fp not in seen_fps:
+                    seen_fps.add(fp)
+                    unique_ids.add(row['id'])
 
-        if unique_ids:
-            df_payloads = df_payloads[df_payloads['id'].isin(unique_ids)].copy()
-            if 'id' in df_signals.columns:
-                df_signals = df_signals[df_signals['id'].isin(unique_ids)].copy()
-    except Exception as dedup_err:
-        pass
+            if unique_ids:
+                df_payloads = df_payloads[df_payloads['id'].isin(unique_ids)].copy()
+                if 'id' in df_signals.columns:
+                    df_signals = df_signals[df_signals['id'].isin(unique_ids)].copy()
+        except Exception:
+            pass
 
-# Enforce strict cutoff floor: 12:00 PM IST on September 30, 2026 (06:30 AM UTC)
-DATA_CUTOFF_FLOOR = pd.Timestamp("2026-09-30 06:30:00", tz="UTC")
+    # Enforce strict cutoff floor: 12:00 PM IST on September 30, 2026 (06:30 AM UTC)
+    DATA_CUTOFF_FLOOR = pd.Timestamp("2026-09-30 06:30:00", tz="UTC")
 
-if not df_signals.empty:
-    if df_signals['timestamp'].dt.tz is None:
-        df_signals['timestamp'] = df_signals['timestamp'].dt.tz_localize('UTC')
-    df_signals = df_signals[df_signals['timestamp'] >= DATA_CUTOFF_FLOOR].copy()
+    if not df_signals.empty:
+        if df_signals['timestamp'].dt.tz is None:
+            df_signals['timestamp'] = df_signals['timestamp'].dt.tz_localize('UTC')
+        df_signals = df_signals[df_signals['timestamp'] >= DATA_CUTOFF_FLOOR].copy()
 
-if not df_payloads.empty:
-    if df_payloads['timestamp'].dt.tz is None:
-        df_payloads['timestamp'] = df_payloads['timestamp'].dt.tz_localize('UTC')
-    df_payloads = df_payloads[df_payloads['timestamp'] >= DATA_CUTOFF_FLOOR].copy()
+    if not df_payloads.empty:
+        if df_payloads['timestamp'].dt.tz is None:
+            df_payloads['timestamp'] = df_payloads['timestamp'].dt.tz_localize('UTC')
+        df_payloads = df_payloads[df_payloads['timestamp'] >= DATA_CUTOFF_FLOOR].copy()
 
-if not df_signals.empty:
-    # Calibrate historical records where magnitude was suppressed by the early rubric-score bug
-    df_signals['sentiment_index'] = df_signals['sentiment_score'] * 100
-    df_payloads['sentiment_index'] = df_payloads['sentiment_score'] * 100
+    if not df_signals.empty:
+        # Calibrate historical records where magnitude was suppressed by the early rubric-score bug
+        df_signals['sentiment_index'] = df_signals['sentiment_score'] * 100
+    if not df_payloads.empty:
+        df_payloads['sentiment_index'] = df_payloads['sentiment_score'] * 100
+
+    return df_signals, df_payloads, latest_pipeline_run
+
+
+# Helper for segmented filter buttons (resilient across Streamlit versions)
+def render_segmented_filter(label, options, default_ix: int | None = 0, key=None):
+    default_val = options[default_ix] if (default_ix is not None and 0 <= default_ix < len(options)) else None
+    if key:
+        if key not in st.session_state or st.session_state[key] is None or st.session_state[key] not in options:
+            st.session_state[key] = default_val
+        if hasattr(st, "pills"):
+            res = st.pills(label, options, key=key, label_visibility="collapsed")
+            return res or default_val
+        elif hasattr(st, "segmented_control"):
+            res = st.segmented_control(label, options, key=key, label_visibility="collapsed")
+            return res or default_val
+        else:
+            return st.radio(label, options, index=default_ix, key=key, horizontal=True, label_visibility="collapsed")
+    else:
+        if hasattr(st, "pills"):
+            res = st.pills(label, options, default=default_val, label_visibility="collapsed")
+            return res or default_val
+        elif hasattr(st, "segmented_control"):
+            res = st.segmented_control(label, options, default=default_val, label_visibility="collapsed")
+            return res or default_val
+        else:
+            return st.radio(label, options, index=default_ix, horizontal=True, label_visibility="collapsed")
+
+
+# Helper for resilient fragment decorator supporting auto-run intervals
+def make_fragment_decorator(run_every="30s"):
+    if hasattr(st, "fragment"):
+        return st.fragment(run_every=run_every)
+    elif hasattr(st, "experimental_fragment"):
+        return st.experimental_fragment(run_every=run_every)  # type: ignore[attr-defined]
+    else:
+        def noop_dec(func):
+            return func
+        return noop_dec
+
+
+@make_fragment_decorator(run_every="30s")
+def render_dashboard():
+    df_signals, df_payloads, latest_pipeline_run = get_processed_data()
+
+    if df_signals.empty:
+        st.info("Database empty. Run the ingestion engine to populate.")
+        return
+
+    # Dynamic timezone selection: resolve active timezone from session state or default
+    tz_options = {
+        "Asia/Kolkata (IST)": "Asia/Kolkata",
+        "UTC": "UTC",
+        "America/New_York (EST)": "America/New_York",
+        "Europe/London (GMT)": "Europe/London",
+        "Asia/Tokyo (JST)": "Asia/Tokyo"
+    }
+    tz_keys = list(tz_options.keys())
+    default_tz_ix = next((i for i, k in enumerate(tz_keys) if "IST" in k), 0)
+    current_selected_tz = st.session_state.get("filter_timezone", tz_keys[default_tz_ix])
+    current_target_tz = tz_options.get(current_selected_tz, "Asia/Kolkata")
+
     latest_ts = df_signals['timestamp'].max() if not df_signals.empty else None
-    
-    # Derive pipeline freshness from latest successful run, with fallback to latest signal timestamp
     pipeline_completed_at = latest_pipeline_run.get('completed_at') if latest_pipeline_run else None
     time_display_str, relative_display_str, freshness_tooltip, freshness_tier = format_pipeline_freshness(
-        pipeline_completed_at, fallback_ts=latest_ts
+        pipeline_completed_at, fallback_ts=latest_ts, target_tz_str=current_target_tz
     )
 
     # --- Top Row: Symmetrical Header Banner & Status Action Card ---
-    header_col, action_col = st.columns([0.68, 0.32], vertical_alignment="center")
+    header_col, action_col = st.columns([0.60, 0.40], vertical_alignment="top")
     
     with header_col:
         st.markdown(f"""
@@ -1403,12 +1492,11 @@ if not df_signals.empty:
 
         st.markdown(f"""
         <div class="header-banner-card header-action-card">
-            <div title="{freshness_tooltip}" style="display: inline-flex; align-items: center; gap: 6px; background: {pill_bg}; border: 1px solid {pill_border}; padding: 5px 10px; border-radius: 4px; flex-shrink: 0; cursor: default;">
+            <div title="{freshness_tooltip}" style="display: inline-flex; align-items: center; gap: 6px; background: {pill_bg}; border: 1px solid {pill_border}; padding: 5px 10px; border-radius: 4px; flex-shrink: 0; cursor: default; white-space: nowrap;">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{pill_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                <span style="font-size: 0.72rem; font-weight: 700; color: {pill_color}; font-family: 'Montserrat', sans-serif; letter-spacing: 0.04em; text-transform: uppercase;">UPDATED {time_display_str}</span>
-                <span style="font-size: 0.65rem; font-weight: 600; color: #94a3b8; font-family: 'IBM Plex Sans', sans-serif;">({relative_display_str})</span>
+                <span style="font-size: 0.72rem; font-weight: 700; color: {pill_color}; font-family: 'Montserrat', sans-serif; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap;">UPDATED {time_display_str}</span>
             </div>
-            <div style="display: inline-flex; align-items: center; gap: 7px; background: {status_bg}; border: 1px solid {status_border}; color: {status_text}; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; padding: 5px 11px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 10px rgba(16, 185, 129, 0.15); flex-shrink: 0;">
+            <div style="display: inline-flex; align-items: center; gap: 7px; background: {status_bg}; border: 1px solid {status_border}; color: {status_text}; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; padding: 5px 11px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 10px rgba(16, 185, 129, 0.15); flex-shrink: 0; white-space: nowrap;">
                 <span style="width: 7px; height: 7px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; display: inline-block;"></span>
                 SYSTEM ONLINE
             </div>
@@ -1467,581 +1555,541 @@ if not df_signals.empty:
         </div>
     </details>
     """, unsafe_allow_html=True)
+    # --- Top Row: Filter Toolbar Card (5 Aligned Controls in 1 Single Line) ---
+    with st.container(border=True):
+        filter_col1, filter_col2, filter_col3, filter_col4, filter_col5 = st.columns([1.1, 1.25, 1.35, 1.35, 1.05], gap="small")
+        lbl_color = "#475569" if is_light else "#94a3b8"
+        
+        with filter_col1:
+            st.markdown(f"""
+            <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">TIMEFRAME</span>
+            </div>
+            """, unsafe_allow_html=True)
+            timeframe_options = ["7 Days", "1 Day", "12 Hours", "6 Hours", "4 Hours", "1 Month", "1 Year", "All"]
+            default_tf_ix = 0
+            date_range = st.selectbox("Timeframe", timeframe_options, index=default_tf_ix, label_visibility="collapsed", key="filter_timeframe")
+            
+        with filter_col2:
+            st.markdown(f"""
+            <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">REGION</span>
+            </div>
+            """, unsafe_allow_html=True)
+            try:
+                from config.market_registry import get_all_region_codes
+                all_regions = get_all_region_codes()
+            except Exception:
+                all_regions = ["IN", "US", "UK", "JP"]
+            available_regions = df_signals['market_region'].unique().tolist()
+            regions = [r for r in all_regions if r in available_regions] + [r for r in available_regions if r not in all_regions]
+            if not regions:
+                regions = ["IN"]
+            
+            region_name_map = {
+                "IN": "India (IN)",
+                "US": "United States (US)",
+                "UK": "United Kingdom (UK)",
+                "JP": "Japan (JP)"
+            }
+            display_regions = [region_name_map.get(r, r) for r in regions]
+            default_reg_name = region_name_map.get("IN", "IN")
+            default_ix = display_regions.index(default_reg_name) if default_reg_name in display_regions else 0
+            selected_region_display = st.selectbox("Region", display_regions, index=default_ix, label_visibility="collapsed", key="filter_region")
+            selected_region = next((code for code, name in region_name_map.items() if name == selected_region_display), selected_region_display)
+
+        with filter_col3:
+            st.markdown(f"""
+            <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">CHART DISPLAY</span>
+            </div>
+            """, unsafe_allow_html=True)
+            active_indices = df_signals[df_signals['market_region'] == selected_region]['index_ticker'].unique().tolist()
+            active_indices = [x for x in active_indices if x != 'UNKNOWN']
+            chart_display = st.selectbox("Chart Display", ["All Indices"] + active_indices, index=0, label_visibility="collapsed", key="filter_chart_display")
+
+        with filter_col4:
+            st.markdown(f"""
+            <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 10"></polyline></svg>
+                <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">TIMEZONE</span>
+            </div>
+            """, unsafe_allow_html=True)
+            tz_options = {
+                "Asia/Kolkata (IST)": "Asia/Kolkata",
+                "UTC": "UTC",
+                "America/New_York (EST)": "America/New_York",
+                "Europe/London (GMT)": "Europe/London",
+                "Asia/Tokyo (JST)": "Asia/Tokyo"
+            }
+            tz_keys = list(tz_options.keys())
+            default_tz_ix = next((i for i, k in enumerate(tz_keys) if "IST" in k), 0)
+            display_tz = st.selectbox("Timezone", tz_keys, index=default_tz_ix, label_visibility="collapsed", key="filter_timezone")
+            target_tz = tz_options[display_tz]
+            tz_abbr = display_tz.split('(')[-1].replace(')', '').strip() if '(' in display_tz else display_tz
+
+        with filter_col5:
+            st.markdown(f"""
+            <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">EMA WINDOW</span>
+            </div>
+            """, unsafe_allow_html=True)
+            ema_display_options = ["4 Periods", "8 Periods", "12 Periods", "24 Periods"]
+            selected_ema_label = st.selectbox("EMA Window", ema_display_options, index=0, label_visibility="collapsed", key="filter_ema_window")
+            ema_window = int(selected_ema_label.split()[0])
+
+    filtered_signals = df_signals[df_signals['market_region'] == selected_region].copy()
+    display_payloads = df_payloads.copy()
     
-    # Helper for segmented filter buttons (resilient across Streamlit versions)
-    def render_segmented_filter(label, options, default_ix: int | None = 0, key=None):
-        default_val = options[default_ix] if (default_ix is not None and 0 <= default_ix < len(options)) else None
-        if key:
-            if key not in st.session_state or st.session_state[key] is None or st.session_state[key] not in options:
-                st.session_state[key] = default_val
-            if hasattr(st, "pills"):
-                res = st.pills(label, options, key=key, label_visibility="collapsed")
-                return res or default_val
-            elif hasattr(st, "segmented_control"):
-                res = st.segmented_control(label, options, key=key, label_visibility="collapsed")
-                return res or default_val
-            else:
-                return st.radio(label, options, index=default_ix, key=key, horizontal=True, label_visibility="collapsed")
-        else:
-            if hasattr(st, "pills"):
-                res = st.pills(label, options, default=default_val, label_visibility="collapsed")
-                return res or default_val
-            elif hasattr(st, "segmented_control"):
-                res = st.segmented_control(label, options, default=default_val, label_visibility="collapsed")
-                return res or default_val
-            else:
-                return st.radio(label, options, index=default_ix, horizontal=True, label_visibility="collapsed")
-
-    # --- Fragment Decorator for Partial Re-rendering (avoids full-page reloads on widget changes) ---
-    if hasattr(st, "fragment"):
-        fragment_decorator = st.fragment
-    elif hasattr(st, "experimental_fragment"):
-        fragment_decorator = st.experimental_fragment  # type: ignore[attr-defined]
-    else:
-        def fragment_decorator(func):
-            return func
-
-    # --- Wrap filter toolbar + dashboard body in a fragment to avoid full-page reloads on dropdown changes ---
-    @fragment_decorator
-    def render_dashboard_body():
-        # --- Top Row: Filter Toolbar Card (5 Aligned Controls in 1 Single Line) ---
-        with st.container(border=True):
-            filter_col1, filter_col2, filter_col3, filter_col4, filter_col5 = st.columns([1.1, 1.25, 1.35, 1.35, 1.05], gap="small")
-            lbl_color = "#475569" if is_light else "#94a3b8"
+    # --- Implement Timeframe Filtering ---
+    if not filtered_signals.empty and date_range != "All":
+        # Ensure timestamp is tz-aware for accurate Timedelta math
+        if filtered_signals['timestamp'].dt.tz is None:
+            filtered_signals['timestamp'] = filtered_signals['timestamp'].dt.tz_localize('UTC')
+        if display_payloads['timestamp'].dt.tz is None:
+            display_payloads['timestamp'] = display_payloads['timestamp'].dt.tz_localize('UTC')
             
-            with filter_col1:
-                st.markdown(f"""
-                <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">TIMEFRAME</span>
-                </div>
-                """, unsafe_allow_html=True)
-                timeframe_options = ["7 Days", "1 Day", "12 Hours", "6 Hours", "4 Hours", "1 Month", "1 Year", "All"]
-                default_tf_ix = 0
-                date_range = st.selectbox("Timeframe", timeframe_options, index=default_tf_ix, label_visibility="collapsed", key="filter_timeframe")
-                
-            with filter_col2:
-                st.markdown(f"""
-                <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                    <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">REGION</span>
-                </div>
-                """, unsafe_allow_html=True)
-                try:
-                    from config.market_registry import get_all_region_codes
-                    all_regions = get_all_region_codes()
-                except Exception:
-                    all_regions = ["IN", "US", "UK", "JP"]
-                available_regions = df_signals['market_region'].unique().tolist()
-                regions = [r for r in all_regions if r in available_regions] + [r for r in available_regions if r not in all_regions]
-                if not regions:
-                    regions = ["IN"]
-                
-                region_name_map = {
-                    "IN": "India (IN)",
-                    "US": "United States (US)",
-                    "UK": "United Kingdom (UK)",
-                    "JP": "Japan (JP)"
-                }
-                display_regions = [region_name_map.get(r, r) for r in regions]
-                default_reg_name = region_name_map.get("IN", "IN")
-                default_ix = display_regions.index(default_reg_name) if default_reg_name in display_regions else 0
-                selected_region_display = st.selectbox("Region", display_regions, index=default_ix, label_visibility="collapsed", key="filter_region")
-                selected_region = next((code for code, name in region_name_map.items() if name == selected_region_display), selected_region_display)
-
-            with filter_col3:
-                st.markdown(f"""
-                <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                    <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">CHART DISPLAY</span>
-                </div>
-                """, unsafe_allow_html=True)
-                active_indices = df_signals[df_signals['market_region'] == selected_region]['index_ticker'].unique().tolist()
-                active_indices = [x for x in active_indices if x != 'UNKNOWN']
-                chart_display = st.selectbox("Chart Display", ["All Indices"] + active_indices, index=0, label_visibility="collapsed", key="filter_chart_display")
-
-            with filter_col4:
-                st.markdown(f"""
-                <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 10"></polyline></svg>
-                    <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">TIMEZONE</span>
-                </div>
-                """, unsafe_allow_html=True)
-                tz_options = {
-                    "Asia/Kolkata (IST)": "Asia/Kolkata",
-                    "UTC": "UTC",
-                    "America/New_York (EST)": "America/New_York",
-                    "Europe/London (GMT)": "Europe/London",
-                    "Asia/Tokyo (JST)": "Asia/Tokyo"
-                }
-                tz_keys = list(tz_options.keys())
-                default_tz_ix = next((i for i, k in enumerate(tz_keys) if "IST" in k), 0)
-                display_tz = st.selectbox("Timezone", tz_keys, index=default_tz_ix, label_visibility="collapsed", key="filter_timezone")
-                target_tz = tz_options[display_tz]
-                tz_abbr = display_tz.split('(')[-1].replace(')', '').strip() if '(' in display_tz else display_tz
-
-            with filter_col5:
-                st.markdown(f"""
-                <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 2px;">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{lbl_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                    <span style="font-size: 0.70rem; font-weight: 700; color: {lbl_color}; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Montserrat', sans-serif;">EMA WINDOW</span>
-                </div>
-                """, unsafe_allow_html=True)
-                ema_display_options = ["4 Periods", "8 Periods", "12 Periods", "24 Periods"]
-                selected_ema_label = st.selectbox("EMA Window", ema_display_options, index=0, label_visibility="collapsed", key="filter_ema_window")
-                ema_window = int(selected_ema_label.split()[0])
-
-        filtered_signals = df_signals[df_signals['market_region'] == selected_region].copy()
-        display_payloads = df_payloads.copy()
+        now = pd.Timestamp.utcnow()
+        cutoff = now  # default: no filtering if date_range is unrecognized
+        if date_range in ["4 Hours", "4 Hour", "4H"]: cutoff = now - pd.Timedelta(hours=4)
+        elif date_range in ["6 Hours", "6 Hour", "6H"]: cutoff = now - pd.Timedelta(hours=6)
+        elif date_range in ["12 Hours", "12 Hour", "12H"]: cutoff = now - pd.Timedelta(hours=12)
+        elif date_range in ["1 Day", "1Day", "24 Hours", "24 Hour", "24H"]: cutoff = now - pd.Timedelta(hours=24)
+        elif date_range in ["7 Days", "7 Day", "7D"]: cutoff = now - pd.Timedelta(days=7)
+        elif date_range in ["1 Month", "1M"]: cutoff = now - pd.Timedelta(days=30)
+        elif date_range in ["1 Year", "1Y"]: cutoff = now - pd.Timedelta(days=365)
         
-        # --- Implement Timeframe Filtering ---
-        if not filtered_signals.empty and date_range != "All":
-            # Ensure timestamp is tz-aware for accurate Timedelta math
-            if filtered_signals['timestamp'].dt.tz is None:
-                filtered_signals['timestamp'] = filtered_signals['timestamp'].dt.tz_localize('UTC')
-            if display_payloads['timestamp'].dt.tz is None:
-                display_payloads['timestamp'] = display_payloads['timestamp'].dt.tz_localize('UTC')
-                
-            now = pd.Timestamp.utcnow()
-            cutoff = now  # default: no filtering if date_range is unrecognized
-            if date_range in ["4 Hours", "4 Hour", "4H"]: cutoff = now - pd.Timedelta(hours=4)
-            elif date_range in ["6 Hours", "6 Hour", "6H"]: cutoff = now - pd.Timedelta(hours=6)
-            elif date_range in ["12 Hours", "12 Hour", "12H"]: cutoff = now - pd.Timedelta(hours=12)
-            elif date_range in ["1 Day", "1Day", "24 Hours", "24 Hour", "24H"]: cutoff = now - pd.Timedelta(hours=24)
-            elif date_range in ["7 Days", "7 Day", "7D"]: cutoff = now - pd.Timedelta(days=7)
-            elif date_range in ["1 Month", "1M"]: cutoff = now - pd.Timedelta(days=30)
-            elif date_range in ["1 Year", "1Y"]: cutoff = now - pd.Timedelta(days=365)
-            
-            filtered_signals = filtered_signals[filtered_signals['timestamp'] >= cutoff]
-            display_payloads = display_payloads[display_payloads['timestamp'] >= cutoff]
+        filtered_signals = filtered_signals[filtered_signals['timestamp'] >= cutoff]
+        display_payloads = display_payloads[display_payloads['timestamp'] >= cutoff]
+    
+    if not filtered_signals.empty:
+        # Convert DataFrames to User Selected Timezone
+        if filtered_signals['timestamp'].dt.tz is None:
+            filtered_signals['timestamp'] = filtered_signals['timestamp'].dt.tz_localize('UTC')
+        filtered_signals['timestamp'] = filtered_signals['timestamp'].dt.tz_convert(target_tz)
         
-        if not filtered_signals.empty:
-            # Convert DataFrames to User Selected Timezone
-            if filtered_signals['timestamp'].dt.tz is None:
-                filtered_signals['timestamp'] = filtered_signals['timestamp'].dt.tz_localize('UTC')
-            filtered_signals['timestamp'] = filtered_signals['timestamp'].dt.tz_convert(target_tz)
-            
-            if display_payloads['timestamp'].dt.tz is None:
-                display_payloads['timestamp'] = display_payloads['timestamp'].dt.tz_localize('UTC')
-            display_payloads['timestamp'] = display_payloads['timestamp'].dt.tz_convert(target_tz)
+        if display_payloads['timestamp'].dt.tz is None:
+            display_payloads['timestamp'] = display_payloads['timestamp'].dt.tz_localize('UTC')
+        display_payloads['timestamp'] = display_payloads['timestamp'].dt.tz_convert(target_tz)
 
-            filtered_signals.sort_values('timestamp', inplace=True)
-            
-            # Dynamically adjust grouping frequency based on zoom level to prevent blank charts
-            freq_str = 'h'
-            if date_range in ["1 Month", "1M", "1 Year", "1Y", "All"]:
-                freq_str = 'D'
-            
-            # Calculate EMA by grouping into active periods (dropna prevents flatlines)
-            df_trend = filtered_signals.groupby(pd.Grouper(key='timestamp', freq=freq_str))['sentiment_index'].mean().dropna().reset_index()
-            df_trend['EMA_Index'] = df_trend['sentiment_index'].ewm(span=ema_window, adjust=False).mean()
-            
-            # Merge the EMA back to the latest point for KPIs
-            current_ema = df_trend['EMA_Index'].iloc[-1] if len(df_trend) > 0 else 0
-            previous_ema = df_trend['EMA_Index'].iloc[-2] if len(df_trend) > 1 else 0
-            delta = current_ema - previous_ema
-            
-            # Ensure plot timestamps are naive in target_tz so Plotly renders exact wall-clock time
-            plot_trend_x = df_trend['timestamp'].dt.tz_localize(None) if df_trend['timestamp'].dt.tz is not None else df_trend['timestamp']
-            
-            # --- Main Layout Split (1 Narrow Left, 1 Wide Right) ---
-            left_col, right_col = st.columns([1.25, 3.75])
-            
-            with left_col:
-                # 1. Delta calculation and direction-accurate labeling
-                if abs(delta) < 0.05:
-                    delta_str = "— No change"
-                    delta_pill_color = "#475569" if is_light else "#94a3b8"
-                    delta_pill_bg = "rgba(148, 163, 184, 0.12)" if is_light else "rgba(148, 163, 184, 0.15)"
-                    delta_pill_border = "rgba(148, 163, 184, 0.3)"
-                elif delta > 0:
-                    delta_str = f"▲ +{abs(delta):.1f}% change"
-                    delta_pill_color = "#059669" if is_light else "#34d399"
-                    delta_pill_bg = "rgba(16, 185, 129, 0.12)" if is_light else "rgba(16, 185, 129, 0.15)"
-                    delta_pill_border = "rgba(16, 185, 129, 0.3)"
-                else:
-                    delta_str = f"▼ -{abs(delta):.1f}% change"
-                    delta_pill_color = "#dc2626" if is_light else "#f87171"
-                    delta_pill_bg = "rgba(239, 68, 68, 0.12)" if is_light else "rgba(239, 68, 68, 0.15)"
-                    delta_pill_border = "rgba(239, 68, 68, 0.3)"
-                    
-                val_color = "green" if current_ema > 0 else "red" if current_ema < 0 else ""
+        filtered_signals.sort_values('timestamp', inplace=True)
+        
+        # Dynamically adjust grouping frequency based on zoom level to prevent blank charts
+        freq_str = 'h'
+        if date_range in ["1 Month", "1M", "1 Year", "1Y", "All"]:
+            freq_str = 'D'
+        
+        # Calculate EMA by grouping into active periods (dropna prevents flatlines)
+        df_trend = filtered_signals.groupby(pd.Grouper(key='timestamp', freq=freq_str))['sentiment_index'].mean().dropna().reset_index()
+        df_trend['EMA_Index'] = df_trend['sentiment_index'].ewm(span=ema_window, adjust=False).mean()
+        
+        # Merge the EMA back to the latest point for KPIs
+        current_ema = df_trend['EMA_Index'].iloc[-1] if len(df_trend) > 0 else 0
+        previous_ema = df_trend['EMA_Index'].iloc[-2] if len(df_trend) > 1 else 0
+        delta = current_ema - previous_ema
+        
+        # Ensure plot timestamps are naive in target_tz so Plotly renders exact wall-clock time
+        plot_trend_x = df_trend['timestamp'].dt.tz_localize(None) if df_trend['timestamp'].dt.tz is not None else df_trend['timestamp']
+        
+        # --- Main Layout Split (1 Narrow Left, 1 Wide Right) ---
+        left_col, right_col = st.columns([1.25, 3.75])
+        
+        with left_col:
+            # 1. Delta calculation and direction-accurate labeling
+            if abs(delta) < 0.05:
+                delta_str = "— No change"
+                delta_pill_color = "#475569" if is_light else "#94a3b8"
+                delta_pill_bg = "rgba(148, 163, 184, 0.12)" if is_light else "rgba(148, 163, 184, 0.15)"
+                delta_pill_border = "rgba(148, 163, 184, 0.3)"
+            elif delta > 0:
+                delta_str = f"▲ +{abs(delta):.1f}% change"
+                delta_pill_color = "#059669" if is_light else "#34d399"
+                delta_pill_bg = "rgba(16, 185, 129, 0.12)" if is_light else "rgba(16, 185, 129, 0.15)"
+                delta_pill_border = "rgba(16, 185, 129, 0.3)"
+            else:
+                delta_str = f"▼ -{abs(delta):.1f}% change"
+                delta_pill_color = "#dc2626" if is_light else "#f87171"
+                delta_pill_bg = "rgba(239, 68, 68, 0.12)" if is_light else "rgba(239, 68, 68, 0.15)"
+                delta_pill_border = "rgba(239, 68, 68, 0.3)"
                 
-                # 2. Market Bias Regime
-                bias = "Bullish" if current_ema > 5 else "Bearish" if current_ema < -5 else "Neutral"
-                if bias == "Bullish":
-                    b_color_hex = "#059669" if is_light else "#34d399"
-                    b_pill_bg = "rgba(16, 185, 129, 0.12)" if is_light else "rgba(16, 185, 129, 0.15)"
-                    b_pill_border = "rgba(16, 185, 129, 0.3)"
-                    b_val_color = "green"
-                elif bias == "Bearish":
-                    b_color_hex = "#dc2626" if is_light else "#f87171"
-                    b_pill_bg = "rgba(239, 68, 68, 0.12)" if is_light else "rgba(239, 68, 68, 0.15)"
-                    b_pill_border = "rgba(239, 68, 68, 0.3)"
-                    b_val_color = "red"
-                else:
-                    b_color_hex = "#7c3aed" if is_light else "#c084fc"
-                    b_pill_bg = "rgba(124, 58, 237, 0.12)" if is_light else "rgba(168, 85, 247, 0.15)"
-                    b_pill_border = "rgba(124, 58, 237, 0.3)" if is_light else "rgba(168, 85, 247, 0.3)"
-                    b_val_color = ""
+            val_color = "green" if current_ema > 0 else "red" if current_ema < 0 else ""
+            
+            # 2. Market Bias Regime
+            bias = "Bullish" if current_ema > 5 else "Bearish" if current_ema < -5 else "Neutral"
+            if bias == "Bullish":
+                b_color_hex = "#059669" if is_light else "#34d399"
+                b_pill_bg = "rgba(16, 185, 129, 0.12)" if is_light else "rgba(16, 185, 129, 0.15)"
+                b_pill_border = "rgba(16, 185, 129, 0.3)"
+                b_val_color = "green"
+            elif bias == "Bearish":
+                b_color_hex = "#dc2626" if is_light else "#f87171"
+                b_pill_bg = "rgba(239, 68, 68, 0.12)" if is_light else "rgba(239, 68, 68, 0.15)"
+                b_pill_border = "rgba(239, 68, 68, 0.3)"
+                b_val_color = "red"
+            else:
+                b_color_hex = "#7c3aed" if is_light else "#c084fc"
+                b_pill_bg = "rgba(124, 58, 237, 0.12)" if is_light else "rgba(168, 85, 247, 0.15)"
+                b_pill_border = "rgba(124, 58, 237, 0.3)" if is_light else "rgba(168, 85, 247, 0.3)"
+                b_val_color = ""
 
-                # 3. Telemetry metrics
-                total_news_count = len(filtered_signals)
-                tracked_count = filtered_signals['index_ticker'].nunique()
-                
-                nv_color = "#334155" if is_light else "#cbd5e1"
-                nv_bg = "rgba(0, 0, 0, 0.05)" if is_light else "rgba(255, 255, 255, 0.06)"
-                nv_border = "rgba(0, 0, 0, 0.12)" if is_light else "rgba(255, 255, 255, 0.12)"
-                
-                ti_color = "#059669" if is_light else "#34d399"
+            # 3. Telemetry metrics
+            total_news_count = len(filtered_signals)
+            tracked_count = filtered_signals['index_ticker'].nunique()
+            
+            nv_color = "#334155" if is_light else "#cbd5e1"
+            nv_bg = "rgba(0, 0, 0, 0.05)" if is_light else "rgba(255, 255, 255, 0.06)"
+            nv_border = "rgba(0, 0, 0, 0.12)" if is_light else "rgba(255, 255, 255, 0.12)"
+            
+            ti_color = "#059669" if is_light else "#34d399"
 
-                # Render Left Column (4 Symmetrically Stacked KPI Cards)
-                kpi_column_html = (
-                    '<div class="kpi-column-container">'
-                    # Card 1: Headline Hero Metric (Aggregate Optimism)
-                    '<div class="white-card kpi-card">'
-                    '<div class="kpi-card-content">'
-                    '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
-                    '<span class="metric-title" style="margin-bottom: 0;">Aggregate Optimism</span>'
-                    f'<span style="font-size: 0.72rem; font-weight: 700; color: var(--header-border-left); text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{selected_region}</span>'
-                    '</div>'
-                    f'<div class="metric-value metric-hero {val_color}">{current_ema:+.1f}</div>'
-                    '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
-                    f'<span style="font-size: 0.74rem; font-weight: 700; color: {delta_pill_color}; background: {delta_pill_bg}; border: 1px solid {delta_pill_border}; padding: 2px 7px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">{delta_str}</span>'
-                    f'<span style="font-size: 0.78rem; color: var(--text-secondary);">vs previous period</span>'
-                    '</div>'
-                    '</div>'
-                    '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
-                    '<span>Confidence vector</span>'
-                    '<span style="color: var(--text-primary); font-weight: 600;">System-One CLM</span>'
-                    '</div>'
-                    '</div>'
+            # Render Left Column (4 Symmetrically Stacked KPI Cards)
+            kpi_column_html = (
+                '<div class="kpi-column-container">'
+                # Card 1: Headline Hero Metric (Aggregate Optimism)
+                '<div class="white-card kpi-card">'
+                '<div class="kpi-card-content">'
+                '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
+                '<span class="metric-title" style="margin-bottom: 0;">Aggregate Optimism</span>'
+                f'<span style="font-size: 0.72rem; font-weight: 700; color: var(--header-border-left); text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{selected_region}</span>'
+                '</div>'
+                f'<div class="metric-value metric-hero {val_color}">{current_ema:+.1f}</div>'
+                '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
+                f'<span style="font-size: 0.74rem; font-weight: 700; color: {delta_pill_color}; background: {delta_pill_bg}; border: 1px solid {delta_pill_border}; padding: 2px 7px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">{delta_str}</span>'
+                f'<span style="font-size: 0.78rem; color: var(--text-secondary);">vs previous period</span>'
+                '</div>'
+                '</div>'
+                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
+                '<span>Confidence vector</span>'
+                '<span style="color: var(--text-primary); font-weight: 600;">System-One CLM</span>'
+                '</div>'
+                '</div>'
 
-                    # Card 2: Strategic Regime (Market Bias)
-                    '<div class="white-card kpi-card">'
-                    '<div class="kpi-card-content">'
-                    '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
-                    '<span class="metric-title" style="margin-bottom: 0;">Market Bias</span>'
-                    f'<span style="font-size: 0.68rem; font-weight: 800; color: {b_color_hex}; background: {b_pill_bg}; border: 1px solid {b_pill_border}; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif; letter-spacing: 0.04em;">{bias}</span>'
-                    '</div>'
-                    f'<div class="metric-value {b_val_color}" style="font-size: 1.55rem;">{bias}</div>'
-                    '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
-                    f'<span style="font-size: 0.78rem; color: var(--text-secondary);">{ema_window}-period moving average</span>'
-                    '</div>'
-                    '</div>'
-                    '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
-                    '<span>Signal strategy</span>'
-                    '<span style="color: var(--text-primary); font-weight: 600;">EMA Crossover</span>'
-                    '</div>'
-                    '</div>'
+                # Card 2: Strategic Regime (Market Bias)
+                '<div class="white-card kpi-card">'
+                '<div class="kpi-card-content">'
+                '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
+                '<span class="metric-title" style="margin-bottom: 0;">Market Bias</span>'
+                f'<span style="font-size: 0.68rem; font-weight: 800; color: {b_color_hex}; background: {b_pill_bg}; border: 1px solid {b_pill_border}; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif; letter-spacing: 0.04em;">{bias}</span>'
+                '</div>'
+                f'<div class="metric-value {b_val_color}" style="font-size: 1.55rem;">{bias}</div>'
+                '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
+                f'<span style="font-size: 0.78rem; color: var(--text-secondary);">{ema_window}-period moving average</span>'
+                '</div>'
+                '</div>'
+                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
+                '<span>Signal strategy</span>'
+                '<span style="color: var(--text-primary); font-weight: 600;">EMA Crossover</span>'
+                '</div>'
+                '</div>'
 
-                    # Card 3: Total News Volume
-                    '<div class="white-card kpi-card">'
-                    '<div class="kpi-card-content">'
-                    '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
-                    '<span class="metric-title" style="margin-bottom: 0;">Total News Volume</span>'
-                    f'<span style="font-size: 0.68rem; font-weight: 700; color: {nv_color}; background: {nv_bg}; border: 1px solid {nv_border}; padding: 2px 7px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">{date_range} Window</span>'
-                    '</div>'
-                    f'<div class="metric-value" style="color: var(--text-primary); font-size: 1.55rem;">{total_news_count}</div>'
-                    '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
-                    f'<span style="font-size: 0.78rem; color: var(--text-secondary);">articles ingested</span>'
-                    '</div>'
-                    '</div>'
-                    '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
-                    '<span>Ingestion cadence</span>'
-                    '<span style="color: var(--text-primary); font-weight: 600;">Every 2 hours</span>'
-                    '</div>'
-                    '</div>'
+                # Card 3: Total News Volume
+                '<div class="white-card kpi-card">'
+                '<div class="kpi-card-content">'
+                '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
+                '<span class="metric-title" style="margin-bottom: 0;">Total News Volume</span>'
+                f'<span style="font-size: 0.68rem; font-weight: 700; color: {nv_color}; background: {nv_bg}; border: 1px solid {nv_border}; padding: 2px 7px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">{date_range} Window</span>'
+                '</div>'
+                f'<div class="metric-value" style="color: var(--text-primary); font-size: 1.55rem;">{total_news_count}</div>'
+                '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
+                f'<span style="font-size: 0.78rem; color: var(--text-secondary);">articles ingested</span>'
+                '</div>'
+                '</div>'
+                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
+                '<span>Ingestion cadence</span>'
+                '<span style="color: var(--text-primary); font-weight: 600;">Every 2 hours</span>'
+                '</div>'
+                '</div>'
 
-                    # Card 4: Tracked Indices
-                    '<div class="white-card kpi-card">'
-                    '<div class="kpi-card-content">'
-                    '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
-                    '<span class="metric-title" style="margin-bottom: 0;">Tracked Indices</span>'
-                    f'<span style="font-size: 0.68rem; font-weight: 700; color: {ti_color}; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 2px 7px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{selected_region}</span>'
-                    '</div>'
-                    f'<div class="metric-value" style="color: var(--text-primary); font-size: 1.55rem;">{tracked_count}</div>'
-                    '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
-                    f'<span style="font-size: 0.74rem; font-weight: 700; color: {ti_color}; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 2px 6px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">100% Active</span>'
-                    f'<span style="font-size: 0.78rem; color: var(--text-secondary);">real-time monitored</span>'
-                    '</div>'
-                    '</div>'
-                    '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
-                    '<span>Active universe</span>'
-                    '<span style="color: var(--text-primary); font-weight: 600;">20 Global Assets</span>'
-                    '</div>'
-                    '</div>'
-                    '</div>'
-                )
-                st.markdown(kpi_column_html, unsafe_allow_html=True)
+                # Card 4: Tracked Indices
+                '<div class="white-card kpi-card">'
+                '<div class="kpi-card-content">'
+                '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;">'
+                '<span class="metric-title" style="margin-bottom: 0;">Tracked Indices</span>'
+                f'<span style="font-size: 0.68rem; font-weight: 700; color: {ti_color}; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 2px 7px; border-radius: 4px; text-transform: uppercase; font-family: \'Montserrat\', sans-serif;">{selected_region}</span>'
+                '</div>'
+                f'<div class="metric-value" style="color: var(--text-primary); font-size: 1.55rem;">{tracked_count}</div>'
+                '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px;">'
+                f'<span style="font-size: 0.74rem; font-weight: 700; color: {ti_color}; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 2px 6px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">100% Active</span>'
+                f'<span style="font-size: 0.78rem; color: var(--text-secondary);">real-time monitored</span>'
+                '</div>'
+                '</div>'
+                '<div class="metric-footer" style="margin-top: 6px; padding-top: 6px; font-size: 0.78rem; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">'
+                '<span>Active universe</span>'
+                '<span style="color: var(--text-primary); font-weight: 600;">20 Global Assets</span>'
+                '</div>'
+                '</div>'
+                '</div>'
+            )
+            st.markdown(kpi_column_html, unsafe_allow_html=True)
 
-            with right_col:
-                # --- Combined Chart & Mini Index Container (unified alignment & borders) ---
-                with st.container(border=True):
-                    st.markdown(f"""
-                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--card-border); margin-bottom: 6px;">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.30); padding: 5px; border-radius: 6px; display: flex; align-items: center;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                            </div>
-                            <div>
-                                <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); font-family: 'Montserrat', sans-serif;">Aggregate Market Optimism</div>
-                                <div style="font-size: 0.78rem; color: var(--text-muted); font-family: 'IBM Plex Sans', sans-serif;">Multi-index sentiment surface & {selected_region} moving average</div>
-                            </div>
+        with right_col:
+            # --- Combined Chart & Mini Index Container (unified alignment & borders) ---
+            with st.container(border=True):
+                st.markdown(f"""
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--card-border); margin-bottom: 6px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.30); padding: 5px; border-radius: 6px; display: flex; align-items: center;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span style="font-size: 0.75rem; color: var(--text-muted); font-family: 'IBM Plex Sans', sans-serif;">Scale: [-100, +100] • {tz_abbr}</span>
+                        <div>
+                            <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); font-family: 'Montserrat', sans-serif;">Aggregate Market Optimism</div>
+                            <div style="font-size: 0.78rem; color: var(--text-muted); font-family: 'IBM Plex Sans', sans-serif;">Multi-index sentiment surface & {selected_region} moving average</div>
                         </div>
                     </div>
-                    """, unsafe_allow_html=True)
-                    
-                    fig_area = go.Figure()
-                    
-                    # Refined, high-legibility institutional color palette with soft translucent fills
-                    distinct_colors = ["#10b981", "#f59e0b", "#6366f1", "#06b6d4", "#ec4899", "#84cc16"]
-                    fill_colors = [
-                        "rgba(16, 185, 129, 0.12)",
-                        "rgba(245, 158, 11, 0.10)",
-                        "rgba(99, 102, 241, 0.10)",
-                        "rgba(6, 182, 212, 0.10)",
-                        "rgba(236, 72, 153, 0.10)",
-                        "rgba(132, 204, 22, 0.10)"
-                    ]
-                    active_tickers = [c for c in filtered_signals['index_ticker'].unique() if c != 'UNKNOWN']
-                    
-                    # Plot individual index observations with translucent area fills
-                    for i, ticker in enumerate(active_tickers):
-                        if chart_display != "All Indices" and ticker != chart_display:
-                            continue
-                        t_df = filtered_signals[filtered_signals['index_ticker'] == ticker].sort_values('timestamp')
-                        if t_df.empty:
-                            continue
-                        t_grouped = t_df.groupby(pd.Grouper(key='timestamp', freq=freq_str))['sentiment_index'].mean().dropna().reset_index()
-                        if t_grouped.empty:
-                            continue
-                        t_x = t_grouped['timestamp'].dt.tz_localize(None) if t_grouped['timestamp'].dt.tz is not None else t_grouped['timestamp']
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 0.75rem; color: var(--text-muted); font-family: 'IBM Plex Sans', sans-serif;">Scale: [-100, +100] • {tz_abbr}</span>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                fig_area = go.Figure()
+                
+                # Refined, high-legibility institutional color palette with soft translucent fills
+                distinct_colors = ["#10b981", "#f59e0b", "#6366f1", "#06b6d4", "#ec4899", "#84cc16"]
+                fill_colors = [
+                    "rgba(16, 185, 129, 0.12)",
+                    "rgba(245, 158, 11, 0.10)",
+                    "rgba(99, 102, 241, 0.10)",
+                    "rgba(6, 182, 212, 0.10)",
+                    "rgba(236, 72, 153, 0.10)",
+                    "rgba(132, 204, 22, 0.10)"
+                ]
+                active_tickers = [c for c in filtered_signals['index_ticker'].unique() if c != 'UNKNOWN']
+                
+                # Plot individual index observations with translucent area fills
+                for i, ticker in enumerate(active_tickers):
+                    if chart_display != "All Indices" and ticker != chart_display:
+                        continue
+                    t_df = filtered_signals[filtered_signals['index_ticker'] == ticker].sort_values('timestamp')
+                    if t_df.empty:
+                        continue
+                    t_grouped = t_df.groupby(pd.Grouper(key='timestamp', freq=freq_str))['sentiment_index'].mean().dropna().reset_index()
+                    if t_grouped.empty:
+                        continue
+                    t_x = t_grouped['timestamp'].dt.tz_localize(None) if t_grouped['timestamp'].dt.tz is not None else t_grouped['timestamp']
 
-                        fig_area.add_trace(go.Scatter(
-                            x=t_x, y=t_grouped['sentiment_index'],
-                            mode='lines+markers', name=ticker,
-                            line=dict(width=1.8, color=distinct_colors[i % len(distinct_colors)]),
-                            marker=dict(size=4),
-                            fill='tozeroy',
-                            fillcolor=fill_colors[i % len(fill_colors)],
-                            opacity=0.9,
-                            connectgaps=True
-                        ))
-                    
-                    # Add bold prominent line for Global EMA Trend on top
-                    ema_color = '#0f172a' if is_light else '#f8fafc'
                     fig_area.add_trace(go.Scatter(
-                        x=plot_trend_x, y=df_trend['EMA_Index'],
-                        mode='lines',
-                        line=dict(color=ema_color, width=3.2, shape='linear'), 
-                        name=f'{selected_region} Trend ({ema_window}P EMA)'
+                        x=t_x, y=t_grouped['sentiment_index'],
+                        mode='lines+markers', name=ticker,
+                        line=dict(width=1.8, color=distinct_colors[i % len(distinct_colors)]),
+                        marker=dict(size=4),
+                        fill='tozeroy',
+                        fillcolor=fill_colors[i % len(fill_colors)],
+                        opacity=0.9,
+                        connectgaps=True
                     ))
-                    
-                    fig_area.update_layout(
-                        height=370, margin=dict(l=0, r=0, t=10, b=0),
-                        plot_bgcolor="rgba(255,255,255,0.4)" if is_light else "rgba(0,0,0,0)",
-                        paper_bgcolor="rgba(0,0,0,0)",
-                        hovermode="x unified",
-                        legend=dict(
-                            orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0,
-                            font=dict(color="#0f172a" if is_light else "#f8fafc", size=11, family="Montserrat")
-                        ),
-                        xaxis=dict(
-                            showgrid=True, gridcolor='rgba(148, 163, 184, 0.22)' if is_light else 'rgba(255,255,255,0.06)',
-                            showline=True, linecolor='rgba(100, 116, 139, 0.35)' if is_light else 'rgba(255,255,255,0.15)', linewidth=1,
-                            ticks='outside', tickcolor='rgba(100, 116, 139, 0.35)' if is_light else 'rgba(255,255,255,0.25)', ticklen=4,
-                            title=dict(text=f"<b>TIMELINE • {tz_abbr}</b>", font=dict(size=11, color="#334155" if is_light else "#cbd5e1", family="Montserrat")),
-                            tickfont=dict(size=10, color="#334155" if is_light else "#94a3b8", family="IBM Plex Sans")
-                        ),
-                        yaxis=dict(
-                            range=[-105, 105],
-                            dtick=25,
-                            fixedrange=True,
-                            showgrid=True, gridcolor='rgba(148, 163, 184, 0.22)' if is_light else 'rgba(255,255,255,0.06)',
-                            zeroline=True, zerolinecolor='rgba(148, 163, 184, 0.45)' if is_light else 'rgba(148, 163, 184, 0.35)', zerolinewidth=1.5,
-                            showline=True, linecolor='rgba(100, 116, 139, 0.35)' if is_light else 'rgba(255,255,255,0.15)', linewidth=1,
-                            ticks='outside', tickcolor='rgba(100, 116, 139, 0.35)' if is_light else 'rgba(255,255,255,0.25)', ticklen=4,
-                            title=dict(text="<b>OPTIMISM SCORE</b>", font=dict(size=11, color="#334155" if is_light else "#cbd5e1", family="Montserrat")),
-                            tickfont=dict(size=10, color="#0f172a" if is_light else "#f8fafc", family="IBM Plex Sans"),
-                            side="right"
-                        )
-                    )
-                    st.plotly_chart(
-                        fig_area,
-                        use_container_width=True,
-                        config={
-                            'displayModeBar': 'hover',
-                            'scrollZoom': False,
-                            'displaylogo': False,
-                            'modeBarButtonsToRemove': ['zoom2d', 'zoomIn2d', 'zoomOut2d']
-                        }
-                    )
-
-                    # --- Mini KPI Tiles for Individual Indices (Inside same container for flush borders) ---
-                    valid_tickers = [t for t in active_tickers if t != 'UNKNOWN']
-                    if valid_tickers:
-                        kpi_html = '<div class="mini-kpi-grid">'
-                        
-                        for ticker in valid_tickers:
-                            t_sub = filtered_signals[filtered_signals['index_ticker'] == ticker].sort_values('timestamp')
-                            t_grp = t_sub.groupby(pd.Grouper(key='timestamp', freq=freq_str))['sentiment_index'].mean().dropna()
-                            latest_score = t_grp.iloc[-1] if len(t_grp) > 0 else 0
-                            prev_score = t_grp.iloc[-2] if len(t_grp) > 1 else latest_score
-                            delta_idx = latest_score - prev_score
-                            
-                            if abs(latest_score) < 0.5:
-                                ticker_status = "NEUTRAL"
-                                t_status_color = "#475569" if is_light else "#94a3b8"
-                                t_status_bg = "rgba(148, 163, 184, 0.18)" if is_light else "rgba(148, 163, 184, 0.12)"
-                                t_status_border = "rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.3)"
-                                t_card_border = "#94a3b8" if is_light else "#64748b"
-                                t_val_color = "#334155" if is_light else "#cbd5e1"
-                            elif latest_score >= 0.5:
-                                ticker_status = "BULLISH"
-                                t_status_color = "#059669" if is_light else "#34d399"
-                                t_status_bg = "rgba(16, 185, 129, 0.15)"
-                                t_status_border = "rgba(16, 185, 129, 0.35)"
-                                t_card_border = "#10b981"
-                                t_val_color = "#059669" if is_light else "#10b981"
-                            else:
-                                ticker_status = "BEARISH"
-                                t_status_color = "#dc2626" if is_light else "#f87171"
-                                t_status_bg = "rgba(239, 68, 68, 0.15)"
-                                t_status_border = "rgba(239, 68, 68, 0.35)"
-                                t_card_border = "#ef4444"
-                                t_val_color = "#dc2626" if is_light else "#ef4444"
-                            
-                            if abs(delta_idx) < 0.05:
-                                delta_tag = '<span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">— No change</span>'
-                            elif delta_idx > 0:
-                                delta_tag = f'<span style="font-size: 0.75rem; font-weight: 700; color: #059669; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 1px 6px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">▲ {abs(delta_idx):.1f}%</span> <span style="font-size: 0.75rem; color: var(--text-secondary);">momentum</span>'
-                            else:
-                                delta_tag = f'<span style="font-size: 0.75rem; font-weight: 700; color: #dc2626; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.25); padding: 1px 6px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">▼ {abs(delta_idx):.1f}%</span> <span style="font-size: 0.75rem; color: var(--text-secondary);">momentum</span>'
-                            
-                            kpi_html += (
-                                f'<div class="mini-index-card" style="border-left: 3px solid {t_card_border}; margin-bottom: 0;">'
-                                '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">'
-                                f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.78rem; font-weight: 700; color: {"#0f172a" if is_light else "#f8fafc"}; text-transform: uppercase; letter-spacing: 0.03em;">{ticker}</span>'
-                                f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.68rem; font-weight: 800; color: {t_status_color}; background: {t_status_bg}; border: 1px solid {t_status_border}; padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">{ticker_status}</span>'
-                                '</div>'
-                                f'<div style="font-family: \'Montserrat\', sans-serif; font-size: clamp(1.2rem, 2vw, 1.6rem); font-weight: 800; color: {t_val_color}; margin: 2px 0;">{latest_score:+.1f}</div>'
-                                f'<div style="display: flex; align-items: center; gap: 5px; margin-top: 4px;">{delta_tag}</div>'
-                                '</div>'
-                            )
-                        
-                        kpi_html += '</div>'
-                        st.markdown(kpi_html, unsafe_allow_html=True)
-
-            # --- Regional News Feed at the Bottom (Isolated Fragment for Dynamic Rendering) ---
-            def render_live_intelligence_feed(region_payloads, selected_region, is_light, date_range):
-                total_events = len(region_payloads)
-                bullish_count = int((region_payloads['sentiment_index'] >= 0.5).sum()) if not region_payloads.empty else 0
-                bearish_count = int((region_payloads['sentiment_index'] <= -0.5).sum()) if not region_payloads.empty else 0
-                neutral_count = total_events - bullish_count - bearish_count
-
-                with st.container(border=True, key="live_intelligence_feed_container"):
-                    feed_header_col1, feed_header_col2 = st.columns([0.42, 0.58], vertical_alignment="center")
-                    with feed_header_col1:
-                        st.markdown(f"""<div style="display: flex; align-items: center; gap: 8px; margin: 0; padding: 0; min-height: 38px;"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.4); flex-shrink: 0;"></span><span style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); font-family: 'Montserrat', sans-serif; line-height: 1.2;">{selected_region} Live Intelligence Feed</span></div>""", unsafe_allow_html=True)
-                    with feed_header_col2:
-                        feed_pill_options = [
-                            f"All {total_events}",
-                            f"Bullish {bullish_count}",
-                            f"Bearish {bearish_count}",
-                            f"Neutral {neutral_count}"
-                        ]
-                        selected_feed_pill = render_segmented_filter("feed_filter", feed_pill_options, default_ix=0, key="feed_sentiment_pills")
-
-                    if selected_feed_pill and "Bullish" in selected_feed_pill:
-                        feed_display_payloads = region_payloads[region_payloads['sentiment_index'] >= 0.5]
-                        sentiment_label = "Bullish"
-                    elif selected_feed_pill and "Bearish" in selected_feed_pill:
-                        feed_display_payloads = region_payloads[region_payloads['sentiment_index'] <= -0.5]
-                        sentiment_label = "Bearish"
-                    elif selected_feed_pill and ("Neutral" in selected_feed_pill or "Noise" in selected_feed_pill):
-                        feed_display_payloads = region_payloads[(region_payloads['sentiment_index'] > -0.5) & (region_payloads['sentiment_index'] < 0.5)]
-                        sentiment_label = "Neutral"
-                    else:
-                        feed_display_payloads = region_payloads
-                        sentiment_label = "All"
-
-                    st.markdown(f"""
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 4px 10px 4px; border-bottom: 1px solid var(--feed-card-border); margin-bottom: 10px;">
-                        <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); font-family: 'Montserrat', sans-serif; letter-spacing: 0.04em;">
-                            STREAMING {len(feed_display_payloads)} {sentiment_label.upper()} HEADLINES
-                        </span>
-                    </div>
-                    """, unsafe_allow_html=True)
-
-                    # Directly render top headlines in a scrollable feed container
-                    html_feed = '<div class="news-feed-scroll">'
-                    if not feed_display_payloads.empty:
-                        for _, row in feed_display_payloads.iterrows():
-                            sentiment = row['sentiment_index']
-                            if date_range in ["4 Hours", "4 Hour", "4H", "6 Hours", "6 Hour", "6H", "12 Hours", "12 Hour", "12H", "1 Day", "1Day", "1D", "24 Hours", "24 Hour", "24H"]:
-                                time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
-                            else:
-                                time_str = pd.to_datetime(row['timestamp']).strftime('%b %d, %H:%M')
-                            ticker_label = row.get('index_ticker', 'Macro')
-                            
-                            parsed = clean_news_item(row['raw_text'])
-                            clean_headline = parsed['headline']
-                            source = parsed['source']
-                            
-                            # Determine Sentiment & Neutral status
-                            if abs(sentiment) < 0.5:
-                                status_badge = f'<span style="background: {"rgba(148, 163, 184, 0.2)" if is_light else "rgba(148, 163, 184, 0.18)"}; border: 1px solid {"rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.45)"}; color: {"#475569" if is_light else "#cbd5e1"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">NEUTRAL</span>'
-                                score_color = "#64748b" if is_light else "#94a3b8"
-                                score_bg = "rgba(148, 163, 184, 0.15)" if is_light else "rgba(148, 163, 184, 0.12)"
-                                score_border = "rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.3)"
-                                card_border = "#94a3b8" if is_light else "#64748b"
-                            elif sentiment >= 0.5:
-                                status_badge = f'<span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: {"#059669" if is_light else "#34d399"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BULLISH</span>'
-                                score_color = "#059669" if is_light else "#10b981"
-                                score_bg = "rgba(16, 185, 129, 0.15)" if is_light else "rgba(16, 185, 129, 0.12)"
-                                score_border = "rgba(16, 185, 129, 0.35)" if is_light else "rgba(16, 185, 129, 0.3)"
-                                card_border = "#10b981"
-                            else:
-                                status_badge = f'<span style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: {"#dc2626" if is_light else "#f87171"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BEARISH</span>'
-                                score_color = "#dc2626" if is_light else "#ef4444"
-                                score_bg = "rgba(239, 68, 68, 0.15)" if is_light else "rgba(239, 68, 68, 0.12)"
-                                score_border = "rgba(239, 68, 68, 0.35)" if is_light else "rgba(239, 68, 68, 0.3)"
-                                card_border = "#ef4444"
-                            
-                            source_badge = f'<span style="background: {"rgba(0, 0, 0, 0.04)" if is_light else "rgba(255, 255, 255, 0.04)"}; border: 1px solid {"rgba(0, 0, 0, 0.08)" if is_light else "rgba(255, 255, 255, 0.08)"}; color: {"#475569" if is_light else "#94a3b8"}; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">{source}</span>' if source else ""
-                            
-                            escaped_headline = html.escape(clean_headline)
-                            badges_markup = (
-                                f'<span style="font-family: \'IBM Plex Sans\', sans-serif; font-size: 0.75rem; font-weight: 500; color: {"#475569" if is_light else "#94a3b8"}; background: {"rgba(0,0,0,0.04)" if is_light else "rgba(255,255,255,0.04)"}; border: 1px solid {"rgba(0,0,0,0.08)" if is_light else "rgba(255,255,255,0.08)"}; padding: 2px 7px; border-radius: 4px; flex-shrink: 0;">{time_str}</span>'
-                                f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.75rem; font-weight: 700; color: {"#334155" if is_light else "#f8fafc"}; background: {"rgba(0, 0, 0, 0.05)" if is_light else "rgba(255, 255, 255, 0.06)"}; border: 1px solid {"rgba(0, 0, 0, 0.12)" if is_light else "rgba(255, 255, 255, 0.12)"}; padding: 2px 8px; border-radius: 4px; flex-shrink: 0;">{ticker_label}</span>'
-                                f'{source_badge}{status_badge}'
-                            )
-                            score_markup = f'<div style="flex-shrink: 0;"><span style="font-family: \'Montserrat\', sans-serif; font-size: 0.8rem; font-weight: 700; color: {score_color}; background: {score_bg}; border: 1px solid {score_border}; padding: 3px 9px; border-radius: 4px; letter-spacing: 0.02em;">{sentiment:+.1f}</span></div>'
-                            card_top = f'<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">{badges_markup}</div>{score_markup}</div>'
-                            card_body = f'<div style="font-size: 0.92rem; color: {"#0f172a" if is_light else "#f8fafc"}; font-weight: 500; line-height: 1.5; font-family: \'IBM Plex Sans\', sans-serif;">{escaped_headline}</div>'
-                            
-                            html_feed += f'<div class="news-item-card" style="border-left: 3px solid {card_border};">{card_top}{card_body}</div>'
-                    else:
-                        html_feed += f'<div style="color: var(--text-muted); font-size: 0.88rem; padding: 18px; text-align: center; font-family: \'IBM Plex Sans\', sans-serif;">No news events matching the selected sentiment filter for {selected_region}.</div>'
-
-                    html_feed += '</div>'
-                    st.markdown(html_feed, unsafe_allow_html=True)
-
-            region_payloads = display_payloads[display_payloads['market_region'] == selected_region]
-            if not region_payloads.empty:
-                region_payloads = region_payloads.sort_values('timestamp', ascending=False)
-            render_live_intelligence_feed(region_payloads, selected_region, is_light, date_range)
                 
+                # Add bold prominent line for Global EMA Trend on top
+                ema_color = '#0f172a' if is_light else '#f8fafc'
+                fig_area.add_trace(go.Scatter(
+                    x=plot_trend_x, y=df_trend['EMA_Index'],
+                    mode='lines',
+                    line=dict(color=ema_color, width=3.2, shape='linear'), 
+                    name=f'{selected_region} Trend ({ema_window}P EMA)'
+                ))
+                
+                fig_area.update_layout(
+                    height=370, margin=dict(l=0, r=0, t=10, b=0),
+                    plot_bgcolor="rgba(255,255,255,0.4)" if is_light else "rgba(0,0,0,0)",
+                    paper_bgcolor="rgba(0,0,0,0)",
+                    hovermode="x unified",
+                    legend=dict(
+                        orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0,
+                        font=dict(color="#0f172a" if is_light else "#f8fafc", size=11, family="Montserrat")
+                    ),
+                    xaxis=dict(
+                        showgrid=True, gridcolor='rgba(148, 163, 184, 0.22)' if is_light else 'rgba(255,255,255,0.06)',
+                        showline=True, linecolor='rgba(100, 116, 139, 0.35)' if is_light else 'rgba(255,255,255,0.15)', linewidth=1,
+                        ticks='outside', tickcolor='rgba(100, 116, 139, 0.35)' if is_light else 'rgba(255,255,255,0.25)', ticklen=4,
+                        title=dict(text=f"<b>TIMELINE • {tz_abbr}</b>", font=dict(size=11, color="#334155" if is_light else "#cbd5e1", family="Montserrat")),
+                        tickfont=dict(size=10, color="#334155" if is_light else "#94a3b8", family="IBM Plex Sans")
+                    ),
+                    yaxis=dict(
+                        range=[-105, 105],
+                        dtick=25,
+                        fixedrange=True,
+                        showgrid=True, gridcolor='rgba(148, 163, 184, 0.22)' if is_light else 'rgba(255,255,255,0.06)',
+                        zeroline=True, zerolinecolor='rgba(148, 163, 184, 0.45)' if is_light else 'rgba(148, 163, 184, 0.35)', zerolinewidth=1.5,
+                        showline=True, linecolor='rgba(100, 116, 139, 0.35)' if is_light else 'rgba(255,255,255,0.15)', linewidth=1,
+                        ticks='outside', tickcolor='rgba(100, 116, 139, 0.35)' if is_light else 'rgba(255,255,255,0.25)', ticklen=4,
+                        title=dict(text="<b>OPTIMISM SCORE</b>", font=dict(size=11, color="#334155" if is_light else "#cbd5e1", family="Montserrat")),
+                        tickfont=dict(size=10, color="#0f172a" if is_light else "#f8fafc", family="IBM Plex Sans"),
+                        side="right"
+                    )
+                )
+                st.plotly_chart(
+                    fig_area,
+                    use_container_width=True,
+                    config={
+                        'displayModeBar': 'hover',
+                        'scrollZoom': False,
+                        'displaylogo': False,
+                        'modeBarButtonsToRemove': ['zoom2d', 'zoomIn2d', 'zoomOut2d']
+                    }
+                )
 
-        else:
-            st.warning("No data found for the selected parameters.")
+                # --- Mini KPI Tiles for Individual Indices (Inside same container for flush borders) ---
+                valid_tickers = [t for t in active_tickers if t != 'UNKNOWN']
+                if valid_tickers:
+                    kpi_html = '<div class="mini-kpi-grid">'
+                    
+                    for ticker in valid_tickers:
+                        t_sub = filtered_signals[filtered_signals['index_ticker'] == ticker].sort_values('timestamp')
+                        t_grp = t_sub.groupby(pd.Grouper(key='timestamp', freq=freq_str))['sentiment_index'].mean().dropna()
+                        latest_score = t_grp.iloc[-1] if len(t_grp) > 0 else 0
+                        prev_score = t_grp.iloc[-2] if len(t_grp) > 1 else latest_score
+                        delta_idx = latest_score - prev_score
+                        
+                        if abs(latest_score) < 0.5:
+                            ticker_status = "NEUTRAL"
+                            t_status_color = "#475569" if is_light else "#94a3b8"
+                            t_status_bg = "rgba(148, 163, 184, 0.18)" if is_light else "rgba(148, 163, 184, 0.12)"
+                            t_status_border = "rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.3)"
+                            t_card_border = "#94a3b8" if is_light else "#64748b"
+                            t_val_color = "#334155" if is_light else "#cbd5e1"
+                        elif latest_score >= 0.5:
+                            ticker_status = "BULLISH"
+                            t_status_color = "#059669" if is_light else "#34d399"
+                            t_status_bg = "rgba(16, 185, 129, 0.15)"
+                            t_status_border = "rgba(16, 185, 129, 0.35)"
+                            t_card_border = "#10b981"
+                            t_val_color = "#059669" if is_light else "#10b981"
+                        else:
+                            ticker_status = "BEARISH"
+                            t_status_color = "#dc2626" if is_light else "#f87171"
+                            t_status_bg = "rgba(239, 68, 68, 0.15)"
+                            t_status_border = "rgba(239, 68, 68, 0.35)"
+                            t_card_border = "#ef4444"
+                            t_val_color = "#dc2626" if is_light else "#ef4444"
+                        
+                        if abs(delta_idx) < 0.05:
+                            delta_tag = '<span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">— No change</span>'
+                        elif delta_idx > 0:
+                            delta_tag = f'<span style="font-size: 0.75rem; font-weight: 700; color: #059669; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); padding: 1px 6px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">▲ {abs(delta_idx):.1f}%</span> <span style="font-size: 0.75rem; color: var(--text-secondary);">momentum</span>'
+                        else:
+                            delta_tag = f'<span style="font-size: 0.75rem; font-weight: 700; color: #dc2626; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.25); padding: 1px 6px; border-radius: 4px; font-family: \'Montserrat\', sans-serif;">▼ {abs(delta_idx):.1f}%</span> <span style="font-size: 0.75rem; color: var(--text-secondary);">momentum</span>'
+                        
+                        kpi_html += (
+                            f'<div class="mini-index-card" style="border-left: 3px solid {t_card_border}; margin-bottom: 0;">'
+                            '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">'
+                            f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.78rem; font-weight: 700; color: {"#0f172a" if is_light else "#f8fafc"}; text-transform: uppercase; letter-spacing: 0.03em;">{ticker}</span>'
+                            f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.68rem; font-weight: 800; color: {t_status_color}; background: {t_status_bg}; border: 1px solid {t_status_border}; padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">{ticker_status}</span>'
+                            '</div>'
+                            f'<div style="font-family: \'Montserrat\', sans-serif; font-size: clamp(1.2rem, 2vw, 1.6rem); font-weight: 800; color: {t_val_color}; margin: 2px 0;">{latest_score:+.1f}</div>'
+                            f'<div style="display: flex; align-items: center; gap: 5px; margin-top: 4px;">{delta_tag}</div>'
+                            '</div>'
+                        )
+                    
+                    kpi_html += '</div>'
+                    st.markdown(kpi_html, unsafe_allow_html=True)
 
-    render_dashboard_body()
+        # --- Regional News Feed at the Bottom (Isolated Fragment for Dynamic Rendering) ---
+        def render_live_intelligence_feed(region_payloads, selected_region, is_light, date_range):
+            total_events = len(region_payloads)
+            bullish_count = int((region_payloads['sentiment_index'] >= 0.5).sum()) if not region_payloads.empty else 0
+            bearish_count = int((region_payloads['sentiment_index'] <= -0.5).sum()) if not region_payloads.empty else 0
+            neutral_count = total_events - bullish_count - bearish_count
 
-else:
-    st.info("Database empty. Run the ingestion engine to populate.")
+            with st.container(border=True, key="live_intelligence_feed_container"):
+                feed_header_col1, feed_header_col2 = st.columns([0.42, 0.58], vertical_alignment="center")
+                with feed_header_col1:
+                    st.markdown(f"""<div style="display: flex; align-items: center; gap: 8px; margin: 0; padding: 0; min-height: 38px;"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.4); flex-shrink: 0;"></span><span style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); font-family: 'Montserrat', sans-serif; line-height: 1.2;">{selected_region} Live Intelligence Feed</span></div>""", unsafe_allow_html=True)
+                with feed_header_col2:
+                    feed_pill_options = [
+                        f"All {total_events}",
+                        f"Bullish {bullish_count}",
+                        f"Bearish {bearish_count}",
+                        f"Neutral {neutral_count}"
+                    ]
+                    selected_feed_pill = render_segmented_filter("feed_filter", feed_pill_options, default_ix=0, key="feed_sentiment_pills")
+
+                if selected_feed_pill and "Bullish" in selected_feed_pill:
+                    feed_display_payloads = region_payloads[region_payloads['sentiment_index'] >= 0.5]
+                    sentiment_label = "Bullish"
+                elif selected_feed_pill and "Bearish" in selected_feed_pill:
+                    feed_display_payloads = region_payloads[region_payloads['sentiment_index'] <= -0.5]
+                    sentiment_label = "Bearish"
+                elif selected_feed_pill and ("Neutral" in selected_feed_pill or "Noise" in selected_feed_pill):
+                    feed_display_payloads = region_payloads[(region_payloads['sentiment_index'] > -0.5) & (region_payloads['sentiment_index'] < 0.5)]
+                    sentiment_label = "Neutral"
+                else:
+                    feed_display_payloads = region_payloads
+                    sentiment_label = "All"
+
+                st.markdown(f"""
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 4px 10px 4px; border-bottom: 1px solid var(--feed-card-border); margin-bottom: 10px;">
+                    <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); font-family: 'Montserrat', sans-serif; letter-spacing: 0.04em;">
+                        STREAMING {len(feed_display_payloads)} {sentiment_label.upper()} HEADLINES
+                    </span>
+                </div>
+                """, unsafe_allow_html=True)
+
+                # Directly render top headlines in a scrollable feed container
+                html_feed = '<div class="news-feed-scroll">'
+                if not feed_display_payloads.empty:
+                    for _, row in feed_display_payloads.iterrows():
+                        sentiment = row['sentiment_index']
+                        if date_range in ["4 Hours", "4 Hour", "4H", "6 Hours", "6 Hour", "6H", "12 Hours", "12 Hour", "12H", "1 Day", "1Day", "1D", "24 Hours", "24 Hour", "24H"]:
+                            time_str = pd.to_datetime(row['timestamp']).strftime('%H:%M')
+                        else:
+                            time_str = pd.to_datetime(row['timestamp']).strftime('%b %d, %H:%M')
+                        ticker_label = row.get('index_ticker', 'Macro')
+                        
+                        parsed = clean_news_item(row['raw_text'])
+                        clean_headline = parsed['headline']
+                        source = parsed['source']
+                        
+                        # Determine Sentiment & Neutral status
+                        if abs(sentiment) < 0.5:
+                            status_badge = f'<span style="background: {"rgba(148, 163, 184, 0.2)" if is_light else "rgba(148, 163, 184, 0.18)"}; border: 1px solid {"rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.45)"}; color: {"#475569" if is_light else "#cbd5e1"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">NEUTRAL</span>'
+                            score_color = "#64748b" if is_light else "#94a3b8"
+                            score_bg = "rgba(148, 163, 184, 0.15)" if is_light else "rgba(148, 163, 184, 0.12)"
+                            score_border = "rgba(148, 163, 184, 0.35)" if is_light else "rgba(148, 163, 184, 0.3)"
+                            card_border = "#94a3b8" if is_light else "#64748b"
+                        elif sentiment >= 0.5:
+                            status_badge = f'<span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: {"#059669" if is_light else "#34d399"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BULLISH</span>'
+                            score_color = "#059669" if is_light else "#10b981"
+                            score_bg = "rgba(16, 185, 129, 0.15)" if is_light else "rgba(16, 185, 129, 0.12)"
+                            score_border = "rgba(16, 185, 129, 0.35)" if is_light else "rgba(16, 185, 129, 0.3)"
+                            card_border = "#10b981"
+                        else:
+                            status_badge = f'<span style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: {"#dc2626" if is_light else "#f87171"}; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">BEARISH</span>'
+                            score_color = "#dc2626" if is_light else "#ef4444"
+                            score_bg = "rgba(239, 68, 68, 0.15)" if is_light else "rgba(239, 68, 68, 0.12)"
+                            score_border = "rgba(239, 68, 68, 0.35)" if is_light else "rgba(239, 68, 68, 0.3)"
+                            card_border = "#ef4444"
+                        
+                        source_badge = f'<span style="background: {"rgba(0, 0, 0, 0.04)" if is_light else "rgba(255, 255, 255, 0.04)"}; border: 1px solid {"rgba(0, 0, 0, 0.08)" if is_light else "rgba(255, 255, 255, 0.08)"}; color: {"#475569" if is_light else "#94a3b8"}; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; flex-shrink: 0; font-family: \'Montserrat\', sans-serif;">{source}</span>' if source else ""
+                        
+                        escaped_headline = html.escape(clean_headline)
+                        badges_markup = (
+                            f'<span style="font-family: \'IBM Plex Sans\', sans-serif; font-size: 0.75rem; font-weight: 500; color: {"#475569" if is_light else "#94a3b8"}; background: {"rgba(0,0,0,0.04)" if is_light else "rgba(255,255,255,0.04)"}; border: 1px solid {"rgba(0,0,0,0.08)" if is_light else "rgba(255,255,255,0.08)"}; padding: 2px 7px; border-radius: 4px; flex-shrink: 0;">{time_str}</span>'
+                            f'<span style="font-family: \'Montserrat\', sans-serif; font-size: 0.75rem; font-weight: 700; color: {"#334155" if is_light else "#f8fafc"}; background: {"rgba(0, 0, 0, 0.05)" if is_light else "rgba(255, 255, 255, 0.06)"}; border: 1px solid {"rgba(0, 0, 0, 0.12)" if is_light else "rgba(255, 255, 255, 0.12)"}; padding: 2px 8px; border-radius: 4px; flex-shrink: 0;">{ticker_label}</span>'
+                            f'{source_badge}{status_badge}'
+                        )
+                        score_markup = f'<div style="flex-shrink: 0;"><span style="font-family: \'Montserrat\', sans-serif; font-size: 0.8rem; font-weight: 700; color: {score_color}; background: {score_bg}; border: 1px solid {score_border}; padding: 3px 9px; border-radius: 4px; letter-spacing: 0.02em;">{sentiment:+.1f}</span></div>'
+                        card_top = f'<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">{badges_markup}</div>{score_markup}</div>'
+                        card_body = f'<div style="font-size: 0.92rem; color: {"#0f172a" if is_light else "#f8fafc"}; font-weight: 500; line-height: 1.5; font-family: \'IBM Plex Sans\', sans-serif;">{escaped_headline}</div>'
+                        
+                        html_feed += f'<div class="news-item-card" style="border-left: 3px solid {card_border};">{card_top}{card_body}</div>'
+                else:
+                    html_feed += f'<div style="color: var(--text-muted); font-size: 0.88rem; padding: 18px; text-align: center; font-family: \'IBM Plex Sans\', sans-serif;">No news events matching the selected sentiment filter for {selected_region}.</div>'
+
+                html_feed += '</div>'
+                st.markdown(html_feed, unsafe_allow_html=True)
+
+        region_payloads = display_payloads[display_payloads['market_region'] == selected_region]
+        if not region_payloads.empty:
+            region_payloads = region_payloads.sort_values('timestamp', ascending=False)
+        render_live_intelligence_feed(region_payloads, selected_region, is_light, date_range)
+            
+
+    else:
+        st.warning("No data found for the selected parameters.")
+
+render_dashboard()
 
