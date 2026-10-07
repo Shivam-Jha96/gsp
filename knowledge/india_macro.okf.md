@@ -1,11 +1,11 @@
 # India Macro Trading Rules
 
-## Rule 1: RBI Hawkish Tightening Cycle & Sovereign Yield Repricing
-- **Condition:** The RBI Monetary Policy Committee (MPC) reverses its accommodative stance to deliver repo rate hikes (+25 bps) amid headline retail CPI accelerating toward 20-month highs above the 4% medium-term target.
+## Rule 1: RBI Hawkish Policy Pivot & Sovereign Yield Repricing
+- **Condition:** The RBI Monetary Policy Committee (MPC) reverses its accommodative stance to deliver repo rate hikes (+25 bps to 5.5%), initiating a new tightening cycle as headline inflation broadens and tests upper tolerance thresholds.
 - **Action:** Bearish on long-duration sovereign bonds (G-Secs), rate-sensitive real estate, and high-multiple growth equities; Bullish on short-term money market yields, short-tenor commercial paper, and commercial bank Net Interest Margins (NIMs).
 
 ## Rule 2: Food & Fuel Headline Inflation Squeeze on Discretionary Demand
-- **Condition:** Escalating price pressures in food staples (including sugar), chips, and fuel elevate headline CPI consecutively (rising for multiple straight months toward 4.82%), compressing household disposable budgets across rural and urban segments.
+- **Condition:** Escalating price pressures in food staples, perishables, and fuel elevate headline CPI consecutively toward multi-month/20-month highs, compressing household disposable budgets across rural and urban segments.
 - **Action:** Bearish on volume-sensitive mass FMCG, entry-level two-wheelers, and low-tier consumer discretionary; Bullish on upstream agricultural input providers (fertilizers, agrochemicals) and domestic energy exploration and production firms.
 
 ## Rule 3: Rupee Depreciation & Growth-FX Decoupling

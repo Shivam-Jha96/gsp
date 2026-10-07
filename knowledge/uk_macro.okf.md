@@ -13,7 +13,7 @@
 - **Action:** Bearish on 10Y and 30Y nominal UK Gilts; bullish on UK Gilt yield curve steepeners (2s10s and 5s30s).
 
 ## Rule 4: Stagflationary Terms-of-Trade Shock and Sterling Depreciation
-- **Condition:** Elevated imported energy costs coincide with widening fiscal deficits and political volatility (such as high-profile cabinet resignations), breaking the positive correlation between rising nominal Gilt yields and currency appreciation.
+- **Condition:** Elevated imported energy costs coincide with widening fiscal deficits and political volatility, breaking the positive correlation between rising nominal Gilt yields and currency appreciation.
 - **Action:** Bearish on GBP/USD and GBP/EUR; bullish on USD-earning multinational FTSE 100 equities.
 
 ## Rule 5: Policy Rate Transmission and Consumer Credit Impairment

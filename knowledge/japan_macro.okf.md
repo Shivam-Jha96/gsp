@@ -1,7 +1,7 @@
 # Japan Macro Trading Rules
 
 ## Rule 1: BOJ Monetary Normalization, Ultra-Long Yield Spikes, and Emergency Backstop Friction
-- **Condition:** The Bank of Japan proceeds with policy rate hikes and quantitative tightening while ultra-long JGB yields surge to multi-decade records due to fiscal and monetary friction, intensifying sovereign debt servicing concerns and heightening market speculation of emergency central bank bond-buying operations.
+- **Condition:** The Bank of Japan proceeds with rate hikes and quantitative tightening while ultra-long JGB yields surge to multi-decade records due to fiscal and monetary friction, intensifying sovereign debt servicing concerns and heightening market speculation of emergency central bank bond-buying operations.
 - **Action:** Bearish on 20Y-40Y JGBs, Bullish on Japanese mega-cap banking equities, Bullish on JGB 10Y-30Y yield-curve steepeners.
 
 ## Rule 2: Persistent FX Carry Divergence and Asymmetric Intervention Catalysts
