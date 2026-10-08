@@ -1,3 +1,7 @@
+"""
+Unit tests for Valence Public Forward Signal Evaluation & Verification Ledger.
+"""
+
 import os
 import sys
 import tempfile
@@ -36,46 +40,41 @@ class TestForwardTester(unittest.TestCase):
             index_ticker="SPY",
             raw_sentiment=12.5,
             ema_sentiment=8.2,
-            target_position=1.0,
-            simulated_price=580.25,
-            daily_pnl_pct=0.15,
+            directional_stance="BULLISH",
             model_version="clm-8b-v1",
             okf_commit="test_commit",
             ledger_path=self.temp_path
         )
         self.assertEqual(record["region"], "US")
         self.assertEqual(record["index_ticker"], "SPY")
-        self.assertEqual(record["target_position"], 1.0)
+        self.assertEqual(record["directional_stance"], "BULLISH")
         self.assertEqual(record["model_version"], "clm-8b-v1")
 
     def test_load_forward_test_metrics(self):
-        # 1. Flat/cash day (target_position=0, daily_pnl=0)
+        # 1. Neutral signal in deadband
         record_forward_signal(
             region="US",
             index_ticker="SPY",
             raw_sentiment=5.0,
             ema_sentiment=4.0,
-            target_position=0.0,
-            simulated_price=580.0,
-            daily_pnl_pct=0.0,
+            directional_stance="NEUTRAL",
             ledger_path=self.temp_path
         )
-        # 2. Active winning trade
+        # 2. Bullish directional signal
         record_forward_signal(
             region="US",
             index_ticker="SPY",
             raw_sentiment=15.0,
             ema_sentiment=10.0,
-            target_position=1.0,
-            simulated_price=585.0,
-            daily_pnl_pct=0.25,
+            directional_stance="BULLISH",
             ledger_path=self.temp_path
         )
         metrics = load_forward_test_metrics(ledger_path=self.temp_path)
         self.assertEqual(metrics["status"], "ACTIVE_AUDIT")
         self.assertEqual(metrics["record_count"], 2)
-        self.assertEqual(metrics["active_trades"], 1)
-        self.assertEqual(metrics["win_rate_pct"], 100.0)
+        self.assertEqual(metrics["directional_calls"], 1)
+        self.assertEqual(metrics["neutral_filtered"], 1)
+        self.assertEqual(metrics["total_days"], 1)
 
 
 if __name__ == "__main__":

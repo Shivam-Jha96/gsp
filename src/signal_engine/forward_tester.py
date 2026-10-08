@@ -1,8 +1,9 @@
 """
-Public Out-of-Sample Forward Testing & Verification Ledger for Valence.
+Public Out-of-Sample Forward Signal Evaluation & Verification Ledger for Valence.
 
 Maintains an immutable, append-only ledger in reports/forward_test_ledger.csv
-to build a verifiable public track record of signals, paper trade fills, and out-of-sample alpha.
+to build a verifiable public track record of quantitative macroeconomic directional signals,
+deadband filtering efficiency, and predictive accuracy.
 """
 
 import os
@@ -21,11 +22,7 @@ LEDGER_COLUMNS = [
     "index_ticker",
     "raw_sentiment",
     "ema_sentiment",
-    "target_position",
-    "simulated_price",
-    "slippage_bps",
-    "daily_pnl_pct",
-    "cumulative_return_pct",
+    "directional_stance",
     "model_version",
     "okf_commit"
 ]
@@ -43,7 +40,7 @@ def ensure_ledger_initialized(ledger_path: Optional[str] = None):
         with open(path, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
             writer.writerow(LEDGER_COLUMNS)
-        logger.info(f"Initialized forward test ledger at {path}")
+        logger.info(f"Initialized forward signal ledger at {path}")
 
 
 def record_forward_signal(
@@ -51,31 +48,16 @@ def record_forward_signal(
     index_ticker: str,
     raw_sentiment: float,
     ema_sentiment: float,
-    target_position: float,
-    simulated_price: float,
-    slippage_bps: float = 5.0,
-    daily_pnl_pct: float = 0.0,
+    directional_stance: str = "NEUTRAL",
     model_version: str = "clm-8b-v1",
     okf_commit: str = "HEAD",
     ledger_path: Optional[str] = None
 ) -> Dict[str, Any]:
     """
-    Appends a new point-in-time signal to the forward test ledger.
+    Appends a new point-in-time macroeconomic signal to the public forward evaluation ledger.
     """
     ensure_ledger_initialized(ledger_path)
     path = ledger_path or get_ledger_path()
-    
-    # Read existing cumulative return if available
-    cum_ret = 0.0
-    try:
-        df = pd.read_csv(path)
-        if not df.empty and "cumulative_return_pct" in df.columns:
-            last_cum = df["cumulative_return_pct"].dropna().iloc[-1]
-            cum_ret = float(last_cum) + daily_pnl_pct
-        else:
-            cum_ret = daily_pnl_pct
-    except Exception:
-        cum_ret = daily_pnl_pct
 
     now_utc = datetime.now(timezone.utc).isoformat()
     record = [
@@ -84,11 +66,7 @@ def record_forward_signal(
         index_ticker,
         round(raw_sentiment, 4),
         round(ema_sentiment, 4),
-        round(target_position, 1),
-        round(simulated_price, 2),
-        round(slippage_bps, 1),
-        round(daily_pnl_pct, 4),
-        round(cum_ret, 4),
+        directional_stance.upper(),
         model_version,
         okf_commit
     ]
@@ -97,29 +75,28 @@ def record_forward_signal(
         writer = csv.writer(f)
         writer.writerow(record)
 
-    logger.info(f"Recorded forward test row: [{region}] {index_ticker} (EMA: {ema_sentiment:+.2f}, Pos: {target_position})")
+    logger.info(f"Recorded forward signal: [{region}] {index_ticker} (EMA: {ema_sentiment:+.2f}, Stance: {directional_stance.upper()})")
     return dict(zip(LEDGER_COLUMNS, record))
 
 
 def load_forward_test_metrics(ledger_path: Optional[str] = None) -> Dict[str, Any]:
     """
-    Computes summary out-of-sample forward statistics from the ledger.
-    Distinguishes active risk exposure from flat/neutral cash deadband days.
+    Computes summary out-of-sample signal statistics from the public forward evaluation ledger.
+    Evaluates macro conviction (directional calls vs neutral deadband filtering).
     """
     ensure_ledger_initialized(ledger_path)
     path = ledger_path or get_ledger_path()
     try:
         df = pd.read_csv(path)
     except Exception as e:
-        logger.error(f"Error reading forward test ledger: {e}")
+        logger.error(f"Error reading forward signal ledger: {e}")
         return {
             "status": "NO_DATA",
             "record_count": 0,
-            "active_trades": 0,
+            "directional_calls": 0,
+            "neutral_filtered": 0,
             "total_days": 0,
-            "win_rate_pct": None,
-            "realized_sharpe": None,
-            "cumulative_return_pct": 0.0,
+            "directional_hit_rate_pct": None,
             "latest_update": "N/A"
         }
 
@@ -127,49 +104,40 @@ def load_forward_test_metrics(ledger_path: Optional[str] = None) -> Dict[str, An
         return {
             "status": "INITIALIZING",
             "record_count": 0,
-            "active_trades": 0,
+            "directional_calls": 0,
+            "neutral_filtered": 0,
             "total_days": 0,
-            "win_rate_pct": None,
-            "realized_sharpe": None,
-            "cumulative_return_pct": 0.0,
+            "directional_hit_rate_pct": None,
             "latest_update": "Awaiting first live pipeline run"
         }
 
     total_records = len(df)
     unique_dates = len(pd.to_datetime(df["timestamp"]).dt.date.unique())
-    cum_ret = float(df["cumulative_return_pct"].iloc[-1]) if "cumulative_return_pct" in df.columns else 0.0
 
-    # Distinguish active market positions from flat/neutral cash deadband days
-    # Target positions != 0.0 represent genuine active trading risk
-    if "target_position" in df.columns:
-        active_df = df[df["target_position"] != 0.0]
-    elif "daily_pnl_pct" in df.columns:
-        active_df = df[df["daily_pnl_pct"] != 0.0]
+    # Categorize macro conviction:
+    # Directional Calls: high conviction outside neutral deadband (BULLISH or BEARISH)
+    # Neutral Filtered: low conviction within [-5.0, +5.0] deadband
+    if "directional_stance" in df.columns:
+        directional_mask = df["directional_stance"].str.upper().isin(["BULLISH", "BEARISH"])
     else:
-        active_df = df
+        directional_mask = df["ema_sentiment"].abs() >= 5.0
 
-    active_count = len(active_df)
-    active_pnls = active_df["daily_pnl_pct"].dropna() if "daily_pnl_pct" in active_df.columns else pd.Series()
-    
-    # Active Win Rate: strictly across executed active trades
-    if len(active_pnls) > 0:
-        win_rate = float((active_pnls > 0).mean() * 100.0)
-    else:
-        win_rate = None
+    directional_calls = int(directional_mask.sum())
+    neutral_filtered = int((~directional_mask).sum())
 
-    # Realized forward Sharpe: requires at least 5 active daily trade returns with variance
-    if len(active_pnls) >= 5 and active_pnls.std() > 0:
-        realized_sharpe = float((active_pnls.mean() / active_pnls.std()) * np.sqrt(252 * 6.5))
-    else:
-        realized_sharpe = None
+    # Directional Hit Rate (if realized forward moves are present in audit data)
+    directional_hit_rate = None
+    if "forward_hit" in df.columns and directional_calls > 0:
+        valid_hits = df.loc[directional_mask, "forward_hit"].dropna()
+        if len(valid_hits) > 0:
+            directional_hit_rate = round(float(valid_hits.mean() * 100.0), 2)
 
     return {
         "status": "ACTIVE_AUDIT",
         "record_count": total_records,
-        "active_trades": active_count,
+        "directional_calls": directional_calls,
+        "neutral_filtered": neutral_filtered,
         "total_days": unique_dates,
-        "win_rate_pct": round(win_rate, 2) if win_rate is not None else None,
-        "realized_sharpe": round(realized_sharpe, 2) if realized_sharpe is not None else None,
-        "cumulative_return_pct": round(cum_ret, 2),
+        "directional_hit_rate_pct": directional_hit_rate,
         "latest_update": df["timestamp"].iloc[-1] if total_records > 0 else "N/A"
     }

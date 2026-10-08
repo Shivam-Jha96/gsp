@@ -12,7 +12,8 @@ from .ema import calculate_ema
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-# Alpaca Configuration
+# Execution Configuration: Disabled by default for MVP (Signal-Only Engine)
+ENABLE_TRADE_EXECUTION = os.getenv("ENABLE_TRADE_EXECUTION", "false").lower() == "true"
 ALPACA_API_KEY = os.getenv("ALPACA_API_KEY", "dummy_api_key")
 ALPACA_SECRET_KEY = os.getenv("ALPACA_SECRET_KEY", "dummy_secret_key")
 PAPER_TRADING = True
@@ -23,7 +24,7 @@ def get_mock_sentiment_data() -> pd.DataFrame:
     In production, this would query a database or API for real sentiment scores.
     """
     # Create 10 hours of mock data ending now
-    now = pd.Timestamp.utcnow()
+    now = pd.Timestamp.now('UTC')
     dates = pd.date_range(end=now, periods=10, freq='h')
     
     # Simple mock data: alternating sentiment or any pattern
@@ -36,35 +37,41 @@ def get_mock_sentiment_data() -> pd.DataFrame:
 
 def execute_signal(current_ema: float, previous_ema: float, symbol: str = "SPY", qty: float = 1.0):
     """
-    Routes directional signals to Alpaca as OrderRequests based on EMA crossovers.
+    Evaluates directional signals based on EMA crossovers.
+    In MVP mode, logs directional stance without active order execution.
     """
+    # Directional Stance:
+    # If EMA goes from negative/lower to positive/higher -> BUY
+    # If EMA goes from positive/higher to negative/lower -> SELL
+    side = None
+    if current_ema > previous_ema and current_ema > 0:
+        side = OrderSide.BUY
+        stance = "BULLISH"
+    elif current_ema < previous_ema and current_ema < 0:
+        side = OrderSide.SELL
+        stance = "BEARISH"
+    else:
+        stance = "NEUTRAL"
+
+    if stance == "NEUTRAL":
+        logger.info(f"[SIGNAL ENGINE] {symbol} Neutral Deadband -> EMA: {current_ema:+.4f} (Prev: {previous_ema:+.4f}). No action.")
+        return
+
+    logger.info(f"[SIGNAL ENGINE] {symbol} {stance} Stance Detected -> EMA: {current_ema:+.4f} (Prev: {previous_ema:+.4f})")
+
+    if not ENABLE_TRADE_EXECUTION:
+        logger.info(f"[MVP MODE] Trade execution is disabled. Directional signal recorded for research evaluation.")
+        return
+
     try:
         trading_client = TradingClient(ALPACA_API_KEY, ALPACA_SECRET_KEY, paper=PAPER_TRADING)
-        
-        # Simple Strategy:
-        # If EMA goes from negative/lower to positive/higher -> BUY
-        # If EMA goes from positive/higher to negative/lower -> SELL
-        side = None
-        if current_ema > previous_ema and current_ema > 0:
-            side = OrderSide.BUY
-            logger.info(f"Bullish Signal Detected -> Current EMA: {current_ema:.4f}, Prev: {previous_ema:.4f}")
-        elif current_ema < previous_ema and current_ema < 0:
-            side = OrderSide.SELL
-            logger.info(f"Bearish Signal Detected -> Current EMA: {current_ema:.4f}, Prev: {previous_ema:.4f}")
-        else:
-            logger.info("Neutral Signal -> No trade execution required.")
-            return
-
         if side:
-            # Create Market Order
             order_data = MarketOrderRequest(
                 symbol=symbol,
                 qty=qty,
                 side=side,
                 time_in_force=TimeInForce.GTC
             )
-            
-            # Submit Order
             logger.info(f"Routing {side.name} order for {qty} {symbol} to Alpaca Paper Trading...")
             order = trading_client.submit_order(order_data=order_data)
             logger.info(f"Order successful! Order ID: {order.id}")

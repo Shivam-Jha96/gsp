@@ -1,1 +1,1 @@
-timestamp,region,index_ticker,raw_sentiment,ema_sentiment,target_position,simulated_price,slippage_bps,daily_pnl_pct,cumulative_return_pct,model_version,okf_commit
+timestamp,region,index_ticker,raw_sentiment,ema_sentiment,directional_stance,model_version,okf_commit

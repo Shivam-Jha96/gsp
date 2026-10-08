@@ -2268,7 +2268,7 @@ def render_regulatory_disclaimer():
             <strong>Educational & Research Use Only:</strong> Valence is an open-source quantitative research platform. Signals, momentum indicators, and directional scores displayed herein do not constitute investment advice, financial promotion, or trade recommendations under SEBI (India), SEC (US), FCA (UK), or other global financial regulatory jurisdictions.
         </div>
         <div style="font-size: 0.72rem; color: #64748b; line-height: 1.5;">
-            <strong>Execution & Data Notice:</strong> All automated trading triggers are strictly simulated via Alpaca Paper Trading. Real capital should never be deployed solely based on directional sentiment projections. Ingested news events are processed for research demonstrations under fair-use parameters.
+            <strong>Execution & Data Notice:</strong> Valence operates strictly as a quantitative macro sentiment and directional signal intelligence engine. Automated broker execution is disabled in this MVP. Real capital should never be deployed solely based on directional sentiment projections. Ingested news events are processed for research demonstrations under fair-use parameters.
         </div>
     </div>
     """
@@ -2277,30 +2277,36 @@ def render_regulatory_disclaimer():
 
 def render_forward_test_ledger_section():
     """
-    Renders the public, out-of-sample forward-testing verification ledger in the terminal.
+    Renders the public, out-of-sample forward signal evaluation ledger in the terminal.
     """
     try:
         from signal_engine.forward_tester import load_forward_test_metrics
         metrics = load_forward_test_metrics()
     except Exception:
-        metrics = {"status": "INITIALIZING", "record_count": 0, "active_trades": 0, "total_days": 0, "win_rate_pct": None, "realized_sharpe": None, "cumulative_return_pct": 0.0}
+        metrics = {
+            "status": "INITIALIZING",
+            "record_count": 0,
+            "directional_calls": 0,
+            "neutral_filtered": 0,
+            "total_days": 0,
+            "directional_hit_rate_pct": None
+        }
 
     rec_count = metrics.get("record_count", 0)
-    active_trades = metrics.get("active_trades", 0)
+    directional_calls = metrics.get("directional_calls", 0)
+    neutral_filtered = metrics.get("neutral_filtered", 0)
     days = metrics.get("total_days", 0)
-    win_rate = metrics.get("win_rate_pct")
-    sharpe = metrics.get("realized_sharpe")
-    cum_ret = metrics.get("cumulative_return_pct", 0.0)
+    hit_rate = metrics.get("directional_hit_rate_pct")
 
-    win_rate_str = f"{win_rate:.1f}%" if win_rate is not None else "N/A (Warmup)"
-    sharpe_str = f"{sharpe:.2f}" if sharpe is not None else "N/A (Warmup)"
+    hit_rate_str = f"{hit_rate:.1f}%" if hit_rate is not None else "N/A (Warmup)"
 
-    with st.expander("📊 PUBLIC OUT-OF-SAMPLE FORWARD TEST TRACK RECORD (VERIFIABLE LEDGER)", expanded=False):
+    with st.expander("📊 PUBLIC OUT-OF-SAMPLE SIGNAL EVALUATION TRACK RECORD (VERIFIABLE LEDGER)", expanded=False):
         st.markdown("""
         <div style="font-family: 'IBM Plex Sans', sans-serif; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.5;">
-            In accordance with institutional quantitative standards, Valence does not rely on synthetic in-sample backtests. 
-            All directional signals, paper trade fills, and out-of-sample returns are logged to an immutable, append-only public ledger 
-            (<code>reports/forward_test_ledger.csv</code>) committed directly to GitHub.
+            In accordance with institutional quantitative standards, Valence operates in this MVP strictly as a deterministic 
+            macroeconomic directional signal intelligence platform. Automated broker order execution is disabled. 
+            All directional sentiment projections, EMA crossovers, and deadband filter states are logged to an immutable, append-only public ledger 
+            (<code>reports/forward_test_ledger.csv</code>) committed directly to GitHub to measure out-of-sample predictive efficacy.
         </div>
         """, unsafe_allow_html=True)
 
@@ -2308,13 +2314,13 @@ def render_forward_test_ledger_section():
         with col1:
             st.metric("Logged Signals", f"{rec_count:,}")
         with col2:
-            st.metric("Active Trades", f"{active_trades:,}")
+            st.metric("Directional Calls", f"{directional_calls:,}")
         with col3:
-            st.metric("Active Win Rate", win_rate_str)
+            st.metric("Neutral Filtered", f"{neutral_filtered:,}")
         with col4:
-            st.metric("Realized Sharpe", sharpe_str)
+            st.metric("Observed Days", f"{days}")
         with col5:
-            st.metric("Cumulative Alpha", f"{cum_ret:+.2f}%")
+            st.metric("Directional Hit Rate", hit_rate_str)
 
         st.caption("Updated dynamically with each pipeline run. Source: reports/forward_test_ledger.csv")
 
