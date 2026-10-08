@@ -201,20 +201,20 @@ def render_regulatory_disclaimer():
             </div>
             <div class="regulatory-notice-header-right">
                 <span class="regulatory-pill green">NON-CUSTODIAL</span>
-                <span class="regulatory-pill sky">RESEARCH DEMO</span>
+                <span class="regulatory-pill slate">RESEARCH DEMO</span>
                 <span class="regulatory-mono-tag">APACHE-2.0 OPEN-SOURCE</span>
             </div>
         </div>
         <div class="regulatory-grid">
-            <div class="regulatory-subcard sky-border">
+            <div class="regulatory-subcard neutral-border">
                 <div class="regulatory-subcard-header">
                     <div class="regulatory-subcard-title">
                         <span style="font-size: 0.9rem;">🎓</span>
                         <span>Academic & Research Scope</span>
                     </div>
-                    <span class="regulatory-subcard-badge sky">NON-ADVISORY</span>
+                    <span class="regulatory-subcard-badge slate">NON-ADVISORY</span>
                 </div>
-                <div class="regulatory-callout-pill sky">
+                <div class="regulatory-callout-pill amber">
                     NOT INVESTMENT ADVICE OR FINANCIAL PROMOTION
                 </div>
                 <div class="regulatory-bullet-list">
@@ -228,15 +228,15 @@ def render_regulatory_disclaimer():
                     </div>
                 </div>
             </div>
-            <div class="regulatory-subcard purple-border">
+            <div class="regulatory-subcard amber-border">
                 <div class="regulatory-subcard-header">
                     <div class="regulatory-subcard-title">
                         <span style="font-size: 0.9rem;">🛡️</span>
                         <span>Execution Safeguards & Attribution</span>
                     </div>
-                    <span class="regulatory-subcard-badge purple">LOCKOUT ACTIVE</span>
+                    <span class="regulatory-subcard-badge amber">LOCKOUT ACTIVE</span>
                 </div>
-                <div class="regulatory-callout-pill purple">
+                <div class="regulatory-callout-pill red">
                     AUTOMATED BROKER EXECUTION DISABLED
                 </div>
                 <div class="regulatory-bullet-list">

@@ -115,7 +115,7 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
                 <div class="ledger-quick-stats">
                     <span class="ledger-pill"><strong style="color: #f8fafc;">{rec_count:,}</strong> SIGNALS</span>
                     <span class="ledger-pill green"><strong style="color: #34d399;">{hit_rate_str}</strong> HIT RATE</span>
-                    <span class="ledger-pill cyan">OUT-OF-SAMPLE</span>
+                    <span class="ledger-pill slate">OUT-OF-SAMPLE</span>
                 </div>
             </div>
             <div class="ledger-expand-btn">
@@ -126,7 +126,7 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
         <div class="ledger-content">
             <div class="ledger-governance-strip">
                 <div class="ledger-gov-col">
-                    <div class="ledger-gov-pill blue">
+                    <div class="ledger-gov-pill amber">
                         <span class="ledger-gov-icon">🔒</span>
                         <span>ZERO CAPITAL RISK</span>
                     </div>
@@ -144,7 +144,7 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
                     </div>
                 </div>
                 <div class="ledger-gov-col">
-                    <div class="ledger-gov-pill purple">
+                    <div class="ledger-gov-pill slate">
                         <span class="ledger-gov-icon">📁</span>
                         <span>IMMUTABLE LEDGER</span>
                     </div>
@@ -157,12 +157,12 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
                 <div class="ledger-metric-card">
                     <div class="ledger-metric-header">
                         <span class="ledger-metric-title">Logged Signals</span>
-                        <span class="ledger-tag cyan">IMMUTABLE</span>
+                        <span class="ledger-tag slate">IMMUTABLE</span>
                     </div>
                     <div class="ledger-metric-value">{rec_count:,}</div>
                     <div class="ledger-dist-bar">
                         <div class="ledger-dist-segment green" style="width: {directional_pct:.1f}%;" title="Directional ({directional_pct:.1f}%)"></div>
-                        <div class="ledger-dist-segment purple" style="width: {neutral_pct:.1f}%;" title="Neutral ({neutral_pct:.1f}%)"></div>
+                        <div class="ledger-dist-segment neutral" style="width: {neutral_pct:.1f}%;" title="Neutral ({neutral_pct:.1f}%)"></div>
                     </div>
                     <div class="ledger-metric-sub">{directional_pct:.0f}% Dir • {neutral_pct:.0f}% Neut</div>
                 </div>
@@ -178,9 +178,9 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
                 <div class="ledger-metric-card">
                     <div class="ledger-metric-header">
                         <span class="ledger-metric-title">Neutral Filtered</span>
-                        <span class="ledger-tag purple">{neutral_pct:.0f}% VOL</span>
+                        <span class="ledger-tag slate">{neutral_pct:.0f}% VOL</span>
                     </div>
-                    <div class="ledger-metric-value purple">{neutral_filtered:,}</div>
+                    <div class="ledger-metric-value slate">{neutral_filtered:,}</div>
                     <div style="height: 5px; margin: 5px 0 4px 0;"></div>
                     <div class="ledger-metric-sub">Noise rejected by ±0.05 band</div>
                 </div>
