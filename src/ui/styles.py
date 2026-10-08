@@ -1116,8 +1116,9 @@ __THEME_VARS__
 
     /* Public Out-of-Sample Ledger Track Record Collapsible & KPI Grid */
     details.ledger-collapsible {
-        background: var(--card-bg) !important;
+        background: linear-gradient(180deg, rgba(15, 23, 42, 0.85) 0%, rgba(8, 9, 13, 0.95) 100%) !important;
         border: 1px solid var(--card-border) !important;
+        border-top: 2px solid #38bdf8 !important;
         border-radius: 8px !important;
         margin-top: 10px !important;
         margin-bottom: 10px !important;
@@ -1125,15 +1126,16 @@ __THEME_VARS__
         overflow: hidden !important;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
         box-shadow: var(--card-shadow) !important;
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(12px);
     }
     details.ledger-collapsible:hover {
-        border-color: rgba(255, 255, 255, 0.14) !important;
+        border-color: rgba(255, 255, 255, 0.16) !important;
+        border-top-color: #38bdf8 !important;
     }
     details.ledger-collapsible summary.ledger-summary {
         list-style: none !important;
         cursor: pointer !important;
-        padding: 9px 14px !important;
+        padding: 10px 14px !important;
         user-select: none !important;
         display: flex !important;
         align-items: center !important;
@@ -1144,7 +1146,7 @@ __THEME_VARS__
         transition: background 0.2s ease;
     }
     details.ledger-collapsible summary.ledger-summary:hover {
-        background: rgba(255, 255, 255, 0.04);
+        background: rgba(255, 255, 255, 0.05);
     }
     details.ledger-collapsible summary.ledger-summary::-webkit-details-marker,
     details.ledger-collapsible summary.ledger-summary::marker {
@@ -1158,13 +1160,13 @@ __THEME_VARS__
         flex: 1 1 auto;
     }
     .ledger-badge {
-        background: rgba(56, 189, 248, 0.12);
-        border: 1px solid rgba(56, 189, 248, 0.32);
+        background: rgba(56, 189, 248, 0.14);
+        border: 1px solid rgba(56, 189, 248, 0.35);
         color: #38bdf8;
         font-family: 'Montserrat', sans-serif;
         font-size: 0.68rem;
         font-weight: 800;
-        letter-spacing: 0.06em;
+        letter-spacing: 0.08em;
         padding: 3px 8px;
         border-radius: 4px;
         text-transform: uppercase;
@@ -1172,7 +1174,7 @@ __THEME_VARS__
     }
     .ledger-summary-title {
         font-family: 'Montserrat', sans-serif;
-        font-size: 0.82rem;
+        font-size: 0.84rem;
         font-weight: 700;
         color: var(--text-primary);
         letter-spacing: 0.02em;
@@ -1211,6 +1213,11 @@ __THEME_VARS__
         border-color: rgba(56, 189, 248, 0.28);
         color: #38bdf8;
     }
+    .ledger-pill.purple {
+        background: rgba(168, 85, 247, 0.12);
+        border-color: rgba(168, 85, 247, 0.28);
+        color: #a78bfa;
+    }
     .ledger-expand-btn {
         display: inline-flex;
         align-items: center;
@@ -1240,40 +1247,75 @@ __THEME_VARS__
     .ledger-content {
         padding: 14px 16px 14px 16px !important;
     }
-    .ledger-callout {
-        display: flex;
-        align-items: flex-start;
-        gap: 12px;
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        border-left: 3px solid #38bdf8;
-        border-radius: 6px;
-        padding: 10px 14px;
+
+    /* Executive Governance Strip (Visual 3-Tile Row) */
+    .ledger-governance-strip {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 10px;
         margin-bottom: 14px;
     }
-    .ledger-callout-icon {
-        font-size: 1.1rem;
-        line-height: 1.2;
-        flex-shrink: 0;
-        padding-top: 1px;
+    .ledger-gov-col {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 6px;
+        padding: 10px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        transition: all 0.2s ease;
     }
-    .ledger-callout-text {
-        font-family: 'IBM Plex Sans', sans-serif;
-        font-size: 0.82rem;
-        color: var(--text-secondary);
-        line-height: 1.55;
+    .ledger-gov-col:hover {
+        background: rgba(255, 255, 255, 0.04);
+        border-color: rgba(255, 255, 255, 0.12);
     }
-    .ledger-code-pill {
-        display: inline-block;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.74rem;
-        color: #38bdf8;
-        background: rgba(56, 189, 248, 0.10);
-        border: 1px solid rgba(56, 189, 248, 0.25);
-        padding: 1px 6px;
+    .ledger-gov-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.66rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        width: fit-content;
+        padding: 2px 7px;
         border-radius: 4px;
-        margin: 0 2px;
     }
+    .ledger-gov-pill.blue {
+        background: rgba(56, 189, 248, 0.12);
+        border: 1px solid rgba(56, 189, 248, 0.28);
+        color: #38bdf8;
+    }
+    .ledger-gov-pill.green {
+        background: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.28);
+        color: #34d399;
+    }
+    .ledger-gov-pill.purple {
+        background: rgba(168, 85, 247, 0.12);
+        border: 1px solid rgba(168, 85, 247, 0.28);
+        color: #a78bfa;
+    }
+    .ledger-gov-desc {
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 0.77rem;
+        color: #94a3b8;
+        line-height: 1.5;
+    }
+    .ledger-gov-desc strong {
+        color: #f8fafc;
+    }
+    .ledger-gov-desc code {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.72rem;
+        color: #38bdf8;
+        background: rgba(56, 189, 248, 0.08);
+        padding: 1px 4px;
+        border-radius: 3px;
+    }
+
+    /* 5-Metric Responsive Micro-KPI Grid */
     .ledger-metrics-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
@@ -1296,15 +1338,15 @@ __THEME_VARS__
         transform: translateY(-1px);
     }
     .ledger-metric-card.highlight {
-        border-color: rgba(16, 185, 129, 0.28);
-        background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, rgba(15, 17, 24, 0.75) 100%);
+        border-color: rgba(16, 185, 129, 0.32);
+        background: linear-gradient(180deg, rgba(16, 185, 129, 0.07) 0%, rgba(15, 17, 24, 0.85) 100%);
     }
     .ledger-metric-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         gap: 4px;
-        margin-bottom: 4px;
+        margin-bottom: 2px;
     }
     .ledger-metric-title {
         font-family: 'Montserrat', sans-serif;
@@ -1350,23 +1392,54 @@ __THEME_VARS__
     }
     .ledger-metric-value {
         font-family: 'Montserrat', sans-serif;
-        font-size: 1.45rem;
+        font-size: 1.55rem;
         font-weight: 800;
         color: var(--text-primary);
         letter-spacing: -0.02em;
         line-height: 1.2;
-        margin: 2px 0 4px 0;
+        margin: 2px 0 2px 0;
+        font-variant-numeric: tabular-nums;
     }
     .ledger-metric-value.green { color: #34d399; }
     .ledger-metric-value.purple { color: #c084fc; }
     .ledger-metric-value.amber { color: #fbbf24; }
     .ledger-metric-value.red { color: #f87171; }
+
+    /* Visual Distribution & Meter Bars */
+    .ledger-meter-container {
+        height: 5px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        overflow: hidden;
+        margin: 5px 0 4px 0;
+    }
+    .ledger-meter-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+        box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+    }
+    .ledger-dist-bar {
+        display: flex;
+        height: 4px;
+        border-radius: 2px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.06);
+        margin: 5px 0 4px 0;
+    }
+    .ledger-dist-segment.green {
+        background: #10b981;
+    }
+    .ledger-dist-segment.purple {
+        background: #a78bfa;
+    }
     .ledger-metric-sub {
         font-family: 'IBM Plex Sans', sans-serif;
-        font-size: 0.72rem;
+        font-size: 0.70rem;
         color: var(--text-muted);
         line-height: 1.3;
     }
+
     .ledger-footer-bar {
         display: flex;
         justify-content: space-between;
@@ -1403,11 +1476,12 @@ __THEME_VARS__
 
     /* Quantitative Research & Regulatory Notice Card */
     .regulatory-notice-card {
-        background: var(--card-bg) !important;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(10, 14, 23, 0.9) 100%) !important;
         border: 1px solid var(--card-border) !important;
+        border-left: 3px solid #38bdf8 !important;
         border-radius: 8px !important;
-        box-shadow: var(--card-shadow) !important;
-        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+        backdrop-filter: blur(12px);
         padding: 14px 18px 12px 18px !important;
         margin-top: 10px !important;
         margin-bottom: 24px !important;
@@ -1415,6 +1489,7 @@ __THEME_VARS__
     }
     .regulatory-notice-card:hover {
         border-color: rgba(255, 255, 255, 0.14) !important;
+        border-left-color: #38bdf8 !important;
     }
     .regulatory-notice-header {
         display: flex;
@@ -1485,22 +1560,22 @@ __THEME_VARS__
     .regulatory-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 10px;
-        margin-bottom: 10px;
+        gap: 12px;
+        margin-bottom: 12px;
     }
     .regulatory-subcard {
         background: rgba(255, 255, 255, 0.02);
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.06);
         border-radius: 6px;
-        padding: 10px 14px;
+        padding: 12px 14px;
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 8px;
         transition: all 0.2s ease;
     }
     .regulatory-subcard:hover {
         background: rgba(255, 255, 255, 0.035);
-        border-color: rgba(255, 255, 255, 0.10);
+        border-color: rgba(255, 255, 255, 0.12);
     }
     .regulatory-subcard.sky-border {
         border-left: 3px solid #38bdf8;
@@ -1508,25 +1583,90 @@ __THEME_VARS__
     .regulatory-subcard.purple-border {
         border-left: 3px solid #a78bfa;
     }
+    .regulatory-subcard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 6px;
+    }
     .regulatory-subcard-title {
         display: flex;
         align-items: center;
         gap: 6px;
         font-family: 'Montserrat', sans-serif;
-        font-size: 0.74rem;
+        font-size: 0.76rem;
         font-weight: 700;
         color: #e2e8f0;
         letter-spacing: 0.02em;
     }
-    .regulatory-icon {
-        font-size: 0.85rem;
-        line-height: 1;
+    .regulatory-subcard-badge {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.60rem;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        padding: 2px 6px;
+        border-radius: 3px;
+        text-transform: uppercase;
     }
-    .regulatory-subcard-body {
+    .regulatory-subcard-badge.sky {
+        background: rgba(56, 189, 248, 0.12);
+        border: 1px solid rgba(56, 189, 248, 0.28);
+        color: #38bdf8;
+    }
+    .regulatory-subcard-badge.purple {
+        background: rgba(168, 85, 247, 0.12);
+        border: 1px solid rgba(168, 85, 247, 0.28);
+        color: #a78bfa;
+    }
+    .regulatory-callout-pill {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 3px 8px;
+        border-radius: 4px;
+        width: fit-content;
+    }
+    .regulatory-callout-pill.sky {
+        background: rgba(56, 189, 248, 0.10);
+        border: 1px solid rgba(56, 189, 248, 0.25);
+        color: #38bdf8;
+    }
+    .regulatory-callout-pill.purple {
+        background: rgba(168, 85, 247, 0.10);
+        border: 1px solid rgba(168, 85, 247, 0.25);
+        color: #c084fc;
+    }
+    .regulatory-bullet-list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .regulatory-bullet-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
         font-family: 'IBM Plex Sans', sans-serif;
-        font-size: 0.76rem;
+        font-size: 0.75rem;
         color: #94a3b8;
-        line-height: 1.55;
+        line-height: 1.5;
+    }
+    .reg-chip {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.60rem;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        padding: 1px 5px;
+        border-radius: 3px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        color: #cbd5e1;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+    .regulatory-bullet-item strong {
+        color: #e2e8f0;
     }
     .regulatory-bottom-bar {
         display: flex;

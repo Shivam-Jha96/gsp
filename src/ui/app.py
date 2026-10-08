@@ -72,7 +72,16 @@ except Exception:
     render_local_storage_sync_script = state_persistence_mod.render_local_storage_sync_script
 
 # UI Styling & Modular Components
+import importlib
 try:
+    import ui.styles as ui_styles_mod
+    import ui.components as ui_components_mod
+    import ui.components.ledger as ui_ledger_mod
+    import ui.components.header as ui_header_mod
+    importlib.reload(ui_styles_mod)
+    importlib.reload(ui_components_mod)
+    importlib.reload(ui_ledger_mod)
+    importlib.reload(ui_header_mod)
     from ui.styles import inject_global_styles
     from ui.components import (
         make_fragment_decorator,
@@ -85,6 +94,14 @@ try:
         render_regulatory_disclaimer,
     )
 except Exception:
+    import src.ui.styles as ui_styles_mod
+    import src.ui.components as ui_components_mod
+    import src.ui.components.ledger as ui_ledger_mod
+    import src.ui.components.header as ui_header_mod
+    importlib.reload(ui_styles_mod)
+    importlib.reload(ui_components_mod)
+    importlib.reload(ui_ledger_mod)
+    importlib.reload(ui_header_mod)
     from src.ui.styles import inject_global_styles
     from src.ui.components import (
         make_fragment_decorator,

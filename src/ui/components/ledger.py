@@ -80,16 +80,31 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
     days = metrics.get("total_days", 0)
     hit_rate = metrics.get("directional_hit_rate_pct")
 
+    directional_pct = (directional_calls / rec_count * 100.0) if rec_count > 0 else 0.0
+    neutral_pct = (neutral_filtered / rec_count * 100.0) if rec_count > 0 else 0.0
+    day_label = "Day" if days == 1 else "Days"
+
     if hit_rate is not None:
         hit_rate_str = f"{hit_rate:.1f}%"
+        hit_rate_clamped = min(max(hit_rate, 0.0), 100.0)
         hr_val_class = "green" if hit_rate >= 50.0 else "red"
         hr_tag_class = "green" if hit_rate >= 50.0 else "red"
         hr_sub_text = "Out-of-sample directional efficacy"
+        meter_markup = f"""
+        <div class="ledger-meter-container">
+            <div class="ledger-meter-fill" style="width: {hit_rate_clamped:.1f}%;"></div>
+        </div>
+        """
     else:
         hit_rate_str = "N/A (Warmup)"
         hr_val_class = "amber"
         hr_tag_class = "amber"
         hr_sub_text = "Calibrating next evaluation window"
+        meter_markup = """
+        <div class="ledger-meter-container">
+            <div style="height: 100%; width: 100%; background: rgba(245, 158, 11, 0.2); border-radius: 999px;"></div>
+        </div>
+        """
 
     ledger_html = f"""
     <details class="ledger-collapsible" open>
@@ -111,16 +126,38 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
             </div>
         </summary>
         <div class="ledger-content">
-            <div class="ledger-callout">
-                <div class="ledger-callout-icon">🛡️</div>
-                <div class="ledger-callout-text">
-                    In accordance with institutional quantitative standards, Valence operates in this MVP strictly as a deterministic 
-                    macroeconomic directional signal intelligence platform. Automated broker order execution is disabled. 
-                    All directional sentiment projections, EMA crossovers, and deadband filter states are logged to an immutable, append-only public ledger 
-                    (<span class="ledger-code-pill">reports/forward_test_ledger.csv</span>) committed directly to GitHub to measure out-of-sample predictive efficacy.
+            <!-- Executive Governance Strip: Visual 3-Tile Row -->
+            <div class="ledger-governance-strip">
+                <div class="ledger-gov-col">
+                    <div class="ledger-gov-pill blue">
+                        <span class="ledger-gov-icon">🔒</span>
+                        <span>ZERO CAPITAL RISK</span>
+                    </div>
+                    <div class="ledger-gov-desc">
+                        Automated broker routing is <strong>disabled</strong>. Valence operates strictly as deterministic macroeconomic signal intelligence.
+                    </div>
+                </div>
+                <div class="ledger-gov-col">
+                    <div class="ledger-gov-pill green">
+                        <span class="ledger-gov-icon">⚡</span>
+                        <span>SYSTEM-ONE CLM</span>
+                    </div>
+                    <div class="ledger-gov-desc">
+                        Native choice spreads <code>P(Bullish) - P(Bearish)</code> conditioned against regional OKF rules with zero generative drift.
+                    </div>
+                </div>
+                <div class="ledger-gov-col">
+                    <div class="ledger-gov-pill purple">
+                        <span class="ledger-gov-icon">📁</span>
+                        <span>IMMUTABLE LEDGER</span>
+                    </div>
+                    <div class="ledger-gov-desc">
+                        Directional calls and deadband states are committed to <code>reports/forward_test_ledger.csv</code> on GitHub.
+                    </div>
                 </div>
             </div>
 
+            <!-- 5-Metric Micro KPI Grid with Visual Meters -->
             <div class="ledger-metrics-grid">
                 <div class="ledger-metric-card">
                     <div class="ledger-metric-header">
@@ -128,46 +165,55 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
                         <span class="ledger-tag cyan">IMMUTABLE</span>
                     </div>
                     <div class="ledger-metric-value">{rec_count:,}</div>
-                    <div class="ledger-metric-sub">Append-only audit trail</div>
+                    <div class="ledger-dist-bar">
+                        <div class="ledger-dist-segment green" style="width: {directional_pct:.1f}%;" title="Directional ({directional_pct:.1f}%)"></div>
+                        <div class="ledger-dist-segment purple" style="width: {neutral_pct:.1f}%;" title="Neutral ({neutral_pct:.1f}%)"></div>
+                    </div>
+                    <div class="ledger-metric-sub">{directional_pct:.0f}% Dir • {neutral_pct:.0f}% Neut</div>
                 </div>
 
                 <div class="ledger-metric-card">
                     <div class="ledger-metric-header">
                         <span class="ledger-metric-title">Directional Calls</span>
-                        <span class="ledger-tag green">ACTIVE</span>
+                        <span class="ledger-tag green">{directional_pct:.0f}% VOL</span>
                     </div>
                     <div class="ledger-metric-value green">{directional_calls:,}</div>
-                    <div class="ledger-metric-sub">Bullish & Bearish signals</div>
+                    <div style="height: 5px; margin: 5px 0 4px 0;"></div>
+                    <div class="ledger-metric-sub">Bullish & Bearish momentum</div>
                 </div>
 
                 <div class="ledger-metric-card">
                     <div class="ledger-metric-header">
                         <span class="ledger-metric-title">Neutral Filtered</span>
-                        <span class="ledger-tag purple">DEADBAND</span>
+                        <span class="ledger-tag purple">{neutral_pct:.0f}% VOL</span>
                     </div>
                     <div class="ledger-metric-value purple">{neutral_filtered:,}</div>
-                    <div class="ledger-metric-sub">Noise threshold rejected</div>
+                    <div style="height: 5px; margin: 5px 0 4px 0;"></div>
+                    <div class="ledger-metric-sub">Noise rejected by ±0.05 band</div>
                 </div>
 
                 <div class="ledger-metric-card">
                     <div class="ledger-metric-header">
-                        <span class="ledger-metric-title">Observed Days</span>
+                        <span class="ledger-metric-title">Observed Horizon</span>
                         <span class="ledger-tag amber">WINDOW</span>
                     </div>
-                    <div class="ledger-metric-value amber">{days}</div>
+                    <div class="ledger-metric-value amber">{days} <span style="font-size: 0.95rem; font-weight: 600; color: #94a3b8;">{day_label}</span></div>
+                    <div style="height: 5px; margin: 5px 0 4px 0;"></div>
                     <div class="ledger-metric-sub">Live tracking horizon</div>
                 </div>
 
                 <div class="ledger-metric-card highlight">
                     <div class="ledger-metric-header">
                         <span class="ledger-metric-title">Directional Hit Rate</span>
-                        <span class="ledger-tag {hr_tag_class}">EFFICACY</span>
+                        <span class="ledger-tag {hr_tag_class}">ACCURACY</span>
                     </div>
                     <div class="ledger-metric-value {hr_val_class}">{hit_rate_str}</div>
+                    {meter_markup}
                     <div class="ledger-metric-sub">{hr_sub_text}</div>
                 </div>
             </div>
 
+            <!-- Footer Telemetry Status Bar -->
             <div class="ledger-footer-bar">
                 <div class="ledger-footer-left">
                     <span class="ledger-status-dot"></span>

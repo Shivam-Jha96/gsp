@@ -193,37 +193,70 @@ def render_regulatory_disclaimer():
     <div class="regulatory-notice-card">
         <div class="regulatory-notice-header">
             <div class="regulatory-notice-header-left">
-                <span class="regulatory-badge">⚖️ REGULATORY GOVERNANCE</span>
-                <span class="regulatory-title">Quantitative Research & Compliance Disclosures</span>
+                <span class="regulatory-badge">⚖️ INSTITUTIONAL COMPLIANCE</span>
+                <span class="regulatory-title">Quantitative Research & Governance Disclosures</span>
             </div>
             <div class="regulatory-notice-header-right">
                 <span class="regulatory-pill green">NON-CUSTODIAL</span>
-                <span class="regulatory-pill sky">RESEARCH ONLY</span>
-                <span class="regulatory-mono-tag">OPEN-SOURCE TERMINAL</span>
+                <span class="regulatory-pill sky">RESEARCH DEMO</span>
+                <span class="regulatory-mono-tag">APACHE-2.0 OPEN-SOURCE</span>
             </div>
         </div>
         <div class="regulatory-grid">
+            <!-- Left Card: Academic & Research Scope -->
             <div class="regulatory-subcard sky-border">
-                <div class="regulatory-subcard-title">
-                    <span class="regulatory-icon">🎓</span>
-                    <span>Educational & Research Use Only</span>
+                <div class="regulatory-subcard-header">
+                    <div class="regulatory-subcard-title">
+                        <span style="font-size: 0.9rem;">🎓</span>
+                        <span>Academic & Research Scope</span>
+                    </div>
+                    <span class="regulatory-subcard-badge sky">NON-ADVISORY</span>
                 </div>
-                <div class="regulatory-subcard-body">
-                    Valence is an open-source quantitative research platform. Signals, momentum indicators, and directional scores displayed herein do not constitute investment advice, financial promotion, or trade recommendations under SEBI (India), SEC (US), FCA (UK), or other global financial regulatory jurisdictions.
+                
+                <div class="regulatory-callout-pill sky">
+                    NOT INVESTMENT ADVICE OR FINANCIAL PROMOTION
+                </div>
+
+                <div class="regulatory-bullet-list">
+                    <div class="regulatory-bullet-item">
+                        <span class="reg-chip">JURISDICTIONS</span>
+                        <span>Valence is an open-source research engine. It does not provide trade advice or portfolio management under <strong>SEBI (India)</strong>, <strong>SEC (US)</strong>, <strong>FCA (UK)</strong>, or global authorities.</span>
+                    </div>
+                    <div class="regulatory-bullet-item">
+                        <span class="reg-chip">SIGNALS</span>
+                        <span>All sentiment scores, momentum indicators, and directional biases represent probabilistic models and must not be construed as investment recommendations.</span>
+                    </div>
                 </div>
             </div>
+
+            <!-- Right Card: Execution Safeguards & Attribution -->
             <div class="regulatory-subcard purple-border">
-                <div class="regulatory-subcard-title">
-                    <span class="regulatory-icon">🛡️</span>
-                    <span>Execution Safeguards & Fair-Use Attribution</span>
+                <div class="regulatory-subcard-header">
+                    <div class="regulatory-subcard-title">
+                        <span style="font-size: 0.9rem;">🛡️</span>
+                        <span>Execution Safeguards & Attribution</span>
+                    </div>
+                    <span class="regulatory-subcard-badge purple">LOCKOUT ACTIVE</span>
                 </div>
-                <div class="regulatory-subcard-body">
-                    Valence operates strictly as a quantitative macro sentiment and directional signal intelligence engine. Automated broker execution is disabled in this MVP. Real capital should never be deployed solely based on directional sentiment projections. Ingested news events are processed for research demonstrations under fair-use parameters.
+
+                <div class="regulatory-callout-pill purple">
+                    AUTOMATED BROKER EXECUTION DISABLED
+                </div>
+
+                <div class="regulatory-bullet-list">
+                    <div class="regulatory-bullet-item">
+                        <span class="reg-chip">CAPITAL</span>
+                        <span>Automated broker order routing is hard-disabled in this MVP. Real capital should never be allocated solely based on directional sentiment projections.</span>
+                    </div>
+                    <div class="regulatory-bullet-item">
+                        <span class="reg-chip">NEWS DATA</span>
+                        <span>Global financial news events are ingested, filtered, and evaluated solely for algorithmic demonstration under fair-use research parameters.</span>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="regulatory-bottom-bar">
-            <span>Valence Quantitative Terminal • Contrastive Language Modeling (CLM-8B System-One) • Regional OKF Policy Rules</span>
+            <span>VALENCE QUANTITATIVE TERMINAL • SYSTEM-ONE CONTRASTIVE MODEL (CLM-8B) • REGIONAL OKF POLICY RULES</span>
             <span class="regulatory-bottom-right">PROBABILISTIC INFERENCE • NOT INVESTMENT ADVICE</span>
         </div>
     </div>
