@@ -921,21 +921,22 @@ Reports are automatically saved to `reports/benchmark_report.md` and `reports/be
 
 ### 6.3 Unit Testing & Invariant Verification Suite
 
-Valence enforces zero-regression quality through an automated unit test suite (`tests/unit/`) comprising **66 tests** across 11 modules:
+Valence enforces zero-regression quality through an automated unit test suite (`tests/unit/`) comprising **66 tests** across 12 modules:
 
 | Test Module | Coverage & Verification Invariants | Test Count |
 | :--- | :--- | :---: |
-| [`test_scoring_math.py`](file:///d:/Dev/repos/gsp/tests/unit/test_scoring_math.py) | Mathematical invariant bounds: $P \in \Delta^2$, $S_{\text{rel}} \in [-1.0, 1.0]$, $M \ge 0$, and scale $[-100, 100]$. | 8 |
-| [`test_signal_engine.py`](file:///d:/Dev/repos/gsp/tests/unit/test_signal_engine.py) | Span 4 & Span 12 recursive EMA accuracy, deadband $\pm 5.0$ filtering, trade execution lockout. | 9 |
-| [`test_backtest_causality.py`](file:///d:/Dev/repos/gsp/tests/unit/test_backtest_causality.py) | Point-in-time causality, strictly preventing future price return look-ahead leakage. | 3 |
-| [`test_classifier_and_registry.py`](file:///d:/Dev/repos/gsp/tests/unit/test_classifier_and_registry.py) | Regional affinity classifier, central bank feed ingestion, zero cross-region contaminant leakage. | 8 |
-| [`test_dedup_and_sentiment.py`](file:///d:/Dev/repos/gsp/tests/unit/test_dedup_and_sentiment.py) | Canonical SHA-256 fingerprint deduplication across syndicated articles. | 4 |
-| [`test_forward_tester.py`](file:///d:/Dev/repos/gsp/tests/unit/test_forward_tester.py) | Append-only public forward ledger, in-memory metric calculation fallback, sync from DataFrame. | 6 |
-| [`test_okf_updater.py`](file:///d:/Dev/repos/gsp/tests/unit/test_okf_updater.py) | Resilient Gemini model fallback chain (`gemini-3.8-flash` $\to$ `3.7` $\to$ `3.5-lite`) and rate pacing. | 3 |
+| [`test_benchmark_metrics.py`](file:///d:/Dev/repos/gsp/tests/unit/test_benchmark_metrics.py) | Predictive and quant benchmark metrics: Information Coefficient, Rank IC, directional hit rate, Expected Calibration Error (ECE), Brier score, Sharpe, Sortino, Max Drawdown, Calmar ratio, and Granger causality. | 11 |
 | [`test_state_persistence.py`](file:///d:/Dev/repos/gsp/tests/unit/test_state_persistence.py) | Dual-layer session state, URL query-param synchronization, and localStorage rehydration. | 11 |
+| [`test_signal_engine.py`](file:///d:/Dev/repos/gsp/tests/unit/test_signal_engine.py) | Span 4 & Span 12 recursive EMA accuracy, deadband $\pm 5.0$ filtering, trade execution lockout. | 9 |
+| [`test_classifier_and_registry.py`](file:///d:/Dev/repos/gsp/tests/unit/test_classifier_and_registry.py) | Regional affinity classifier, central bank feed ingestion, zero cross-region contaminant leakage. | 7 |
+| [`test_forward_tester.py`](file:///d:/Dev/repos/gsp/tests/unit/test_forward_tester.py) | Append-only public forward ledger, in-memory metric calculation fallback, sync from DataFrame. | 6 |
 | [`test_telemetry.py`](file:///d:/Dev/repos/gsp/tests/unit/test_telemetry.py) | Pipeline execution telemetry, duration tracking, error logging, and freshness timestamps. | 6 |
 | [`test_ui_fragment_isolation.py`](file:///d:/Dev/repos/gsp/tests/unit/test_ui_fragment_isolation.py) | Modular UI `@st.fragment` isolation decorators, scoped reruns (`rerun_scoped`), and sentiment pills. | 4 |
-| [`test_ui_chart_config.py`](file:///d:/Dev/repos/gsp/tests/unit/test_ui_chart_config.py) & [`test_valence_branding.py`](file:///d:/Dev/repos/gsp/tests/unit/test_valence_branding.py) | Plotly chart zoom lockouts, SVG branding assets, and permanent dark styling consistency. | 4 |
+| [`test_backtest_causality.py`](file:///d:/Dev/repos/gsp/tests/unit/test_backtest_causality.py) | Point-in-time causality, strictly preventing future price return look-ahead leakage. | 3 |
+| [`test_dedup_and_sentiment.py`](file:///d:/Dev/repos/gsp/tests/unit/test_dedup_and_sentiment.py) | Canonical SHA-256 fingerprint deduplication across syndicated articles. | 3 |
+| [`test_valence_branding.py`](file:///d:/Dev/repos/gsp/tests/unit/test_valence_branding.py) | SVG branding assets and permanent dark styling consistency. | 3 |
+| [`test_okf_updater.py`](file:///d:/Dev/repos/gsp/tests/unit/test_okf_updater.py) | Resilient Gemini model fallback chain (`gemini-3.8-flash` $\to$ `3.7` $\to$ `3.5-lite`) and rate pacing. | 2 |
+| [`test_ui_chart_config.py`](file:///d:/Dev/repos/gsp/tests/unit/test_ui_chart_config.py) | Plotly chart zoom lockouts, responsive config, and responsive mode settings. | 1 |
 
 Execute the unit test suite locally:
 ```bash
