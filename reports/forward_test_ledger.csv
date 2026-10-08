@@ -1,10 +1,1 @@
 timestamp,region,index_ticker,raw_sentiment,ema_sentiment,target_position,simulated_price,slippage_bps,daily_pnl_pct,cumulative_return_pct,model_version,okf_commit
-2026-10-08T06:39:08.043683+00:00,US,SPY,12.5,8.2,1.0,580.25,5.0,0.15,0.15,clm-8b-v1,test_commit
-2026-10-08T06:39:25.248147+00:00,US,SPY,5.0,4.0,0.0,580.0,5.0,0.0,0.15,clm-8b-v1,HEAD
-2026-10-08T06:39:25.270222+00:00,US,SPY,12.5,8.2,1.0,580.25,5.0,0.15,0.3,clm-8b-v1,test_commit
-2026-10-08T06:41:45.251945+00:00,US,SPY,5.0,4.0,0.0,580.0,5.0,0.0,0.3,clm-8b-v1,HEAD
-2026-10-08T06:41:45.266944+00:00,US,SPY,12.5,8.2,1.0,580.25,5.0,0.15,0.45,clm-8b-v1,test_commit
-2026-10-08T06:42:21.405583+00:00,US,SPY,5.0,4.0,0.0,580.0,5.0,0.0,0.45,clm-8b-v1,HEAD
-2026-10-08T06:42:21.423644+00:00,US,SPY,12.5,8.2,1.0,580.25,5.0,0.15,0.6,clm-8b-v1,test_commit
-2026-10-08T06:47:57.092682+00:00,US,SPY,5.0,4.0,0.0,580.0,5.0,0.0,0.6,clm-8b-v1,HEAD
-2026-10-08T06:47:57.116260+00:00,US,SPY,12.5,8.2,1.0,580.25,5.0,0.15,0.75,clm-8b-v1,test_commit

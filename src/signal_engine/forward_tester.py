@@ -37,8 +37,8 @@ def get_ledger_path() -> str:
     return os.path.join(reports_dir, "forward_test_ledger.csv")
 
 
-def ensure_ledger_initialized():
-    path = get_ledger_path()
+def ensure_ledger_initialized(ledger_path: Optional[str] = None):
+    path = ledger_path or get_ledger_path()
     if not os.path.exists(path) or os.path.getsize(path) == 0:
         with open(path, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
@@ -56,13 +56,14 @@ def record_forward_signal(
     slippage_bps: float = 5.0,
     daily_pnl_pct: float = 0.0,
     model_version: str = "clm-8b-v1",
-    okf_commit: str = "HEAD"
+    okf_commit: str = "HEAD",
+    ledger_path: Optional[str] = None
 ) -> Dict[str, Any]:
     """
     Appends a new point-in-time signal to the forward test ledger.
     """
-    ensure_ledger_initialized()
-    path = get_ledger_path()
+    ensure_ledger_initialized(ledger_path)
+    path = ledger_path or get_ledger_path()
     
     # Read existing cumulative return if available
     cum_ret = 0.0
@@ -100,48 +101,75 @@ def record_forward_signal(
     return dict(zip(LEDGER_COLUMNS, record))
 
 
-def load_forward_test_metrics() -> Dict[str, Any]:
+def load_forward_test_metrics(ledger_path: Optional[str] = None) -> Dict[str, Any]:
     """
     Computes summary out-of-sample forward statistics from the ledger.
+    Distinguishes active risk exposure from flat/neutral cash deadband days.
     """
-    ensure_ledger_initialized()
-    path = get_ledger_path()
+    ensure_ledger_initialized(ledger_path)
+    path = ledger_path or get_ledger_path()
     try:
         df = pd.read_csv(path)
     except Exception as e:
         logger.error(f"Error reading forward test ledger: {e}")
-        return {"status": "NO_DATA", "record_count": 0}
+        return {
+            "status": "NO_DATA",
+            "record_count": 0,
+            "active_trades": 0,
+            "total_days": 0,
+            "win_rate_pct": None,
+            "realized_sharpe": None,
+            "cumulative_return_pct": 0.0,
+            "latest_update": "N/A"
+        }
 
     if df.empty:
         return {
             "status": "INITIALIZING",
             "record_count": 0,
+            "active_trades": 0,
             "total_days": 0,
-            "directional_hit_rate_pct": 0.0,
-            "realized_sharpe": 0.0,
-            "cumulative_return_pct": 0.0
+            "win_rate_pct": None,
+            "realized_sharpe": None,
+            "cumulative_return_pct": 0.0,
+            "latest_update": "Awaiting first live pipeline run"
         }
 
     total_records = len(df)
     unique_dates = len(pd.to_datetime(df["timestamp"]).dt.date.unique())
     cum_ret = float(df["cumulative_return_pct"].iloc[-1]) if "cumulative_return_pct" in df.columns else 0.0
-    
-    # Calculate win rate if PnL available
-    pnls = df["daily_pnl_pct"].dropna() if "daily_pnl_pct" in df.columns else pd.Series()
-    win_rate = float((pnls > 0).mean() * 100.0) if len(pnls) > 0 else 0.0
-    
-    # Realized forward Sharpe
-    if len(pnls) >= 5 and pnls.std() > 0:
-        realized_sharpe = float((pnls.mean() / pnls.std()) * np.sqrt(252 * 6.5))
+
+    # Distinguish active market positions from flat/neutral cash deadband days
+    # Target positions != 0.0 represent genuine active trading risk
+    if "target_position" in df.columns:
+        active_df = df[df["target_position"] != 0.0]
+    elif "daily_pnl_pct" in df.columns:
+        active_df = df[df["daily_pnl_pct"] != 0.0]
     else:
-        realized_sharpe = 0.0
+        active_df = df
+
+    active_count = len(active_df)
+    active_pnls = active_df["daily_pnl_pct"].dropna() if "daily_pnl_pct" in active_df.columns else pd.Series()
+    
+    # Active Win Rate: strictly across executed active trades
+    if len(active_pnls) > 0:
+        win_rate = float((active_pnls > 0).mean() * 100.0)
+    else:
+        win_rate = None
+
+    # Realized forward Sharpe: requires at least 5 active daily trade returns with variance
+    if len(active_pnls) >= 5 and active_pnls.std() > 0:
+        realized_sharpe = float((active_pnls.mean() / active_pnls.std()) * np.sqrt(252 * 6.5))
+    else:
+        realized_sharpe = None
 
     return {
         "status": "ACTIVE_AUDIT",
         "record_count": total_records,
+        "active_trades": active_count,
         "total_days": unique_dates,
-        "win_rate_pct": round(win_rate, 2),
-        "realized_sharpe": round(realized_sharpe, 2),
+        "win_rate_pct": round(win_rate, 2) if win_rate is not None else None,
+        "realized_sharpe": round(realized_sharpe, 2) if realized_sharpe is not None else None,
         "cumulative_return_pct": round(cum_ret, 2),
         "latest_update": df["timestamp"].iloc[-1] if total_records > 0 else "N/A"
     }

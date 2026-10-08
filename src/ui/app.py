@@ -2283,13 +2283,17 @@ def render_forward_test_ledger_section():
         from signal_engine.forward_tester import load_forward_test_metrics
         metrics = load_forward_test_metrics()
     except Exception:
-        metrics = {"status": "INITIALIZING", "record_count": 0, "total_days": 0, "win_rate_pct": 0.0, "realized_sharpe": 0.0, "cumulative_return_pct": 0.0}
+        metrics = {"status": "INITIALIZING", "record_count": 0, "active_trades": 0, "total_days": 0, "win_rate_pct": None, "realized_sharpe": None, "cumulative_return_pct": 0.0}
 
     rec_count = metrics.get("record_count", 0)
+    active_trades = metrics.get("active_trades", 0)
     days = metrics.get("total_days", 0)
-    win_rate = metrics.get("win_rate_pct", 0.0)
-    sharpe = metrics.get("realized_sharpe", 0.0)
+    win_rate = metrics.get("win_rate_pct")
+    sharpe = metrics.get("realized_sharpe")
     cum_ret = metrics.get("cumulative_return_pct", 0.0)
+
+    win_rate_str = f"{win_rate:.1f}%" if win_rate is not None else "N/A (Warmup)"
+    sharpe_str = f"{sharpe:.2f}" if sharpe is not None else "N/A (Warmup)"
 
     with st.expander("📊 PUBLIC OUT-OF-SAMPLE FORWARD TEST TRACK RECORD (VERIFIABLE LEDGER)", expanded=False):
         st.markdown("""
@@ -2304,11 +2308,11 @@ def render_forward_test_ledger_section():
         with col1:
             st.metric("Logged Signals", f"{rec_count:,}")
         with col2:
-            st.metric("Forward Days", f"{days}")
+            st.metric("Active Trades", f"{active_trades:,}")
         with col3:
-            st.metric("Win Rate", f"{win_rate:.1f}%")
+            st.metric("Active Win Rate", win_rate_str)
         with col4:
-            st.metric("Realized Sharpe", f"{sharpe:.2f}")
+            st.metric("Realized Sharpe", sharpe_str)
         with col5:
             st.metric("Cumulative Alpha", f"{cum_ret:+.2f}%")
 
