@@ -548,6 +548,7 @@ __THEME_VARS__
         display: flex;
         flex-direction: column;
         justify-content: center;
+        min-width: 0;
     }
     .header-brand-title-row {
         display: flex;
@@ -765,6 +766,7 @@ __THEME_VARS__
         overflow: hidden;
         white-space: nowrap;
         position: relative;
+        min-width: 0;
         flex: 1 1 auto;
         mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
         -webkit-mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
@@ -1243,6 +1245,7 @@ __THEME_VARS__
         .usp-ticker-wrap {
             order: 3 !important;
             width: 100% !important;
+            min-width: 0 !important;
             flex: 1 1 100% !important;
             margin-top: 2px !important;
             padding-top: 4px !important;
