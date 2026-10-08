@@ -2275,13 +2275,14 @@ def render_regulatory_disclaimer():
     st.markdown(disclaimer_html, unsafe_allow_html=True)
 
 
-def render_forward_test_ledger_section():
+def render_forward_test_ledger_section(df_signals=None):
     """
     Renders the public, out-of-sample forward signal evaluation ledger in the terminal.
+    Automatically incorporates all historical signals loaded on the dashboard and database.
     """
     try:
         from signal_engine.forward_tester import load_forward_test_metrics
-        metrics = load_forward_test_metrics()
+        metrics = load_forward_test_metrics(df_signals=df_signals)
     except Exception:
         metrics = {
             "status": "INITIALIZING",
@@ -2340,7 +2341,7 @@ def render_dashboard():
     render_filter_toolbar(df_signals)
     render_analytics_surface(df_signals)
     render_live_intelligence_feed(df_payloads)
-    render_forward_test_ledger_section()
+    render_forward_test_ledger_section(df_signals)
     render_regulatory_disclaimer()
 
 

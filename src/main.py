@@ -267,6 +267,24 @@ async def run_ingestion_pipeline():
                     """, (signal_id, item['data']['timestamp'], text, context, json.dumps(item), fingerprint_hash))
                 conn.commit()
                 
+        # Record into forward test evaluation ledger
+        try:
+            from signal_engine.forward_tester import record_forward_signal
+            raw_idx = directional_score * 100.0
+            stance = "BULLISH" if raw_idx >= 5.0 else ("BEARISH" if raw_idx <= -5.0 else "NEUTRAL")
+            git_hash = get_git_commit_hash()
+            record_forward_signal(
+                region=region,
+                index_ticker=ticker,
+                raw_sentiment=raw_idx,
+                ema_sentiment=raw_idx,
+                directional_stance=stance,
+                model_version="clm-8b-v1",
+                okf_commit=git_hash
+            )
+        except Exception as e:
+            logger.warning(f"Could not record forward signal in ledger: {e}")
+
         # Mandatory 4.2-second delay to enforce ~14 requests per minute, respecting Gemini's 15 RPM free tier limit
         # No strict rate limit since we host our own Modal API!
         await asyncio.sleep(0.1)
