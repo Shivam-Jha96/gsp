@@ -125,4 +125,20 @@ def build_rss_feeds() -> List[Dict[str, Any]]:
                 "asset_class": asset_class
             })
 
+        # 3. Direct Official Central Bank RSS Feeds (High macro density, public license)
+        cb_feed_urls = {
+            "US": ("https://www.federalreserve.gov/feeds/press_all.xml", "Federal Reserve"),
+            "IN": ("https://rbi.org.in/pressreleases_rss.xml", "Reserve Bank of India"),
+            "UK": ("https://www.bankofengland.co.uk/rss/news", "Bank of England"),
+            "JP": ("https://www.boj.or.jp/en/rss/whatsnew.xml", "Bank of Japan")
+        }
+        if region_code in cb_feed_urls:
+            feed_url, cb_name = cb_feed_urls[region_code]
+            feeds.append({
+                "url": feed_url,
+                "region": region_code,
+                "ticker": cb_name,
+                "asset_class": "macro"
+            })
+
     return feeds

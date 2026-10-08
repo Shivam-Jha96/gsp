@@ -40,16 +40,22 @@ class TestMarketRegistryAndClassifier(unittest.TestCase):
     def test_build_rss_feeds(self):
         feeds = build_rss_feeds()
         self.assertGreater(len(feeds), 0)
-        # Every index generates 2 feeds (Google General + Reuters Institutional)
+        # Feeds include Google News (General + Reuters) and official Central Bank feeds
+        cb_tickers = {"Federal Reserve", "Reserve Bank of India", "Bank of England", "Bank of Japan"}
+        found_cb = set()
         for feed in feeds:
             self.assertIn("url", feed)
             self.assertIn("region", feed)
             self.assertIn("ticker", feed)
             self.assertIn(feed["region"], ["IN", "US", "UK", "JP"])
-            # Must include geotargeting params
-            self.assertIn("&gl=", feed["url"])
-            self.assertIn("&hl=", feed["url"])
-            self.assertIn("&ceid=", feed["url"])
+            if "news.google.com" in feed["url"]:
+                # Must include geotargeting params for Google News
+                self.assertIn("&gl=", feed["url"])
+                self.assertIn("&hl=", feed["url"])
+                self.assertIn("&ceid=", feed["url"])
+            elif feed["ticker"] in cb_tickers:
+                found_cb.add(feed["ticker"])
+        self.assertEqual(found_cb, cb_tickers)
 
     def test_classifier_valid_regional_acceptance(self):
         classifier = RegionalAffinityClassifier()

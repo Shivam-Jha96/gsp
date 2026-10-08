@@ -2275,6 +2275,46 @@ def render_regulatory_disclaimer():
     st.markdown(disclaimer_html, unsafe_allow_html=True)
 
 
+def render_forward_test_ledger_section():
+    """
+    Renders the public, out-of-sample forward-testing verification ledger in the terminal.
+    """
+    try:
+        from signal_engine.forward_tester import load_forward_test_metrics
+        metrics = load_forward_test_metrics()
+    except Exception:
+        metrics = {"status": "INITIALIZING", "record_count": 0, "total_days": 0, "win_rate_pct": 0.0, "realized_sharpe": 0.0, "cumulative_return_pct": 0.0}
+
+    rec_count = metrics.get("record_count", 0)
+    days = metrics.get("total_days", 0)
+    win_rate = metrics.get("win_rate_pct", 0.0)
+    sharpe = metrics.get("realized_sharpe", 0.0)
+    cum_ret = metrics.get("cumulative_return_pct", 0.0)
+
+    with st.expander("📊 PUBLIC OUT-OF-SAMPLE FORWARD TEST TRACK RECORD (VERIFIABLE LEDGER)", expanded=False):
+        st.markdown("""
+        <div style="font-family: 'IBM Plex Sans', sans-serif; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.5;">
+            In accordance with institutional quantitative standards, Valence does not rely on synthetic in-sample backtests. 
+            All directional signals, paper trade fills, and out-of-sample returns are logged to an immutable, append-only public ledger 
+            (<code>reports/forward_test_ledger.csv</code>) committed directly to GitHub.
+        </div>
+        """, unsafe_allow_html=True)
+
+        col1, col2, col3, col4, col5 = st.columns(5)
+        with col1:
+            st.metric("Logged Signals", f"{rec_count:,}")
+        with col2:
+            st.metric("Forward Days", f"{days}")
+        with col3:
+            st.metric("Win Rate", f"{win_rate:.1f}%")
+        with col4:
+            st.metric("Realized Sharpe", f"{sharpe:.2f}")
+        with col5:
+            st.metric("Cumulative Alpha", f"{cum_ret:+.2f}%")
+
+        st.caption("Updated dynamically with each pipeline run. Source: reports/forward_test_ledger.csv")
+
+
 def render_dashboard():
     df_signals, df_payloads, latest_pipeline_run = get_processed_data()
 
@@ -2290,8 +2330,10 @@ def render_dashboard():
     render_filter_toolbar(df_signals)
     render_analytics_surface(df_signals)
     render_live_intelligence_feed(df_payloads)
+    render_forward_test_ledger_section()
     render_regulatory_disclaimer()
 
 
 render_dashboard()
+
 
