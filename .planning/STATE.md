@@ -1,19 +1,19 @@
 ---
 gsd_state_version: "1.0"
 current_phase: 2
-current_phase_name: UI Component Modularization & Operational Hardening
-status: planning
-stopped_at: Completed project initialization (`PROJECT.md`, `config.json`, `REQUIREMENTS.md`, `ROADMAP.md`, `STATE.md`).
-last_updated: "2026-10-08T11:47:00.000Z"
+current_phase_name: Quantitative Engine Remediation, Governance & Public Forward Testing
+status: completed
+stopped_at: Completed Phase 2 (Plans 02-01, 02-02, 02-03) and verified via /gsd-code-review.
+last_updated: "2026-10-08T12:20:00.000Z"
 last_activity: 2026-10-08
-last_activity_desc: "Completed quick task 261008-j17: Realign wiki, README, and UI with honest benchmarking, removed synthetic backtests, and regulatory disclaimers"
-state_head: 9d5219b
+last_activity_desc: "Completed Phase 2: Quantitative Engine Remediation, Governance & Public Forward Testing (Plans 2.2, 2.3, 2.4)"
+state_head: 3829ff9
 progress:
-  total_phases: 2
-  completed_phases: 1
-  total_plans: 5
-  completed_plans: 3
-  percent: 60
+  total_phases: 3
+  completed_phases: 2
+  total_plans: 8
+  completed_plans: 6
+  percent: 75
 ---
 
 # Project State
@@ -23,21 +23,21 @@ progress:
 See: .planning/PROJECT.md (updated 2026-10-05)
 
 **Core value:** Zero-hallucination, deterministic macroeconomic directional sentiment projection grounded in regional OKF rules with high-performance institutional visualization.
-**Current focus:** Phase 2: UI Component Modularization & Operational Hardening
+**Current focus:** Phase 2: Quantitative Engine Remediation, Governance & Public Forward Testing (Completed)
 
 ## Current Position
 
-Phase: 2 of 2 (UI Component Modularization & Operational Hardening)
-Plan: 0 of 2 in current phase
-Status: Ready to plan
-Last activity: 2026-10-05 — Completed quick task 261005-j14: Implement pipeline_runs telemetry in src/main.py and integrate freshness badge in src/ui/app.py
+Phase: 2 of 3 (Quantitative Engine Remediation, Governance & Public Forward Testing)
+Plan: 3 of 3 in current phase (Completed)
+Status: Completed
+Last activity: 2026-10-08 — Completed Plans 02-01, 02-02, 02-03, executed 54 unit tests, code review passed cleanly.
 
-Progress: [██████░░░░] 60%
+Progress: [████████░░] 75%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
+- Total plans completed: 6
 - Average duration: -
 - Total execution time: -
 
@@ -49,6 +49,10 @@ Progress: [██████░░░░] 60%
 - [Phase 1]: Use TypeSafe System-One CLM-8B for continuous directional scores derived from calibrated choice probabilities.
 - [Phase 1]: Wrap filter toolbar and dashboard in `@st.fragment` to prevent full-page script reloads on widget interactions.
 - [Quick 261005-j14]: Store pipeline run completion telemetry in `pipeline_runs` table with composite index to power live dashboard data freshness badge.
+- [Phase 2]: Eradicate look-ahead leakage from backtesting engine; enforce strictly causal returns and realistic warm network latency distributions (180–320ms).
+- [Phase 2]: Gate automated Gemini OKF policy rule updates behind GitHub Actions PRs via `peter-evans/create-pull-request@v6` instead of direct commits to master.
+- [Phase 2]: Establish append-only forward-test ledger in `reports/forward_test_ledger.csv` for verifiable public track record.
+- [Phase 2]: Ingest official direct Central Bank RSS feeds (Federal Reserve, RBI, Bank of England, Bank of Japan).
 
 ### Pending Todos
 
@@ -56,7 +60,7 @@ None yet.
 
 ### Blockers/Concerns
 
-None. All 17 unit tests passing, working tree clean.
+None. All 54 unit tests passing, working tree clean.
 
 ### Quick Tasks Completed
 

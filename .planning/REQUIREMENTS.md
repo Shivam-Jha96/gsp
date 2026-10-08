@@ -17,10 +17,17 @@
 - [x] **UI-01**: Permanent Dark Mode locked across the Streamlit terminal (theme toggle removed)
 - [x] **UI-02**: `@st.fragment` partial re-rendering isolates filter dropdowns and news feed without full-page reloading
 
-### Refactoring & Expansion (Current Milestone)
+### Remediation & Governance (Current Milestone)
+
+- [ ] **QUANT-01**: Eliminate look-ahead leakage in backtest simulation and implement causal timestamp assertions
+- [ ] **GOV-01**: Harden Gemini model fallback registry and implement automated OKF Pull Request safety gates
+- [ ] **LEDGER-01**: Implement append-only public forward-test ledger tracking daily signals and paper trades
+- [ ] **DATA-01**: Ingest direct official Central Bank RSS feeds (Fed, RBI, BoE, BoJ) into the poller
+
+### Modularization & Expansion (Future Milestone)
 
 - [ ] **MOD-01**: Refactor `src/ui/app.py` into dedicated component modules under `src/ui/components/` (header, filters, chart, feed, styling)
-- [ ] **MOD-02**: Implement an automated fortnightly GitHub Action to fetch and update `*_constituents.okf.json` files using a free API (FMP or Finnhub)
+- [ ] **MOD-02**: Implement an automated fortnightly GitHub Action to fetch and update `*_constituents.okf.json` files using a free API
 - [ ] **TEST-01**: Expand automated unit and regression test coverage for signal EMA crossover and edge case calculation
 - [ ] **MON-01**: Integrate proactive health probe reporting across scheduled GitHub Actions pipelines
 
@@ -53,10 +60,14 @@
 | BASE-07 | Phase 1 | Complete |
 | UI-01 | Phase 1 | Complete |
 | UI-02 | Phase 1 | Complete |
-| MOD-01 | Phase 2 | Pending |
-| MOD-02 | Phase 2 | Pending |
-| TEST-01 | Phase 2 | Pending |
-| MON-01 | Phase 2 | Pending |
+| QUANT-01 | Phase 2 | Pending |
+| GOV-01 | Phase 2 | Pending |
+| LEDGER-01 | Phase 2 | Pending |
+| DATA-01 | Phase 2 | Pending |
+| MOD-01 | Phase 3 | Pending |
+| MOD-02 | Phase 3 | Pending |
+| TEST-01 | Phase 3 | Pending |
+| MON-01 | Phase 3 | Pending |
 
 **Coverage:**
 - v1 requirements: 13 total

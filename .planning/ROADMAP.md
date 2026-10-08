@@ -7,7 +7,8 @@ Valence provides real-time quantitative macroeconomic directional sentiment calc
 ## Phases
 
 - [x] **Phase 1: Baseline Quantitative Platform & Permanent Dark Theme** - End-to-end ingestion, AI scoring, database pooling, and permanent dark terminal
-- [ ] **Phase 2: UI Component Modularization & Operational Hardening** - Modularize `app.py` into `src/ui/components/`, expand EMA test suites, and add pipeline monitoring
+- [x] **Phase 2: Quantitative Engine Remediation, Governance & Public Forward Testing** - Eliminate look-ahead leakage, update Gemini model fallbacks, implement OKF PR safety gates, and launch append-only forward-test ledger
+- [ ] **Phase 3: UI Component Modularization & Operational Hardening** - Modularize `app.py` into `src/ui/components/`, expand EMA test suites, and add pipeline monitoring
 
 ## Phase Details
 
@@ -28,9 +29,27 @@ Plans:
 - [x] 01-02: TypeSafe CLM-8B inference, OKF rule engine, and Supabase connection pooler
 - [x] 01-03: Reactive Streamlit dashboard with partial fragments and permanent dark theme
 
-### Phase 2: UI Component Modularization & Operational Hardening
-**Goal**: Refactor single-file UI monolith into maintainable component packages and harden test coverage
+### Phase 2: Quantitative Engine Remediation, Governance & Public Forward Testing
+**Goal**: Remediate external review findings by eliminating look-ahead backtest leakage, hardening Gemini model fallbacks, implementing OKF PR safety gates, and launching a public forward-test ledger with licensable data.
 **Depends on**: Phase 1
+**Requirements**: QUANT-01, GOV-01, LEDGER-01, DATA-01
+**Success Criteria**:
+  1. `src/benchmark/backtest_engine.py` eliminates future price return look-ahead leakage and enforces causal point-in-time assertions.
+  2. `src/benchmark/nlp_evaluator.py` measures authentic network latency percentiles rather than local in-memory simulation loops.
+  3. `src/knowledge_engine/okf_updater.py` updates to active Gemini 2.5/3.x models, removes deprecated endpoints, and implements automated PR generation for macro rule shifts.
+  4. Database schema adds `published_at`, `scored_at`, and `okf_version_hash` audit metadata.
+  5. Append-only `reports/forward_test_ledger.csv` tracks daily out-of-sample forward signals and paper trading execution.
+  6. Official Central Bank RSS feeds (Fed, RBI, BoE, BoJ) are integrated into the ingestion pipeline.
+**Plans**: 3 plans
+
+Plans:
+- [x] 02-01: Benchmarking Suite & Backtest Look-Ahead Remediation (Plan 2.2)
+- [x] 02-02: Pipeline Hardening, Model Fallback Registry & OKF Governance (Plan 2.3)
+- [x] 02-03: Public Forward-Testing Ledger & Central Bank Feed Ingestion (Plan 2.4)
+
+### Phase 3: UI Component Modularization & Operational Hardening
+**Goal**: Refactor single-file UI monolith into maintainable component packages and harden test coverage
+**Depends on**: Phase 2
 **Requirements**: MOD-01, TEST-01, MON-01
 **Success Criteria**:
   1. `src/ui/app.py` is decomposed into cleanly scoped components in `src/ui/components/` (header, toolbar, chart, feed, styling).
@@ -39,19 +58,20 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 02-01: Decompose `app.py` into `src/ui/components/` maintaining all CSS variables and fragment reactivity
-- [ ] 02-02: Expand test coverage and add CI pipeline monitoring
+- [ ] 03-01: Decompose `app.py` into `src/ui/components/` maintaining all CSS variables and fragment reactivity
+- [ ] 03-02: Expand test coverage and add CI pipeline monitoring
 
 ## Progress
 
 **Execution Order:**
-Phase 1 (Complete) → Phase 2 (Ready to plan)
+Phase 1 (Complete) → Phase 2 (Complete) → Phase 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Baseline Quantitative Platform & Permanent Dark Theme | 3/3 | Complete | 2026-10-05 |
-| 2. UI Component Modularization & Operational Hardening | 0/2 | Ready to plan | - |
+| 2. Quantitative Engine Remediation, Governance & Public Forward Testing | 3/3 | Complete | 2026-10-08 |
+| 3. UI Component Modularization & Operational Hardening | 0/2 | Pending | - |
 
 ---
 *Roadmap defined: 2026-10-05*
-*Last updated: 2026-10-05 after initialization*
+*Last updated: 2026-10-08 with review remediation milestone*
