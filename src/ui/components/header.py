@@ -70,8 +70,8 @@ def render_header_banner(df_signals: Optional[pd.DataFrame] = None, latest_pipel
 
     st.markdown(f"""
     <div class="header-banner-card">
-        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
-            <svg width="44" height="40" viewBox="15 15 70 75" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.45)); flex-shrink: 0;">
+        <div class="header-brand-section">
+            <svg class="header-brand-logo" width="44" height="40" viewBox="15 15 70 75" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <linearGradient id="vFlatCyanAreaH" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" stop-color="#0284c7" stop-opacity="0.45"/>
@@ -106,26 +106,26 @@ def render_header_banner(df_signals: Optional[pd.DataFrame] = None, latest_pipel
                 <circle cx="76" cy="24" r="6" fill="rgba(16, 185, 129, 0.25)"/>
                 <polygon points="76,17 71,28 81,28" fill="#34d399"/>
             </svg>
-            <div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-family: 'Montserrat', sans-serif; font-size: clamp(1.25rem, 2.4vw, 1.55rem); font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; background: linear-gradient(135deg, #ffffff 30%, #e2e8f0 70%, #6ee7b7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 2px 10px rgba(0,0,0,0.5)); line-height: 1.1;">VALENCE</span>
-                    <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981;"></span>
-                    <span style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.32); color: #34d399; font-size: 0.62rem; font-weight: 800; padding: 2px 7px; border-radius: 4px; letter-spacing: 0.08em; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">QUANT</span>
+            <div class="header-brand-text">
+                <div class="header-brand-title-row">
+                    <span class="header-brand-title">VALENCE</span>
+                    <span class="header-brand-dot"></span>
+                    <span class="header-brand-badge">QUANT</span>
                 </div>
-                <div style="font-size: clamp(0.66rem, 1.2vw, 0.74rem); font-weight: 600; color: #94a3b8; font-family: 'IBM Plex Sans', sans-serif; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 3px; display: flex; align-items: center; gap: 6px;">
+                <div class="header-brand-sub-row">
                     <span>Global Macro Sentiment</span>
-                    <span style="color: rgba(255,255,255,0.25);">•</span>
-                    <span style="color: #34d399;">Directional Signal Engine</span>
+                    <span class="header-brand-sub-dot">•</span>
+                    <span class="header-brand-accent">Directional Signal Engine</span>
                 </div>
             </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end;">
-            <div title="{freshness_tooltip}" style="display: inline-flex; align-items: center; gap: 6px; background: {pill_bg}; border: 1px solid {pill_border}; padding: 5px 10px; border-radius: 4px; flex-shrink: 0; cursor: default; white-space: nowrap;">
+        <div class="header-telemetry-section">
+            <div class="header-pill-freshness" title="{freshness_tooltip}" style="background: {pill_bg}; border-color: {pill_border};">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{pill_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                <span style="font-size: 0.72rem; font-weight: 700; color: {pill_color}; font-family: 'Montserrat', sans-serif; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap;">UPDATED {time_display_str}</span>
+                <span style="color: {pill_color};">UPDATED {time_display_str}</span>
             </div>
-            <div style="display: inline-flex; align-items: center; gap: 7px; background: {status_bg}; border: 1px solid {status_border}; color: {status_text}; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; padding: 5px 11px; border-radius: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; box-shadow: 0 0 10px rgba(16, 185, 129, 0.15); flex-shrink: 0; white-space: nowrap;">
-                <span style="width: 7px; height: 7px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; display: inline-block;"></span>
+            <div class="header-pill-status" style="background: {status_bg}; border-color: {status_border}; color: {status_text};">
+                <span class="header-status-indicator"></span>
                 SYSTEM ONLINE
             </div>
         </div>

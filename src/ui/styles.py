@@ -527,11 +527,132 @@ __THEME_VARS__
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 16px;
         box-sizing: border-box;
         backdrop-filter: blur(10px);
         box-shadow: var(--header-shadow);
         transition: all 0.2s ease;
         margin-bottom: 10px !important;
+    }
+    .header-brand-section {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        flex-shrink: 0;
+    }
+    .header-brand-logo {
+        filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.45));
+        flex-shrink: 0;
+    }
+    .header-brand-text {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .header-brand-title-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .header-brand-title {
+        font-family: 'Montserrat', sans-serif;
+        font-size: clamp(1.25rem, 2.4vw, 1.55rem);
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: linear-gradient(135deg, #ffffff 30%, #e2e8f0 70%, #6ee7b7 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 2px 10px rgba(0,0,0,0.5));
+        line-height: 1.1;
+    }
+    .header-brand-dot {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #10b981;
+        box-shadow: 0 0 8px #10b981;
+    }
+    .header-brand-badge {
+        background: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.32);
+        color: #34d399;
+        font-size: 0.62rem;
+        font-weight: 800;
+        padding: 2px 7px;
+        border-radius: 4px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-family: 'Montserrat', sans-serif;
+    }
+    .header-brand-sub-row {
+        font-size: clamp(0.66rem, 1.2vw, 0.74rem);
+        font-weight: 600;
+        color: #94a3b8;
+        font-family: 'IBM Plex Sans', sans-serif;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-top: 3px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
+    }
+    .header-brand-sub-dot {
+        color: rgba(255, 255, 255, 0.25);
+    }
+    .header-brand-accent {
+        color: #34d399;
+    }
+    .header-telemetry-section {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+    .header-pill-freshness {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border-width: 1px;
+        border-style: solid;
+        padding: 5px 10px;
+        border-radius: 4px;
+        flex-shrink: 0;
+        cursor: default;
+        white-space: nowrap;
+        font-size: 0.72rem;
+        font-weight: 700;
+        font-family: 'Montserrat', sans-serif;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+    .header-pill-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        border-width: 1px;
+        border-style: solid;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        padding: 5px 11px;
+        border-radius: 4px;
+        text-transform: uppercase;
+        font-family: 'Montserrat', sans-serif;
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+    .header-status-indicator {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #10b981;
+        box-shadow: 0 0 8px #10b981;
+        display: inline-block;
     }
 
     /* Segmented Control & Pills Styling */
@@ -1061,11 +1182,106 @@ __THEME_VARS__
             justify-content: flex-start !important;
             flex: initial !important;
         }
+
+        /* Responsive Header Banner Card */
+        .header-banner-card {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 12px !important;
+            padding: 12px 14px !important;
+        }
+        .header-brand-section {
+            width: 100% !important;
+            gap: 12px !important;
+            flex-wrap: nowrap !important; /* Critical: locks logo and brand title horizontally */
+        }
+        .header-brand-logo {
+            width: 38px !important;
+            height: 35px !important;
+        }
+        .header-brand-title {
+            font-size: 1.35rem !important;
+        }
+        .header-brand-sub-row {
+            white-space: normal !important;
+            line-height: 1.35;
+            font-size: 0.65rem !important;
+            gap: 5px !important;
+        }
+        .header-telemetry-section {
+            width: 100% !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            gap: 8px !important;
+            flex-wrap: nowrap !important;
+        }
+        .header-pill-freshness,
+        .header-pill-status {
+            flex: 1 1 50% !important;
+            justify-content: center !important;
+            font-size: 0.68rem !important;
+            padding: 6px 8px !important;
+            box-sizing: border-box !important;
+        }
+
+        /* Responsive Quantitative Edge Banner (Flex-Order Reorganization) */
+        .usp-summary-inner {
+            flex-wrap: wrap !important;
+            gap: 8px 10px !important;
+        }
+        .usp-badge {
+            order: 1 !important;
+            font-size: 0.64rem !important;
+            padding: 2px 7px !important;
+        }
+        .usp-expand-btn {
+            order: 2 !important;
+            margin-left: auto !important;
+            font-size: 0.64rem !important;
+            padding: 3px 8px !important;
+        }
+        .usp-ticker-wrap {
+            order: 3 !important;
+            width: 100% !important;
+            flex: 1 1 100% !important;
+            margin-top: 2px !important;
+            padding-top: 4px !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+        }
+        .usp-ticker-item {
+            font-size: 0.74rem !important;
+        }
     }
 
     @media (max-width: 480px) {
         .block-container { padding: 0.75rem 0.5rem !important; }
         .white-card { padding: 8px 10px; margin-bottom: 8px; }
+
+        .header-banner-card {
+            padding: 10px 12px !important;
+            gap: 10px !important;
+        }
+        .header-brand-logo {
+            width: 34px !important;
+            height: 31px !important;
+        }
+        .header-brand-title {
+            font-size: 1.20rem !important;
+        }
+        .header-brand-sub-row {
+            font-size: 0.58rem !important;
+            letter-spacing: 0.02em !important;
+        }
+        .header-pill-freshness,
+        .header-pill-status {
+            font-size: 0.64rem !important;
+            padding: 5px 6px !important;
+            letter-spacing: 0.04em !important;
+        }
+        .usp-badge,
+        .usp-expand-btn {
+            font-size: 0.60rem !important;
+        }
     }
 
     /* Hide Streamlit native UI elements */
