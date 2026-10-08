@@ -5,8 +5,8 @@ import unittest
 class TestUIChartConfig(unittest.TestCase):
     def setUp(self):
         root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-        self.app_path = os.path.join(root_dir, 'src', 'ui', 'app.py')
-        with open(self.app_path, 'r', encoding='utf-8') as f:
+        self.analytics_path = os.path.join(root_dir, 'src', 'ui', 'components', 'analytics.py')
+        with open(self.analytics_path, 'r', encoding='utf-8') as f:
             self.source = f.read()
 
     def test_plotly_chart_config_removes_zoom(self):
