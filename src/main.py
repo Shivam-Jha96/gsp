@@ -3,6 +3,7 @@ import logging
 import os
 import json
 import uuid
+import subprocess
 
 # Ingestion
 from ingestion.poller import FeedPoller, FEEDS
@@ -12,6 +13,12 @@ from ingestion.dedup import canonical_fingerprint
 from typesafe_sdk import TypeSafeClient, Choice
 
 from config.market_registry import get_region_meta, load_asset_classes
+
+def get_git_commit_hash() -> str:
+    try:
+        return subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], stderr=subprocess.DEVNULL).decode().strip()
+    except Exception:
+        return "unknown"
 
 def score_sentiment(client, text: str, region_context: str = "", region_tag: str = "GLOBAL", asset_class: str = "equity") -> dict:
     """
@@ -239,11 +246,19 @@ async def run_ingestion_pipeline():
                 
             with db_client.get_connection() as conn:
                 with conn.cursor() as cur:
-                    # Insert Math Layer
-                    cur.execute("""
-                        INSERT INTO event_signals (id, index_ticker, market_region, timestamp, sentiment_score)
-                        VALUES (%s, %s, %s, %s, %s)
-                    """, (signal_id, ticker, region, item['data']['timestamp'], directional_score))
+                    # Insert Math Layer (with audit metadata & backward-compatible fallback)
+                    git_hash = get_git_commit_hash()
+                    try:
+                        cur.execute("""
+                            INSERT INTO event_signals (id, index_ticker, market_region, timestamp, sentiment_score, published_at, scored_at, okf_version_hash, model_version)
+                            VALUES (%s, %s, %s, %s, %s, %s, NOW(), %s, %s)
+                        """, (signal_id, ticker, region, item['data']['timestamp'], directional_score, item['data']['timestamp'], git_hash, "clm-8b-v1"))
+                    except Exception:
+                        conn.rollback()
+                        cur.execute("""
+                            INSERT INTO event_signals (id, index_ticker, market_region, timestamp, sentiment_score)
+                            VALUES (%s, %s, %s, %s, %s)
+                        """, (signal_id, ticker, region, item['data']['timestamp'], directional_score))
                     
                     # Insert Document Layer
                     cur.execute("""

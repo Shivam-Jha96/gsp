@@ -11,14 +11,14 @@ from config.market_registry import load_market_registry
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-# Default model fallback priority list
+# Default model fallback priority list (updated to remove deprecated 1.5/2.0 models)
 DEFAULT_MODEL_FALLBACKS = [
+    "gemini-2.5-flash",
+    "gemini-2.5-pro",
     "gemini-3.8-flash",
     "gemini-3.7-flash",
     "gemini-3.5-flash-lite",
     "gemini-3.5-flash",
-    "gemini-2.0-flash",
-    "gemini-1.5-flash",
 ]
 
 # Rate limiting guardrails to stay strictly below Google Gemini 15 RPM free-tier quota
@@ -27,18 +27,37 @@ INTER_REGION_DELAY = 10.0    # 10.0s cooldown between regional runs
 
 _last_request_time = 0.0
 
+def validate_macro_rule_diff(current_rules: str, new_rules: str) -> bool:
+    """
+    Validates that a proposed macro rule update preserves document integrity
+    and does not introduce accidental truncation or format collapse.
+    """
+    if not new_rules or len(new_rules.strip()) < 200:
+        logger.warning("  [DIFF-GUARD] Rejecting update: new rules are suspiciously short (<200 chars).")
+        return False
+        
+    curr_len = len(current_rules.strip())
+    new_len = len(new_rules.strip())
+    
+    # If the new rules shrink by more than 35% compared to current rules, trigger safety quarantine
+    if curr_len > 0 and new_len < 0.65 * curr_len:
+        logger.warning(f"  [DIFF-GUARD] Rejecting update: dramatic shrinkage detected ({new_len} vs {curr_len} chars).")
+        return False
+        
+    return True
+
 def get_available_models(client) -> list:
     """
     Discovers available Gemini models dynamically from the Google GenAI API
     to eliminate 404 errors caused by deprecated model IDs or account tier constraints.
     """
     preferred_priority = [
+        "gemini-2.5-flash",
+        "gemini-2.5-pro",
         "gemini-3.8-flash",
         "gemini-3.7-flash",
         "gemini-3.5-flash-lite",
         "gemini-3.5-flash",
-        "gemini-2.0-flash",
-        "gemini-1.5-flash",
     ]
     discovered = []
     try:
@@ -202,6 +221,10 @@ Output ONLY raw Markdown text. Do NOT wrap it in code blocks.
                 new_content = re.sub(r"^```(?:markdown)?\s*", "", new_content.strip(), flags=re.IGNORECASE)
                 new_content = re.sub(r"\s*```$", "", new_content)
                     
+                if not validate_macro_rule_diff(current_rules, new_content):
+                    logger.warning(f"  [DIFF-GUARD] Proposed update for {region_data['file']} failed diff validation. Preserving existing rules.")
+                    return
+
                 # Save to disk
                 write_okf(region_data["file"], new_content)
                 logger.info(f"Successfully updated {region_data['file']} using {model_id}.")

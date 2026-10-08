@@ -8,6 +8,10 @@ CREATE TABLE event_signals (
     market_region VARCHAR(100) NOT NULL,
     timestamp TIMESTAMPTZ NOT NULL,
     sentiment_score NUMERIC,
+    published_at TIMESTAMPTZ,
+    scored_at TIMESTAMPTZ DEFAULT NOW(),
+    okf_version_hash VARCHAR(64),
+    model_version VARCHAR(64) DEFAULT 'clm-8b-v1',
     PRIMARY KEY (id, timestamp)
 ) PARTITION BY RANGE (timestamp);
 
