@@ -571,6 +571,17 @@ To ensure an uninterrupted user experience across browser reloads (F5), page ref
 * **Cross-Region Dynamic Validation:**
   When switching regions (e.g. from US to India), the state persistence engine validates whether the active `chart` parameter exists in the selected region's constituent universe; if not, it gracefully resets the selection to `"All Indices"` to prevent empty chart states.
 
+#### 10. Decomposed Single-Responsibility UI Component Architecture
+To ensure long-term maintainability and eliminate monolithic script bloat, the 2,400+ line UI file was decomposed into modular components:
+* [`src/ui/styles.py`](file:///d:/Dev/repos/gsp/src/ui/styles.py): Centralized CSS design system, permanent dark theme styling variables (`#020617`, `#0f172a`), responsive Google Web Fonts (`Montserrat`, `IBM Plex Sans`, `JetBrains Mono`), and global style injector (`inject_global_styles()`).
+* [`src/ui/components/header.py`](file:///d:/Dev/repos/gsp/src/ui/components/header.py): `@st.fragment`-isolated header action bar, live pipeline telemetry badges, USP quantitative thesis collapsible banner, and regulatory disclaimer.
+* [`src/ui/components/toolbar.py`](file:///d:/Dev/repos/gsp/src/ui/components/toolbar.py): Ultra-compact 5-control horizontal filter toolbar (`Timeframe`, `Region`, `Chart Display`, `Timezone`, `EMA Window`) with scoped rerun handlers (`rerun_scoped()`).
+* [`src/ui/components/analytics.py`](file:///d:/Dev/repos/gsp/src/ui/components/analytics.py): `@st.fragment`-isolated analytics surface containing the left-column KPI card hierarchy, high-performance Plotly multi-series sentiment chart with disabled vertical zoom, and per-index mini momentum cards.
+* [`src/ui/components/feed.py`](file:///d:/Dev/repos/gsp/src/ui/components/feed.py): `@st.fragment`-isolated live intelligence feed stream, regex text cleaner, and color-coded sentiment pill filters.
+* [`src/ui/components/ledger.py`](file:///d:/Dev/repos/gsp/src/ui/components/ledger.py): Public out-of-sample forward evaluation ledger card, in-memory metric computation fallback, and interactive signal audit table.
+* [`src/ui/components/common.py`](file:///d:/Dev/repos/gsp/src/ui/components/common.py): Shared utility decorators (`make_fragment_decorator`), resilient segmented filter controls, and scoped rerun helpers.
+* [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py): Clean, lightweight application orchestrator entry point (~250 lines) managing data caching and component invocation.
+
 ---
 
 ### Layer 6: Autonomous Knowledge Engine
@@ -631,7 +642,7 @@ Each rule maintains a concise, institutional-grade format (1–2 sentence condit
 ---
 
 ### Layer 7: CI/CD & Orchestration Layer
-* **Source Files:** [`.github/workflows/deploy.yml`](file:///d:/Dev/repos/gsp/.github/workflows/deploy.yml), [`.github/workflows/update_okf.yml`](file:///d:/Dev/repos/gsp/.github/workflows/update_okf.yml), [`.github/workflows/update_constituents.yml`](file:///d:/Dev/repos/gsp/.github/workflows/update_constituents.yml), [`.github/workflows/ci.yml`](file:///d:/Dev/repos/gsp/.github/workflows/ci.yml)
+* **Source Files:** [`.github/workflows/deploy.yml`](file:///d:/Dev/repos/gsp/.github/workflows/deploy.yml), [`.github/workflows/health_check.yml`](file:///d:/Dev/repos/gsp/.github/workflows/health_check.yml), [`.github/workflows/update_okf.yml`](file:///d:/Dev/repos/gsp/.github/workflows/update_okf.yml), [`.github/workflows/update_constituents.yml`](file:///d:/Dev/repos/gsp/.github/workflows/update_constituents.yml), [`.github/workflows/ci.yml`](file:///d:/Dev/repos/gsp/.github/workflows/ci.yml)
 
 #### 1. Workflow Architecture & Decoupled Execution Graph
 GitHub Actions orchestrates all recurring pipelines on isolated, non-blocking schedules with dedicated concurrency groups:
@@ -641,6 +652,14 @@ GitHub Actions orchestrates all recurring pipelines on isolated, non-blocking sc
 |  .github/workflows/ci.yml                             |
 |  - Triggers on: Push & Pull Request (master, main)    |
 |  - Tasks: Dependency checks, compileall, PyTest       |
++-------------------------------------------------------+
+
++-------------------------------------------------------+
+|  .github/workflows/health_check.yml                   |
+|  - Triggers on: Cron '0 */6 * * *' (Every 6 hours)    |
+|                 workflow_dispatch (Manual trigger)    |
+|  - Tasks: Probes RSS feeds, Supabase DB pool, Modal   |
+|           CLM-8B inference, posts Step Summary        |
 +-------------------------------------------------------+
 
 +-------------------------------------------------------+

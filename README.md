@@ -218,7 +218,11 @@ gsp/
 │   ├── ingestion/              # Async RSS poller, regional affinity classifier & deduplicator
 │   ├── knowledge_engine/       # Gemini-powered OKF updater
 │   ├── signal_engine/          # Pandas EMA calculator & Alpaca routing
-│   ├── ui/                     # Streamlit dashboard & dual-layer session persistence
+│   ├── ui/                     # Modular Streamlit dashboard & styling
+│   │   ├── components/         # Single-responsibility components (header, toolbar, analytics, feed, ledger)
+│   │   ├── styles.py           # Master permanent dark theme CSS & typography engine
+│   │   ├── state_persistence.py# Dual-layer query-param & local storage persistence
+│   │   └── app.py              # Lightweight dashboard entry-point orchestrator
 │   └── main.py                 # Unified pipeline entry point
 └── requirements.txt
 ```
@@ -303,6 +307,7 @@ PYTHONPATH=src python src/main.py
 | Workflow | Schedule | Description |
 |----------|----------|-------------|
 | **Sentiment Pipeline** (`deploy.yml`) | Every 2 hours | Ingestion → AI Scoring → Database → Paper Trading |
+| **Operational Health Probe** (`health_check.yml`) | Every 6 hours | Probes regional RSS feeds, Supabase DB pool, and Modal CLM inference endpoint |
 | **OKF Knowledge Updater** (`update_okf.yml`) | Daily at 00:00 UTC | Gemini analyzes macro policy news and auto-commits updated OKF trading rules |
 | **Index Constituents Updater** (`update_constituents.yml`) | Fortnightly | Automated update of regional index constituents using open-source financial APIs |
 | **Reclassification & Purge** (`reclassify_db.yml`) | Manual (`workflow_dispatch`) | Scans historical Supabase records and audits/purges regional contaminants |
