@@ -70,7 +70,7 @@ None. All 54 unit tests passing, working tree clean.
 | 261005-j15 | Unconditionally expand live intelligence feed with ALL pill selected | 2026-10-05 | 595abf8 | - |
 | 261005-j16 | Shift deploy.yml pipeline cron schedule to off-peak minute 17 | 2026-10-05 | 17cd096 | - |
 | 261008-j17 | Realign wiki, README, and UI with honest benchmarking, removed synthetic backtests, and regulatory disclaimers | 2026-10-08 | 9d5219b | [261008-j17-phase-2-1-documentation-realignment](./quick/261008-j17-phase-2-1-documentation-realignment/) |
-| 261008-j18 | Enhance UI consistency of forward-test ledger and regulatory disclosures with institutional dark theme | 2026-10-08 | 3245df1 | - |
+| 261008-j18 | Enhance UI consistency of forward-test ledger and regulatory disclosures with institutional dark theme | 2026-10-08 | b3ea004 | - |
 
 ## Session Continuity
 
