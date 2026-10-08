@@ -13,8 +13,11 @@ from signal_engine.forward_tester import (
     ensure_ledger_initialized,
     record_forward_signal,
     load_forward_test_metrics,
+    compute_metrics_from_dataframe,
+    sync_signals_to_ledger,
     LEDGER_COLUMNS
 )
+import pandas as pd
 
 
 class TestForwardTester(unittest.TestCase):
@@ -75,6 +78,39 @@ class TestForwardTester(unittest.TestCase):
         self.assertEqual(metrics["directional_calls"], 1)
         self.assertEqual(metrics["neutral_filtered"], 1)
         self.assertEqual(metrics["total_days"], 1)
+
+    def test_compute_metrics_from_dataframe_empty(self):
+        metrics = compute_metrics_from_dataframe(pd.DataFrame())
+        self.assertEqual(metrics["status"], "INITIALIZING")
+        self.assertEqual(metrics["record_count"], 0)
+        self.assertEqual(metrics["directional_calls"], 0)
+
+    def test_compute_metrics_from_dataframe_with_signals(self):
+        df = pd.DataFrame({
+            "timestamp": pd.date_range("2026-10-01", periods=10, freq="1h"),
+            "market_region": ["US"] * 10,
+            "index_ticker": ["S&P 500"] * 10,
+            "sentiment_score": [0.8, -0.6, 0.02, 0.5, -0.9, 0.1, -0.4, 0.7, -0.2, 0.3]
+        })
+        metrics = compute_metrics_from_dataframe(df)
+        self.assertEqual(metrics["status"], "ACTIVE_AUDIT")
+        self.assertEqual(metrics["record_count"], 10)
+        self.assertGreater(metrics["directional_calls"], 0)
+        self.assertGreaterEqual(metrics["total_days"], 1)
+
+    def test_load_forward_test_metrics_with_df_signals_sync(self):
+        # Empty ledger initially
+        ensure_ledger_initialized(self.temp_path)
+        df = pd.DataFrame({
+            "timestamp": pd.date_range("2026-10-01", periods=5, freq="1h"),
+            "market_region": ["IN"] * 5,
+            "index_ticker": ["Nifty 50"] * 5,
+            "sentiment_index": [50.0, -60.0, 10.0, -40.0, 2.0]
+        })
+        metrics = load_forward_test_metrics(ledger_path=self.temp_path, df_signals=df)
+        self.assertEqual(metrics["status"], "ACTIVE_AUDIT")
+        self.assertEqual(metrics["record_count"], 5)
+        self.assertGreater(metrics["directional_calls"], 0)
 
 
 if __name__ == "__main__":

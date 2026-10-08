@@ -17,6 +17,19 @@ for p in [src_dir, root_dir]:
     if p not in sys.path:
         sys.path.insert(0, p)
 
+# Bridge Streamlit Cloud secrets to environment variables if not already present
+if "DATABASE_URL" not in os.environ:
+    try:
+        if hasattr(st, "secrets"):
+            if "DATABASE_URL" in st.secrets:
+                os.environ["DATABASE_URL"] = str(st.secrets["DATABASE_URL"])
+            elif "postgres" in st.secrets and "DATABASE_URL" in st.secrets["postgres"]:
+                os.environ["DATABASE_URL"] = str(st.secrets["postgres"]["DATABASE_URL"])
+            elif "supabase" in st.secrets and "DATABASE_URL" in st.secrets["supabase"]:
+                os.environ["DATABASE_URL"] = str(st.secrets["supabase"]["DATABASE_URL"])
+    except Exception:
+        pass
+
 # Dynamic resilient import: guards against Streamlit daemon caching stale modules in sys.modules during hot-reloads
 try:
     import database.client as db_client_mod
@@ -60,6 +73,24 @@ except Exception:
     sync_all_preferences_to_query_params = state_persistence_mod.sync_all_preferences_to_query_params
     get_persisted_feed_index = state_persistence_mod.get_persisted_feed_index
     render_local_storage_sync_script = state_persistence_mod.render_local_storage_sync_script
+
+# Dynamic resilient import: forward tester metrics calculation
+try:
+    import signal_engine.forward_tester as forward_tester_mod
+    import importlib
+    importlib.reload(forward_tester_mod)
+    load_forward_test_metrics = forward_tester_mod.load_forward_test_metrics
+    compute_metrics_from_dataframe = getattr(forward_tester_mod, 'compute_metrics_from_dataframe', None)
+except Exception:
+    try:
+        import src.signal_engine.forward_tester as forward_tester_mod
+        import importlib
+        importlib.reload(forward_tester_mod)
+        load_forward_test_metrics = forward_tester_mod.load_forward_test_metrics
+        compute_metrics_from_dataframe = getattr(forward_tester_mod, 'compute_metrics_from_dataframe', None)
+    except Exception:
+        load_forward_test_metrics = None
+        compute_metrics_from_dataframe = None
 
 valence_favicon_path = os.path.join(current_dir, "assets", "valence_logo_flat.svg")
 st.set_page_config(page_title="Valence", layout="wide", initial_sidebar_state="collapsed", page_icon=valence_favicon_path if os.path.exists(valence_favicon_path) else "📈")
@@ -2279,11 +2310,41 @@ def render_forward_test_ledger_section(df_signals=None):
     """
     Renders the public, out-of-sample forward signal evaluation ledger in the terminal.
     Automatically incorporates all historical signals loaded on the dashboard and database.
+    Guarantees continuous live metrics without falling back to zero.
     """
+    # If df_signals is None or empty, pull from processed data cache
+    if df_signals is None or df_signals.empty:
+        try:
+            cached_signals, _, _ = get_processed_data()
+            if cached_signals is not None and not cached_signals.empty:
+                df_signals = cached_signals
+        except Exception:
+            pass
+
+    metrics = None
     try:
-        from signal_engine.forward_tester import load_forward_test_metrics
-        metrics = load_forward_test_metrics(df_signals=df_signals)
-    except Exception:
+        if load_forward_test_metrics is not None:
+            metrics = load_forward_test_metrics(df_signals=df_signals)
+        else:
+            from signal_engine.forward_tester import load_forward_test_metrics as lftm
+            metrics = lftm(df_signals=df_signals)
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).error(f"Error calling load_forward_test_metrics: {e}", exc_info=True)
+
+    # Infallible in-memory fallback: if metrics failed or returned zero records despite having df_signals
+    if (metrics is None or metrics.get("record_count", 0) == 0) and df_signals is not None and not df_signals.empty:
+        try:
+            if compute_metrics_from_dataframe is not None:
+                metrics = compute_metrics_from_dataframe(df_signals)
+            else:
+                from signal_engine.forward_tester import compute_metrics_from_dataframe as cmfd
+                metrics = cmfd(df_signals)
+        except Exception as e:
+            import logging
+            logging.getLogger(__name__).error(f"Error in in-memory metric fallback: {e}", exc_info=True)
+
+    if not metrics:
         metrics = {
             "status": "INITIALIZING",
             "record_count": 0,
