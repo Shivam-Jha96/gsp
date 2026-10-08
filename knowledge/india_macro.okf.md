@@ -1,25 +1,25 @@
 # India Macro Trading Rules
 
-## Rule 1: RBI Hawkish Policy Pivot & Sovereign Yield Repricing
-- **Condition:** The RBI Monetary Policy Committee (MPC) reverses its accommodative stance to deliver repo rate hikes (+25 bps to 5.5%), initiating a new tightening cycle as headline inflation broadens and tests upper tolerance thresholds.
-- **Action:** Bearish on long-duration sovereign bonds (G-Secs), rate-sensitive real estate, and high-multiple growth equities; Bullish on short-term money market yields, short-tenor commercial paper, and commercial bank Net Interest Margins (NIMs).
+## Rule 1: RBI Tightening Cycle & Yield Curve Bear Flattening
+- **Condition:** The RBI MPC exits its multi-year accommodative/neutral stance to initiate a rate-hiking cycle (raising the repo rate by 25 bps to 5.5%) in response to headline inflation persistently breaching the 4.0% median target.
+- **Action:** Bearish on long-duration sovereign bonds (G-Secs), duration-sensitive NBFC balance sheets, and high-multiple growth equities; Bullish on short-term money market paper (91-day/364-day T-Bills), 1-year Overnight Index Swaps (OIS) paying rates, and large commercial bank Net Interest Margins (NIMs).
 
-## Rule 2: Food & Fuel Headline Inflation Squeeze on Discretionary Demand
-- **Condition:** Escalating price pressures in food staples, perishables, and fuel elevate headline CPI consecutively toward multi-month/20-month highs, compressing household disposable budgets across rural and urban segments.
-- **Action:** Bearish on volume-sensitive mass FMCG, entry-level two-wheelers, and low-tier consumer discretionary; Bullish on upstream agricultural input providers (fertilizers, agrochemicals) and domestic energy exploration and production firms.
+## Rule 2: Food & Fuel CPI Acceleration & Consumer Margin Compression
+- **Condition:** Headline retail inflation prints consecutive monthly gains toward multi-month highs (reaching 4.82%), driven by persistent supply shocks in food baskets (sugar, staples) and fuel costs that outpace nominal wage growth.
+- **Action:** Bearish on volume-dependent mass FMCG, entry-level two-wheelers, and low-ticket consumer durables; Bullish on domestic energy upstream exploration/refining firms and agricultural input suppliers (fertilizers, agrochemicals, sugar processors).
 
-## Rule 3: Rupee Depreciation & Growth-FX Decoupling
-- **Condition:** Spot USD/INR experiences structural depreciation pressures toward record lows driven by wide cross-border yield differentials and trade frictions, despite resilient domestic GDP growth.
-- **Action:** Bullish on export-oriented foreign currency revenue earners (IT services, pharmaceuticals, specialty chemicals); Bearish on import-dependent, margin-squeezed domestic industries (electronics assemblers, capital equipment importers, and crude-linked downstream manufacturers).
+## Rule 3: Growth-FX Decoupling & Persistent Rupee Depreciation
+- **Condition:** Spot USD/INR faces continuous upward pressure (INR depreciation) driven by cross-border interest rate differentials and crude import bills, despite resilient domestic GDP expansion holding above 8%.
+- **Action:** Bullish on foreign-currency-denominated revenue exporters (Tier-1 IT services, generic pharmaceutical manufacturers, auto ancillaries); Bearish on import-intensive, domestic margin-compressed sectors (consumer electronics assemblers, basic capital goods importers, unhedged external commercial borrowers).
 
-## Rule 4: RBI FX Intervention & Systemic Liquidity Drain
-- **Condition:** The RBI deploys aggressive spot and forward market FX interventions to cap Rupee volatility, causing secondary sterilization effects that drain domestic banking system liquidity.
-- **Action:** Bearish on bank treasury mark-to-market profits and non-banking financial company (NBFC) short-term borrowing costs; Bullish on short-dated FX forward premia and the narrowing of onshore-offshore INR basis spreads.
+## Rule 4: Balance of Payments Windfall & RBI FX Liquidity Sterilization
+- **Condition:** Heavy cross-border capital inflows driving toward substantial balance-of-payments surpluses ($50B+ potential) trigger heavy RBI reserve accumulation, accompanied by aggressive open market sterilization to manage domestic systemic liquidity.
+- **Action:** Bearish on systemic banking liquidity surpluses and short-tenor commercial paper yields; Bullish on onshore short-dated USD/INR forward premia and RBI foreign exchange reserve assets.
 
-## Rule 5: Dual-Track Capital Flows: FPI Volatility vs. Domestic Institutional Absorption
-- **Condition:** Foreign Portfolio Investment (FPI) flows display cyclical volatility—characterized by sudden sharp outflows (e.g., ₹7,608 crore in two days) against multi-year structural foreign investment troughs—counterbalanced by persistent Domestic Institutional Investor (DII) and retail Systematic Investment Plan (SIP) liquidity.
-- **Action:** Bearish on FPI-dominated large-cap index heavyweights vulnerable to global emerging market outflows; Bullish on DII-dominated domestic cyclical themes, high-dividend Public Sector Enterprises (PSUs), and local infrastructure operators.
+## Rule 5: FPI Inflow Inflection & Institutional Large-Cap Momentum
+- **Condition:** Foreign Portfolio Investors (FPIs) transition from multi-year cyclical lulls into sustained net monthly buying, complementing sticky Domestic Institutional Investor (DII) and retail Systematic Investment Plan (SIP) liquidity pools.
+- **Action:** Bullish on foreign-flow-sensitive benchmark indices (Nifty 50, Sensex large-cap constituents) and private banking heavyweights; Bearish on illiquid, lower-tier micro-caps vulnerable to retail speculative rotation.
 
-## Rule 6: Bilateral Trade Alignments & Supply Chain Re-Shoring
-- **Condition:** Ongoing India-US bilateral trade talks, trade credential enhancements, and the realignment of global supply chains impact tariff exposures and export clearances across manufacturing and technology verticals.
-- **Action:** Bullish on export-incentivized domestic electronics manufacturing services (EMS) and industrial engineering exporters; Bearish on tariff-exposed metal exporters and trade-sensitive traditional textiles.
+## Rule 6: Trade Credential Formalization & Supply Chain Realignment
+- **Condition:** Upgraded international trade credentials, global supply chain diversification away from regional peers, and government production-linked incentives accelerate export orders and industrial FDI.
+- **Action:** Bullish on Electronics Manufacturing Services (EMS), contract industrial engineering exporters, and modern port/logistics operators; Bearish on uncompetitive, tariff-exposed basic textile manufacturers and unprotected secondary metal producers.
