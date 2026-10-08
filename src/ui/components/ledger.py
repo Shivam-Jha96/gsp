@@ -80,28 +80,104 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
     days = metrics.get("total_days", 0)
     hit_rate = metrics.get("directional_hit_rate_pct")
 
-    hit_rate_str = f"{hit_rate:.1f}%" if hit_rate is not None else "N/A (Warmup)"
+    if hit_rate is not None:
+        hit_rate_str = f"{hit_rate:.1f}%"
+        hr_val_class = "green" if hit_rate >= 50.0 else "red"
+        hr_tag_class = "green" if hit_rate >= 50.0 else "red"
+        hr_sub_text = "Out-of-sample directional efficacy"
+    else:
+        hit_rate_str = "N/A (Warmup)"
+        hr_val_class = "amber"
+        hr_tag_class = "amber"
+        hr_sub_text = "Calibrating next evaluation window"
 
-    with st.expander("📊 PUBLIC OUT-OF-SAMPLE SIGNAL EVALUATION TRACK RECORD (VERIFIABLE LEDGER)", expanded=False):
-        st.markdown("""
-        <div style="font-family: 'IBM Plex Sans', sans-serif; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.5;">
-            In accordance with institutional quantitative standards, Valence operates in this MVP strictly as a deterministic 
-            macroeconomic directional signal intelligence platform. Automated broker order execution is disabled. 
-            All directional sentiment projections, EMA crossovers, and deadband filter states are logged to an immutable, append-only public ledger 
-            (<code>reports/forward_test_ledger.csv</code>) committed directly to GitHub to measure out-of-sample predictive efficacy.
+    ledger_html = f"""
+    <details class="ledger-collapsible" open>
+        <summary class="ledger-summary">
+            <div class="ledger-summary-inner">
+                <span class="ledger-badge">📊 VERIFIABLE TRACK RECORD</span>
+                <div class="ledger-summary-title">
+                    <span>Public Out-of-Sample Signal Evaluation Track Record</span>
+                </div>
+                <div class="ledger-quick-stats">
+                    <span class="ledger-pill"><strong style="color: #f8fafc;">{rec_count:,}</strong> SIGNALS</span>
+                    <span class="ledger-pill green"><strong style="color: #34d399;">{hit_rate_str}</strong> HIT RATE</span>
+                    <span class="ledger-pill cyan">OUT-OF-SAMPLE</span>
+                </div>
+            </div>
+            <div class="ledger-expand-btn">
+                <span class="ledger-expand-text">DETAILS ▾</span>
+                <span class="ledger-collapse-text">COLLAPSE ▴</span>
+            </div>
+        </summary>
+        <div class="ledger-content">
+            <div class="ledger-callout">
+                <div class="ledger-callout-icon">🛡️</div>
+                <div class="ledger-callout-text">
+                    In accordance with institutional quantitative standards, Valence operates in this MVP strictly as a deterministic 
+                    macroeconomic directional signal intelligence platform. Automated broker order execution is disabled. 
+                    All directional sentiment projections, EMA crossovers, and deadband filter states are logged to an immutable, append-only public ledger 
+                    (<span class="ledger-code-pill">reports/forward_test_ledger.csv</span>) committed directly to GitHub to measure out-of-sample predictive efficacy.
+                </div>
+            </div>
+
+            <div class="ledger-metrics-grid">
+                <div class="ledger-metric-card">
+                    <div class="ledger-metric-header">
+                        <span class="ledger-metric-title">Logged Signals</span>
+                        <span class="ledger-tag cyan">IMMUTABLE</span>
+                    </div>
+                    <div class="ledger-metric-value">{rec_count:,}</div>
+                    <div class="ledger-metric-sub">Append-only audit trail</div>
+                </div>
+
+                <div class="ledger-metric-card">
+                    <div class="ledger-metric-header">
+                        <span class="ledger-metric-title">Directional Calls</span>
+                        <span class="ledger-tag green">ACTIVE</span>
+                    </div>
+                    <div class="ledger-metric-value green">{directional_calls:,}</div>
+                    <div class="ledger-metric-sub">Bullish & Bearish signals</div>
+                </div>
+
+                <div class="ledger-metric-card">
+                    <div class="ledger-metric-header">
+                        <span class="ledger-metric-title">Neutral Filtered</span>
+                        <span class="ledger-tag purple">DEADBAND</span>
+                    </div>
+                    <div class="ledger-metric-value purple">{neutral_filtered:,}</div>
+                    <div class="ledger-metric-sub">Noise threshold rejected</div>
+                </div>
+
+                <div class="ledger-metric-card">
+                    <div class="ledger-metric-header">
+                        <span class="ledger-metric-title">Observed Days</span>
+                        <span class="ledger-tag amber">WINDOW</span>
+                    </div>
+                    <div class="ledger-metric-value amber">{days}</div>
+                    <div class="ledger-metric-sub">Live tracking horizon</div>
+                </div>
+
+                <div class="ledger-metric-card highlight">
+                    <div class="ledger-metric-header">
+                        <span class="ledger-metric-title">Directional Hit Rate</span>
+                        <span class="ledger-tag {hr_tag_class}">EFFICACY</span>
+                    </div>
+                    <div class="ledger-metric-value {hr_val_class}">{hit_rate_str}</div>
+                    <div class="ledger-metric-sub">{hr_sub_text}</div>
+                </div>
+            </div>
+
+            <div class="ledger-footer-bar">
+                <div class="ledger-footer-left">
+                    <span class="ledger-status-dot"></span>
+                    <span>Continuously updated per pipeline run • Ground-truth forward evaluation</span>
+                </div>
+                <div class="ledger-footer-right">
+                    <span>Source: <code>reports/forward_test_ledger.csv</code></span>
+                </div>
+            </div>
         </div>
-        """, unsafe_allow_html=True)
-
-        col1, col2, col3, col4, col5 = st.columns(5)
-        with col1:
-            st.metric("Logged Signals", f"{rec_count:,}")
-        with col2:
-            st.metric("Directional Calls", f"{directional_calls:,}")
-        with col3:
-            st.metric("Neutral Filtered", f"{neutral_filtered:,}")
-        with col4:
-            st.metric("Observed Days", f"{days}")
-        with col5:
-            st.metric("Directional Hit Rate", hit_rate_str)
-
-        st.caption("Updated dynamically with each pipeline run. Source: reports/forward_test_ledger.csv")
+    </details>
+    """
+    st.markdown(ledger_html, unsafe_allow_html=True)

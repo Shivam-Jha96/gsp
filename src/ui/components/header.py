@@ -190,20 +190,41 @@ def render_regulatory_disclaimer():
     Renders compliance, educational research, and data licensing disclosures in the terminal footer.
     """
     disclaimer_html = """
-    <div style="margin-top: 36px; margin-bottom: 24px; padding: 18px 22px; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(51, 65, 85, 0.4); border-radius: 8px; font-family: 'IBM Plex Sans', sans-serif;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
-            <span style="font-family: 'Montserrat', sans-serif; font-size: 0.72rem; font-weight: 700; color: #94a3b8; letter-spacing: 0.08em; text-transform: uppercase;">
-                ⚖️ Quantitative Research & Regulatory Notice
-            </span>
-            <span style="font-size: 0.70rem; color: #64748b; font-family: 'JetBrains Mono', monospace;">
-                OPEN-SOURCE ANALYTICS TERMINAL
-            </span>
+    <div class="regulatory-notice-card">
+        <div class="regulatory-notice-header">
+            <div class="regulatory-notice-header-left">
+                <span class="regulatory-badge">⚖️ REGULATORY GOVERNANCE</span>
+                <span class="regulatory-title">Quantitative Research & Compliance Disclosures</span>
+            </div>
+            <div class="regulatory-notice-header-right">
+                <span class="regulatory-pill green">NON-CUSTODIAL</span>
+                <span class="regulatory-pill sky">RESEARCH ONLY</span>
+                <span class="regulatory-mono-tag">OPEN-SOURCE TERMINAL</span>
+            </div>
         </div>
-        <div style="font-size: 0.76rem; color: #94a3b8; line-height: 1.55; margin-bottom: 6px;">
-            <strong>Educational & Research Use Only:</strong> Valence is an open-source quantitative research platform. Signals, momentum indicators, and directional scores displayed herein do not constitute investment advice, financial promotion, or trade recommendations under SEBI (India), SEC (US), FCA (UK), or other global financial regulatory jurisdictions.
+        <div class="regulatory-grid">
+            <div class="regulatory-subcard sky-border">
+                <div class="regulatory-subcard-title">
+                    <span class="regulatory-icon">🎓</span>
+                    <span>Educational & Research Use Only</span>
+                </div>
+                <div class="regulatory-subcard-body">
+                    Valence is an open-source quantitative research platform. Signals, momentum indicators, and directional scores displayed herein do not constitute investment advice, financial promotion, or trade recommendations under SEBI (India), SEC (US), FCA (UK), or other global financial regulatory jurisdictions.
+                </div>
+            </div>
+            <div class="regulatory-subcard purple-border">
+                <div class="regulatory-subcard-title">
+                    <span class="regulatory-icon">🛡️</span>
+                    <span>Execution Safeguards & Fair-Use Attribution</span>
+                </div>
+                <div class="regulatory-subcard-body">
+                    Valence operates strictly as a quantitative macro sentiment and directional signal intelligence engine. Automated broker execution is disabled in this MVP. Real capital should never be deployed solely based on directional sentiment projections. Ingested news events are processed for research demonstrations under fair-use parameters.
+                </div>
+            </div>
         </div>
-        <div style="font-size: 0.72rem; color: #64748b; line-height: 1.5;">
-            <strong>Execution & Data Notice:</strong> Valence operates strictly as a quantitative macro sentiment and directional signal intelligence engine. Automated broker execution is disabled in this MVP. Real capital should never be deployed solely based on directional sentiment projections. Ingested news events are processed for research demonstrations under fair-use parameters.
+        <div class="regulatory-bottom-bar">
+            <span>Valence Quantitative Terminal • Contrastive Language Modeling (CLM-8B System-One) • Regional OKF Policy Rules</span>
+            <span class="regulatory-bottom-right">PROBABILISTIC INFERENCE • NOT INVESTMENT ADVICE</span>
         </div>
     </div>
     """

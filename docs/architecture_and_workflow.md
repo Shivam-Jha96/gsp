@@ -563,13 +563,33 @@ To ensure an uninterrupted user experience across browser reloads (F5), page ref
 #### 10. Decomposed Single-Responsibility UI Component Architecture
 To ensure long-term maintainability and eliminate monolithic script bloat, the 2,400+ line UI file was decomposed into modular components:
 * [`src/ui/styles.py`](file:///d:/Dev/repos/gsp/src/ui/styles.py): Centralized CSS design system, permanent dark theme styling variables (`#020617`, `#0f172a`), responsive Google Web Fonts (`Montserrat`, `IBM Plex Sans`, `JetBrains Mono`), and global style injector (`inject_global_styles()`).
-* [`src/ui/components/header.py`](file:///d:/Dev/repos/gsp/src/ui/components/header.py): `@st.fragment`-isolated header action bar, live pipeline telemetry badges, USP quantitative thesis collapsible banner, and regulatory disclaimer.
+* [`src/ui/components/header.py`](file:///d:/Dev/repos/gsp/src/ui/components/header.py): `@st.fragment`-isolated header action bar, live pipeline telemetry badges, USP quantitative thesis collapsible banner, and institutional regulatory disclaimer.
 * [`src/ui/components/toolbar.py`](file:///d:/Dev/repos/gsp/src/ui/components/toolbar.py): Ultra-compact 5-control horizontal filter toolbar (`Timeframe`, `Region`, `Chart Display`, `Timezone`, `EMA Window`) with scoped rerun handlers (`rerun_scoped()`).
 * [`src/ui/components/analytics.py`](file:///d:/Dev/repos/gsp/src/ui/components/analytics.py): `@st.fragment`-isolated analytics surface containing the left-column KPI card hierarchy, high-performance Plotly multi-series sentiment chart with disabled vertical zoom, and per-index mini momentum cards.
 * [`src/ui/components/feed.py`](file:///d:/Dev/repos/gsp/src/ui/components/feed.py): `@st.fragment`-isolated live intelligence feed stream, regex text cleaner, and color-coded sentiment pill filters.
-* [`src/ui/components/ledger.py`](file:///d:/Dev/repos/gsp/src/ui/components/ledger.py): Public out-of-sample forward evaluation ledger card, in-memory metric computation fallback, and interactive signal audit table.
+* [`src/ui/components/ledger.py`](file:///d:/Dev/repos/gsp/src/ui/components/ledger.py): Public out-of-sample forward evaluation track record collapsible drawer (`details.ledger-collapsible`), 5-card micro-KPI grid, and point-in-time verifiable ledger telemetry.
 * [`src/ui/components/common.py`](file:///d:/Dev/repos/gsp/src/ui/components/common.py): Shared utility decorators (`make_fragment_decorator`), resilient segmented filter controls, and scoped rerun helpers.
 * [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py): Clean, lightweight application orchestrator entry point (~250 lines) managing data caching and component invocation.
+
+#### 11. Public Forward-Testing Track Record & Verifiable Ledger Card
+[`src/ui/components/ledger.py`](file:///d:/Dev/repos/gsp/src/ui/components/ledger.py) renders an institutional collapsible card (`details.ledger-collapsible`) documenting live out-of-sample predictive performance:
+* **Interactive Summary Bar:** Features an institutional badge (`📊 VERIFIABLE TRACK RECORD`), summary title, quick-telemetry pills (`N SIGNALS`, `N% HIT RATE`, `OUT-OF-SAMPLE`), and toggle action (`DETAILS ▾` / `COLLAPSE ▴`).
+* **Governance Callout Banner:** Contextual notice with shield icon, cyan left accent border, and monospace source link emphasizing deterministic signal intelligence and automated execution lockout.
+* **5-Column Micro-KPI Grid:** Responsive grid presenting 5 dedicated metric cards styled consistently with the primary KPI cards:
+  1. **Logged Signals:** Total immutable append-only events.
+  2. **Directional Calls:** Active non-neutral stance count (Emerald).
+  3. **Neutral Filtered:** Events filtered by the ±0.05 deadband threshold (Purple).
+  4. **Observed Days:** Point-in-time live forward tracking horizon (Amber).
+  5. **Directional Hit Rate:** Out-of-sample next-period predictive accuracy highlighted with dynamic green/red/amber efficacy styling.
+* **Telemetry Verification Bar:** Status beacon and direct link to the append-only `reports/forward_test_ledger.csv` source file.
+
+#### 12. Institutional Regulatory Compliance & Governance Disclosures
+[`src/ui/components/header.py`](file:///d:/Dev/repos/gsp/src/ui/components/header.py) provides [`render_regulatory_disclaimer()`](file:///d:/Dev/repos/gsp/src/ui/components/header.py#L188) rendered as an institutional footer disclosure card (`.regulatory-notice-card`):
+* **Compliance Header Bar:** Displays an institutional badge (`⚖️ REGULATORY GOVERNANCE`), title, and jurisdiction tags (`NON-CUSTODIAL`, `RESEARCH ONLY`, `OPEN-SOURCE TERMINAL`).
+* **Structured 2-Column Grid:** Replaces dense stacked paragraphs with demarcated sub-cards featuring custom accent borders:
+  1. **Educational & Research Mandate:** Sky-bordered card clarifying non-advisory quantitative research boundaries under SEBI (India), SEC (US), FCA (UK), and global regulators.
+  2. **Execution Safeguards & Attribution:** Purple-bordered card confirming broker lockout, zero real capital deployment, and news event research demonstration under fair-use parameters.
+* **Attribution Baseline:** Technical terminal attribution tag highlighting CLM-8B System-One inference and OKF policy conditioning.
 
 ---
 
