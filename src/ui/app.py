@@ -1563,7 +1563,7 @@ def render_usp_banner():
                 </div>
             </div>
             <div style="font-family: 'IBM Plex Sans', sans-serif; font-size: clamp(0.78rem, 1.5vw, 0.83rem); color: var(--edge-text); line-height: 1.6; margin-bottom: 0;">
-                Generative LLMs suffer from prompt drift, hallucination, and confidence clustering. Valence replaces text generation with a <strong>System-One Contrastive Model (CLM-8B)</strong> that projects global news directly onto native choice probabilities: <strong style="color: {'#059669' if is_light else '#34d399'}; font-weight: 700;">P(Bullish)</strong>, <strong style="color: {'#dc2626' if is_light else '#f87171'}; font-weight: 700;">P(Bearish)</strong>, and <strong style="color: var(--text-muted); font-weight: 700;">P(Neutral)</strong>. Headlines are conditioned against regional macroeconomic policy rules (OKF), converting real-time global news into an institutional momentum score [-100, +100].
+                Generative LLMs suffer from prompt drift, hallucination, and confidence clustering. Valence replaces text generation with a <strong>System-One Contrastive Model (CLM-8B)</strong> that projects global news directly onto native choice probabilities: <strong style="color: {'#059669' if is_light else '#34d399'}; font-weight: 700;">P(Bullish)</strong>, <strong style="color: {'#dc2626' if is_light else '#f87171'}; font-weight: 700;">P(Bearish)</strong>, and <strong style="color: var(--text-muted); font-weight: 700;">P(Neutral)</strong>. Headlines are conditioned against regional macroeconomic policy rules (OKF), converting real-time global news into a calibrated directional momentum score [-100, +100].
             </div>
         </div>
     </details>
@@ -2250,6 +2250,31 @@ def render_live_intelligence_feed(df_payloads=None):
         st.markdown(html_feed, unsafe_allow_html=True)
 
 
+def render_regulatory_disclaimer():
+    """
+    Renders compliance, educational research, and data licensing disclosures in the terminal footer.
+    """
+    disclaimer_html = """
+    <div style="margin-top: 36px; margin-bottom: 24px; padding: 18px 22px; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(51, 65, 85, 0.4); border-radius: 8px; font-family: 'IBM Plex Sans', sans-serif;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+            <span style="font-family: 'Montserrat', sans-serif; font-size: 0.72rem; font-weight: 700; color: #94a3b8; letter-spacing: 0.08em; text-transform: uppercase;">
+                ⚖️ Quantitative Research & Regulatory Notice
+            </span>
+            <span style="font-size: 0.70rem; color: #64748b; font-family: 'JetBrains Mono', monospace;">
+                OPEN-SOURCE ANALYTICS TERMINAL
+            </span>
+        </div>
+        <div style="font-size: 0.76rem; color: #94a3b8; line-height: 1.55; margin-bottom: 6px;">
+            <strong>Educational & Research Use Only:</strong> Valence is an open-source quantitative research platform. Signals, momentum indicators, and directional scores displayed herein do not constitute investment advice, financial promotion, or trade recommendations under SEBI (India), SEC (US), FCA (UK), or other global financial regulatory jurisdictions.
+        </div>
+        <div style="font-size: 0.72rem; color: #64748b; line-height: 1.5;">
+            <strong>Execution & Data Notice:</strong> All automated trading triggers are strictly simulated via Alpaca Paper Trading. Real capital should never be deployed solely based on directional sentiment projections. Ingested news events are processed for research demonstrations under fair-use parameters.
+        </div>
+    </div>
+    """
+    st.markdown(disclaimer_html, unsafe_allow_html=True)
+
+
 def render_dashboard():
     df_signals, df_payloads, latest_pipeline_run = get_processed_data()
 
@@ -2265,6 +2290,8 @@ def render_dashboard():
     render_filter_toolbar(df_signals)
     render_analytics_surface(df_signals)
     render_live_intelligence_feed(df_payloads)
+    render_regulatory_disclaimer()
 
 
 render_dashboard()
+

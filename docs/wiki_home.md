@@ -1,4 +1,4 @@
-# Valence — Quantitative Macro-Sentiment Platform & Institutional Terminal
+# Valence — Quantitative Macro-Sentiment Platform & Open Intelligence Terminal
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Shivam-Jha96/gsp/master/assets/valence_social_preview.png" alt="Valence Social Preview Banner" width="100%" style="border-radius: 8px;" />
@@ -7,7 +7,7 @@
 
 Welcome to the official technical wiki for **Valence** (formerly Global Sentiment Platform of Share Markets / GSP). 
 
-Valence is an autonomous, institutional-grade quantitative macroeconomic sentiment and directional signal engine. It ingests thousands of unstructured global news events in real time across four geopolitical hubs (United States, India, United Kingdom, and Japan), evaluates deterministic market sentiment using **Contrastive Language Models (CLM-8B System-One)**, stores vertically partitioned time-series signals in PostgreSQL, computes multi-period Exponential Moving Average (EMA) momentum indicators, executes automated paper trades via Alpaca's REST API, and renders low-latency telemetry to an institutional Streamlit terminal.
+Valence is an open-source quantitative macroeconomic sentiment and directional signal engine. It continuously ingests geopolitical and financial news events across four geopolitical hubs (United States, India, United Kingdom, and Japan), evaluates deterministic market sentiment using **Contrastive Language Models (CLM-8B System-One)**, stores vertically partitioned time-series signals in PostgreSQL, computes multi-period Exponential Moving Average (EMA) momentum indicators, simulates paper trades via Alpaca's REST API, and renders low-latency telemetry to a high-contrast dark Streamlit terminal.
 
 ---
 
@@ -19,20 +19,21 @@ Valence is an autonomous, institutional-grade quantitative macroeconomic sentime
 4. [Quantitative Research & Scoring Mathematics](#4-quantitative-research--scoring-mathematics)
 5. [Institutional Terminal Guide (UI Telemetry)](#5-institutional-terminal-guide-ui-telemetry)
 6. [Dynamic Objective Knowledge Framework (OKF)](#6-dynamic-objective-knowledge-framework-okf)
-7. [Institutional Benchmarking & LLM Comparison (USP Validation)](#7-institutional-benchmarking--llm-comparison-usp-validation)
+7. [Empirical Benchmarking & LLM Comparison (USP Validation)](#7-empirical-benchmarking--llm-comparison-usp-validation)
 8. [Production Operations & Resiliency Matrix](#8-production-operations--resiliency-matrix)
+9. [Regulatory Disclaimers & Data Terms](#9-regulatory-disclaimers--data-terms)
 
 ---
 
 
 ## 1. Executive Summary & Core Philosophy
 
-Conventional natural language processing (NLP) pipelines in quantitative finance rely on autoregressive generative Large Language Models (LLMs) such as GPT-4, Claude, or Llama. These models suffer from non-deterministic token sampling entropy, high per-call latency (2,000–5,000 ms), formatting hallucinations, and subjective confidence clustering (e.g., arbitrarily clustering around 0.8 or 0.2).
+Conventional natural language processing (NLP) pipelines in quantitative finance rely on autoregressive generative Large Language Models (LLMs) such as GPT-4, Claude, or Llama. These models introduce non-deterministic token sampling entropy, high per-call latency (1,200–2,500 ms), formatting hallucinations, and subjective confidence clustering (e.g., arbitrarily clustering around 0.8 or 0.2).
 
 **Valence eliminates generative token decoding entirely.** The platform is built upon four foundational pillars:
 
 1. **System-One Metric Embedding Evaluation**: Projects financial text directly into a continuous metric space, evaluating orthogonal candidate hypotheses with native mathematical probabilities where P(Bullish) + P(Bearish) + P(Neutral) = 1.0.
-2. **Strict Vertical Database Partitioning**: Decouples high-frequency analytical time-series queries (event_signals) from heavy document metadata blobs (event_payloads), guaranteeing microsecond database scans.
+2. **Strict Vertical Database Partitioning**: Decouples high-frequency analytical time-series queries (event_signals) from heavy document metadata blobs (event_payloads), guaranteeing sub-millisecond analytical database scans.
 3. **GitOps-Driven Macroeconomic Reasoning**: Real-world central bank policy regimes mutate constantly. Regional trading heuristics reside in declarative Objective Knowledge Framework (*.okf.md) files updated autonomously by scheduled Gemini cron jobs without code redeployments.
 4. **Decoupled Serverless Topologies**: Ingestion (GitHub Actions), AI Inference (Modal serverless A10G GPU), Relational Persistence (Supabase PostgreSQL), and Visualization (Streamlit Cloud) scale independently with zero operational lock-in.
 
@@ -40,13 +41,13 @@ Conventional natural language processing (NLP) pipelines in quantitative finance
 
 ## 2. The System-One Paradigm: Tri-Level Architecture Comparison
 
-Valence builds upon the contrastive foundation of **TypeSafe AI's Jev** architecture, refining it into a fully normalized, asset-class-aware quantitative sentiment engine.
+Valence utilizes the contrastive inference paradigm of **TypeSafe AI's Jev** System-One model (accessed via its official SDK), extending it into a fully normalized, asset-class-aware quantitative sentiment engine.
 
 | Evaluation Dimension | Generative LLMs (Autoregressive) | TypeSafe AI (Vanilla Jev) | Valence CLM System-One Engine |
 | :--- | :--- | :--- | :--- |
-| **Scoring Mechanism** | Generates text tokens / Prompted JSON | Contrastive representation / Choice probabilities | **Focused Bipolar Simplex + Quantitative Spread (S_rel)** |
-| **Inference Latency** | 2,000–5,000 ms / headline | 300–600 ms / call (standard hosted API) | **< 250 ms** / headline (dedicated serverless A10G ASGI) |
-| **Output Stability** | Prone to formatting errors and hallucinations | Deterministic choice probabilities (P_i in [0, 1]) | **100% deterministic continuous momentum (-100 to +100)** |
+| **Scoring Mechanism** | Generates text tokens / Prompted JSON | Contrastive representation / Choice probabilities | **Bipolar Simplex Projection + Quantitative Spread (S_rel)** |
+| **Inference Latency** | 1,200–2,500 ms / headline | 70–500 ms / call (standard hosted API) | **180–350 ms warm API / batch** (serverless A10G) |
+| **Output Stability** | Prone to formatting errors and hallucinations | Deterministic choice probabilities (P_i in [0, 1]) | **Deterministic continuous momentum (-100 to +100)** |
 | **Confidence Calibration** | Qualitative clustering (e.g., 0.8 vs 0.2) | Raw probabilities; uncalibrated directional spread | **Calibrated relative directional conviction (S_rel)** |
 | **Signal Noise Handling** | Neutral sentiment easily misclassified | Prone to neutral flatlining (P >= 0.90) on dense context | **Explicit non-linear neutral attenuation factor (M)** |
 | **Macro & Asset Conditioning**| Unstructured prompts; prone to attention drift | Static criteria; no dynamic macro regime awareness | **Dynamic regional OKF priors + asset-class-aware criteria** |
@@ -194,45 +195,61 @@ Macroeconomic policies mutate dynamically across central banks (Federal Reserve,
 
 ---
 
-## 7. Institutional Benchmarking & LLM Comparison (USP Validation)
+## 7. Empirical Benchmarking & LLM Comparison (USP Validation)
 
-To quantitatively prove Valence's architectural superiority over conventional Generative LLM setups and dictionary methods, the system contains an automated 4-tier benchmarking suite (`src/benchmark/` & `scripts/run_benchmarks.py`).
+To quantitatively evaluate Valence's architectural trade-offs against conventional Generative LLM setups and dictionary methods, the platform includes an automated multi-tier benchmarking suite (`src/benchmark/` & `scripts/run_benchmarks.py`).
 
 ### 7.1 Empirical Head-to-Head Comparison
 
 Evaluated on the **Macroeconomic Golden Benchmark Dataset** (`knowledge/benchmark/macro_golden_dataset.json`) across 500 curated central bank policy releases, CPI inflation prints, and trade tariff shocks:
 
-| Quantitative & Operational Dimension | Valence System-One CLM (Qwen3-8B) | Generative LLMs (GPT-4o / Gemini Flash) | Loughran-McDonald Lexicon | Institutional Target | Status |
+| Quantitative & Operational Dimension | Valence System-One CLM (TypeSafe / Qwen3-8B) | Generative LLMs (GPT-4o / Gemini Flash) | Loughran-McDonald Lexicon | Baseline Target | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Inference Latency (Forward Pass)** | **0.01 ms** (< 250 ms pipeline) | 1,251 ms (**>50x slower**) | 0.01 ms | < 50 ms | **PASS** |
-| **Bitwise Determinism** | **100% Zero-Variance ($\text{Var} = 0$)** | Stochastic (Decoding entropy / drift) | 100% Deterministic | Zero Variance | **PASS** |
-| **Expected Calibration Error (ECE)** | **0.0892 (Calibrated Simplex)** | 0.1333 (Overconfident mode collapse) | 0.0549 | < 0.10 | **PASS** |
+| **Inference Latency (Warm API Call)**| **180–350 ms** (< 500 ms pipeline) | 1,200–2,500 ms (**>4x slower**) | < 0.1 ms (in-memory lookup) | < 500 ms | **PASS** |
+| **Container Cold Boot (Serverless)** | **15–30 s** (scale-to-zero GPU boot)| None (managed multi-tenant API) | None (in-process memory) | Scale-to-zero | **PASS** |
+| **Bitwise / Float Determinism** | **Deterministic ($\Delta \le 10^{-6}$)** | Stochastic (Decoding temperature drift) | 100% Bitwise Invariant | Reproducible | **PASS** |
+| **Expected Calibration Error (ECE)** | **0.0892 (Calibrated Simplex)** | 0.1333 (Overconfident mode collapse) | 0.0549 (Conservative unigram prior) | < 0.10 | **PASS** |
 | **Brier Calibration Score** | **0.2034** | 0.2452 | 0.2679 | < 0.25 | **PASS** |
-| **Macro F1 Score** | **0.8380** | 0.8545 | 0.7884 | > 0.80 | **PASS** |
-| **Schema Parse Failure Rate** | **0.00% (Direct Tensor Dot-Product)**| 1.8% – 3.2% (JSON syntax drift) | 0.00% | 0.00% | **PASS** |
-| **Predictive Alpha: Info Coeff (IC)**| **+0.2369** (Rank IC: **+0.1950**) | +0.08 to +0.12 (latency decay) | +0.02 to +0.05 | > +0.05 | **PASS** |
-| **Historical Strategy Sharpe Ratio** | **1.70** (SPY hourly crossover) | 0.85 – 1.05 (transaction drag) | 0.73 (Buy & Hold benchmark)| > 1.50 | **PASS** |
-| **Strategy Total Return (vs Benchmark)**| **+5.48%** (vs +2.95% Buy & Hold) | +3.10% (slippage eroded) | +2.95% | Outperform Index | **+2.53% Alpha** |
+| **Macro F1 Score** | **0.8380** (Nuanced macro semantics) | **0.8545** (Slightly higher recall) | 0.7884 (Rigid lexicon omissions) | > 0.80 | **PASS** |
+| **Schema Parse Failure Rate** | **0.00% (Direct Choice Vector)**| 1.8% – 3.2% (JSON syntax drift) | 0.00% | 0.00% | **PASS** |
+| **Compute Cost per 10k Events** | **~$0.15** (Scale-to-zero batch) | ~$1.50 – $3.50 (10x higher opex) | $0.00 (Local CPU) | < $1.00 | **PASS** |
+| **Point-in-Time Forward Track Record**| **Under compilation** (`reports/forward_test_ledger.csv`) | N/A | N/A | Live Public Audit | **IN PROGRESS** |
+
+> **Note on Alpha Metrics:** Preliminary synthetic backtest figures ($IC = +0.24$, Sharpe $1.70$) reported in earlier drafts have been removed following quantitative review. Those simulations contained synthetic look-ahead artifacts. Directional predictive alpha will be established exclusively via our public, append-only forward-test ledger.
 
 ### 7.2 Why Contrastive System-One Outperforms Generative LLMs
 
-1. **Sub-Second Execution Prevents Information Decay**: Autoregressive decoding consumes $1,200\text{--}2,500\text{ ms}$, meaning generative agents place trades long after high-frequency market participants have priced in economic releases. Valence computes tensor inner-products in $<250\text{ ms}$.
+1. **Cost-Efficient Batch Inference for Macro Monitoring**: Autoregressive decoding consumes $1,200\text{--}2,500\text{ ms}$ per call and incurs high token fees when ingesting hundreds of regional headlines. Valence processes multi-headline batches in $<350\text{ ms}$ warm latency, enabling cost-effective hourly macroeconomic regime tracking across 40 global news channels without keeping an expensive GPU permanently spinning.
 2. **True Probabilistic Simplex Geometry**: Generative LLMs cluster around subjective prompted numbers (`"confidence": 0.80`). Valence projects states directly onto the 2-simplex $\Delta^2$ where $P(\text{Bullish}) + P(\text{Bearish}) + P(\text{Neutral}) = 1.0$, producing mathematically calibrated directional spread $S_{\text{rel}}$.
 3. **Endogenous Neutral Damping ($M$)**: Generative LLMs regularly over-trade on routine releases (e.g. jobless claims matching consensus). Valence's neutral attenuation factor $M = |S_{\text{rel}}| \times (1.0 - 0.5 \times P_{\text{neut}})$ suppresses non-directional noise into the $[-5.0, +5.0]$ deadband, dramatically cutting trading fees and execution drag.
-4. **Zero-Variance Bitwise Reproducibility**: Generative LLMs exhibit non-zero temperature entropy, leading to contradictory trades on identical headlines. Valence guarantees $\text{Var}(\text{score}) = 0.0$.
+4. **Reproducible Mathematical State**: Generative LLMs exhibit temperature entropy, creating divergent labels across identical prompt evaluations. Valence guarantees output variance across repeated evaluation runs remains within floating-point epsilon ($\sigma < 10^{-6}$).
 
 ---
 
 ## 8. Production Operations & Resiliency Matrix
 
-| Service / Layer | Provider | SLA | Failure Mode | Auto-Recovery Mechanism |
-| :--- | :--- | :--- | :--- | :--- |
-| **CLM Inference** | Modal Labs (A10G) | 99.9% | Cold-boot latency / Container timeout | ASGI mount bypasses proxy; graceful fallback to Neutral (0.0) score on timeout. |
-| **Relational DB** | Supabase (AWS) | 99.95% | PgBouncer pooler idle connection drop | ThreadedConnectionPool with pre-checkout `_is_alive()` ping; transparent 2-attempt UI retry loop. |
-| **Knowledge Cron** | Google GenAI | 99.9% | HTTP 429 Quota or HTTP 503 Overload | Paced requests (>= 6.0s interval); immediate failover to secondary Flash models. |
-| **Ingestion** | GitHub Actions | 99.9% | Network timeout on regional RSS feed | Async aiohttp timeout guards (10s); continues processing healthy feeds. |
-| **Trade Execution**| Alpaca API | 99.95% | Order reject on outside-hours trading | Paper trading orders automatically queued or logged without blocking pipeline. |
+| Service / Layer | Provider | Typical SLA | Failure Mode | Auto-Recovery Mechanism | Operational Caveat |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **CLM Inference** | Modal Labs (A10G) | 99.9% | Cold-boot latency / Container timeout | ASGI mount bypasses proxy; graceful fallback to Neutral (0.0) score on timeout. | Free Starter tier ($30/mo) provides ~27 A10G GPU-hours; scale-to-zero keeps per-run time < 2 min. |
+| **Relational DB** | Supabase (AWS) | 99.95% | PgBouncer pooler idle connection drop | ThreadedConnectionPool with pre-checkout `_is_alive()` ping; transparent 2-attempt UI retry loop. | Free-tier database pauses after 7 days of inactivity; regular pipeline cron prevents auto-pause. |
+| **Knowledge Cron** | Google GenAI | 99.9% | HTTP 429 Quota or HTTP 503 Overload | Paced requests (>= 6.0s interval); immediate failover to secondary Flash models. | Gemini model endpoints retire periodically; fallback registry must track active releases. |
+| **Ingestion** | GitHub Actions | 99.9% | Network timeout on regional RSS feed | Async aiohttp timeout guards (10s); continues processing healthy feeds. | Free runner cron executions experience 5–20 minute scheduling jitter during peak hours. |
+| **Trade Execution**| Alpaca API | 99.95% | Order reject on outside-hours trading | Paper trading orders automatically queued or logged without blocking pipeline. | Paper trading fills are simulated without market impact or non-US equity support. |
 
 ---
 
-*Valence Wiki • Document Version 2.5.0 • Maintained by Quantitative Research & Engineering*
+## 9. Regulatory Disclaimers & Data Terms
+
+### 9.1 Financial & Research Disclaimer
+**Valence is an open-source educational and quantitative macroeconomic research terminal.**
+- It does **not** constitute financial, investment, legal, or tax advice.
+- It does **not** issue trading recommendations or research analyst reports under the regulations of the **Securities and Exchange Board of India (SEBI)**, the **US Securities and Exchange Commission (SEC)**, the **Financial Conduct Authority (FCA)**, or any other financial regulatory authority.
+- All order execution capabilities are strictly confined to **Alpaca Paper Trading** for simulated algorithmic evaluation. Real capital should never be committed solely on the basis of directional sentiment scores or automated signals generated by this platform.
+
+### 9.2 Data Licensing & Redistribution Notice
+- The regional news feeds ingested via Google News RSS are accessed for non-commercial academic research, open-source testing, and prototyping demonstrations under standard fair-use parameters.
+- For commercial deployments, feeds should be supplemented or substituted with authorized publisher APIs, direct Central Bank RSS bulletins (Federal Reserve, Reserve Bank of India, Bank of England, Bank of Japan), or licensable open data initiatives (e.g. GDELT).
+
+---
+
+*Valence Technical Documentation • Version 2.6.0 • Maintained for Open-Source Quantitative Research*
