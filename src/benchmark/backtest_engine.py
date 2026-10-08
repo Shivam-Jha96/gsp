@@ -72,7 +72,7 @@ def generate_mock_price_series(periods: int = 100, start_price: float = 500.0) -
     Generates synthetic geometric Brownian motion price series for offline testing.
     """
     np.random.seed(42)
-    now = pd.Timestamp.utcnow()
+    now = pd.Timestamp.now('UTC')
     dates = pd.date_range(end=now, periods=periods, freq="1h")
     
     # 15% annualized vol, 8% annualized drift
@@ -133,14 +133,23 @@ class ValenceBacktestEngine:
 
         # Generate or align sentiment signals
         if sentiment_series is None or len(sentiment_series) != len(df):
-            # Create synthetic sentiment with realistic predictive lead of 1 period
-            # plus market noise (simulating ~0.12 Information Coefficient)
+            # Strictly causal simulation (using only past/current information at bar t)
+            # Simulates macroeconomic news regime shifts with realistic signal-to-noise ratio
+            # without look-ahead leakage (zero future price leakage).
             np.random.seed(42)
-            lead_returns = df["price_return"].shift(-1).fillna(0.0)
-            scaled_signal = lead_returns * 1500.0 + np.random.normal(0, 20.0, size=len(df))
-            df["sentiment_score"] = np.clip(scaled_signal, -100.0, 100.0)
+            past_momentum = df["price_return"].shift(1).fillna(0.0)
+            # Causal macro innovation shock (orthogonal to future price)
+            macro_innovations = np.random.normal(0, 15.0, size=len(df))
+            causal_signal = past_momentum * 400.0 + macro_innovations
+            df["sentiment_score"] = np.clip(causal_signal, -100.0, 100.0)
         else:
-            df["sentiment_score"] = sentiment_series.values
+            if isinstance(sentiment_series, pd.Series) and isinstance(sentiment_series.index, pd.DatetimeIndex) and isinstance(df.index, pd.DatetimeIndex):
+                # Ensure point-in-time timestamp integrity:
+                # News sentiment at time t must come strictly from published_at <= bar_time
+                aligned_series = sentiment_series.reindex(df.index, method="ffill").fillna(0.0)
+                df["sentiment_score"] = aligned_series.values
+            else:
+                df["sentiment_score"] = sentiment_series.values
 
         # Calculate Valence 4-period EMA
         df["ema_sentiment"] = df["sentiment_score"].ewm(span=self.ema_window, adjust=False).mean()
@@ -207,11 +216,14 @@ class ValenceBacktestEngine:
         losses = abs(df[df["strategy_net_return"] < 0]["strategy_net_return"].sum())
         profit_factor = float(gains / losses) if losses > 0 else 999.0
 
-        # Predictive metrics (IC, Rank IC, Hit Rate)
-        forward_returns = df["price_return"].shift(-1).fillna(0.0)
-        ic = calculate_information_coefficient(df["sentiment_score"], forward_returns)
-        rank_ic = calculate_rank_information_coefficient(df["sentiment_score"], forward_returns)
-        hit_rate = calculate_directional_hit_rate(df["sentiment_score"], forward_returns)
+        # Predictive metrics (Causal Information Coefficient against forward return)
+        # Evaluates correlation between signal at t and realized market return over (t, t+1]
+        valid_n = len(df) - 1
+        sig_t = df["sentiment_score"].iloc[:valid_n]
+        fwd_ret = df["price_return"].iloc[1:valid_n + 1]
+        ic = calculate_information_coefficient(sig_t, fwd_ret)
+        rank_ic = calculate_rank_information_coefficient(sig_t, fwd_ret)
+        hit_rate = calculate_directional_hit_rate(sig_t, fwd_ret)
 
         return {
             "summary": {

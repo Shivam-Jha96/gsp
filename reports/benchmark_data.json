@@ -1,190 +1,23 @@
 {
-  "tier_1_nlp": {
-    "valence_clm": {
-      "model_name": "valence_clm",
-      "sample_count": 24,
-      "accuracy_pct": 87.5,
-      "macro_f1": 0.838,
-      "macro_precision": 0.8561,
-      "macro_recall": 0.8333,
-      "expected_calibration_error": 0.0892,
-      "brier_score": 0.2034,
-      "latency_p50_ms": 0.01,
-      "latency_p90_ms": 0.01,
-      "latency_p99_ms": 0.07,
-      "confusion_matrix": {
-        "Bullish": {
-          "Bullish": 9,
-          "Bearish": 0,
-          "Neutral": 0
-        },
-        "Bearish": {
-          "Bullish": 0,
-          "Bearish": 9,
-          "Neutral": 1
-        },
-        "Neutral": {
-          "Bullish": 2,
-          "Bearish": 0,
-          "Neutral": 3
-        }
-      }
-    },
-    "generative_llm": {
-      "model_name": "generative_llm",
-      "sample_count": 24,
-      "accuracy_pct": 87.5,
-      "macro_f1": 0.8545,
-      "macro_precision": 0.8556,
-      "macro_recall": 0.8667,
-      "expected_calibration_error": 0.1333,
-      "brier_score": 0.2452,
-      "latency_p50_ms": 1251.2,
-      "latency_p90_ms": 1411.19,
-      "latency_p99_ms": 1425.14,
-      "confusion_matrix": {
-        "Bullish": {
-          "Bullish": 9,
-          "Bearish": 0,
-          "Neutral": 0
-        },
-        "Bearish": {
-          "Bullish": 0,
-          "Bearish": 8,
-          "Neutral": 2
-        },
-        "Neutral": {
-          "Bullish": 1,
-          "Bearish": 0,
-          "Neutral": 4
-        }
-      }
-    },
-    "loughran_mcdonald": {
-      "model_name": "loughran_mcdonald",
-      "sample_count": 24,
-      "accuracy_pct": 79.17,
-      "macro_f1": 0.7884,
-      "macro_precision": 0.8333,
-      "macro_recall": 0.8259,
-      "expected_calibration_error": 0.0549,
-      "brier_score": 0.2679,
-      "latency_p50_ms": 0.0,
-      "latency_p90_ms": 0.0,
-      "latency_p99_ms": 0.01,
-      "confusion_matrix": {
-        "Bullish": {
-          "Bullish": 7,
-          "Bearish": 0,
-          "Neutral": 2
-        },
-        "Bearish": {
-          "Bullish": 0,
-          "Bearish": 7,
-          "Neutral": 3
-        },
-        "Neutral": {
-          "Bullish": 0,
-          "Bearish": 0,
-          "Neutral": 5
-        }
-      }
-    },
-    "determinism": {
-      "iterations": 20,
-      "is_deterministic": true,
-      "variance": 0.0,
-      "choice": "Bullish"
-    }
-  },
-  "tier_2_classifier": {
-    "regional_affinity": {
-      "total_samples": 12,
-      "regional_accuracy_pct": 100.0,
-      "cross_region_contamination_pct": 8.33,
-      "region_confusion_matrix": {
-        "US": {
-          "US": 3,
-          "IN": 0,
-          "UK": 0,
-          "JP": 0,
-          "OTHER": 0
-        },
-        "IN": {
-          "US": 0,
-          "IN": 3,
-          "UK": 0,
-          "JP": 0,
-          "OTHER": 0
-        },
-        "UK": {
-          "US": 0,
-          "IN": 0,
-          "UK": 3,
-          "JP": 0,
-          "OTHER": 0
-        },
-        "JP": {
-          "US": 0,
-          "IN": 0,
-          "UK": 0,
-          "JP": 3,
-          "OTHER": 0
-        }
-      }
-    },
-    "noise_rejection": {
-      "noise_rejection_pct": 100.0,
-      "financial_retention_pct": 100.0,
-      "total_tested": 7
-    },
-    "deduplication": {
-      "canonical_fingerprint_invariance": true,
-      "input_syndications": 6,
-      "retained_unique": 1,
-      "deduplication_yield_pct": 83.33
-    }
-  },
   "tier_3_alpha": {
     "initial_capital": 100000.0,
-    "final_equity_strategy": 105484.60116898775,
-    "final_equity_benchmark": 102951.96521988467,
-    "total_return_strategy_pct": 5.48,
-    "total_return_benchmark_pct": 2.95,
-    "cagr_strategy_pct": 14.89,
-    "cagr_benchmark_pct": 7.86,
-    "sharpe_ratio_strategy": 1.7,
-    "sharpe_ratio_benchmark": 0.73,
-    "sortino_ratio_strategy": 2.72,
-    "max_drawdown_strategy_pct": 4.23,
+    "final_equity_strategy": 79870.07222113083,
+    "final_equity_benchmark": 102816.0208941782,
+    "total_return_strategy_pct": -20.13,
+    "total_return_benchmark_pct": 2.82,
+    "cagr_strategy_pct": -44.26,
+    "cagr_benchmark_pct": 7.49,
+    "sharpe_ratio_strategy": -9.78,
+    "sharpe_ratio_benchmark": 0.7,
+    "sortino_ratio_strategy": -7.79,
+    "max_drawdown_strategy_pct": 20.71,
     "max_drawdown_benchmark_pct": 4.53,
-    "calmar_ratio": 3.52,
-    "win_rate_pct": 48.26,
-    "profit_factor": 1.18,
-    "total_trades": 415,
-    "information_coefficient": 0.2369,
-    "rank_information_coefficient": 0.195,
-    "directional_hit_rate_pct": 56.67
-  },
-  "tier_4_system": {
-    "connection_pool": {
-      "status": "simulated_offline",
-      "iterations": 10,
-      "mean_checkout_ms": 1.15,
-      "p95_checkout_ms": 1.45,
-      "errors": 0
-    },
-    "query_performance": {
-      "status": "simulated_offline",
-      "limit": 50,
-      "query_latency_ms": 14.5,
-      "row_count": 50
-    },
-    "ui_fragment": {
-      "iterations": 50,
-      "mean_transform_latency_ms": 0.514,
-      "p95_transform_latency_ms": 0.819,
-      "p99_transform_latency_ms": 0.98
-    }
+    "calmar_ratio": -2.14,
+    "win_rate_pct": 35.62,
+    "profit_factor": 0.37,
+    "total_trades": 335,
+    "information_coefficient": -0.0253,
+    "rank_information_coefficient": -0.0048,
+    "directional_hit_rate_pct": 51.35
   }
 }

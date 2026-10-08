@@ -99,10 +99,12 @@ def evaluate_system_one_simulated(text: str, true_label: str) -> Dict[str, Any]:
         p_bear = (1.0 - p_neut) * 0.5
         conf = p_neut
         
+    simulated_warm_latency = float(np.random.uniform(180.0, 320.0))
     return {
         "Choice": predicted,
         "Confidence": conf,
-        "Probabilities": {"Bullish": p_bull, "Bearish": p_bear, "Neutral": p_neut}
+        "Probabilities": {"Bullish": p_bull, "Bearish": p_bear, "Neutral": p_neut},
+        "simulated_latency_ms": simulated_warm_latency
     }
 
 
@@ -287,19 +289,22 @@ class NLPEvaluator:
 
     def test_determinism(self, iterations: int = 20) -> Dict[str, Any]:
         """
-        Runs repeated evaluations of identical text to verify zero-variance determinism.
+        Runs repeated evaluations of identical text to verify deterministic output invariance.
         """
         test_text = "Federal Reserve lowers benchmark interest rate by 25 basis points; maintains economic growth outlook."
         results = []
+        prob_bulls = []
         for _ in range(iterations):
             res = evaluate_system_one_simulated(test_text, "Bullish")
             results.append(res["Choice"])
+            prob_bulls.append(res["Probabilities"]["Bullish"])
 
         unique_choices = set(results)
-        is_deterministic = (len(unique_choices) == 1)
+        prob_variance = float(np.var(prob_bulls))
+        is_deterministic = (len(unique_choices) == 1 and prob_variance <= 1e-6)
         return {
             "iterations": iterations,
             "is_deterministic": is_deterministic,
-            "variance": 0.0 if is_deterministic else float(np.var([1 if r == results[0] else 0 for r in results])),
+            "probability_variance": prob_variance,
             "choice": results[0]
         }
