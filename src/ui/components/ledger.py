@@ -27,6 +27,12 @@ except Exception:
         load_forward_test_metrics = None
         compute_metrics_from_dataframe = None
 
+try:
+    from ui.components.common import render_clean_html
+except Exception:
+    from src.ui.components.common import render_clean_html
+
+
 
 def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None, get_processed_data_fn=None):
     """
@@ -90,21 +96,13 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
         hr_val_class = "green" if hit_rate >= 50.0 else "red"
         hr_tag_class = "green" if hit_rate >= 50.0 else "red"
         hr_sub_text = "Out-of-sample directional efficacy"
-        meter_markup = f"""
-        <div class="ledger-meter-container">
-            <div class="ledger-meter-fill" style="width: {hit_rate_clamped:.1f}%;"></div>
-        </div>
-        """
+        meter_markup = f'<div class="ledger-meter-container"><div class="ledger-meter-fill" style="width: {hit_rate_clamped:.1f}%;"></div></div>'
     else:
         hit_rate_str = "N/A (Warmup)"
         hr_val_class = "amber"
         hr_tag_class = "amber"
         hr_sub_text = "Calibrating next evaluation window"
-        meter_markup = """
-        <div class="ledger-meter-container">
-            <div style="height: 100%; width: 100%; background: rgba(245, 158, 11, 0.2); border-radius: 999px;"></div>
-        </div>
-        """
+        meter_markup = '<div class="ledger-meter-container"><div style="height: 100%; width: 100%; background: rgba(245, 158, 11, 0.2); border-radius: 999px;"></div></div>'
 
     ledger_html = f"""
     <details class="ledger-collapsible" open>
@@ -126,7 +124,6 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
             </div>
         </summary>
         <div class="ledger-content">
-            <!-- Executive Governance Strip: Visual 3-Tile Row -->
             <div class="ledger-governance-strip">
                 <div class="ledger-gov-col">
                     <div class="ledger-gov-pill blue">
@@ -156,8 +153,6 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
                     </div>
                 </div>
             </div>
-
-            <!-- 5-Metric Micro KPI Grid with Visual Meters -->
             <div class="ledger-metrics-grid">
                 <div class="ledger-metric-card">
                     <div class="ledger-metric-header">
@@ -171,7 +166,6 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
                     </div>
                     <div class="ledger-metric-sub">{directional_pct:.0f}% Dir • {neutral_pct:.0f}% Neut</div>
                 </div>
-
                 <div class="ledger-metric-card">
                     <div class="ledger-metric-header">
                         <span class="ledger-metric-title">Directional Calls</span>
@@ -181,7 +175,6 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
                     <div style="height: 5px; margin: 5px 0 4px 0;"></div>
                     <div class="ledger-metric-sub">Bullish & Bearish momentum</div>
                 </div>
-
                 <div class="ledger-metric-card">
                     <div class="ledger-metric-header">
                         <span class="ledger-metric-title">Neutral Filtered</span>
@@ -191,7 +184,6 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
                     <div style="height: 5px; margin: 5px 0 4px 0;"></div>
                     <div class="ledger-metric-sub">Noise rejected by ±0.05 band</div>
                 </div>
-
                 <div class="ledger-metric-card">
                     <div class="ledger-metric-header">
                         <span class="ledger-metric-title">Observed Horizon</span>
@@ -201,7 +193,6 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
                     <div style="height: 5px; margin: 5px 0 4px 0;"></div>
                     <div class="ledger-metric-sub">Live tracking horizon</div>
                 </div>
-
                 <div class="ledger-metric-card highlight">
                     <div class="ledger-metric-header">
                         <span class="ledger-metric-title">Directional Hit Rate</span>
@@ -212,8 +203,6 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
                     <div class="ledger-metric-sub">{hr_sub_text}</div>
                 </div>
             </div>
-
-            <!-- Footer Telemetry Status Bar -->
             <div class="ledger-footer-bar">
                 <div class="ledger-footer-left">
                     <span class="ledger-status-dot"></span>
@@ -226,4 +215,4 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
         </div>
     </details>
     """
-    st.markdown(ledger_html, unsafe_allow_html=True)
+    render_clean_html(ledger_html)

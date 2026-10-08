@@ -7,6 +7,7 @@ from ui.components.common import (
     render_segmented_filter,
     make_fragment_decorator,
     rerun_scoped,
+    render_clean_html,
 )
 from ui.components.header import (
     render_header_banner,
@@ -28,6 +29,7 @@ from ui.components.ledger import (
 )
 
 __all__ = [
+    "render_clean_html",
     "render_segmented_filter",
     "make_fragment_decorator",
     "rerun_scoped",

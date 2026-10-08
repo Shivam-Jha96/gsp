@@ -6,7 +6,10 @@ from typing import Optional, Dict, Any
 import streamlit as st
 import pandas as pd
 
-from ui.components.common import make_fragment_decorator
+try:
+    from ui.components.common import make_fragment_decorator, render_clean_html
+except Exception:
+    from src.ui.components.common import make_fragment_decorator, render_clean_html
 
 try:
     from database.telemetry import format_pipeline_freshness
@@ -203,7 +206,6 @@ def render_regulatory_disclaimer():
             </div>
         </div>
         <div class="regulatory-grid">
-            <!-- Left Card: Academic & Research Scope -->
             <div class="regulatory-subcard sky-border">
                 <div class="regulatory-subcard-header">
                     <div class="regulatory-subcard-title">
@@ -212,11 +214,9 @@ def render_regulatory_disclaimer():
                     </div>
                     <span class="regulatory-subcard-badge sky">NON-ADVISORY</span>
                 </div>
-                
                 <div class="regulatory-callout-pill sky">
                     NOT INVESTMENT ADVICE OR FINANCIAL PROMOTION
                 </div>
-
                 <div class="regulatory-bullet-list">
                     <div class="regulatory-bullet-item">
                         <span class="reg-chip">JURISDICTIONS</span>
@@ -228,8 +228,6 @@ def render_regulatory_disclaimer():
                     </div>
                 </div>
             </div>
-
-            <!-- Right Card: Execution Safeguards & Attribution -->
             <div class="regulatory-subcard purple-border">
                 <div class="regulatory-subcard-header">
                     <div class="regulatory-subcard-title">
@@ -238,11 +236,9 @@ def render_regulatory_disclaimer():
                     </div>
                     <span class="regulatory-subcard-badge purple">LOCKOUT ACTIVE</span>
                 </div>
-
                 <div class="regulatory-callout-pill purple">
                     AUTOMATED BROKER EXECUTION DISABLED
                 </div>
-
                 <div class="regulatory-bullet-list">
                     <div class="regulatory-bullet-item">
                         <span class="reg-chip">CAPITAL</span>
@@ -261,4 +257,4 @@ def render_regulatory_disclaimer():
         </div>
     </div>
     """
-    st.markdown(disclaimer_html, unsafe_allow_html=True)
+    render_clean_html(disclaimer_html)

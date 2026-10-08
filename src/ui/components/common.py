@@ -89,3 +89,14 @@ def rerun_scoped(target: Any):
             st.rerun()
     except Exception:
         st.rerun()
+
+
+def render_clean_html(html_str: str) -> None:
+    """
+    Renders raw HTML safely in Streamlit without CommonMark indentation errors.
+    Strips leading and trailing whitespace from each line and filters out blank lines,
+    ensuring Markdown never interprets indented HTML lines as code blocks (<pre><code>).
+    """
+    clean_lines = [line.strip() for line in html_str.splitlines() if line.strip()]
+    st.markdown("\n".join(clean_lines), unsafe_allow_html=True)
+
