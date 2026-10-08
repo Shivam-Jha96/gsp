@@ -59,10 +59,10 @@ Valence utilizes the contrastive inference paradigm of **TypeSafe AI's Jev** Sys
 
 ```
 +-----------------------------------------------------------------------------------------+
-|                                7-TIER OPERATIONAL PIPELINE                              |
+|                                8-TIER OPERATIONAL PIPELINE                              |
 +-----------------------------------------------------------------------------------------+
-[1. Geotargeted RSS Feeds (40 Channels across US, IN, UK, JP)]
-       │
+[1. Geotargeted & Central Bank RSS Feeds (44 Channels across US, IN, UK, JP)]
+       │ (Fed, RBI, Bank of England, Bank of Japan + Regional Publishers)
        ▼
 [RegionalAffinityClassifier: Regex Word Tries] ──> (Rejects Cross-Region Contaminants)
        │
@@ -81,35 +81,36 @@ Valence utilizes the contrastive inference paradigm of **TypeSafe AI's Jev** Sys
        │
        ▼
 [4. Vertically Partitioned PostgreSQL (Supabase)]
-       ├─> event_signals: Math & Analytics Layer (Lightweight BRIN & B-Tree indices)
+       ├─> event_signals: Math Layer (audit cols: published_at, scored_at, okf_version_hash)
        ├─> event_payloads: Document Layer (Raw JSON, applied OKF rules context)
        └─> pipeline_runs: Ingestion & Scoring Execution Telemetry
        │
        ├─────────────────────────────────────────┐
        ▼                                         ▼
-[5. Alpaca Execution Engine]            [6. Institutional Terminal (Streamlit)]
-- 4-Period EMA Crossover Filter         - Header Action Card & Freshness Telemetry
-- Hysteresis Deadband Gating            - Plotly Multi-Index Translucent Area Chart
-- Automated Paper Trade Dispatch        - @st.fragment Isolated Live Intelligence Feed
+[5. Public Forward Ledger & Signal Engine]      [6. Institutional Terminal (Modular Streamlit)]
+- Append-Only forward_test_ledger.csv           - Decomposed src/ui/components/ Architecture
+- Multi-Window Recursive EMA (4P, 12P)          - Header Banner & Live Freshness Telemetry
+- Hysteresis Deadband Gating (+/- 5.0)          - Plotly Multi-Index Translucent Area Chart
+- Alpaca Paper Trade Execution Lockout          - @st.fragment Isolated Live Feed & Ledger
 +-----------------------------------------------------------------------------------------+
-[7. Dynamic OKF Knowledge Updater (Daily Cron at 00:00 UTC via Google Gemini Flash)]
-- Scrapes central bank speeches & CPI releases -> Auto-commits updated rules to GitHub
+[7. Dynamic OKF Knowledge Updater (Daily Cron at 00:00 UTC via Google Gemini 2.5/3.x)]
+- Scrapes macro releases -> Generates reviewable Pull Requests for macro rule shifts
 +-----------------------------------------------------------------------------------------+
-[8. Autonomous Constituents Sync (Fortnightly Cron via Open-Source Financial APIs)]
-- Updates regional index constituent JSON registries -> Auto-commits to GitHub
+[8. Operational Health Probe (Every 6 Hours via GitHub Actions & scripts/health_check.py)]
+- Probes RSS feeds, Supabase DB pool, and Modal CLM-8B inference endpoint -> Step Summary
 +-----------------------------------------------------------------------------------------+
 ```
 
 ### Architectural Breakdown
 
-1. **Geotargeted Ingestion**: Queries 40 RSS channels with exact quoting ("%22{ticker}%22") and regional country editions (&gl=IN, &gl=US, &gl=GB, &gl=JP).
+1. **Geotargeted & Central Bank Ingestion**: Queries 44 RSS channels with exact quoting (`"%22{ticker}%22"`), regional country editions (`&gl=IN`, `&gl=US`, `&gl=GB`, `&gl=JP`), and official central bank feeds (Federal Reserve, RBI, BoE, BoJ).
 2. **Regex Affinity Gatekeeper**: Pre-compiles word-boundary regex trees across index tickers (3.0x), constituent companies (2.0x), and central bank anchors (1.0x), rejecting cross-region contaminants.
 3. **Dual Deduplication**: Employs intra-run fingerprinting and 48-hour database lookups to prevent redundant inference calls.
 4. **Modal Serverless ASGI**: Hosts the Qwen3-8B embedding backbone and CLM projection heads natively on an NVIDIA A10G GPU, bypassing TCP proxy deadlocks and cold-boot delays.
-5. **Vertical Partitioning**: Separates numerical vector fields (id, created_at, sentiment_score, region_tag, index_ticker) into event_signals and stores raw JSON metadata in event_payloads.
-6. **Execution Engine**: Vectorizes EMA calculation (alpha = 0.40), executing market orders on Alpaca when crossing directional boundaries.
-7. **Institutional Terminal**: Renders continuous area plots and @st.fragment-isolated news feeds in permanent dark mode (#020617).
-8. **Knowledge & Constituents Engines**: Gemini updates OKF macro rules daily, while a fortnightly cron dynamically maintains regional index constituent registries via financial APIs.
+5. **Vertical Partitioning**: Separates numerical vector fields (`id`, `timestamp`, `sentiment_score`, `market_region`, `index_ticker`, `published_at`, `scored_at`, `okf_version_hash`, `model_version`) into `event_signals` and stores raw JSON metadata in `event_payloads`.
+6. **Execution & Forward Ledger**: Evaluates recursive multi-span EMAs (4-period, 12-period) and logs out-of-sample forward signals to `reports/forward_test_ledger.csv`. Paper trading remains strictly locked out (`ENABLE_TRADE_EXECUTION=false`) for research focus.
+7. **Modular Institutional Terminal**: Decomposed into single-responsibility components in `src/ui/components/` and `src/ui/styles.py` with `@st.fragment`-isolated news feeds and public forward evaluation audit views.
+8. **Knowledge Governance & Operational Monitoring**: Gemini updates OKF macro rules daily via reviewable PRs, while scheduled health probes monitor system availability every 6 hours.
 
 ---
 
@@ -162,6 +163,10 @@ The dashboard (`src/ui/app.py`) is styled permanently in dark mode (`#020617` ca
 |  - Filter Pills: [ALL] [BULLISH] [BEARISH] [NEUTRAL]                               |
 |  - Responsive News Cards with Directional Badges, Canonical Fingerprints & Links   |
 +------------------------------------------------------------------------------------+
+|  [SECTION: Public Out-of-Sample Forward Test Ledger & Directional Hit Rate]       |
+|  - Quantitative KPI Cards: Directional Hit Rate %, Win Ratio, Cumulative Edge     |
+|  - Interactive Historical Signal Audit Table with Timestamp, Region & OKF Commit  |
++------------------------------------------------------------------------------------+
 ```
 
 ### Key UI Features
@@ -213,7 +218,7 @@ Evaluated on the **Macroeconomic Golden Benchmark Dataset** (`knowledge/benchmar
 | **Macro F1 Score** | **0.8380** (Nuanced macro semantics) | **0.8545** (Slightly higher recall) | 0.7884 (Rigid lexicon omissions) | > 0.80 | **PASS** |
 | **Schema Parse Failure Rate** | **0.00% (Direct Choice Vector)**| 1.8% – 3.2% (JSON syntax drift) | 0.00% | 0.00% | **PASS** |
 | **Compute Cost per 10k Events** | **~$0.15** (Scale-to-zero batch) | ~$1.50 – $3.50 (10x higher opex) | $0.00 (Local CPU) | < $1.00 | **PASS** |
-| **Point-in-Time Forward Track Record**| **Under compilation** (`reports/forward_test_ledger.csv`) | N/A | N/A | Live Public Audit | **IN PROGRESS** |
+| **Point-in-Time Forward Track Record**| **Active Public Ledger** (`reports/forward_test_ledger.csv`) | N/A | N/A | Live Public Audit (200+ signals recorded) | **ACTIVE** |
 
 > **Note on Alpha Metrics:** Preliminary synthetic backtest figures ($IC = +0.24$, Sharpe $1.70$) reported in earlier drafts have been removed following quantitative review. Those simulations contained synthetic look-ahead artifacts. Directional predictive alpha will be established exclusively via our public, append-only forward-test ledger.
 
@@ -252,4 +257,4 @@ Evaluated on the **Macroeconomic Golden Benchmark Dataset** (`knowledge/benchmar
 
 ---
 
-*Valence Technical Documentation • Version 2.6.0 • Maintained for Open-Source Quantitative Research*
+*Valence Technical Documentation • Version 2.7.0 • Maintained for Open-Source Quantitative Research*

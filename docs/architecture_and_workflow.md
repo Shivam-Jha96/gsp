@@ -10,8 +10,8 @@
 +------------------------------------+------------------------------------+-------------------------------+
 |       SYSTEM-ONE INFERENCE         |       VERTICAL PARTITIONING        |      GITOPS FOR KNOWLEDGE     |
 | Contrastive state-action mapping   | Decoupling math & document layers  | Macro heuristics versioned    |
-| yields sub-60ms inference latency  | reduces query load by >90% while   | in Markdown; auto-evolved by  |
-| with zero cold-boot overhead.      | preserving rich raw contexts.      | Google Gemini cron jobs.      |
+| yields 180–350ms warm inference    | reduces query load by >90% while   | in Markdown; auto-evolved by  |
+| with scale-to-zero serverless GPU. | preserving rich raw contexts.      | Google Gemini cron jobs.      |
 +------------------------------------+------------------------------------+-------------------------------+
 ```
  
@@ -346,7 +346,11 @@ CREATE TABLE event_payloads (
 |  index_ticker: VARCHAR(50)              |  raw_text: TEXT                          |
 |  market_region: VARCHAR(100)            |  applied_okf_rules: TEXT[]               |
 |  timestamp: TIMESTAMPTZ                 |  metadata: JSONB                         |
-|  sentiment_score: NUMERIC               |                                          |
+|  sentiment_score: NUMERIC               |  fingerprint_hash: VARCHAR(64)           |
+|  published_at: TIMESTAMPTZ (Audit)      |                                          |
+|  scored_at: TIMESTAMPTZ (Audit)         |                                          |
+|  okf_version_hash: VARCHAR(40) (Audit)  |                                          |
+|  model_version: VARCHAR(50) (Audit)     |                                          |
 +-----------------------------------------+------------------------------------------+
 |  Scan Speed: Sub-millisecond            |  Access: Only fetched for drill-down     |
 |  Used By: Signal Engine, EMA Charts     |  Used By: Live Intelligence Feed modal   |
@@ -401,15 +405,15 @@ CREATE TABLE event_payloads (
 ---
 
 ### Layer 4: Signal & Quantitative Execution Engine
-* **Source Files:** [`src/signal_engine/ema.py`](file:///d:/Dev/repos/gsp/src/signal_engine/ema.py), [`src/signal_engine/cron_jobs.py`](file:///d:/Dev/repos/gsp/src/signal_engine/cron_jobs.py)
+* **Source Files:** [`src/signal_engine/ema.py`](file:///d:/Dev/repos/gsp/src/signal_engine/ema.py), [`src/signal_engine/cron_jobs.py`](file:///d:/Dev/repos/gsp/src/signal_engine/cron_jobs.py), [`src/signal_engine/forward_tester.py`](file:///d:/Dev/repos/gsp/src/signal_engine/forward_tester.py)
 * **Runtime & Dependencies:** Python 3.10+, `pandas>=2.2.3`, `alpaca-py>=0.40.0`
 
-#### 1. Vectorized Exponential Moving Average (EMA) Calculation
-[`calculate_ema`](file:///d:/Dev/repos/gsp/src/signal_engine/ema.py#L3-L26) operates on chronological sentiment time series using Pandas' vectorized `ewm` functionality:
+#### 1. Vectorized Multi-Window Exponential Moving Average (EMA) Calculation
+[`calculate_ema`](file:///d:/Dev/repos/gsp/src/signal_engine/ema.py#L3-L26) operates on chronological sentiment time series using Pandas' vectorized `ewm` functionality across multiple parameterizable span windows (e.g. 4-period for tactical momentum, 12-period for regime trends):
 
 $$\text{EMA}_t = \alpha \cdot S_t + (1 - \alpha) \cdot \text{EMA}_{t-1}, \quad \alpha = \frac{2}{N + 1}$$
 
-With window size $N = 4$, the smoothing coefficient is $\alpha = 0.40$. `adjust=False` is enforced to apply the recursive exponential decay formula without introducing initialization bias.
+With window size $N = 4$, the smoothing coefficient is $\alpha = 0.40$. With window size $N = 12$, $\alpha = 2/13 \approx 0.1538$. `adjust=False` is enforced to apply the recursive exponential decay formula without introducing initialization bias.
 
 ```python
 def calculate_ema(sentiment_data: pd.DataFrame, window: int = 4, column: str = 'sentiment_score') -> pd.Series:
@@ -418,36 +422,21 @@ def calculate_ema(sentiment_data: pd.DataFrame, window: int = 4, column: str = '
     return sentiment_data[column].ewm(span=window, adjust=False).mean()
 ```
 
-#### 2. Crossover Strategy & Order Execution
-The quantitative engine evaluates consecutive EMA points ($\text{EMA}_{\text{current}}$ and $\text{EMA}_{\text{previous}}$) to identify directional momentum shifts:
+#### 2. Public Out-of-Sample Forward-Testing Ledger (`forward_tester.py`)
+To establish an unassailable, point-in-time public audit record without synthetic backtest leakage, every scheduled pipeline execution records directional signals to [`reports/forward_test_ledger.csv`](file:///d:/Dev/repos/gsp/reports/forward_test_ledger.csv):
+* **Point-in-Time Schema:** Records `timestamp_utc`, `region`, `index_ticker`, `raw_sentiment`, `ema_sentiment`, `directional_stance`, `model_version`, and `okf_commit`.
+* **Out-of-Sample Metrics Engine:** [`compute_metrics_from_dataframe()`](file:///d:/Dev/repos/gsp/src/signal_engine/forward_tester.py#L103) computes live directional hit rate, total trading days, and directional vs neutral call counts.
+* **Resilient In-Memory Synchronization:** If the CSV ledger is not yet flushed or synced across ephemeral cloud instances, metrics compute dynamically from the live analytical DataFrame (`df_signals`).
 
-```
-                  EMA > Prev & EMA > 0
-               +------------------------> BUY (OrderSide.BUY)
-               |
-SIGNAL STATE --+  EMA < Prev & EMA < 0
-               +------------------------> SELL (OrderSide.SELL)
-               |
-               +------------------------> HOLD (No Order Executed)
-```
-
-Orders are dispatched using Alpaca's modern Python SDK (`alpaca-py`) configured in paper-trading mode:
-
-```python
-order_data = MarketOrderRequest(
-    symbol="SPY",
-    qty=1.0,
-    side=side,
-    time_in_force=TimeInForce.GTC
-)
-trading_client = TradingClient(ALPACA_API_KEY, ALPACA_SECRET_KEY, paper=True)
-order = trading_client.submit_order(order_data=order_data)
-```
+#### 3. Execution Lockout Protection
+To focus the platform on macroeconomic directional intelligence and prevent unintentional capital exposure during forward evaluation, active broker order routing is governed by strict execution gating:
+* `ENABLE_TRADE_EXECUTION = os.getenv("ENABLE_TRADE_EXECUTION", "false").lower() == "true"`
+* When `ENABLE_TRADE_EXECUTION=false`, `execute_signal()` records directional signals for research logging and immediately aborts prior to order dispatch, ensuring complete protection.
 
 ---
 
 ### Layer 5: Presentation & Dashboard Terminal
-* **Source File:** [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py)
+* **Source Files:** [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py), [`src/ui/styles.py`](file:///d:/Dev/repos/gsp/src/ui/styles.py), [`src/ui/components/*.py`](file:///d:/Dev/repos/gsp/src/ui/components/)
 * **Runtime & Dependencies:** Streamlit Community Cloud, `streamlit>=1.30.0`, `plotly>=5.18.0`, `pandas>=2.2.3`
 
 ```
@@ -908,8 +897,36 @@ python scripts/run_benchmarks.py --all
 python scripts/run_benchmarks.py --tier nlp
 python scripts/run_benchmarks.py --tier classifier
 python scripts/run_benchmarks.py --tier alpha --symbol SPY --days 90
-python scripts/run_benchmarks.py --tier system
+Reports are automatically saved to `reports/benchmark_report.md` and `reports/benchmark_data.json`.
+
+### 6.3 Unit Testing & Invariant Verification Suite
+
+Valence enforces zero-regression quality through an automated unit test suite (`tests/unit/`) comprising **66 tests** across 11 modules:
+
+| Test Module | Coverage & Verification Invariants | Test Count |
+| :--- | :--- | :---: |
+| [`test_scoring_math.py`](file:///d:/Dev/repos/gsp/tests/unit/test_scoring_math.py) | Mathematical invariant bounds: $P \in \Delta^2$, $S_{\text{rel}} \in [-1.0, 1.0]$, $M \ge 0$, and scale $[-100, 100]$. | 8 |
+| [`test_signal_engine.py`](file:///d:/Dev/repos/gsp/tests/unit/test_signal_engine.py) | Span 4 & Span 12 recursive EMA accuracy, deadband $\pm 5.0$ filtering, trade execution lockout. | 9 |
+| [`test_backtest_causality.py`](file:///d:/Dev/repos/gsp/tests/unit/test_backtest_causality.py) | Point-in-time causality, strictly preventing future price return look-ahead leakage. | 3 |
+| [`test_classifier_and_registry.py`](file:///d:/Dev/repos/gsp/tests/unit/test_classifier_and_registry.py) | Regional affinity classifier, central bank feed ingestion, zero cross-region contaminant leakage. | 8 |
+| [`test_dedup_and_sentiment.py`](file:///d:/Dev/repos/gsp/tests/unit/test_dedup_and_sentiment.py) | Canonical SHA-256 fingerprint deduplication across syndicated articles. | 4 |
+| [`test_forward_tester.py`](file:///d:/Dev/repos/gsp/tests/unit/test_forward_tester.py) | Append-only public forward ledger, in-memory metric calculation fallback, sync from DataFrame. | 6 |
+| [`test_okf_updater.py`](file:///d:/Dev/repos/gsp/tests/unit/test_okf_updater.py) | Resilient Gemini model fallback chain (`gemini-3.8-flash` $\to$ `3.7` $\to$ `3.5-lite`) and rate pacing. | 3 |
+| [`test_state_persistence.py`](file:///d:/Dev/repos/gsp/tests/unit/test_state_persistence.py) | Dual-layer session state, URL query-param synchronization, and localStorage rehydration. | 11 |
+| [`test_telemetry.py`](file:///d:/Dev/repos/gsp/tests/unit/test_telemetry.py) | Pipeline execution telemetry, duration tracking, error logging, and freshness timestamps. | 6 |
+| [`test_ui_fragment_isolation.py`](file:///d:/Dev/repos/gsp/tests/unit/test_ui_fragment_isolation.py) | Modular UI `@st.fragment` isolation decorators, scoped reruns (`rerun_scoped`), and sentiment pills. | 4 |
+| [`test_ui_chart_config.py`](file:///d:/Dev/repos/gsp/tests/unit/test_ui_chart_config.py) & [`test_valence_branding.py`](file:///d:/Dev/repos/gsp/tests/unit/test_valence_branding.py) | Plotly chart zoom lockouts, SVG branding assets, and permanent dark styling consistency. | 4 |
+
+Execute the unit test suite locally:
+```bash
+python -m unittest discover tests/unit -v
 ```
 
-Reports are automatically saved to `reports/benchmark_report.md` and `reports/benchmark_data.json`.
+### 6.4 Operational Subsystem Health Probe CLI
+
+Run the diagnostic probe locally or via GitHub Actions (`.github/workflows/health_check.yml`):
+```bash
+python scripts/health_check.py
+```
+Outputs latency and status across regional RSS feeds (US, UK, IN, JP), Supabase PostgreSQL pool, and Modal CLM-8B inference, appending a markdown status report to `$GITHUB_STEP_SUMMARY`.
 

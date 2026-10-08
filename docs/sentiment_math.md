@@ -3,7 +3,7 @@
 **Deterministic Directional Conviction Extraction, Tri-Partite Softmax Geometries, and Time-Series Signal Aggregation**
 
 *Valence (formerly GSP) — Quantitative Research & AI Engineering Specifications*  
-*Document Version: 2.4.0 | Classification: Production Quantitative Architecture*
+*Document Version: 2.5.0 | Classification: Production Quantitative Architecture*
 
 ---
 
@@ -91,7 +91,7 @@ Modern quantitative trading systems require bounded latency, deterministic repro
 
 | Metric / Property | System-One CLM (Valence Design) | Generative LLM (Autoregressive Decoder) | Mathematical & Operational Consequence |
 | :--- | :--- | :--- | :--- |
-| **Computational Complexity** | $\mathcal{O}(1)$ single forward pass ($N$ tokens) | $\mathcal{O}(L)$ forward passes ($N$ input + $L$ output tokens) | CLM executes in $10\text{--}15\text{ ms}$; generative models take $600\text{--}2500\text{ ms}$, missing market liquidity windows. |
+| **Computational Complexity** | $\mathcal{O}(1)$ single forward pass ($N$ tokens) | $\mathcal{O}(L)$ forward passes ($N$ input + $L$ output tokens) | CLM executes in $180\text{--}350\text{ ms}$ warm batch API; generative models take $1,200\text{--}2,500\text{ ms}$ per call. |
 | **Stochastic Invariance** | Strictly deterministic: $\text{Var}_{\text{sample}}(\mathbf{z}) = 0$ | Non-zero token sampling entropy unless $T=0$; prone to greedy decoding path bifurcation | Eliminates non-deterministic hedging decisions across replicated worker nodes. |
 | **Probability Extraction** | Direct projection onto continuous 2-simplex $\Delta^2$ | Post-hoc logit extraction or JSON text parsing (`"choice": "Bullish"`) | CLM yields calibrated categorical posteriors; LLMs suffer from prompt drift and schema parsing errors. |
 | **Memory Footprint** | Static inference graph, no KV-cache growth during generation | Linear KV-cache expansion $\mathcal{O}(B \cdot H \cdot L \cdot d)$ per generation token | CLM supports $>100\times$ higher concurrency per GPU device under ZeroGPU execution. |
@@ -550,7 +550,7 @@ The following matrix contrasts the **System-One Contrastive Language Model (CLM)
 | :--- | :--- | :--- | :--- |
 | **Output Representation** | Token string sequence parsed via regex or structured JSON schema. | Raw discrete probability vector $\mathbf{p} \in \Delta^2$ over static choices. | Continuous calibrated probability vector $\mathbf{p} \in \Delta^2$ on unit hypersphere $\mathbb{S}^{k-1}$. |
 | **Logit Calibration** | Uncalibrated; token probabilities are contaminated by syntax tokens. | Calibrated over generic choices; uncalibrated for macro market spread. | Directly calibrated via temperature $\tau$ over canonical hypothesis anchors & $S_{\text{rel}}$. |
-| **Execution Latency** | **$650\text{--}2,200\text{ ms}$** per payload (multi-token generation over API). | **$300\text{--}600\text{ ms}$** per payload (standard hosted HTTP/REST API). | **$< 250\text{ ms}$** pipeline ($10\text{--}18\text{ ms}$ single-pass forward evaluation on A10G ASGI). |
+| **Execution Latency** | **$1,200\text{--}2,500\text{ ms}$** per payload (multi-token autoregressive generation). | **$70\text{--}500\text{ ms}$** per payload (standard hosted HTTP/REST API). | **$180\text{--}350\text{ ms}$** warm API batch ($P_{50}=220\text{ ms}, P_{90}=340\text{ ms}$ on Modal A10G). |
 | **Determinism Guarantee** | Stochastic variance across runs; temperature sensitive. | 100% Deterministic choice probabilities ($P_i \in [0, 1]$). | **100% Bitwise Deterministic** ($\text{Var} = 0$, zero decoding temperature sensitivity). |
 | **Neutral Attenuation** | Dependent on heuristic prompt engineering (e.g., *"score between -1 and 1"*). | No neutral damping; prone to neutral flatlining ($P \ge 0.90$) under dense rules. | Endogenous mathematical operator: $M = \|S_{\text{rel}}\| \cdot (1 - 0.5 \cdot p_{\text{neut}})$. |
 | **Parsing Failure Rate** | Non-zero ($0.5\%\text{--}3.0\%$ JSON parse failures, schema violations). | **$0.00\%$** (Native Choice schema returns probability dictionary). | **$0.00\%$** (Native tensor dot-product returns float values directly). |
@@ -573,8 +573,10 @@ The mathematical framework formulated herein establishes an end-to-end, mathemat
 the Valence platform eliminates the latency, non-determinism, and hallucination risks of generative language models. The system guarantees robust signal-to-noise separation, enabling automated execution algorithms to operate with quantitative confidence across global macro regimes.
 
 ### Source Code Cross-References
-- **Scoring Pipeline**: [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py#L13-L77)
-- **ZeroGPU Inference Engine**: [`src/ai_engine/inference.py`](file:///d:/Dev/repos/gsp/src/ai_engine/inference.py#L12-L69)
+- **Scoring Pipeline**: [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py#L23-L75)
 - **Time-Series EMA Calculator**: [`src/signal_engine/ema.py`](file:///d:/Dev/repos/gsp/src/signal_engine/ema.py#L3-L26)
-- **Execution & Crossover Routing**: [`src/signal_engine/cron_jobs.py`](file:///d:/Dev/repos/gsp/src/signal_engine/cron_jobs.py#L37-L100)
-- **Terminal UI & Regime Visualizer**: [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py#L269-L435)
+- **Forward-Testing Ledger & Out-of-Sample Metrics**: [`src/signal_engine/forward_tester.py`](file:///d:/Dev/repos/gsp/src/signal_engine/forward_tester.py#L103-L200)
+- **Execution & Crossover Routing**: [`src/signal_engine/cron_jobs.py`](file:///d:/Dev/repos/gsp/src/signal_engine/cron_jobs.py#L38-L82)
+- **Modular Analytics & Visualizer**: [`src/ui/components/analytics.py`](file:///d:/Dev/repos/gsp/src/ui/components/analytics.py#L1-L374)
+- **Public Forward Test Card**: [`src/ui/components/ledger.py`](file:///d:/Dev/repos/gsp/src/ui/components/ledger.py#L1-L150)
+- **Application Orchestrator**: [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py#L1-L284)

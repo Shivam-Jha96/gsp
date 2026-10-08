@@ -1,7 +1,9 @@
 # Valence 📊📈
 ### Open-Source Quantitative Macroeconomic Sentiment & Directional Signal Engine
 
+[![CI Pipeline](https://github.com/Shivam-Jha96/gsp/actions/workflows/ci.yml/badge.svg)](https://github.com/Shivam-Jha96/gsp/actions/workflows/ci.yml)
 [![Pipeline Status](https://github.com/Shivam-Jha96/gsp/actions/workflows/deploy.yml/badge.svg)](https://github.com/Shivam-Jha96/gsp/actions/workflows/deploy.yml)
+[![Operational Health](https://github.com/Shivam-Jha96/gsp/actions/workflows/health_check.yml/badge.svg)](https://github.com/Shivam-Jha96/gsp/actions/workflows/health_check.yml)
 [![OKF Updater](https://github.com/Shivam-Jha96/gsp/actions/workflows/update_okf.yml/badge.svg)](https://github.com/Shivam-Jha96/gsp/actions/workflows/update_okf.yml)
 [![Dashboard](https://img.shields.io/badge/Live_Dashboard-Streamlit-FF4B4B?logo=streamlit)](https://valence.streamlit.app/)
 
@@ -179,14 +181,18 @@ flowchart TD
 ```text
 gsp/
 ├── .github/workflows/
+│   ├── ci.yml                  # CI Pipeline PyTest runner & compileall
 │   ├── deploy.yml              # Sentiment pipeline (every 2 hours)
-│   ├── update_okf.yml          # Dynamic OKF updater (daily)
+│   ├── health_check.yml        # Operational subsystem health probe (every 6 hours)
+│   ├── update_okf.yml          # Dynamic OKF updater & PR creator (daily)
 │   ├── update_constituents.yml # Index constituents updater (fortnightly)
+│   ├── db_cleanup.yml          # Database retention purge workflow
 │   └── reclassify_db.yml       # Database integrity, deduplication & re-scoring workflow
 ├── docs/                       # Quantitative & architectural documentation
-│   ├── architecture_and_workflow.md  # End-to-end architecture & workflows
+│   ├── architecture_and_workflow.md  # 7-tier architecture & workflow specifications
 │   ├── sentiment_math.md             # CLM quantitative math & scoring proofs
-│   └── build_progress.md             # Milestone build progress log
+│   ├── wiki_home.md                  # Comprehensive technical wiki
+│   └── build_progress.md             # Multi-phase milestone build progress log
 ├── knowledge/                  # Auto-updated regional trading rules & constituents
 │   ├── benchmark/              # Curated Macroeconomic Golden Benchmark Dataset
 │   ├── us_macro.okf.md
@@ -197,33 +203,65 @@ gsp/
 │   ├── uk_constituents.okf.json
 │   ├── japan_macro.okf.md
 │   └── japan_constituents.okf.json
-├── reports/                    # Generated institutional benchmark reports (Markdown & JSON)
+├── reports/                    # Generated institutional benchmark & forward test reports
+│   ├── forward_test_ledger.csv # Append-only public forward-testing evaluation ledger
+│   ├── benchmark_report.md     # 4-tier benchmark evaluation report
+│   └── benchmark_data.json     # Benchmark metrics data
 ├── scripts/
 │   ├── run_benchmarks.py       # Unified 4-tier quantitative benchmark CLI runner
+│   ├── health_check.py         # Subsystem operational health probe diagnostics CLI
 │   ├── db_cleanup.py           # Database purge & retention maintenance
 │   ├── reclassify_database.py  # Historical contaminant scan & purge utility
-│   └── update_constituents.py  # Fortnightly constituent synchronizer
+│   ├── update_constituents.py  # Fortnightly constituent synchronizer
+│   ├── add_audit_columns.sql   # Database audit schema migration script
+│   └── migrate_to_partitions.sql # Table partitioning migration script
 ├── src/
 │   ├── ai_engine/              # Modal serverless GPU (CLM System-One)
 │   ├── benchmark/              # 4-tier benchmarking engine & econometric metrics
-│   │   ├── backtest_engine.py  # Historical EMA crossover backtester vs Buy & Hold
+│   │   ├── backtest_engine.py  # Causal walk-forward backtester vs Buy & Hold
 │   │   ├── classifier_evaluator.py # Regional affinity & noise filtering benchmark
 │   │   ├── nlp_evaluator.py    # Model calibration (ECE, Brier) vs FinBERT & LM
 │   │   ├── predictive_metrics.py   # Information Coefficient, Hit Rate, Sharpe/Sortino
 │   │   └── system_profiler.py  # Database pool & UI fragment latency profiler
 │   ├── config/                 # Declarative market registry & constituent loaders
 │   │   ├── asset_classes.json  # Global asset-class dynamic criteria (equity, fixed_income, etc.)
-│   │   └── market_registry.json
+│   │   ├── market_registry.json# Regional market, index, and central bank configurations
+│   │   └── market_registry.py  # Dynamic RSS feed generator & registry accessors
 │   ├── database/               # Supabase connection pooler, SQL schemas & pipeline telemetry
+│   │   ├── client.py           # ThreadedConnectionPool manager with pre-checkout ping
+│   │   ├── schemas.sql         # Vertical partitioning schema & audit columns
+│   │   └── telemetry.py        # Context-managed pipeline run telemetry & freshness
 │   ├── ingestion/              # Async RSS poller, regional affinity classifier & deduplicator
-│   ├── knowledge_engine/       # Gemini-powered OKF updater
-│   ├── signal_engine/          # Pandas EMA calculator & Alpaca routing
-│   ├── ui/                     # Modular Streamlit dashboard & styling
+│   │   ├── api_clients.py      # Lightweight XML RSS parser
+│   │   ├── classifier.py       # Regex entity trie affinity classifier
+│   │   ├── dedup.py            # SHA-256 canonical fingerprint deduplicator
+│   │   └── poller.py           # Async aiohttp multi-feed poller
+│   ├── knowledge_engine/       # Dynamic Gemini-powered OKF updater
+│   │   └── okf_updater.py      # Resilient multi-model fallback chain & PR creator
+│   ├── signal_engine/          # Signal generation, forward testing & execution
+│   │   ├── ema.py              # Vectorized recursive multi-window EMA calculator
+│   │   ├── forward_tester.py   # Out-of-sample forward evaluation & in-memory metrics
+│   │   └── cron_jobs.py        # Directional crossover strategy & paper trading
+│   ├── ui/                     # Modular Streamlit dashboard & styling engine
 │   │   ├── components/         # Single-responsibility components (header, toolbar, analytics, feed, ledger)
 │   │   ├── styles.py           # Master permanent dark theme CSS & typography engine
 │   │   ├── state_persistence.py# Dual-layer query-param & local storage persistence
 │   │   └── app.py              # Lightweight dashboard entry-point orchestrator
 │   └── main.py                 # Unified pipeline entry point
+├── tests/
+│   └── unit/                   # Automated unit test suite (66 tests passing)
+│       ├── test_backtest_causality.py
+│       ├── test_benchmark_metrics.py
+│       ├── test_classifier_and_registry.py
+│       ├── test_dedup_and_sentiment.py
+│       ├── test_forward_tester.py
+│       ├── test_okf_updater.py
+│       ├── test_signal_engine.py
+│       ├── test_state_persistence.py
+│       ├── test_telemetry.py
+│       ├── test_ui_chart_config.py
+│       ├── test_ui_fragment_isolation.py
+│       └── test_valence_branding.py
 └── requirements.txt
 ```
 
@@ -242,9 +280,15 @@ python scripts/run_benchmarks.py --tier nlp         # AI Calibration (Acc, F1, E
 python scripts/run_benchmarks.py --tier classifier  # Contamination & Noise Rejection %
 python scripts/run_benchmarks.py --tier alpha       # Historical Backtest on SPY (Sharpe, MDD, IC)
 python scripts/run_benchmarks.py --tier system      # Supabase DB & UI Fragment Latency
+
+# Run automated unit test suite (66 tests)
+python -m unittest discover tests/unit -v
+
+# Run subsystem operational health probe
+python scripts/health_check.py
 ```
 
-Automated reports are generated at `reports/benchmark_report.md` and `reports/benchmark_data.json`.
+Automated reports are generated at `reports/benchmark_report.md` and `reports/benchmark_data.json`. Out-of-sample forward signals are logged point-in-time to `reports/forward_test_ledger.csv`.
 
 ### 🏆 Empirical Benchmark Results: Valence System-One CLM vs. Generative LLMs vs. Baselines
 
@@ -260,7 +304,7 @@ Evaluated on the **Macroeconomic Golden Benchmark Dataset** (500 curated macroec
 | **Macro F1 Score** | **0.8380** (Nuanced macro semantics) | **0.8545** (Slightly higher recall) | 0.7884 (Rigid lexicon omissions) | > 0.80 | **PASS** |
 | **Schema Parse Failure Rate** | **0.00% (Native Choice Vector)** | 1.8% – 3.2% (JSON syntax drift) | 0.00% | 0.00% | **PASS** |
 | **Compute Cost per 10k Events** | **~$0.15** (Scale-to-zero batch) | ~$1.50 – $3.50 (10x higher opex) | $0.00 (Local CPU) | < $1.00 | **PASS** |
-| **Point-in-Time Forward Track Record**| **Under compilation** (`reports/forward_test_ledger.csv`) | N/A | N/A | Live Public Audit | **IN PROGRESS** |
+| **Point-in-Time Forward Track Record**| **Active Public Ledger** (`reports/forward_test_ledger.csv`) | N/A | N/A | Live Public Audit (200+ signals recorded) | **ACTIVE** |
 
 > **Note on Alpha Metrics:** Preliminary synthetic backtest figures ($IC = +0.24$, Sharpe $1.70$) reported in earlier drafts have been removed following quantitative review. Those simulations contained synthetic look-ahead artifacts. Directional predictive alpha will be established exclusively via our public, append-only forward-test ledger.
 
@@ -306,10 +350,12 @@ PYTHONPATH=src python src/main.py
 
 | Workflow | Schedule | Description |
 |----------|----------|-------------|
-| **Sentiment Pipeline** (`deploy.yml`) | Every 2 hours | Ingestion → AI Scoring → Database → Paper Trading |
-| **Operational Health Probe** (`health_check.yml`) | Every 6 hours | Probes regional RSS feeds, Supabase DB pool, and Modal CLM inference endpoint |
-| **OKF Knowledge Updater** (`update_okf.yml`) | Daily at 00:00 UTC | Gemini analyzes macro policy news and auto-commits updated OKF trading rules |
+| **CI Pipeline** (`ci.yml`) | On Push & Pull Request | Automated syntax compilation and 66-test unit test suite execution |
+| **Sentiment Pipeline** (`deploy.yml`) | Every 2 hours | Ingestion → AI Scoring → Database → Forward Ledger |
+| **Operational Health Probe** (`health_check.yml`) | Every 6 hours | Probes regional RSS feeds, Supabase DB pool, and Modal CLM endpoint |
+| **OKF Knowledge Updater** (`update_okf.yml`) | Daily at 00:00 UTC | Gemini analyzes macro policy news and opens reviewable PRs for rule shifts |
 | **Index Constituents Updater** (`update_constituents.yml`) | Fortnightly | Automated update of regional index constituents using open-source financial APIs |
+| **Database Retention Purge** (`db_cleanup.yml`) | Daily at 03:00 UTC | Enforces rolling data retention window and cleans orphaned records |
 | **Reclassification & Purge** (`reclassify_db.yml`) | Manual (`workflow_dispatch`) | Scans historical Supabase records and audits/purges regional contaminants |
 
 All workflows can also be triggered manually via `workflow_dispatch` from the GitHub Actions UI.
