@@ -13,8 +13,6 @@ logger = logging.getLogger(__name__)
 
 # Default model fallback priority list (updated to remove deprecated 1.5/2.0 models)
 DEFAULT_MODEL_FALLBACKS = [
-    "gemini-2.5-flash",
-    "gemini-2.5-pro",
     "gemini-3.8-flash",
     "gemini-3.7-flash",
     "gemini-3.5-flash-lite",
@@ -52,8 +50,6 @@ def get_available_models(client) -> list:
     to eliminate 404 errors caused by deprecated model IDs or account tier constraints.
     """
     preferred_priority = [
-        "gemini-2.5-flash",
-        "gemini-2.5-pro",
         "gemini-3.8-flash",
         "gemini-3.7-flash",
         "gemini-3.5-flash-lite",

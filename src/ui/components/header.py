@@ -149,7 +149,7 @@ def render_usp_banner():
                         <span style="color: var(--text-muted); opacity: 0.6;">•</span>
                         <span class="usp-ticker-item"><strong style="color: #fbbf24;">📈 Momentum Vectors:</strong> 4P EMA Cross-Sectional Tracking</span>
                         <span style="color: var(--text-muted); opacity: 0.6;">•</span>
-                        <span class="usp-ticker-item"><strong style="color: #34d399;">🛡️ System Online:</strong> Institutional Ingestion & Execution Engine</span>
+                        <span class="usp-ticker-item"><strong style="color: #34d399;">🛡️ System Online:</strong> Quantitative Macro Engine & Ingestion Pipeline</span>
                         <span style="color: var(--text-muted); opacity: 0.6;">•</span>
                         <!-- Infinite loop seamless duplicate -->
                         <span class="usp-ticker-item"><strong>Pure Mathematical Sentiment</strong> via System-One CLM-8B</span>
@@ -160,7 +160,7 @@ def render_usp_banner():
                         <span style="color: var(--text-muted); opacity: 0.6;">•</span>
                         <span class="usp-ticker-item"><strong style="color: #fbbf24;">📈 Momentum Vectors:</strong> 4P EMA Cross-Sectional Tracking</span>
                         <span style="color: var(--text-muted); opacity: 0.6;">•</span>
-                        <span class="usp-ticker-item"><strong style="color: #34d399;">🛡️ System Online:</strong> Institutional Ingestion & Execution Engine</span>
+                        <span class="usp-ticker-item"><strong style="color: #34d399;">🛡️ System Online:</strong> Quantitative Macro Engine & Ingestion Pipeline</span>
                     </div>
                 </div>
                 <div class="usp-expand-btn">
@@ -196,7 +196,7 @@ def render_regulatory_disclaimer():
     <div class="regulatory-notice-card">
         <div class="regulatory-notice-header">
             <div class="regulatory-notice-header-left">
-                <span class="regulatory-badge">⚖️ INSTITUTIONAL COMPLIANCE</span>
+                <span class="regulatory-badge">⚖️ REGULATORY COMPLIANCE</span>
                 <span class="regulatory-title">Quantitative Research & Governance Disclosures</span>
             </div>
             <div class="regulatory-notice-header-right">

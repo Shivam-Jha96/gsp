@@ -1,5 +1,5 @@
 """
-Valence: Institutional Macroeconomic Sentiment & Directional Signal Engine.
+Valence: Quantitative Macroeconomic Sentiment & Directional Signal Engine (Open Intelligence Terminal).
 Clean, reactive Streamlit dashboard orchestrator.
 """
 

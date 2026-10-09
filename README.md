@@ -189,7 +189,7 @@ gsp/
 │   ├── db_cleanup.yml          # Database retention purge workflow
 │   └── reclassify_db.yml       # Database integrity, deduplication & re-scoring workflow
 ├── docs/                       # Quantitative & architectural documentation
-│   ├── architecture_and_workflow.md  # 7-tier architecture & workflow specifications
+│   ├── architecture_and_workflow.md  # 8-tier architecture & workflow specifications
 │   ├── sentiment_math.md             # CLM quantitative math & scoring proofs
 │   ├── wiki_home.md                  # Comprehensive technical wiki
 │   └── build_progress.md             # Multi-phase milestone build progress log
@@ -303,10 +303,12 @@ Evaluated on the **Macroeconomic Golden Benchmark Dataset** (500 curated macroec
 | **Brier Calibration Score** | **0.2034** | 0.2452 | 0.2679 | < 0.25 | **PASS** |
 | **Macro F1 Score** | **0.8380** (Nuanced macro semantics) | **0.8545** (Slightly higher recall) | 0.7884 (Rigid lexicon omissions) | > 0.80 | **PASS** |
 | **Schema Parse Failure Rate** | **0.00% (Native Choice Vector)** | 1.8% – 3.2% (JSON syntax drift) | 0.00% | 0.00% | **PASS** |
-| **Compute Cost per 10k Events** | **~$0.15** (Scale-to-zero batch) | ~$1.50 – $3.50 (10x higher opex) | $0.00 (Local CPU) | < $1.00 | **PASS** |
-| **Point-in-Time Forward Track Record**| **Active Public Ledger** (`reports/forward_test_ledger.csv`) | N/A | N/A | Live Public Audit (200+ signals recorded) | **ACTIVE** |
+| **Compute Cost per 10k Events** | **~$0.15 active GPU** (~$0.20 incl. boot & idle) | ~$1.50 – $3.50 (Frontier models; Flash is cheap but has parse drift) | $0.00 (Local CPU) | < $1.00 | **PASS** |
+| **Point-in-Time Forward Track Record**| **Active Public Ledger** (`reports/forward_test_ledger.csv`) | N/A | N/A | Target: 90-day horizon / N >= 1,000 signals | **ACTIVE (301 signals since Oct 7, 2026)** |
 
-> **Note on Alpha Metrics:** Preliminary synthetic backtest figures ($IC = +0.24$, Sharpe $1.70$) reported in earlier drafts have been removed following quantitative review. Those simulations contained synthetic look-ahead artifacts. Directional predictive alpha will be established exclusively via our public, append-only forward-test ledger.
+> **Note on Forward Testing & Alpha Metrics:** Preliminary synthetic backtest figures ($IC = +0.24$, Sharpe $1.70$) reported in earlier drafts have been removed following quantitative review. Those simulations contained synthetic look-ahead artifacts. Directional predictive alpha and calibration are established exclusively via our public, append-only forward-test ledger started on October 7, 2026.
+> 
+> *Pre-Registration Protocol:* Target evaluation horizon: 90 trading days or $N \ge 1,000$ hourly signals ($N_{\text{eff}} \ge 250$ accounting for serial autocorrelation). Null hypothesis: $H_0: \text{Hit Rate} \le 50.0\%, IC \le 0.0$. Directional hit rate in the ledger measures sentiment continuation across observation intervals ($EMA_{\text{sentiment}} \times \text{Next Raw} > 0$). Multi-region equity asset price return correlation (using daily EOD market data) is evaluated as a decoupled quantitative research tier.
 
 ---
 

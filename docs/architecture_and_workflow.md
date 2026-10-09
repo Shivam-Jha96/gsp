@@ -352,7 +352,7 @@ CREATE TABLE event_payloads (
 |  okf_version_hash: VARCHAR(40) (Audit)  |                                          |
 |  model_version: VARCHAR(50) (Audit)     |                                          |
 +-----------------------------------------+------------------------------------------+
-|  Scan Speed: Sub-millisecond            |  Access: Only fetched for drill-down     |
+|  Scan Speed: Fast (BRIN indexed)        |  Access: Only fetched for drill-down     |
 |  Used By: Signal Engine, EMA Charts     |  Used By: Live Intelligence Feed modal   |
 +-----------------------------------------+------------------------------------------+
 ```
@@ -441,7 +441,7 @@ To focus the platform on macroeconomic directional intelligence and prevent unin
 
 ```
 +------------------------------------------------------------------------------------+
-|                       VALENCE - INSTITUTIONAL TERMINAL LAYOUT                      |
+|                    VALENCE - OPEN INTELLIGENCE TERMINAL LAYOUT                     |
 +------------------------------------------------------------------------------------+
 |  [HEADER BANNER: Valence Identity & Vector SVG (Left) | Pipeline Telemetry (Right)]|
 +------------------------------------------------------------------------------------+
@@ -623,8 +623,7 @@ DEFAULT_MODEL_FALLBACKS = [
     "gemini-3.8-flash", 
     "gemini-3.7-flash", 
     "gemini-3.5-flash-lite",
-    "gemini-2.0-flash",
-    "gemini-1.5-flash"
+    "gemini-3.5-flash"
 ]
 ```
 

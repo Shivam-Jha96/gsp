@@ -7,7 +7,7 @@
 
 Welcome to the official technical wiki for **Valence** (formerly Global Sentiment Platform of Share Markets / GSP). 
 
-Valence is an open-source quantitative macroeconomic sentiment and directional signal engine. It continuously ingests geopolitical and financial news events across four geopolitical hubs (United States, India, United Kingdom, and Japan), evaluates deterministic market sentiment using **Contrastive Language Models (CLM-8B System-One)**, stores vertically partitioned time-series signals in PostgreSQL, computes multi-period Exponential Moving Average (EMA) momentum indicators, simulates paper trades via Alpaca's REST API, and renders low-latency telemetry to a high-contrast dark Streamlit terminal.
+Valence is an open-source quantitative macroeconomic sentiment and directional signal engine. It continuously ingests geopolitical and financial news events across four geopolitical hubs (United States, India, United Kingdom, and Japan), evaluates deterministic market sentiment using **Contrastive Language Models (CLM-8B System-One)**, stores vertically partitioned time-series signals in PostgreSQL, computes multi-period Exponential Moving Average (EMA) momentum indicators, evaluates directional stances for paper trading evaluation (order execution disabled in research MVP mode), and renders low-latency telemetry to a high-contrast dark Streamlit terminal.
 
 ---
 
@@ -15,9 +15,9 @@ Valence is an open-source quantitative macroeconomic sentiment and directional s
 
 1. [Executive Summary & Core Philosophy](#1-executive-summary--core-philosophy)
 2. [The System-One Paradigm: Tri-Level Architecture Comparison](#2-the-system-one-paradigm-tri-level-architecture-comparison)
-3. [7-Tier Operational Dataflow & Architecture](#3-7-tier-operational-dataflow--architecture)
+3. [8-Tier Operational Dataflow & Architecture](#3-8-tier-operational-dataflow--architecture)
 4. [Quantitative Research & Scoring Mathematics](#4-quantitative-research--scoring-mathematics)
-5. [Institutional Terminal Guide (UI Telemetry)](#5-institutional-terminal-guide-ui-telemetry)
+5. [Open Intelligence Terminal Guide (UI Telemetry)](#5-open-intelligence-terminal-guide-ui-telemetry)
 6. [Dynamic Objective Knowledge Framework (OKF)](#6-dynamic-objective-knowledge-framework-okf)
 7. [Empirical Benchmarking & LLM Comparison (USP Validation)](#7-empirical-benchmarking--llm-comparison-usp-validation)
 8. [Production Operations & Resiliency Matrix](#8-production-operations--resiliency-matrix)
@@ -33,15 +33,15 @@ Conventional natural language processing (NLP) pipelines in quantitative finance
 **Valence eliminates generative token decoding entirely.** The platform is built upon four foundational pillars:
 
 1. **System-One Metric Embedding Evaluation**: Projects financial text directly into a continuous metric space, evaluating orthogonal candidate hypotheses with native mathematical probabilities where P(Bullish) + P(Bearish) + P(Neutral) = 1.0.
-2. **Strict Vertical Database Partitioning**: Decouples high-frequency analytical time-series queries (event_signals) from heavy document metadata blobs (event_payloads), guaranteeing sub-millisecond analytical database scans.
+2. **Strict Vertical Database Partitioning**: Decouples high-frequency analytical time-series queries (event_signals) from heavy document metadata blobs (event_payloads), guaranteeing fast indexed analytical database scans via BRIN indexes and vertical partitioning.
 3. **GitOps-Driven Macroeconomic Reasoning**: Real-world central bank policy regimes mutate constantly. Regional trading heuristics reside in declarative Objective Knowledge Framework (*.okf.md) files updated autonomously by scheduled Gemini cron jobs without code redeployments.
-4. **Decoupled Serverless Topologies**: Ingestion (GitHub Actions), AI Inference (Modal serverless A10G GPU), Relational Persistence (Supabase PostgreSQL), and Visualization (Streamlit Cloud) scale independently with zero operational lock-in.
+4. **Decoupled Serverless Topologies**: Ingestion (GitHub Actions), AI Inference (Modal serverless A10G GPU / TypeSafe API), Relational Persistence (Supabase PostgreSQL), and Visualization (Streamlit Cloud) scale independently with zero operational lock-in.
 
 ---
 
 ## 2. The System-One Paradigm: Tri-Level Architecture Comparison
 
-Valence utilizes the contrastive inference paradigm of **TypeSafe AI's Jev** System-One model (accessed via its official SDK), extending it into a fully normalized, asset-class-aware quantitative sentiment engine.
+Valence utilizes the contrastive inference paradigm of **TypeSafe AI's Jev** System-One model as its primary runtime (accessed via the official SDK in `src/main.py`), extending it into a fully normalized, asset-class-aware quantitative sentiment engine. For sovereign deployments requiring VPC isolation or local hardware, Valence also provides an open-weights self-hosted blueprint using vLLM Qwen3-8B with contrastive projection heads (`Contrastive-LM/CLM-v0.1-8B` on Modal in `src/ai_engine/modal_app.py`).
 
 | Evaluation Dimension | Generative LLMs (Autoregressive) | TypeSafe AI (Vanilla Jev) | Valence CLM System-One Engine |
 | :--- | :--- | :--- | :--- |
@@ -51,11 +51,13 @@ Valence utilizes the contrastive inference paradigm of **TypeSafe AI's Jev** Sys
 | **Confidence Calibration** | Qualitative clustering (e.g., 0.8 vs 0.2) | Raw probabilities; uncalibrated directional spread | **Calibrated relative directional conviction (S_rel)** |
 | **Signal Noise Handling** | Neutral sentiment easily misclassified | Prone to neutral flatlining (P >= 0.90) on dense context | **Explicit non-linear neutral attenuation factor (M)** |
 | **Macro & Asset Conditioning**| Unstructured prompts; prone to attention drift | Static criteria; no dynamic macro regime awareness | **Dynamic regional OKF priors + asset-class-aware criteria** |
-| **Execution Integration** | Requires regex parsing & ad-hoc heuristics | Discrete outputs; no native temporal smoothing | **Vectorized 4P EMA recursive filtering & Alpaca paper trading** |
+| **Execution Integration** | Requires regex parsing & ad-hoc heuristics | Discrete outputs; no native temporal smoothing | **Vectorized 4P EMA recursive filtering & directional stance logging** |
+
+*Note on Calibration & Benchmark Splits:* The 500-sample NLP calibration benchmark reported in Section 7 was evaluated against hand-curated test bulletins from public financial benchmark collections (Financial PhraseBank and official central bank communiqués). These events are strictly out-of-sample and verified disjoint from training data.
 
 ---
 
-## 3. 7-Tier Operational Dataflow & Architecture
+## 3. 8-Tier Operational Dataflow & Architecture
 
 ```
 +-----------------------------------------------------------------------------------------+
@@ -87,13 +89,13 @@ Valence utilizes the contrastive inference paradigm of **TypeSafe AI's Jev** Sys
        │
        ├─────────────────────────────────────────┐
        ▼                                         ▼
-[5. Public Forward Ledger & Signal Engine]      [6. Institutional Terminal (Modular Streamlit)]
+[5. Public Forward Ledger & Signal Engine]      [6. Open Intelligence Terminal (Modular Streamlit)]
 - Append-Only forward_test_ledger.csv           - Decomposed src/ui/components/ Architecture
 - Multi-Window Recursive EMA (4P, 12P)          - Header Banner & Live Freshness Telemetry
 - Hysteresis Deadband Gating (+/- 5.0)          - Plotly Multi-Index Translucent Area Chart
-- Alpaca Paper Trade Execution Lockout          - @st.fragment Isolated Live Feed & Ledger
+- Directional Stance Logging (Trade Lockout)    - @st.fragment Isolated Live Feed & Ledger
 +-----------------------------------------------------------------------------------------+
-[7. Dynamic OKF Knowledge Updater (Daily Cron at 00:00 UTC via Google Gemini 2.5/3.x)]
+[7. Dynamic OKF Knowledge Updater (Daily Cron at 00:00 UTC via Google Gemini 3.x)]
 - Scrapes macro releases -> Generates reviewable Pull Requests for macro rule shifts
 +-----------------------------------------------------------------------------------------+
 [8. Operational Health Probe (Every 6 Hours via GitHub Actions & scripts/health_check.py)]
@@ -108,9 +110,9 @@ Valence utilizes the contrastive inference paradigm of **TypeSafe AI's Jev** Sys
 3. **Dual Deduplication**: Employs intra-run fingerprinting and 48-hour database lookups to prevent redundant inference calls.
 4. **Modal Serverless ASGI**: Hosts the Qwen3-8B embedding backbone and CLM projection heads natively on an NVIDIA A10G GPU, bypassing TCP proxy deadlocks and cold-boot delays.
 5. **Vertical Partitioning**: Separates numerical vector fields (`id`, `timestamp`, `sentiment_score`, `market_region`, `index_ticker`, `published_at`, `scored_at`, `okf_version_hash`, `model_version`) into `event_signals` and stores raw JSON metadata in `event_payloads`.
-6. **Execution & Forward Ledger**: Evaluates recursive multi-span EMAs (4-period, 12-period) and logs out-of-sample forward signals to `reports/forward_test_ledger.csv`. Paper trading remains strictly locked out (`ENABLE_TRADE_EXECUTION=false`) for research focus.
-7. **Modular Institutional Terminal**: Decomposed into single-responsibility components in `src/ui/components/` and `src/ui/styles.py` with `@st.fragment`-isolated news feeds and public forward evaluation audit views.
-8. **Knowledge Governance & Operational Monitoring**: Gemini updates OKF macro rules daily via reviewable PRs, while scheduled health probes monitor system availability every 6 hours.
+6. **Execution & Forward Ledger**: Evaluates recursive multi-span EMAs (4-period, 12-period) and logs out-of-sample forward signals to `reports/forward_test_ledger.csv`. Order execution remains locked out (`ENABLE_TRADE_EXECUTION=false`) for research focus.
+7. **Modular Open Intelligence Terminal**: Decomposed into single-responsibility components in `src/ui/components/` and `src/ui/styles.py` with `@st.fragment`-isolated news feeds and public forward evaluation audit views.
+8. **Knowledge Governance & Operational Monitoring**: Gemini updates OKF macro rules daily via reviewable Pull Requests (`okf-update-bot`), preventing unauthorized direct commits to `master`, while scheduled health probes monitor system availability every 6 hours.
 
 ---
 
@@ -139,13 +141,13 @@ A continuous recursive temporal filter smooths raw headline noise for automated 
 
 ---
 
-## 5. Institutional Terminal Guide (UI Telemetry)
+## 5. Open Intelligence Terminal Guide (UI Telemetry)
 
 The dashboard (`src/ui/app.py`) is styled permanently in dark mode (`#020617` canvas, `#0f172a` cards, `#10b981` / `#ef4444` directional accents) and organized into seven distinct modules:
 
 ```
 +------------------------------------------------------------------------------------+
-|                       VALENCE - INSTITUTIONAL TERMINAL LAYOUT                      |
+|                    VALENCE - OPEN INTELLIGENCE TERMINAL LAYOUT                     |
 +------------------------------------------------------------------------------------+
 |  [HEADER BANNER: Valence Identity & Vector SVG (Left) | Pipeline Telemetry (Right)]|
 +------------------------------------------------------------------------------------+
@@ -189,14 +191,14 @@ Macroeconomic policies mutate dynamically across central banks (Federal Reserve,
 ### Autonomous Macro Rules Updater (`src/knowledge_engine/okf_updater.py`)
 - Runs daily at `00:00 UTC` via GitHub Actions (`.github/workflows/update_okf.yml`).
 - Scrapes central bank speeches and macro releases, prompting Google Gemini to detect regime shifts.
-- Implements dynamic model discovery (`client.models.list()`) with automatic fallback (`gemini-3.8-flash` -> `gemini-3.7-flash` -> `gemini-2.0-flash`).
+- Implements dynamic model discovery (`client.models.list()`) with automatic fallback (`gemini-3.8-flash` -> `gemini-3.7-flash` -> `gemini-3.5-flash-lite` -> `gemini-3.5-flash`).
 - Strict rate pacing (`MIN_REQUEST_INTERVAL = 6.0s`) prevents free-tier API quota exhaustion.
-- Pushes verified rule updates back to `master` via automated Git bot commits.
+- Submits verified rule updates via reviewable GitHub Pull Requests (`okf-update-bot` branch) with automated document length and diff validation guards (zero direct bot pushes to `master`).
 
 ### Autonomous Index Constituents Updater (`scripts/update_constituents.py`)
 - Runs fortnightly via GitHub Actions (`.github/workflows/update_constituents.yml`).
 - Automatically fetches active index constituents (e.g., S&P 500, Nifty 50, FTSE 100) using free open-source repository APIs.
-- Pushes updated constituent JSONs to `knowledge/*_constituents.okf.json` via automated Git bot commits.
+- Submits updated constituent JSONs via reviewable GitHub Pull Requests (`constituents-update-bot` branch) with structured diff validation checks.
 
 ---
 
@@ -208,7 +210,7 @@ To quantitatively evaluate Valence's architectural trade-offs against convention
 
 Evaluated on the **Macroeconomic Golden Benchmark Dataset** (`knowledge/benchmark/macro_golden_dataset.json`) across 500 curated central bank policy releases, CPI inflation prints, and trade tariff shocks:
 
-| Quantitative & Operational Dimension | Valence System-One CLM (TypeSafe / Qwen3-8B) | Generative LLMs (GPT-4o / Gemini Flash) | Loughran-McDonald Lexicon | Baseline Target | Status |
+| Quantitative & Operational Dimension | Valence System-One CLM (TypeSafe / Modal Blueprint) | Generative LLMs (GPT-4o / Gemini Flash) | Loughran-McDonald Lexicon | Baseline Target | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Inference Latency (Warm API Call)**| **180–350 ms** (< 500 ms pipeline) | 1,200–2,500 ms (**>4x slower**) | < 0.1 ms (in-memory lookup) | < 500 ms | **PASS** |
 | **Container Cold Boot (Serverless)** | **15–30 s** (scale-to-zero GPU boot)| None (managed multi-tenant API) | None (in-process memory) | Scale-to-zero | **PASS** |
@@ -217,16 +219,18 @@ Evaluated on the **Macroeconomic Golden Benchmark Dataset** (`knowledge/benchmar
 | **Brier Calibration Score** | **0.2034** | 0.2452 | 0.2679 | < 0.25 | **PASS** |
 | **Macro F1 Score** | **0.8380** (Nuanced macro semantics) | **0.8545** (Slightly higher recall) | 0.7884 (Rigid lexicon omissions) | > 0.80 | **PASS** |
 | **Schema Parse Failure Rate** | **0.00% (Direct Choice Vector)**| 1.8% – 3.2% (JSON syntax drift) | 0.00% | 0.00% | **PASS** |
-| **Compute Cost per 10k Events** | **~$0.15** (Scale-to-zero batch) | ~$1.50 – $3.50 (10x higher opex) | $0.00 (Local CPU) | < $1.00 | **PASS** |
-| **Point-in-Time Forward Track Record**| **Active Public Ledger** (`reports/forward_test_ledger.csv`) | N/A | N/A | Live Public Audit (200+ signals recorded) | **ACTIVE** |
+| **Compute Cost per 10k Events** | **~$0.15 active GPU** (~$0.20 incl. boot & idle) | ~$1.50 – $3.50 (Frontier models; Flash is cheap but has parse drift) | $0.00 (Local CPU) | < $1.00 | **PASS** |
+| **Point-in-Time Forward Track Record**| **Active Public Ledger** (`reports/forward_test_ledger.csv`) | N/A | N/A | Target: 90-day horizon / N >= 1,000 signals | **ACTIVE (301 signals since Oct 7, 2026)** |
 
-> **Note on Alpha Metrics:** Preliminary synthetic backtest figures ($IC = +0.24$, Sharpe $1.70$) reported in earlier drafts have been removed following quantitative review. Those simulations contained synthetic look-ahead artifacts. Directional predictive alpha will be established exclusively via our public, append-only forward-test ledger.
+> **Note on Forward Testing & Alpha Metrics:** Preliminary synthetic backtest figures ($IC = +0.24$, Sharpe $1.70$) reported in earlier drafts have been removed following quantitative review. Those simulations contained synthetic look-ahead artifacts. Directional predictive alpha and calibration are established exclusively via our public, append-only forward-test ledger started on October 7, 2026.
+> 
+> *Pre-Registration Protocol:* Target evaluation horizon: 90 trading days or $N \ge 1,000$ hourly signals ($N_{\text{eff}} \ge 250$ accounting for serial autocorrelation). Null hypothesis: $H_0: \text{Hit Rate} \le 50.0\%, IC \le 0.0$. Directional hit rate in the ledger measures sentiment continuation across observation intervals ($EMA_{\text{sentiment}} \times \text{Next Raw} > 0$). Multi-region equity asset price return correlation (using daily EOD market data) is evaluated as a decoupled quantitative research tier.
 
 ### 7.2 Why Contrastive System-One Outperforms Generative LLMs
 
 1. **Cost-Efficient Batch Inference for Macro Monitoring**: Autoregressive decoding consumes $1,200\text{--}2,500\text{ ms}$ per call and incurs high token fees when ingesting hundreds of regional headlines. Valence processes multi-headline batches in $<350\text{ ms}$ warm latency, enabling cost-effective hourly macroeconomic regime tracking across 40 global news channels without keeping an expensive GPU permanently spinning.
 2. **True Probabilistic Simplex Geometry**: Generative LLMs cluster around subjective prompted numbers (`"confidence": 0.80`). Valence projects states directly onto the 2-simplex $\Delta^2$ where $P(\text{Bullish}) + P(\text{Bearish}) + P(\text{Neutral}) = 1.0$, producing mathematically calibrated directional spread $S_{\text{rel}}$.
-3. **Endogenous Neutral Damping ($M$)**: Generative LLMs regularly over-trade on routine releases (e.g. jobless claims matching consensus). Valence's neutral attenuation factor $M = |S_{\text{rel}}| \times (1.0 - 0.5 \times P_{\text{neut}})$ suppresses non-directional noise into the $[-5.0, +5.0]$ deadband, dramatically cutting trading fees and execution drag.
+3. **Endogenous Neutral Damping ($M$)**: Generative LLMs regularly over-trade on routine releases (e.g. jobless claims matching consensus). Valence's neutral attenuation factor $M = |S_{\text{rel}}| \times (1.0 - 0.5 \times P_{\text{neut}})$ suppresses non-directional noise into the $[-5.0, +5.0]$ deadband, filtering low-conviction signals without triggering execution churn.
 4. **Reproducible Mathematical State**: Generative LLMs exhibit temperature entropy, creating divergent labels across identical prompt evaluations. Valence guarantees output variance across repeated evaluation runs remains within floating-point epsilon ($\sigma < 10^{-6}$).
 
 ---
