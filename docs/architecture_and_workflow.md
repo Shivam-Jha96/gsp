@@ -2,7 +2,7 @@
  
 ## 1. Executive Summary & Architectural Philosophy
  
-**Valence** (formerly Global Sentiment Platform of Share Markets / GSP) is an autonomous, production-grade quantitative intelligence and execution platform. The system continuously digests unstructured global macroeconomic news streams across 20 international asset classes in 4 geopolitical regions (United States, India, United Kingdom, and Japan), evaluates deterministic market sentiment using Contrastive Language Models (**CLM-8B System-One**), stores vertically partitioned time-series signals in PostgreSQL, computes multi-period Exponential Moving Average (**EMA**) momentum indicators, executes automated paper trades via Alpaca's REST API, and renders low-latency telemetry to an institutional Streamlit terminal.
+**Valence** (formerly Global Sentiment Platform of Share Markets / GSP) is an autonomous, production-grade quantitative intelligence and execution platform. The system continuously digests unstructured global macroeconomic news streams across 20 international asset classes in 4 geopolitical regions (United States, India, United Kingdom, and Japan), evaluates deterministic market sentiment using Contrastive Language Models (**CLM-8B System-One**), stores vertically partitioned time-series signals in PostgreSQL, computes multi-period Exponential Moving Average (**EMA**) momentum indicators, executes automated paper trades via Alpaca's REST API, and renders low-latency telemetry to an open quantitative Streamlit terminal.
  
 ```
 +---------------------------------------------------------------------------------------------------------+
@@ -458,15 +458,15 @@ To focus the platform on macroeconomic directional intelligence and prevent unin
 |  - Tracked Indices       |  +---------------------------------------------------+  |
 |  (4 Symmetrical Cards)   |  - Embedded Mini Asset Tiles (— No change States)       |
 +--------------------------+---------------------------------------------------------+
-|  LIVE INTELLIGENCE FEED (SINGLE UNIFIED INSTITUTIONAL CONTAINER)                   |
+|  LIVE INTELLIGENCE FEED (SINGLE UNIFIED QUANTITATIVE CONTAINER)                   |
 |  - Header: Live Stream Title (Left) | Right-Aligned Sentiment Filter Pills (Right) |
 |  - Collapsible: Filter buttons directly control expansion & view without clutter   |
 +------------------------------------------------------------------------------------+
 ```
 
 #### 1. Visual Design Architecture
-The dashboard implements an institutional financial terminal theme with a unified CSS Design System:
-* **Permanent Institutional Dark Theme & Telemetry Header:** Rendered permanently in dark mode with a deep slate canvas (`#020617`), semi-translucent container cards (`#0f172a` / `rgba(15, 23, 42, 0.65)`), and directional accents (`#10b981` Bullish / `#ef4444` Bearish). The header card displays real-time telemetry (`UPDATED {time_display_str}`), a glowing green `SYSTEM ONLINE` indicator, and isolated styling preventing style bleed across components.
+The dashboard implements a quantitative financial terminal theme with a unified CSS Design System:
+* **Permanent Dark Theme & Telemetry Header:** Rendered permanently in dark mode with a deep slate canvas (`#020617`), semi-translucent container cards (`#0f172a` / `rgba(15, 23, 42, 0.65)`), and directional accents (`#10b981` Bullish / `#ef4444` Bearish). The header card displays real-time telemetry (`UPDATED {time_display_str}`), a glowing green `SYSTEM ONLINE` indicator, and isolated styling preventing style bleed across components.
 * **Automated Horizontal Ticker Preview for Quantitative Edge:** The USP description banner is presented as a collapsible section with an automated continuous scrolling preview ticker in its collapsed form (`uspTicker` CSS animation) that displays the key CLM vs Generative LLM mathematical thesis at a glance.
 * **Ultra-Compact Single-Line 5-Control Filter Toolbar:** All 5 primary filters (`Timeframe`, `Region`, `Chart Display`, `Timezone`, `EMA Window`) are housed in a single horizontal row inside an ultra-compact bordered container (`div[data-testid="stVerticalBlockBorderWrapper"]:has(div[data-testid="stSelectbox"])`). Excess linespacing above and below the controls has been eliminated with zero outer margins, deterministic 10px rhythm, and aligned typography.
 * **Consolidated Left-Column KPI Hierarchy:** The left column is structured with 4 vertically stacked KPI tiles:
@@ -475,7 +475,7 @@ The dashboard implements an institutional financial terminal theme with a unifie
   3. **Total News Volume:** Displays processed headline volume and ingestion cadence (`Every 2 hours`).
   4. **Tracked Indices:** Displays active market universe coverage (`100% Active real-time monitored`).
 * **Flush Column Alignment, Zero Dead Voids & Master Vertical Rhythm:** Both the Plotly time series and the per-index mini tiles are unified inside the exact same bordered container (`with st.container(border=True):`). The left column KPI cards and right chart container maintain strict flexbox stretching (`align-items: stretch`, `flex: 1 1 auto`) to ensure both columns terminate at the exact same bottom boundary across all global regions (IN, US, UK, JP). A deterministic 10px master vertical rhythm is enforced across all dashboard tiers (`.block-container`, `@st.fragment`, and section containers) to eliminate all dead voids and empty gaps.
-* **Single-Tile Live Intelligence Feed Header:** The Live Intelligence Feed header is rendered as a clean, single-tile institutional card without nested box borders or fragmented sub-cards. The region live intelligence title and pulsing blue status beacon sit on the left, while distinct sentiment filter pills (`All`, `Bullish`, `Bearish`, `Neutral`) align cleanly on the right.
+* **Single-Tile Live Intelligence Feed Header:** The Live Intelligence Feed header is rendered as a clean, single-tile card without nested box borders or fragmented sub-cards. The region live intelligence title and pulsing blue status beacon sit on the left, while distinct sentiment filter pills (`All`, `Bullish`, `Bearish`, `Neutral`) align cleanly on the right.
 
 #### 2. Plotly Multi-Series Sentiment Visualization
 The primary visualization renders a clean, multi-line area time series:
@@ -514,7 +514,7 @@ To guarantee that the user dashboard never renders redundant copies of the same 
 * **Chart Weight Normalization:** Multi-index area charts and EMA calculations receive exactly 1 observation per event, eliminating artificial multi-count weighting.
 
 #### 7. Dynamic Fragment-Isolated Live Intelligence Feed Architecture
-The Live Intelligence Feed is housed in a single, unified institutional container isolated with Streamlit's `@st.fragment` decorator:
+The Live Intelligence Feed is housed in a single, unified container isolated with Streamlit's `@st.fragment` decorator:
 * **Dynamic Isolated Rendering (No Page Rerun):** Decorated via `@fragment_decorator` (`render_live_intelligence_feed`), user interactions with sentiment pills update only the feed component dynamically, eliminating dashboard flicker and preventing page reruns.
 * **Header with Right-Aligned Color-Coded Pills:** The feed header contains the regional stream title on the left and right-aligned sentiment filter pills on the right:
   * **All:** Sky Blue border and glow (`#3b82f6` / `#60a5fa`).
@@ -522,7 +522,7 @@ The Live Intelligence Feed is housed in a single, unified institutional containe
   * **Bearish:** Crimson Red accent (`#ef4444` / `#f87171`).
   * **Neutral:** Slate Gray accent (`#94a3b8` / `#cbd5e1`).
 * **Default Expanded State (ALL Selected):** On initial dashboard load, `render_segmented_filter` defaults to `default_ix=0` (`All [N]`), ensuring the live intelligence feed is immediately expanded and displays all headlines for the selected region and timeframe without requiring manual filter activation.
-* **Uncluttered Interface (Instruction Lines Removed):** Extraneous instruction text ("Click any sentiment pill..." and "Click active button again...") has been eliminated for an ultra-clean, institutional user experience.
+* **Uncluttered Interface (Instruction Lines Removed):** Extraneous instruction text ("Click any sentiment pill..." and "Click active button again...") has been eliminated for an ultra-clean quantitative user experience.
 * **Feed Sanitization & Neutral Classification:** Headlines undergo regex processing in `clean_news_item()` to strip HTML markup, remove trailing publisher signatures, and classify each entry into one of three sentiment buckets:
   * **Bullish Event:** Sentiment Score $\ge +0.5$ (Emerald badge)
   * **Bearish Event:** Sentiment Score $\le -0.5$ (Rose badge)
@@ -546,7 +546,7 @@ In [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py), the header action 
 #### 8. Reactive Zero-Reload Polling & Structural Boundary Deconfliction
 To deliver real-time terminal synchronization and resolve visual boundary collisions across varying viewport sizes:
 * **Background Data Polling (`run_every="5m"`):** The dashboard is encapsulated within a master `@st.fragment(run_every="5m")` coupled with `@st.cache_data(ttl=300)` on `get_processed_data()`. When new sentiment pipeline runs complete in Supabase, the terminal automatically updates charts, KPIs, and news feeds in the background with zero manual page refreshes.
-* **Unified Header Banner Enclosure:** The branding typography and live telemetry status pills (`UPDATED {time_display_str}` and `SYSTEM ONLINE`) are unified inside a single continuous institutional `.header-banner-card` (`display: flex; justify-content: space-between; align-items: center;`), eliminating disconnected column cards, horizontal border offsets, and dead interior voids.
+* **Unified Header Banner Enclosure:** The branding typography and live telemetry status pills (`UPDATED {time_display_str}` and `SYSTEM ONLINE`) are unified inside a single continuous `.header-banner-card` (`display: flex; justify-content: space-between; align-items: center;`), eliminating disconnected column cards, horizontal border offsets, and dead interior voids.
 * **Boundary Deconfliction, Margin Rhythm & Chart Clearance:**
   * The chart section container enforces `padding: 14px 18px 14px 18px` with `justify-content: flex-start` paired with Plotly chart height calibrated to `height=460` and internal margins (`margin=dict(l=8, r=44, t=28, b=24)`), providing 24px of breathing clearance above the mini index grid divider, insulating the right Y-axis `OPTIMISM SCORE` label, numerical ticks, timeline axis, and upper legend from colliding with container borders.
   * The mini-index asset grid utilizes responsive `minmax(105px, 1fr)` columns with 6px gaps, natural `margin-top: 10px !important` placement below the timeline divider, compact 6px card padding, and defensive CSS (`white-space: nowrap; flex-shrink: 0; min-width: 0;`), providing a clean 22px breathing margin above the bottom container boundary without overlapping demarcation borders.
@@ -563,7 +563,7 @@ To ensure an uninterrupted user experience across browser reloads (F5), page ref
 #### 10. Decomposed Single-Responsibility UI Component Architecture
 To ensure long-term maintainability and eliminate monolithic script bloat, the 2,400+ line UI file was decomposed into modular components:
 * [`src/ui/styles.py`](file:///d:/Dev/repos/gsp/src/ui/styles.py): Centralized CSS design system, permanent dark theme styling variables (`#020617`, `#0f172a`), responsive Google Web Fonts (`Montserrat`, `IBM Plex Sans`, `JetBrains Mono`), and global style injector (`inject_global_styles()`).
-* [`src/ui/components/header.py`](file:///d:/Dev/repos/gsp/src/ui/components/header.py): `@st.fragment`-isolated header action bar, live pipeline telemetry badges, USP quantitative thesis collapsible banner, and institutional regulatory disclaimer.
+* [`src/ui/components/header.py`](file:///d:/Dev/repos/gsp/src/ui/components/header.py): `@st.fragment`-isolated header action bar, live pipeline telemetry badges, USP quantitative thesis collapsible banner, and regulatory disclaimer.
 * [`src/ui/components/toolbar.py`](file:///d:/Dev/repos/gsp/src/ui/components/toolbar.py): Ultra-compact 5-control horizontal filter toolbar (`Timeframe`, `Region`, `Chart Display`, `Timezone`, `EMA Window`) with scoped rerun handlers (`rerun_scoped()`).
 * [`src/ui/components/analytics.py`](file:///d:/Dev/repos/gsp/src/ui/components/analytics.py): `@st.fragment`-isolated analytics surface containing the left-column KPI card hierarchy, high-performance Plotly multi-series sentiment chart with disabled vertical zoom, and per-index mini momentum cards.
 * [`src/ui/components/feed.py`](file:///d:/Dev/repos/gsp/src/ui/components/feed.py): `@st.fragment`-isolated live intelligence feed stream, regex text cleaner, and color-coded sentiment pill filters.
@@ -572,8 +572,8 @@ To ensure long-term maintainability and eliminate monolithic script bloat, the 2
 * [`src/ui/app.py`](file:///d:/Dev/repos/gsp/src/ui/app.py): Clean, lightweight application orchestrator entry point (~250 lines) managing data caching and component invocation.
 
 #### 11. Public Forward-Testing Track Record & Verifiable Ledger Card
-[`src/ui/components/ledger.py`](file:///d:/Dev/repos/gsp/src/ui/components/ledger.py) renders an institutional collapsible card (`details.ledger-collapsible`) documenting live out-of-sample predictive performance:
-* **Interactive Summary Bar:** Features an institutional badge (`📊 VERIFIABLE TRACK RECORD`), summary title, quick-telemetry pills (`N SIGNALS`, `N% HIT RATE`, `OUT-OF-SAMPLE`), and toggle action (`DETAILS ▾` / `COLLAPSE ▴`).
+[`src/ui/components/ledger.py`](file:///d:/Dev/repos/gsp/src/ui/components/ledger.py) renders a structured collapsible card (`details.ledger-collapsible`) documenting live out-of-sample predictive performance:
+* **Interactive Summary Bar:** Features a governance badge (`📊 VERIFIABLE TRACK RECORD`), summary title, quick-telemetry pills (`N SIGNALS`, `N% HIT RATE`, `OUT-OF-SAMPLE`), and toggle action (`DETAILS ▾` / `COLLAPSE ▴`).
 * **Governance Callout Banner:** Contextual notice with shield icon, cyan left accent border, and monospace source link emphasizing deterministic signal intelligence and automated execution lockout.
 * **5-Column Micro-KPI Grid:** Responsive grid presenting 5 dedicated metric cards styled consistently with the primary KPI cards:
   1. **Logged Signals:** Total immutable append-only events.
@@ -583,9 +583,9 @@ To ensure long-term maintainability and eliminate monolithic script bloat, the 2
   5. **Directional Hit Rate:** Out-of-sample next-period predictive accuracy highlighted with dynamic green/red/amber efficacy styling.
 * **Telemetry Verification Bar:** Status beacon and direct link to the append-only `reports/forward_test_ledger.csv` source file.
 
-#### 12. Institutional Regulatory Compliance & Governance Disclosures
-[`src/ui/components/header.py`](file:///d:/Dev/repos/gsp/src/ui/components/header.py) provides [`render_regulatory_disclaimer()`](file:///d:/Dev/repos/gsp/src/ui/components/header.py#L188) rendered as an institutional footer disclosure card (`.regulatory-notice-card`):
-* **Compliance Header Bar:** Displays an institutional badge (`⚖️ REGULATORY GOVERNANCE`), title, and jurisdiction tags (`NON-CUSTODIAL`, `RESEARCH ONLY`, `OPEN-SOURCE TERMINAL`).
+#### 12. Regulatory Compliance & Governance Disclosures
+[`src/ui/components/header.py`](file:///d:/Dev/repos/gsp/src/ui/components/header.py) provides [`render_regulatory_disclaimer()`](file:///d:/Dev/repos/gsp/src/ui/components/header.py#L188) rendered as a formal footer disclosure card (`.regulatory-notice-card`):
+* **Compliance Header Bar:** Displays a governance badge (`⚖️ REGULATORY GOVERNANCE`), title, and jurisdiction tags (`NON-CUSTODIAL`, `RESEARCH ONLY`, `OPEN-SOURCE TERMINAL`).
 * **Structured 2-Column Grid:** Replaces dense stacked paragraphs with demarcated sub-cards featuring custom accent borders:
   1. **Educational & Research Mandate:** Sky-bordered card clarifying non-advisory quantitative research boundaries under SEBI (India), SEC (US), FCA (UK), and global regulators.
   2. **Execution Safeguards & Attribution:** Purple-bordered card confirming broker lockout, zero real capital deployment, and news event research demonstration under fair-use parameters.
@@ -722,7 +722,7 @@ The table below provides a detailed breakdown of all third-party services and in
 | **Modal Serverless GPU** | Modal Labs (AWS us-east-1) | 99.9% | Serverless NVIDIA A10G (24GB VRAM), pay-per-second | Serves vLLM Qwen3-8B and CLM-8B System-One contrastive inference | Container cold boot stalls runner; out of memory crashes inference | Pre-baked container images via `hf_transfer`; keep-alive scale-down window (120s); fallback neutral score on network timeout |
 | **Supabase PostgreSQL** | Supabase (AWS us-east-1) | 99.95% | Managed PostgreSQL 15+, PgBouncer pooler (Port 6543) | Stores vertically partitioned `event_signals` and `event_payloads` | Connection pool exhaustion under concurrent runner load | Thread-safe connection pool (`ThreadedConnectionPool`); transaction-mode pooling; explicit connection close on exit |
 | **GitHub Actions Runners** | GitHub / Microsoft Azure | 99.9% | Ubuntu-latest standard runners, free-tier minutes | Schedulers for 2-hour pipeline and daily OKF knowledge evolution | Runner scheduling queue delays during peak GitHub hours | Retries via workflow dispatch; independent cron triggers; resilient idempotent pipeline execution |
-| **Streamlit Community Cloud** | Snowflake / Streamlit | 99.5% | Shared cloud container, free hosting tier | Institutional user presentation dashboard and terminal interface | Container memory sleep after 7 days of inactivity; app crash on database disconnect | In-memory `@st.cache_data(ttl=300)` to minimize DB strain; graceful fallback to mock data on DB failure |
+| **Streamlit Community Cloud** | Snowflake / Streamlit | 99.5% | Shared cloud container, free hosting tier | Interactive user presentation dashboard and terminal interface | Container memory sleep after 7 days of inactivity; app crash on database disconnect | In-memory `@st.cache_data(ttl=300)` to minimize DB strain; graceful fallback to mock data on DB failure |
 | **Alpaca Paper Trading API** | Alpaca Securities LLC | 99.95% | Free Paper Trading API tier (REST/WebSocket) | Algorithmic order submission (`MarketOrderRequest`) and portfolio execution | Order rejected due to market hours, invalid symbol, or API timeout | Handled via try/except logging blocks; trade execution failures do not interrupt database ingestion |
 | **Google Gemini API** | Google Cloud Vertex / AI Studio | 99.9% | Free / Pay-as-you-go Gemini Flash API | Macroeconomic regime reasoning and dynamic OKF rule authoring | HTTP 503 high-load errors; 15 RPM rate-limiting throttling | Multi-model fallback chain (`3.8-flash` $\rightarrow$ `3.7-flash` $\rightarrow$ `3.5-flash-lite`); 5s rate-limiting delays |
 | **Google News RSS Aggregators** | Google LLC | Best-effort | Public web endpoints (Rate-limited) | Ingestion source for global financial and macroeconomic news | Network timeout; IP rate-limiting blocking requests | 10-second `aiohttp` client timeout; max 3 headlines per ticker cap; dual search channels (Google + Reuters) |
@@ -868,7 +868,7 @@ Because `.github/workflows/deploy.yml` reads directly from the checked-out works
 
 ## 6. Quantitative Benchmarking & Alpha Validation Architecture
 
-To ensure Valence meets institutional quantitative standards, the platform includes a native, automated **4-Tier Benchmarking Suite** (`src/benchmark/` and `scripts/run_benchmarks.py`).
+To ensure Valence meets rigorous quantitative standards, the platform includes a native, automated **4-Tier Benchmarking Suite** (`src/benchmark/` and `scripts/run_benchmarks.py`).
 
 ```mermaid
 flowchart TD

@@ -131,7 +131,7 @@ Dampens the magnitude of bulletins that carry high neutral probability mass (uni
 * `M = |S_rel| × (1.0 - 0.5 × P(Neutral))`
 
 ### Stage 4: Signed Directional Score (S_dir)
-Converts raw relative conviction into an institutional momentum score:
+Converts raw relative conviction into a calibrated directional sentiment score:
 * `S_dir = sgn(S_rel) × M × 100.0 ∈ [-100.0, +100.0]`
 
 ### Stage 5: Time-Series Exponential Moving Average (EMA_α)

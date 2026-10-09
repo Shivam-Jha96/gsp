@@ -203,7 +203,7 @@ gsp/
 │   ├── uk_constituents.okf.json
 │   ├── japan_macro.okf.md
 │   └── japan_constituents.okf.json
-├── reports/                    # Generated institutional benchmark & forward test reports
+├── reports/                    # Generated quantitative benchmark & forward test reports
 │   ├── forward_test_ledger.csv # Append-only public forward-testing evaluation ledger
 │   ├── benchmark_report.md     # 4-tier benchmark evaluation report
 │   └── benchmark_data.json     # Benchmark metrics data
