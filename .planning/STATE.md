@@ -74,7 +74,7 @@ None. All 66 unit tests passing, working tree clean.
 | 261008-j19 | Implement responsive 2-tier header and flex-order reorganized Quantitative Edge marquee for mobile screens | 2026-10-08 | 7ffb507 | - |
 | 261009-j20 | Resolve PyTest test fixture discovery collision on Granger causality metric | 2026-10-09 | 394acba | - |
 | 261009-j21 | Configure scheduled knowledge updates to push directly to master without PR bottlenecks | 2026-10-09 | 7a0206a | - |
-| 261009-k01 | Reorganize knowledge directory into regions/<region>/ with constituents.okf.json and macro.okf.md | 2026-10-09 | pending | [261009-k01-reorganize-knowledge-regions](./quick/261009-k01-reorganize-knowledge-regions/) |
+| 261009-k01 | Reorganize knowledge directory into regions/<region>/ with constituents.okf.json and macro.okf.md | 2026-10-09 | 1a14877 | [261009-k01-reorganize-knowledge-regions](./quick/261009-k01-reorganize-knowledge-regions/) |
 
 
 ## Session Continuity
