@@ -41,12 +41,12 @@ Valence is an institutional-grade quantitative macroeconomic sentiment and direc
 - Plotly >= 5.18.0 - High-performance interactive financial time-series chart rendering (`go.Figure`, `go.Scatter`).
 - Asyncio & aiohttp >= 3.11.12 - High-throughput asynchronous feed ingestion and concurrent network I/O (`src/ingestion/poller.py`).
 - Python standard library `unittest` - Unit testing suite across classifier, dedup, and OKF components (`tests/unit/`).
-- `typesafe-sdk` >= 0.7.2 - System-One CLM evaluation client interfacing with Modal endpoint.
+- `src/ai_engine/clm_client.py` - Sovereign System-One CLM evaluation client interfacing directly with Modal endpoint via `requests`.
 - `google-genai` >= 2.0.0 - Dynamic Objective Knowledge Framework (OKF) macroeconomic updater.
 
 ## Key Dependencies
 
-- `typesafe-sdk` (>=0.7.2) - Client library communicating with Contrastive Language Model (CLM-8B) server on Modal for zero-hallucination probability projection `P(Bullish), P(Bearish), P(Neutral)`.
+- `requests` (>=2.31.0) - Synchronous HTTP client powering sovereign Contrastive Language Model (CLM-8B) server communication on Modal for zero-hallucination probability projection `P(Bullish), P(Bearish), P(Neutral)`.
 - `google-genai` (>=2.0.0) - Official Google GenAI SDK for updating macroeconomic rules via Gemini flash model fallbacks.
 - `psycopg2-binary` (>=2.9.10) - PostgreSQL database driver managing Supabase connection pooling and data transactions.
 - `pandas` (>=2.2.3) - Time-series manipulation, exponential moving averages (EMA), and tabular analysis.
@@ -129,7 +129,7 @@ Valence is an institutional-grade quantitative macroeconomic sentiment and direc
 - **Used by:** AI inference layer as prompt conditioning context.
 - **Purpose:** Evaluates financial event text conditioned by regional OKF rules and converts it into calibrated directional sentiment scores in `[-1.0, 1.0]`.
 - **Components:**
-- **Depends on:** `typesafe_sdk`, `knowledge/*.okf.md`.
+- **Depends on:** `src/ai_engine/clm_client.py` (`requests`), `knowledge/*.okf.md`.
 - **Used by:** Ingestion pipeline before database insertion.
 - **Purpose:** Manages PostgreSQL connections and provides resilient pooling.
 - **Components:**

@@ -1,10 +1,10 @@
-import os
-import json
-from typesafe_sdk import TypeSafeClient, Choice
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
+from ai_engine.clm_client import CLMClient, Choice
 
-typesafe_api_key = os.environ.get('TYPESAFE_API_KEY', 'empty_key_allowed')
-client = TypeSafeClient(
-    api_key=typesafe_api_key.strip(),
+clm_api_key = os.environ.get('CLM_API_KEY') or os.environ.get('TYPESAFE_API_KEY', 'empty_key_allowed')
+client = CLMClient(
+    api_key=clm_api_key.strip(),
     base_url='https://shivam-jha96--clm-macro-engine-clm-server.modal.run',
     model='clm-latest',
     timeout=120.0

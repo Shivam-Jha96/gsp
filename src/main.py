@@ -9,8 +9,8 @@ import subprocess
 from ingestion.poller import FeedPoller, FEEDS
 from ingestion.dedup import canonical_fingerprint
 
-# AI Engine (TypeSafe AI - Jev System-One Model)
-from typesafe_sdk import TypeSafeClient, Choice
+# AI Engine (Native Sovereign Contrastive Language Model Client)
+from ai_engine.clm_client import CLMClient, Choice
 
 from config.market_registry import get_region_meta, load_asset_classes
 
@@ -22,7 +22,7 @@ def get_git_commit_hash() -> str:
 
 def score_sentiment(client, text: str, region_context: str = "", region_tag: str = "GLOBAL", asset_class: str = "equity") -> dict:
     """
-    Sends the target financial news event to TypeSafe AI's Jev model using the official SDK.
+    Sends the target financial news event to Valence's self-hosted Contrastive Language Model.
     Grounds choices in asset-class aware bipolar criteria (Bullish vs Bearish)
     to eliminate inverse bias for non-equity assets.
     Produces a continuous, calibrated directional score in [-1.0, 1.0].
@@ -54,7 +54,7 @@ def score_sentiment(client, text: str, region_context: str = "", region_tag: str
         p_bear = float(probs.get("Bearish", 0.0))
         p_neut = float(probs.get("Neutral", 0.0))
         
-        # Normalize in case they don't sum to 1 (TypeSafe Jev usually does, but safe fallback)
+        # Normalize in case they don't sum to 1 (CLM probabilities sum to 1 on simplex, but safe fallback)
         total_p = p_bull + p_bear + p_neut
         if total_p > 0:
             p_bull /= total_p
@@ -91,11 +91,11 @@ def score_sentiment(client, text: str, region_context: str = "", region_tag: str
             "Score": score_magnitude,
             "DirectionalScore": directional_score,
             "Probabilities": probs,
-            "Noul": f"Evaluated via TypeSafe Jev (P_bull={p_bull:.2f}, P_bear={p_bear:.2f})"
+            "Noul": f"Evaluated via CLM-8B System-One (P_bull={p_bull:.2f}, P_bear={p_bear:.2f})"
         }
         
     except Exception as e:
-        logging.error(f"Failed to reach TypeSafe API: {e}")
+        logging.error(f"Failed to reach CLM API: {e}")
         return {"Choice": "Neutral", "Score": 0.0, "DirectionalScore": 0.0, "Noul": f"API Error: {e}"}
 
 # Database
@@ -141,9 +141,9 @@ async def run_ingestion_pipeline():
         logger.info("No new payloads fetched.")
         return 0, 0
 
-    # Connect to the custom serverless Modal deployment running Contrastive-LM
-    typesafe_api_key = os.environ.get('TYPESAFE_API_KEY')
-    client = TypeSafeClient(api_key=typesafe_api_key.strip() if typesafe_api_key else 'empty_key_allowed', base_url='https://shivam-jha96--clm-macro-engine-clm-server.modal.run', model='clm-latest', timeout=120.0)
+    # Connect to the sovereign serverless Modal deployment running Contrastive-LM
+    clm_api_key = os.environ.get('CLM_API_KEY') or os.environ.get('TYPESAFE_API_KEY')
+    client = CLMClient(api_key=clm_api_key.strip() if clm_api_key else 'empty_key_allowed', base_url='https://shivam-jha96--clm-macro-engine-clm-server.modal.run', model='clm-latest', timeout=120.0)
 
     # Initialize DB (Requires DATABASE_URL environment variable)
     db_client = None

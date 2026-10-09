@@ -18,7 +18,6 @@ plotly>=5.18.0
 
 # API Calls
 requests>=2.31.0
-typesafe-sdk>=0.7.2
 
 # Knowledge Engine (Dynamic OKF Updater)
 google-genai>=2.0.0

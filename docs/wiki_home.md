@@ -35,15 +35,15 @@ Conventional natural language processing (NLP) pipelines in quantitative finance
 1. **System-One Metric Embedding Evaluation**: Projects financial text directly into a continuous metric space, evaluating orthogonal candidate hypotheses with native mathematical probabilities where P(Bullish) + P(Bearish) + P(Neutral) = 1.0.
 2. **Strict Vertical Database Partitioning**: Decouples high-frequency analytical time-series queries (event_signals) from heavy document metadata blobs (event_payloads), guaranteeing fast indexed analytical database scans via BRIN indexes and vertical partitioning.
 3. **GitOps-Driven Macroeconomic Reasoning**: Real-world central bank policy regimes mutate constantly. Regional trading heuristics reside in declarative Objective Knowledge Framework (*.okf.md) files updated autonomously by scheduled Gemini cron jobs without code redeployments.
-4. **Decoupled Serverless Topologies**: Ingestion (GitHub Actions), AI Inference (Modal serverless A10G GPU / TypeSafe API), Relational Persistence (Supabase PostgreSQL), and Visualization (Streamlit Cloud) scale independently with zero operational lock-in.
+4. **Decoupled Serverless Topologies**: Ingestion (GitHub Actions), AI Inference (Modal serverless A10G GPU running open-weights vLLM Qwen3-8B + contrastive-lm), Relational Persistence (Supabase PostgreSQL), and Visualization (Streamlit Cloud) scale independently with zero operational lock-in.
 
 ---
 
 ## 2. The System-One Paradigm: Tri-Level Architecture Comparison
 
-Valence utilizes the contrastive inference paradigm of **TypeSafe AI's Jev** System-One model as its primary runtime (accessed via the official SDK in `src/main.py`), extending it into a fully normalized, asset-class-aware quantitative sentiment engine. For sovereign deployments requiring VPC isolation or local hardware, Valence also provides an open-weights self-hosted blueprint using vLLM Qwen3-8B with contrastive projection heads (`Contrastive-LM/CLM-v0.1-8B` on Modal in `src/ai_engine/modal_app.py`).
+Valence operates on a **100% self-hosted, sovereign contrastive inference pipeline**. It uses an open-source contrastive learning paradigm (System-One CLM-8B) running natively on a private Modal serverless GPU container (`vLLM` running `Qwen/Qwen3-8B` + `contrastive-lm` ASGI endpoint in `src/ai_engine/modal_app.py`). **Valence does not use TypeSafe or Jev's hosted cloud service or proprietary SDKs**; inference is executed via a lightweight native HTTP client ([`src/ai_engine/clm_client.py`](file:///d:/Dev/repos/gsp/src/ai_engine/clm_client.py)) communicating directly with your private Modal endpoint.
 
-| Evaluation Dimension | Generative LLMs (Autoregressive) | TypeSafe AI (Vanilla Jev) | Valence CLM System-One Engine |
+| Evaluation Dimension | Generative LLMs (Autoregressive) | Vanilla Contrastive Baseline | Valence CLM System-One Engine |
 | :--- | :--- | :--- | :--- |
 | **Scoring Mechanism** | Generates text tokens / Prompted JSON | Contrastive representation / Choice probabilities | **Bipolar Simplex Projection + Quantitative Spread (S_rel)** |
 | **Inference Latency** | 1,200–2,500 ms / headline | 70–500 ms / call (standard hosted API) | **180–350 ms warm API / batch** (serverless A10G) |
@@ -210,7 +210,7 @@ To quantitatively evaluate Valence's architectural trade-offs against convention
 
 Evaluated on the **Macroeconomic Golden Benchmark Dataset** (`knowledge/benchmark/macro_golden_dataset.json`) across 500 curated central bank policy releases, CPI inflation prints, and trade tariff shocks:
 
-| Quantitative & Operational Dimension | Valence System-One CLM (TypeSafe / Modal Blueprint) | Generative LLMs (GPT-4o / Gemini Flash) | Loughran-McDonald Lexicon | Baseline Target | Status |
+| Quantitative & Operational Dimension | Valence System-One CLM (Sovereign Modal Engine) | Generative LLMs (GPT-4o / Gemini Flash) | Loughran-McDonald Lexicon | Baseline Target | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Inference Latency (Warm API Call)**| **180–350 ms** (< 500 ms pipeline) | 1,200–2,500 ms (**>4x slower**) | < 0.1 ms (in-memory lookup) | < 500 ms | **PASS** |
 | **Container Cold Boot (Serverless)** | **15–30 s** (scale-to-zero GPU boot)| None (managed multi-tenant API) | None (in-process memory) | Scale-to-zero | **PASS** |

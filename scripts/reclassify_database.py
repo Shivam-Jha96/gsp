@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../s
 from ingestion.classifier import RegionalAffinityClassifier
 from ingestion.dedup import canonical_fingerprint
 from main import score_sentiment, load_okf_rules
-from typesafe_sdk import TypeSafeClient
+from ai_engine.clm_client import CLMClient
 
 def delete_ids_in_batches(cur, ids_to_delete, batch_size=500):
     if not ids_to_delete:
@@ -143,9 +143,9 @@ def get_asset_class_for_ticker(region: str, ticker: str) -> str:
 
 def run_rescoring(conn, batch_limit=None):
     print("\n--- [STAGE 3] Grounded Sentiment Re-Scoring ---")
-    typesafe_api_key = os.environ.get('TYPESAFE_API_KEY')
-    client = TypeSafeClient(
-        api_key=typesafe_api_key.strip() if typesafe_api_key else 'empty_key_allowed',
+    clm_api_key = os.environ.get('CLM_API_KEY') or os.environ.get('TYPESAFE_API_KEY')
+    client = CLMClient(
+        api_key=clm_api_key.strip() if clm_api_key else 'empty_key_allowed',
         base_url='https://shivam-jha96--clm-macro-engine-clm-server.modal.run',
         model='clm-latest',
         timeout=120.0

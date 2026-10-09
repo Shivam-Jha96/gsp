@@ -25,13 +25,13 @@ Conventional financial NLP platforms rely on generative Large Language Models (L
 
 ### ⚡ The CLM System-One Solution
 
-**Valence** eliminates generative token decoding entirely. Instead, our AI Engine utilizes the contrastive inference paradigm of **TypeSafe AI's Jev** System-One model (via the official SDK), deployed on serverless GPU infrastructure via Modal. By evaluating financial text and macro rules directly in contrastive representation space and applying rigorous financial mathematics, the engine evaluates market states using pure mathematical probability vectors:
+**Valence** eliminates generative token decoding entirely. Instead, our AI Engine utilizes a sovereign contrastive inference pipeline (**CLM-8B System-One**), self-hosted on serverless GPU infrastructure via Modal (`vLLM` running `Qwen/Qwen3-8B` + `contrastive-lm` ASGI endpoint). By evaluating financial text and macro rules directly in contrastive representation space and applying rigorous financial mathematics, the engine evaluates market states using pure mathematical probability vectors:
 
 * **Low-Latency Batch Inference**: Single-pass contrastive scoring runs in **180–350 ms warm API latency** (>4x faster than generative LLMs), enabling cost-efficient hourly macro monitoring without GPU keep-alive expenses.
 * **Zero Hallucination Risk**: No text generation or token sampling; outputs are pure deterministic probability distributions.
 * **Calibrated Probability Simplex**: Directly computes native probabilities over orthogonal market states where $P(\text{Bullish}) + P(\text{Bearish}) + P(\text{Neutral}) = 1.0$.
 
-| Dimension | Generative LLMs (Autoregressive) | TypeSafe AI (Vanilla Jev) | Valence CLM System-One Engine |
+| Dimension | Generative LLMs (Autoregressive) | Vanilla Contrastive Baseline | Valence CLM System-One Engine |
 | :--- | :--- | :--- | :--- |
 | **Scoring Mechanism** | Generates text tokens / Prompted JSON | Contrastive representation / Choice probabilities | **Bipolar Simplex Projection + Quantitative Spread ($S_{\text{rel}}$)** |
 | **Inference Latency** | 1,200 – 2,500 ms / headline | 70 – 500 ms / call (standard hosted API) | **180–350 ms warm API / batch** (serverless A10G) |
@@ -39,7 +39,7 @@ Conventional financial NLP platforms rely on generative Large Language Models (L
 | **Confidence Calibration** | Qualitative clustering (e.g. 0.8 vs 0.2) | Raw probabilities; uncalibrated directional spread | **Calibrated relative directional conviction ($S_{\text{rel}}$)** |
 | **Signal Noise Handling** | Neutral sentiment easily misclassified | Prone to neutral flatlining ($P \ge 0.90$) on dense context | **Explicit non-linear neutral attenuation factor ($M$)** |
 | **Macro & Asset Conditioning** | Unstructured prompts; prone to attention drift | Static criteria; no dynamic macro regime awareness | **Dynamic regional OKF priors + asset-class-aware criteria** |
-| **Execution Integration** | Requires regex parsing & ad-hoc heuristics | Discrete outputs; no native temporal smoothing | **Vectorized 4P EMA recursive filtering & Alpaca paper trading** |
+| **Execution Integration** | Requires regex parsing & ad-hoc heuristics | Discrete outputs; no native temporal smoothing | **Vectorized 4P EMA recursive filtering & directional stance logging** |
 
 ---
 
@@ -124,7 +124,7 @@ flowchart TD
     
     subgraph S2 ["2. AI Engine (CLM-8B on Modal)"]
         OKF[("Regional OKF Rules")]
-        SDK["TypeSafeClient SDK"]
+        SDK["Native CLM Client"]
         GPU["Modal A10G GPU"]
         CLM["System-One Scorer"]
         Poller -->|Headlines| SDK
@@ -159,7 +159,7 @@ flowchart TD
         BOT["GitHub Actions Bot"]
         NEWS -->|Headlines| GEMINI
         GEMINI -->|Updated Rules| BOT
-        BOT -->|Auto-Commit| OKF
+        BOT -->|Reviewable PR| OKF
     end
 ```
 
@@ -168,11 +168,11 @@ flowchart TD
 | Layer | Tech | Description |
 |-------|------|-------------|
 | **Ingestion** | `aiohttp`, Google News RSS, Classifier, Constituent OKF, Deduplicator | Async poller with declarative market registry, index constituent entity mapping, affinity classifier, and multi-stage deduplication |
-| **AI Engine** | `Contrastive-LM/CLM-v0.1-8B`, Modal A10G, TypeSafe SDK | Grounded System-One mathematical scorer — focused state conditioning, explicit market criteria anchors, continuous probability vectors (-1.0 to +1.0) |
-| **Knowledge** | Gemini Flash, Google News RSS, Declarative Constituents | Daily auto-updating OKF macro rules via Gemini and curated regional index constituent registries |
+| **AI Engine** | `Contrastive-LM/CLM-v0.1-8B`, Modal A10G, Native HTTP Client | Grounded System-One mathematical scorer — focused state conditioning, explicit market criteria anchors, continuous probability vectors (-1.0 to +1.0) |
+| **Knowledge** | Gemini Flash, Google News RSS, Declarative Constituents | Daily auto-updating OKF macro rules via Gemini PRs and curated regional index constituent registries |
 | **Database** | Supabase PostgreSQL | Vertical partitioning: `event_signals` (math layer) + `event_payloads` (document layer) |
 | **Signal Engine** | Pandas, Alpaca API | 4-hour EMA crossover strategy routing BUY/SELL orders to paper trading |
-| **Dashboard** | Streamlit, Plotly | Dark-mode glassmorphism terminal with dynamic regional filtering, deduplication, auto-scaling charts and live feed |
+| **Dashboard** | Streamlit, Plotly | Dark-mode terminal with dynamic regional filtering, deduplication, auto-scaling charts and live feed |
 
 ---
 
@@ -249,10 +249,11 @@ gsp/
 │   │   └── app.py              # Lightweight dashboard entry-point orchestrator
 │   └── main.py                 # Unified pipeline entry point
 ├── tests/
-│   └── unit/                   # Automated unit test suite (66 tests passing)
+│   └── unit/                   # Automated unit test suite (69 tests passing)
 │       ├── test_backtest_causality.py
 │       ├── test_benchmark_metrics.py
 │       ├── test_classifier_and_registry.py
+│       ├── test_clm_client.py
 │       ├── test_dedup_and_sentiment.py
 │       ├── test_forward_tester.py
 │       ├── test_okf_updater.py
@@ -281,7 +282,7 @@ python scripts/run_benchmarks.py --tier classifier  # Contamination & Noise Reje
 python scripts/run_benchmarks.py --tier alpha       # Historical Backtest on SPY (Sharpe, MDD, IC)
 python scripts/run_benchmarks.py --tier system      # Supabase DB & UI Fragment Latency
 
-# Run automated unit test suite (66 tests)
+# Run automated unit test suite (69 tests)
 python -m unittest discover tests/unit -v
 
 # Run subsystem operational health probe
@@ -316,10 +317,10 @@ Evaluated on the **Macroeconomic Golden Benchmark Dataset** (500 curated macroec
 ## 🚀 Getting Started
 
 ### 1. Prerequisites
-You will need API keys from the following providers:
-- **Alpaca** — Paper Trading execution
+You will need API keys and endpoints from the following providers:
+- **Alpaca** — Paper Trading execution (optional)
 - **Supabase** — PostgreSQL Database (`DATABASE_URL`)
-- **TypeSafe** — CLM System-One AI inference (`TYPESAFE_API_KEY`)
+- **Modal / CLM Server** — Self-hosted Contrastive Language Model endpoint (`CLM_SERVER_URL`, defaults to Modal deployment)
 - **Gemini** — Dynamic OKF knowledge updates (`GEMINI_API_KEY`)
 
 ### 2. Database Setup
@@ -337,7 +338,8 @@ pip install -r requirements.txt
 export ALPACA_API_KEY="your_api_key"
 export ALPACA_SECRET_KEY="your_secret_key"
 export DATABASE_URL="postgresql://postgres.[PROJECT]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:6543/postgres"
-export TYPESAFE_API_KEY="your_typesafe_api_key"
+export CLM_SERVER_URL="https://shivam-jha96--clm-macro-engine-clm-server.modal.run"
+export CLM_API_KEY="your_clm_api_key"
 export GEMINI_API_KEY="your_gemini_api_key"
 ```
 
@@ -352,7 +354,7 @@ PYTHONPATH=src python src/main.py
 
 | Workflow | Schedule | Description |
 |----------|----------|-------------|
-| **CI Pipeline** (`ci.yml`) | On Push & Pull Request | Automated syntax compilation and 66-test unit test suite execution |
+| **CI Pipeline** (`ci.yml`) | On Push & Pull Request | Automated syntax compilation and 69-test unit test suite execution |
 | **Sentiment Pipeline** (`deploy.yml`) | Every 2 hours | Ingestion → AI Scoring → Database → Forward Ledger |
 | **Operational Health Probe** (`health_check.yml`) | Every 6 hours | Probes regional RSS feeds, Supabase DB pool, and Modal CLM endpoint |
 | **OKF Knowledge Updater** (`update_okf.yml`) | Daily at 00:00 UTC | Gemini analyzes macro policy news and opens reviewable PRs for rule shifts |

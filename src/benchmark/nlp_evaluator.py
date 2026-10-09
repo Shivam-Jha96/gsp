@@ -198,12 +198,12 @@ class NLPEvaluator:
                 res = evaluate_generative_llm_baseline(text, true_label)
             elif model_name == "valence_clm":
                 if use_live_api:
-                    # Attempt live TypeSafe SDK call if configured
+                    # Attempt live sovereign CLM call if configured
                     try:
-                        from typesafe_sdk import TypeSafeClient
-                        api_key = os.getenv("TYPESAFE_API_KEY")
+                        from ai_engine.clm_client import CLMClient
+                        api_key = os.getenv("CLM_API_KEY") or os.getenv("TYPESAFE_API_KEY")
                         if api_key:
-                            client = TypeSafeClient(api_key=api_key)
+                            client = CLMClient(api_key=api_key)
                             from main import score_sentiment
                             eval_res = score_sentiment(client, text, region_tag=sample.get("region", "GLOBAL"))
                             res = {

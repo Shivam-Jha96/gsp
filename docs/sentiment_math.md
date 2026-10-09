@@ -546,7 +546,7 @@ $\text{EMA}_t$ gracefully decays from $+6.50$ to $+3.90$, dropping below the $+5
 
 The following matrix contrasts the **System-One Contrastive Language Model (CLM)** architecture against conventional **Generative Autoregressive LLM Scoring** (e.g., GPT-4o, Gemini 1.5 Pro):
 
-| Engineering & Mathematical Dimension | Generative LLM Scoring (GPT-4o / Gemini 1.5 Pro) | TypeSafe AI (Vanilla Jev Baseline) | Valence System-One CLM Engine |
+| Engineering & Mathematical Dimension | Generative LLM Scoring (GPT-4o / Gemini 1.5 Pro) | Vanilla Contrastive Baseline (Unattenuated) | Valence System-One CLM Engine |
 | :--- | :--- | :--- | :--- |
 | **Output Representation** | Token string sequence parsed via regex or structured JSON schema. | Raw discrete probability vector $\mathbf{p} \in \Delta^2$ over static choices. | Continuous calibrated probability vector $\mathbf{p} \in \Delta^2$ on unit hypersphere $\mathbb{S}^{k-1}$. |
 | **Logit Calibration** | Uncalibrated; token probabilities are contaminated by syntax tokens. | Calibrated over generic choices; uncalibrated for macro market spread. | Directly calibrated via temperature $\tau$ over canonical hypothesis anchors & $S_{\text{rel}}$. |

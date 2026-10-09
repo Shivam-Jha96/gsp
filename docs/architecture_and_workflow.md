@@ -51,7 +51,7 @@ flowchart TD
         MODAL_APP["Modal ASGI Server<br/>(src/ai_engine/modal_app.py)"]
         VLLM["vLLM Pooling Engine<br/>(Qwen/Qwen3-8B Backbone :8090)"]
         CLM_HEAD["CLM-v0.1-8B Contrastive Heads<br/>(In-Memory Vector Arena Cache)"]
-        SDK["TypeSafe SDK Client<br/>(Net Directional Probabilities)"]
+        SDK["Native CLM Client<br/>(Net Directional Probabilities)"]
         MAIN -->|Async Batch Requests| SDK
         SDK --> MODAL_APP
         MODAL_APP --- VLLM
@@ -237,8 +237,8 @@ To eliminate OPEX/CAPEX waste (redundant inference costs and duplicate database 
 ---
 
 ### Layer 2: AI Inference & Knowledge Layer
-* **Source Files:** [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py), [`src/ai_engine/modal_app.py`](file:///d:/Dev/repos/gsp/src/ai_engine/modal_app.py), [`knowledge/*.okf.md`](file:///d:/Dev/repos/gsp/knowledge/)
-* **Runtime & Dependencies:** Modal Cloud (NVIDIA A10G), `vllm`, `contrastive-lm`, `typesafe-sdk>=0.7.2`, `torch`, `hf_transfer`
+* **Source Files:** [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py), [`src/ai_engine/clm_client.py`](file:///d:/Dev/repos/gsp/src/ai_engine/clm_client.py), [`src/ai_engine/modal_app.py`](file:///d:/Dev/repos/gsp/src/ai_engine/modal_app.py), [`knowledge/*.okf.md`](file:///d:/Dev/repos/gsp/knowledge/)
+* **Runtime & Dependencies:** Modal Cloud (NVIDIA A10G), `vllm`, `contrastive-lm`, `requests>=2.31.0`, `torch`, `hf_transfer`
 
 #### 1. System-One CLM-8B Inference Architecture
 Conventional generative AI models (System-Two) rely on autoregressive token-by-token generation, requiring hundreds of milliseconds to produce formatted JSON responses that frequently fail schema validation. Valence implements a **System-One Contrastive Language Model (CLM-8B)**:
@@ -290,7 +290,7 @@ def clm_server():
 * **Keep-Alive Scale-Down Window:** An idle scale-down window of 120 seconds keeps containers warm during consecutive batch queries.
 
 #### 4. Mathematical Sentiment Calibration
-In [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py#L22-L82), the TypeSafe SDK queries the CLM serverless endpoint. The probabilities $P(\text{Bullish})$, $P(\text{Bearish})$, and $P(\text{Neutral})$ are converted into a calibrated directional sentiment score $S \in [-1.0, 1.0]$:
+In [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py#L22-L82), the native [`CLMClient`](file:///d:/Dev/repos/gsp/src/ai_engine/clm_client.py) queries the self-hosted CLM serverless endpoint. The probabilities $P(\text{Bullish})$, $P(\text{Bearish})$, and $P(\text{Neutral})$ are converted into a calibrated directional sentiment score $S \in [-1.0, 1.0]$:
 
 1. **Relative Directional Spread ($s_{\text{rel}}$):**
    $$s_{\text{rel}} = \frac{P(\text{Bullish}) - P(\text{Bearish})}{P(\text{Bullish}) + P(\text{Bearish}) + \epsilon} \quad \text{where } \epsilon = 10^{-5}$$
@@ -707,7 +707,7 @@ GitHub Actions orchestrates all recurring pipelines on isolated, non-blocking sc
 #### 2. Environment Secrets Management
 Pipelines operate in headless containerized environments using repository-level GitHub Actions secrets:
 * `DATABASE_URL`: Secure PostgreSQL connection URI pointing to Supabase PgBouncer (Port 6543).
-* `TYPESAFE_API_KEY`: API token used to authenticate with the Modal CLM serverless endpoint.
+* `CLM_API_KEY` / `TYPESAFE_API_KEY`: API token used to authenticate with the self-hosted Modal CLM serverless endpoint.
 * `ALPACA_API_KEY` & `ALPACA_SECRET_KEY`: Credentials for Alpaca Paper Trading API endpoints.
 * `GEMINI_API_KEY`: Google AI Studio token for macroeconomic rule generation.
 
@@ -754,7 +754,7 @@ The table below provides a detailed breakdown of all third-party services and in
 
 ### 2. Modal Inference & AI Scoring Outages
 
-#### Symptom: HTTP 500/504 Errors or Timeouts from TypeSafe SDK
+#### Symptom: HTTP 500/504 Errors or Timeouts from Modal CLM Endpoint
 * **Root Causes:**
   1. The Modal serverless container experienced an out-of-memory (OOM) error during vLLM initialization.
   2. vLLM embedding server on port 8090 failed its internal health check.
@@ -920,7 +920,7 @@ Reports are automatically saved to `reports/benchmark_report.md` and `reports/be
 
 ### 6.3 Unit Testing & Invariant Verification Suite
 
-Valence enforces zero-regression quality through an automated unit test suite (`tests/unit/`) comprising **66 tests** across 12 modules:
+Valence enforces zero-regression quality through an automated unit test suite (`tests/unit/`) comprising **69 tests** across 13 modules:
 
 | Test Module | Coverage & Verification Invariants | Test Count |
 | :--- | :--- | :---: |
@@ -932,6 +932,7 @@ Valence enforces zero-regression quality through an automated unit test suite (`
 | [`test_telemetry.py`](file:///d:/Dev/repos/gsp/tests/unit/test_telemetry.py) | Pipeline execution telemetry, duration tracking, error logging, and freshness timestamps. | 6 |
 | [`test_ui_fragment_isolation.py`](file:///d:/Dev/repos/gsp/tests/unit/test_ui_fragment_isolation.py) | Modular UI `@st.fragment` isolation decorators, scoped reruns (`rerun_scoped`), and sentiment pills. | 4 |
 | [`test_backtest_causality.py`](file:///d:/Dev/repos/gsp/tests/unit/test_backtest_causality.py) | Point-in-time causality, strictly preventing future price return look-ahead leakage. | 3 |
+| [`test_clm_client.py`](file:///d:/Dev/repos/gsp/tests/unit/test_clm_client.py) | Sovereign HTTP client payload formatting, choice probability parsing, and zero-SDK resilience. | 3 |
 | [`test_dedup_and_sentiment.py`](file:///d:/Dev/repos/gsp/tests/unit/test_dedup_and_sentiment.py) | Canonical SHA-256 fingerprint deduplication across syndicated articles. | 3 |
 | [`test_valence_branding.py`](file:///d:/Dev/repos/gsp/tests/unit/test_valence_branding.py) | SVG branding assets and permanent dark styling consistency. | 3 |
 | [`test_okf_updater.py`](file:///d:/Dev/repos/gsp/tests/unit/test_okf_updater.py) | Resilient Gemini model fallback chain (`gemini-3.8-flash` $\to$ `3.7` $\to$ `3.5-lite`) and rate pacing. | 2 |

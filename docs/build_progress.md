@@ -11,6 +11,7 @@ This document tracks the cumulative build and milestone progression of **Valence
 | **Phase 1** | Baseline Quantitative Platform & Permanent Dark Theme | 3/3 | 42 | **COMPLETE** | 2026-10-05 |
 | **Phase 2** | Quantitative Remediation, Governance & Forward Testing | 3/3 | 57 | **COMPLETE** | 2026-10-08 |
 | **Phase 3** | UI Component Modularization & Operational Hardening | 2/2 | 66 | **COMPLETE** | 2026-10-08 |
+| **Remediation** | Round 2 Review & Sovereign CLM-8B Client Migration | 1/1 | 69 | **COMPLETE** | 2026-10-09 |
 
 ---
 
@@ -23,8 +24,8 @@ This document tracks the cumulative build and milestone progression of **Valence
   - High-throughput asynchronous feed poller (`poller.py`) using `aiohttp` and `asyncio.gather()`.
   - Word-boundary regex classifier (`classifier.py`) matching index tickers (3.0x), constituents (2.0x), and central bank anchors (1.0x).
   - SHA-256 canonical fingerprint deduplication (`dedup.py`) eliminating multi-feed duplicates.
-- [x] **AI Inference Layer (`src/main.py`):**
-  - Integrated `typesafe-sdk` interfacing with Modal serverless A10G running Contrastive-LM (CLM-8B).
+- [x] **AI Inference Layer (`src/main.py`, `src/ai_engine/clm_client.py`):**
+  - Built sovereign native CLM client (`src/ai_engine/clm_client.py`) interfacing directly with Modal serverless A10G running Contrastive-LM (CLM-8B) via `requests`.
   - Projected financial headlines onto the 2-simplex $\Delta^2$ yielding $P(\text{Bullish}), P(\text{Bearish}), P(\text{Neutral})$.
   - Extracted relative directional spread $S_{\text{rel}}$ and neutral attenuation factor $M$.
 - [x] **Database & Pooling Layer (`src/database/`):**
@@ -89,3 +90,23 @@ This document tracks the cumulative build and milestone progression of **Valence
   - Created `.github/workflows/health_check.yml` running every 6 hours and posting diagnostics to `$GITHUB_STEP_SUMMARY`.
 - [x] **Unit Testing Validation:**
   - Full test suite expanded to **66 passing unit tests** across all modules with zero regressions.
+
+---
+
+## Remediation: Round 2 Review & Sovereign CLM-8B Client Migration
+**Timeline:** 2026-10-09  
+**Objective:** Remediate Round 2 feedback: clarify model provenance and zero-dependency sovereign architecture, decouple entirely from third-party client SDKs via native HTTP client, update docs/math, and expand test suite to 69 unit tests.
+
+### Delivered Components:
+- [x] **Sovereign CLM Client Implementation (`src/ai_engine/clm_client.py`):**
+  - Built zero-dependency Python HTTP client interfacing directly with Modal serverless endpoint (`/v1/systemone`) via `requests`.
+  - Implemented typed `Choice`, `ChoiceAnswer`, `SystemOneResponse`, and backward-compatibility aliases.
+  - Removed `typesafe-sdk` from `requirements.txt` and all codebase imports.
+- [x] **Expanded Unit Test Suite (`tests/unit/test_clm_client.py`):**
+  - Added unit tests for dict and list responses, serialization, and error handling.
+  - Test suite expanded to **69 passing unit tests** across 13 modules.
+- [x] **Documentation & Math Realignment:**
+  - Updated `README.md`, `docs/wiki_home.md`, `docs/architecture_and_workflow.md`, `docs/sentiment_math.md`, and `GEMINI.md`.
+  - Replaced vendor claims with sovereign architecture documentation.
+  - Audited and verified all 109 internal documentation links via `scripts/audit_docs.py`.
+
