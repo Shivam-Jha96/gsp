@@ -13,7 +13,7 @@
 - **Action:** Bearish on 10Y and 30Y nominal UK Gilts; bullish on UK Gilt yield curve steepeners (2s10s and 5s30s).
 
 ## Rule 4: Stagflationary Terms-of-Trade Shock and Sterling Depreciation
-- **Condition:** Elevated imported energy costs coincide with widening fiscal deficits and political volatility (including high-profile cabinet departures), breaking the positive correlation between rising nominal Gilt yields and currency appreciation.
+- **Condition:** Elevated imported energy costs coincide with widening fiscal deficits and political volatility (including high-profile cabinet departures like Streeting's exit), breaking the positive correlation between rising nominal Gilt yields and currency appreciation.
 - **Action:** Bearish on GBP/USD and GBP/EUR; bullish on USD-earning multinational FTSE 100 equities.
 
 ## Rule 5: Policy Rate Transmission and Consumer Credit Impairment
@@ -21,7 +21,7 @@
 - **Action:** Bearish on UK residential homebuilders, domestic retail banks, and real estate investment trusts (REITs); bullish on defensive UK regulated utilities.
 
 ## Rule 6: Large-Cap Resource Exporters vs. Domestic Cyclicals Divergence
-- **Condition:** Depreciating Sterling and elevated commodity benchmarks support FTSE 100 dollar earnings, while domestic monthly GDP growth remains restrained despite isolated quarterly resilience (such as the 0.6% Q1 growth print).
+- **Condition:** Depreciating Sterling and elevated commodity benchmarks support FTSE 100 dollar earnings, while domestic monthly GDP growth remains restrained despite isolated quarterly resilience (such as surprise quarterly bounces).
 - **Action:** Bullish on the FTSE 100 / FTSE 250 equity ratio (long FTSE 100, short FTSE 250); bearish on domestic retail and consumer-facing mid-caps.
 
 ## Rule 7: Disinflationary Data Relief and Front-End Dovish Re-pricing
