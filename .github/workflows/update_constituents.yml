@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      pull-requests: write
 
     steps:
       - name: Checkout Repository
@@ -33,18 +32,16 @@ jobs:
           MARKET_DATA_API_KEY: ${{ secrets.MARKET_DATA_API_KEY }}
         run: python scripts/update_constituents.py
         
-      - name: Create Pull Request for Constituents Review
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore(knowledge): fortnightly automated update of index constituents"
-          title: "Index Constituents Update: Fortnightly Rebalance Review"
-          body: |
-            ### Automated Index Constituents Update
-            This pull request contains updated market index constituents dynamically refreshed by the constituent synchronization engine.
-            
-            **Review Checklist:**
-            - [ ] Verify additions/deletions against regional stock exchange rebalance announcements.
-            - [ ] Ensure JSON structure integrity across `knowledge/*_constituents.okf.json`.
-          branch: constituents-update-bot
-          delete-branch: true
+      - name: Commit and Push Constituents Updates Directly
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add knowledge/
+          if git diff --staged --quiet; then
+            echo "No constituent changes detected."
+          else
+            git commit -m "chore(knowledge): autonomous fortnightly update of index constituents"
+            git pull --rebase origin master
+            git push origin master
+          fi
+
