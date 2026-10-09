@@ -10,10 +10,10 @@ Valence is an open-source quantitative macroeconomic sentiment and directional s
 ---
 ## Table of Contents
 
-- [🌟 At a Glance: Valence in Plain English](#-at-a-glance-valence-in-plain-english-for-non-technical-readers)
-  - [The Real-World Problem We Are Solving](#the-real-world-problem-we-are-solving)
-  - [What We Are Trying to Achieve with Valence](#what-we-are-trying-to-achieve-with-valence)
-  - [How Does Valence Help You?](#how-does-valence-help-you)
+- [🌟 At a Glance: Valence in Plain English](#-at-a-glance-valence-in-plain-english)
+    - [1. The Real-World Problem We Are Solving](#1-the-real-world-problem-we-are-solving)
+    - [2. What We Are Trying to Achieve with Valence](#2-what-we-are-trying-to-achieve-with-valence)
+    - [3. How Does Valence Help You?](#3-how-does-valence-help-you)
 1. [Executive Summary & Core Philosophy](#1-executive-summary--core-philosophy)
 2. [The System-One Paradigm: Tri-Level Architecture Comparison](#2-the-system-one-paradigm-tri-level-architecture-comparison)
 3. [8-Tier Operational Dataflow & Architecture](#3-8-tier-operational-dataflow--architecture)
@@ -26,33 +26,57 @@ Valence is an open-source quantitative macroeconomic sentiment and directional s
 
 ---
 
-## 🌟 At a Glance: 
+## 🌟 At a Glance: Valence in Plain English
 
-### The Real-World Problem We Are Solving
+> **Executive Overview:** Valence is an open-source "weather radar" for global financial markets. It replaces subjective financial news chatter and hallucinating chatbots with pure, deterministic mathematical sentiment scores calculated directly from breaking news events.
+
+### 1. The Real-World Problem We Are Solving
+
 Every day, financial markets are hit by an overwhelming flood of news: central bank interest rate announcements, inflation reports, geopolitical developments, earnings releases, and trade policy updates.
 
 For regular investors and market participants, this news deluge creates three major challenges:
-1. **Information Overload:** Sifting through dozens of articles every morning across US, Indian, UK, or Japanese markets takes hours and is mentally exhausting.
-2. **Sensationalism & Emotional Traps:** Financial headlines are often written to maximize clicks and stir up intense emotions—fear of a crash or hype around a rally. Reacting emotionally to sensational headlines often leads to costly mistakes.
-3. **The Chatbot Dilemma:** Asking general-purpose AI chatbots (like ChatGPT) to summarize the market often produces long, wordy paragraphs that sound persuasive but can hallucinate facts, give inconsistent opinions, or change their stance depending on how a question is worded.
+* **Information Overload:** Sifting through dozens of articles every morning across US, Indian, UK, or Japanese markets takes hours and is mentally exhausting.
+* **Sensationalism & Emotional Traps:** Financial headlines are often written to maximize clicks and stir up intense emotions—fear of a crash or hype around a rally. Reacting emotionally to sensational headlines often leads to costly mistakes.
+* **The Chatbot Dilemma:** Asking general-purpose AI chatbots (like ChatGPT) to summarize the market often produces long, wordy paragraphs that sound persuasive but can hallucinate facts, give inconsistent opinions, or change their stance depending on how a question is worded.
 
-### What We Are Trying to Achieve with Valence
+---
+
+### 2. What We Are Trying to Achieve with Valence
+
 **Valence transforms the chaotic noise of global financial news into a clean, objective "weather radar" for world markets.**
 
 Think of Valence as an automated, tireless macroeconomic analyst that runs around the clock:
-- 📡 **Collects Breaking News 24/7:** Valence continuously monitors breaking economic and financial bulletins across four major economic centers: the **United States, India, the United Kingdom, and Japan**.
-- 🧹 **Filters Out Noise & Clickbait:** It discards irrelevant celebrity gossip, duplicate stories, and non-macro noise, focusing strictly on genuine macroeconomic and policy events.
-- 🌡️ **Measures Market Temperature (Zero Hallucinations):** Instead of writing speculative essays or chatting, Valence uses a specialized contrastive AI model that acts like a precision thermometer. It evaluates each headline against established regional economic rules to compute a pure mathematical score:
-  - **Bullish (+):** Indicates economic expansion, corporate growth, or market optimism.
-  - **Bearish (-):** Indicates economic contraction, inflation risk, or market pessimism.
-  - **Neutral (0):** Routine baseline noise with no significant market impact (filtered out).
-- 📈 **Tracks the Underlying Tide:** Individual headlines fluctuate wildly from hour to hour. Valence connects these readings into a smoothed Exponential Moving Average (EMA). Just like tracking ocean tides instead of erratic surface ripples, this shows you the true underlying direction of market sentiment over time.
 
-### How Does Valence Help You?
-- ⏱️ **Instant Macro Pulse (Save Hours Every Morning):** In just 10 seconds, you can glance at the live terminal and know immediately whether sentiment in the US, India, UK, or Japan is leaning positive, negative, or calm today.
-- 🎯 **Objective, Emotion-Free Decisions:** By replacing sensationalist media commentary with rigorous mathematical measurements, Valence helps you stay grounded and avoid panic-selling or fear-of-missing-out (FOMO).
-- 🌐 **Global Cross-Market Perspective:** See how international events ripple across economies simultaneously—for instance, observing whether a US Federal Reserve rate shift or a global oil price shock is lifting or dampening sentiment in Indian or Japanese markets.
-- 🔍 **100% Transparent & Verifiable:** Unlike proprietary "black-box" Wall Street tools, Valence is completely open-source. You can click on any score to view the exact underlying news articles and verify its publicly recorded out-of-sample accuracy ledger for yourself.
+* 📡 **Collects Breaking News 24/7:**  
+  Valence continuously monitors breaking economic and financial bulletins across four major economic centers: the **United States, India, the United Kingdom, and Japan**.
+
+* 🧹 **Filters Out Noise & Clickbait:**  
+  It discards irrelevant celebrity gossip, duplicate stories, and non-macro noise, focusing strictly on genuine macroeconomic and policy events.
+
+* 🌡️ **Measures Market Temperature (Zero Hallucinations):**  
+  Instead of writing speculative essays or chatting, Valence uses a specialized contrastive AI model that acts like a precision thermometer. It evaluates each headline against established regional economic rules to compute a pure mathematical score:
+    * **Bullish (+):** Indicates economic expansion, corporate growth, or market optimism.
+    * **Bearish (-):** Indicates economic contraction, inflation risk, or market pessimism.
+    * **Neutral (0):** Routine baseline noise with no significant market impact (filtered out).
+
+* 📈 **Tracks the Underlying Tide:**  
+  Individual headlines fluctuate wildly from hour to hour. Valence connects these readings into a smoothed Exponential Moving Average (EMA). Just like tracking ocean tides instead of erratic surface ripples, this shows you the true underlying direction of market sentiment over time.
+
+---
+
+### 3. How Does Valence Help You?
+
+* ⏱️ **Instant Macro Pulse (Save Hours Every Morning):**  
+  In just 10 seconds, you can glance at the live terminal and know immediately whether sentiment in the US, India, UK, or Japan is leaning positive, negative, or calm today.
+
+* 🎯 **Objective, Emotion-Free Decisions:**  
+  By replacing sensationalist media commentary with rigorous mathematical measurements, Valence helps you stay grounded and avoid panic-selling or fear-of-missing-out (FOMO).
+
+* 🌐 **Global Cross-Market Perspective:**  
+  See how international events ripple across economies simultaneously—for instance, observing whether a US Federal Reserve rate shift or a global oil price shock is lifting or dampening sentiment in Indian or Japanese markets.
+
+* 🔍 **100% Transparent & Verifiable:**  
+  Unlike proprietary "black-box" Wall Street tools, Valence is completely open-source. You can click on any score to view the exact underlying news articles and verify its publicly recorded out-of-sample accuracy ledger for yourself.
 
 ---
 
