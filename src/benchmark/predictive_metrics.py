@@ -237,7 +237,7 @@ def calculate_calmar_ratio(cagr: float, max_drawdown: float) -> float:
     return float(cagr / max_drawdown)
 
 
-def test_granger_causality(
+def calculate_granger_causality(
     sentiment_series: Union[np.ndarray, pd.Series], 
     return_series: Union[np.ndarray, pd.Series], 
     max_lag: int = 3
@@ -307,3 +307,10 @@ def test_granger_causality(
             "is_causal": False,
             "error": str(e)
         }
+
+
+# Backwards compatibility alias; explicitly set __test__ = False to prevent PyTest discovery collisions
+test_granger_causality = calculate_granger_causality
+test_granger_causality.__test__ = False
+calculate_granger_causality.__test__ = False
+

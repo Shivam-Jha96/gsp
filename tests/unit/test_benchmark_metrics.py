@@ -18,6 +18,7 @@ from benchmark.predictive_metrics import (
     calculate_sortino_ratio,
     calculate_max_drawdown,
     calculate_calmar_ratio,
+    calculate_granger_causality,
     test_granger_causality,
 )
 
@@ -100,10 +101,14 @@ class TestBenchmarkMetrics(unittest.TestCase):
         np.random.seed(42)
         sentiment = np.random.normal(0, 1, 50)
         returns = np.random.normal(0, 0.02, 50)
-        res = test_granger_causality(sentiment, returns, max_lag=2)
+        res = calculate_granger_causality(sentiment, returns, max_lag=2)
         self.assertIn("f_stat", res)
         self.assertIn("p_value", res)
         self.assertIn("is_causal", res)
+        
+        # Test backward compatibility alias
+        res_alias = test_granger_causality(sentiment, returns, max_lag=2)
+        self.assertEqual(res["f_stat"], res_alias["f_stat"])
 
 
 if __name__ == "__main__":
