@@ -27,7 +27,7 @@
 ### Modularization & Expansion (Future Milestone)
 
 - [ ] **MOD-01**: Refactor `src/ui/app.py` into dedicated component modules under `src/ui/components/` (header, filters, chart, feed, styling)
-- [ ] **MOD-02**: Implement an automated fortnightly GitHub Action to fetch and update `*_constituents.okf.json` files using a free API
+- [ ] **MOD-02**: Implement an automated fortnightly GitHub Action to fetch and update `knowledge/regions/*/constituents.okf.json` files using a free API
 - [ ] **TEST-01**: Expand automated unit and regression test coverage for signal EMA crossover and edge case calculation
 - [ ] **MON-01**: Integrate proactive health probe reporting across scheduled GitHub Actions pipelines
 

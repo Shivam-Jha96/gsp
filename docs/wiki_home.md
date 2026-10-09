@@ -237,10 +237,10 @@ The dashboard (`src/ui/app.py`) is styled permanently in dark mode (`#020617` ca
 
 Macroeconomic policies mutate dynamically across central banks (Federal Reserve, RBI, Bank of England, Bank of Japan). Valence maintains real-time policy rules in version-controlled markdown documents:
 
-- `knowledge/us_macro.okf.md` — Federal Reserve rates, US CPI, Treasury yields, Dollar index dynamics.
-- `knowledge/india_macro.okf.md` — RBI repo rates, domestic liquidity, food/fuel inflation, monsoon impact.
-- `knowledge/uk_macro.okf.md` — Bank of England stance, Gilt yields, Sterling exchange rates, FTSE trends.
-- `knowledge/japan_macro.okf.md` — BoJ Yield Curve Control (YCC), negative rate exits, Yen carry trades.
+- `knowledge/regions/us/macro.okf.md` — Federal Reserve rates, US CPI, Treasury yields, Dollar index dynamics.
+- `knowledge/regions/india/macro.okf.md` — RBI repo rates, domestic liquidity, food/fuel inflation, monsoon impact.
+- `knowledge/regions/uk/macro.okf.md` — Bank of England stance, Gilt yields, Sterling exchange rates, FTSE trends.
+- `knowledge/regions/japan/macro.okf.md` — BoJ Yield Curve Control (YCC), negative rate exits, Yen carry trades.
 
 ### Autonomous Macro Rules Updater (`src/knowledge_engine/okf_updater.py`)
 - Runs daily at `00:00 UTC` via GitHub Actions (`.github/workflows/update_okf.yml`).

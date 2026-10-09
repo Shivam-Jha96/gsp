@@ -105,7 +105,7 @@ def update_region_file(region_file: Path):
 def main():
     # Fallback to keyless open-source due to FMP free-tier 403 Forbidden limits
     logging.info("Starting index constituents update using yfiua open-source project...")
-    for file_path in KNOWLEDGE_DIR.glob("*_constituents.okf.json"):
+    for file_path in sorted(KNOWLEDGE_DIR.rglob("*constituents*.okf.json")):
         try:
             update_region_file(file_path)
         except Exception as e:

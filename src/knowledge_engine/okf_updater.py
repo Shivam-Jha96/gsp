@@ -141,15 +141,24 @@ def fetch_macro_news(queries: list, locale: dict = None, max_items_per_query: in
     logger.info(f"  Fetched {len(all_items)} unique news items.")
     return "\n".join(all_items)
 
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+def _resolve_path(filepath: str) -> str:
+    if os.path.isabs(filepath):
+        return filepath
+    return os.path.join(REPO_ROOT, filepath)
+
 def read_current_okf(filepath: str) -> str:
-    if os.path.exists(filepath):
-        with open(filepath, "r", encoding="utf-8") as f:
+    resolved = _resolve_path(filepath)
+    if os.path.exists(resolved):
+        with open(resolved, "r", encoding="utf-8") as f:
             return f.read()
     return "No existing rules found."
 
 def write_okf(filepath: str, content: str):
-    os.makedirs(os.path.dirname(filepath), exist_ok=True)
-    with open(filepath, "w", encoding="utf-8") as f:
+    resolved = _resolve_path(filepath)
+    os.makedirs(os.path.dirname(resolved), exist_ok=True)
+    with open(resolved, "w", encoding="utf-8") as f:
         f.write(content.strip() + "\n")
 
 async def update_region(region_code: str, region_data: dict, client, model_fallbacks: list):

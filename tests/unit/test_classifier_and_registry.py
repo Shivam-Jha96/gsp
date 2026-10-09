@@ -36,6 +36,8 @@ class TestMarketRegistryAndClassifier(unittest.TestCase):
             self.assertGreaterEqual(len(meta["anchors"]), 5)
             self.assertIn("okf_file", meta)
             self.assertTrue(os.path.exists(os.path.join(os.path.dirname(__file__), "../../", meta["okf_file"])))
+            self.assertIn("constituents_file", meta)
+            self.assertTrue(os.path.exists(os.path.join(os.path.dirname(__file__), "../../", meta["constituents_file"])))
 
     def test_build_rss_feeds(self):
         feeds = build_rss_feeds()

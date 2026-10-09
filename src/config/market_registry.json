@@ -82,8 +82,8 @@
       "India inflation CPI data",
       "India economy GDP FPI flows"
     ],
-    "okf_file": "knowledge/india_macro.okf.md",
-    "constituents_file": "knowledge/india_constituents.okf.json"
+    "okf_file": "knowledge/regions/india/macro.okf.md",
+    "constituents_file": "knowledge/regions/india/constituents.okf.json"
   },
   "US": {
     "name": "United States",
@@ -174,8 +174,8 @@
       "US CPI inflation data",
       "US economy GDP jobs"
     ],
-    "okf_file": "knowledge/us_macro.okf.md",
-    "constituents_file": "knowledge/us_constituents.okf.json"
+    "okf_file": "knowledge/regions/us/macro.okf.md",
+    "constituents_file": "knowledge/regions/us/constituents.okf.json"
   },
   "UK": {
     "name": "United Kingdom",
@@ -261,8 +261,8 @@
       "UK inflation CPI data",
       "UK economy GDP gilts"
     ],
-    "okf_file": "knowledge/uk_macro.okf.md",
-    "constituents_file": "knowledge/uk_constituents.okf.json"
+    "okf_file": "knowledge/regions/uk/macro.okf.md",
+    "constituents_file": "knowledge/regions/uk/constituents.okf.json"
   },
   "JP": {
     "name": "Japan",
@@ -343,7 +343,7 @@
       "Japan inflation CPI yen",
       "Japan economy GDP Nikkei"
     ],
-    "okf_file": "knowledge/japan_macro.okf.md",
-    "constituents_file": "knowledge/japan_constituents.okf.json"
+    "okf_file": "knowledge/regions/japan/macro.okf.md",
+    "constituents_file": "knowledge/regions/japan/constituents.okf.json"
   }
 }

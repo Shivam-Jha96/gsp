@@ -29,14 +29,12 @@ gsp/
 │   ├── build_progress.md         # Historical engineering changelog and milestone log
 │   └── sentiment_math.md         # Mathematical formula contracts for CLM probability scoring
 ├── knowledge/                    # Objective Knowledge Framework (OKF) storage
-│   ├── india_constituents.okf.json # Nifty 50 constituent metadata
-│   ├── india_macro.okf.md        # India RBI & macroeconomic policy rules
-│   ├── japan_constituents.okf.json # Nikkei 225 constituent metadata
-│   ├── japan_macro.okf.md        # Bank of Japan macroeconomic policy rules
-│   ├── uk_constituents.okf.json  # FTSE 100 constituent metadata
-│   ├── uk_macro.okf.md           # Bank of England macroeconomic policy rules
-│   ├── us_constituents.okf.json  # S&P 500 constituent metadata
-│   └── us_macro.okf.md           # US Federal Reserve macroeconomic policy rules
+│   ├── benchmark/                # Curated golden evaluation datasets
+│   └── regions/                  # Regional trading rules & constituent definitions
+│       ├── india/                # constituents.okf.json & macro.okf.md
+│       ├── japan/                # constituents.okf.json & macro.okf.md
+│       ├── uk/                   # constituents.okf.json & macro.okf.md
+│       └── us/                   # constituents.okf.json & macro.okf.md
 ├── scratch/                      # Temporary prototyping and test scripts
 │   ├── query_db.py               # Ad-hoc database queries
 │   ├── query_st.py               # Local Streamlit testing probe
@@ -104,7 +102,7 @@ gsp/
 - **Python Modules:** Lowercase with underscores (`market_registry.py`, `okf_updater.py`).
 - **Classes:** PascalCase (`RegionalAffinityClassifier`, `SupabasePoolClient`, `NewsDeduplicator`).
 - **Functions & Variables:** snake_case (`score_sentiment`, `canonical_fingerprint`, `load_okf_rules`).
-- **Configuration & Knowledge Files:** lowercase with underscores and descriptive extensions (`india_macro.okf.md`, `india_constituents.okf.json`).
+- **Configuration & Knowledge Files:** lowercase with underscores and descriptive extensions (`market_registry.json`, `knowledge/regions/<region>/macro.okf.md`, `constituents.okf.json`).
 - **Tests:** Prefixed with `test_` matching target modules (`test_classifier_and_registry.py`).
 
 ---

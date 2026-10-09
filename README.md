@@ -72,7 +72,7 @@ Our quantitative sentiment pipeline transforms unstructured global headlines int
 ```
 
 #### 1. Ingestion with Open Knowledge Formulation (OKF)
-Each ingested headline is paired with dynamic regional macroeconomic rules (`knowledge/*_macro.okf.md`) containing central bank policies, interest rate regimes, and inflation sensitivities:
+Each ingested headline is paired with dynamic regional macroeconomic rules (`knowledge/regions/*/macro.okf.md`) containing central bank policies, interest rate regimes, and inflation sensitivities:
 $$\text{State} = \mathcal{T}(\text{Headline}, \text{Summary}) \oplus \text{OKF}_{\text{Region}}$$
 
 #### 2. Native Probability Distribution Extraction
@@ -195,14 +195,11 @@ gsp/
 │   └── build_progress.md             # Multi-phase milestone build progress log
 ├── knowledge/                  # Auto-updated regional trading rules & constituents
 │   ├── benchmark/              # Curated Macroeconomic Golden Benchmark Dataset
-│   ├── us_macro.okf.md
-│   ├── us_constituents.okf.json
-│   ├── india_macro.okf.md
-│   ├── india_constituents.okf.json
-│   ├── uk_macro.okf.md
-│   ├── uk_constituents.okf.json
-│   ├── japan_macro.okf.md
-│   └── japan_constituents.okf.json
+│   └── regions/                # Hierarchical regional knowledge framework
+│       ├── india/              # macro.okf.md & constituents.okf.json (NSE/BSE)
+│       ├── japan/              # macro.okf.md & constituents.okf.json (Nikkei/TOPIX)
+│       ├── uk/                 # macro.okf.md & constituents.okf.json (FTSE 100/250)
+│       └── us/                 # macro.okf.md & constituents.okf.json (S&P 500/NASDAQ)
 ├── reports/                    # Generated quantitative benchmark & forward test reports
 │   ├── forward_test_ledger.csv # Append-only public forward-testing evaluation ledger
 │   ├── benchmark_report.md     # 4-tier benchmark evaluation report

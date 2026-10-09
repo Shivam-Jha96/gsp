@@ -42,7 +42,7 @@ flowchart TD
 
     subgraph S2["Knowledge & Ingestion Pipeline"]
         MAIN["Pipeline Orchestrator<br/>(src/main.py)"]
-        OKF_FILES["Objective Knowledge Files<br/>(knowledge/*.okf.md)"]
+        OKF_FILES["Objective Knowledge Files<br/>(knowledge/regions/*/macro.okf.md)"]
         DEDUP --> MAIN
         OKF_FILES -->|Dynamic Context Injection| MAIN
     end
@@ -192,7 +192,7 @@ Exact quotation prevents Google from returning broad fuzzy keyword associations,
 #### 3. Deterministic Entity, Constituent Company & Regional Affinity Gatekeeper (`classifier.py`)
 To mathematically prevent cross-region contamination (e.g., US Wall Street market wraps erroneously tagged under India, or Indian shares returned under UK FTSE queries) while ensuring constituent company news is correctly recognized, [`RegionalAffinityClassifier`](file:///d:/Dev/repos/gsp/src/ingestion/classifier.py) evaluates every parsed headline against a multi-tier compiled regex entity trie:
 * **Index Ticker Affinity (Weight = 3.0):** Matches exact index ticker names and their aliases (e.g., `S&P 500`, `Nifty 50`, `FTSE 100`, `Nikkei 225`).
-* **Constituent Company Affinity (Weight = 2.0):** Dynamically compiled from declarative regional constituent files (`knowledge/*_constituents.okf.json`). Matches individual listed companies (e.g., `Apple`, `Nvidia`, `Mulberry`, `Steady Energy`, `Fidelity Special Values`, `TCS`, `Toyota`) and automatically resolves the article to its parent index ticker (e.g., Mulberry $\to$ FTSE AIM).
+* **Constituent Company Affinity (Weight = 2.0):** Dynamically compiled from declarative regional constituent files (`knowledge/regions/*/constituents.okf.json`). Matches individual listed companies (e.g., `Apple`, `Nvidia`, `Mulberry`, `Steady Energy`, `Fidelity Special Values`, `TCS`, `Toyota`) and automatically resolves the article to its parent index ticker (e.g., Mulberry $\to$ FTSE AIM).
 * **Macroeconomic Anchor Affinity (Weight = 1.0):** Matches country-specific institutions, central banks, and currency anchors (`rbi`, `rupee`, `dalal street`, `fed`, `boe`, `boj`, `yen`, `gilt`, `london`).
 * **Verification & Rerouting Rules:**
   - An item is accepted into the pipeline if $\text{Affinity}(\text{ExpectedRegion}) > 0$.
@@ -200,12 +200,12 @@ To mathematically prevent cross-region contamination (e.g., US Wall Street marke
   - Cross-region contaminants (where expected affinity is 0 but another region's affinity is high) are automatically rejected and logged.
   - **Broad-Market Equity Action Heuristic:** If a feed item exhibits zero cross-region contaminant signals and contains market price-action vocabulary (`stocks`, `equities`, `rally`, `selloff`, `jobs data`), it is validated for the expected region rather than falsely discarded as noise.
 
-#### 4. Region-Wise Declarative Index Constituents (`knowledge/*_constituents.okf.json`)
+#### 4. Region-Wise Declarative Index Constituents (`knowledge/regions/*/constituents.okf.json`)
 Indices are baskets of constituent companies. In practice, high-impact financial news frequently mentions individual companies rather than the abstract index ticker. Valence maintains declarative constituent registries per region:
-* [`knowledge/us_constituents.okf.json`](file:///d:/Dev/repos/gsp/knowledge/us_constituents.okf.json): S&P 500, NASDAQ, Dow Jones, Russell 2000 mega-caps and mid-caps.
-* [`knowledge/india_constituents.okf.json`](file:///d:/Dev/repos/gsp/knowledge/india_constituents.okf.json): Nifty 50, Sensex, Nifty Bank, Nifty IT leaders.
-* [`knowledge/uk_constituents.okf.json`](file:///d:/Dev/repos/gsp/knowledge/uk_constituents.okf.json): FTSE 100, FTSE 250, FTSE All-Share, and FTSE AIM constituents.
-* [`knowledge/japan_constituents.okf.json`](file:///d:/Dev/repos/gsp/knowledge/japan_constituents.okf.json): Nikkei 225, TOPIX, JP Mothers, JASDAQ constituents.
+* [`knowledge/regions/us/constituents.okf.json`](file:///d:/Dev/repos/gsp/knowledge/regions/us/constituents.okf.json): S&P 500, NASDAQ, Dow Jones, Russell 2000 mega-caps and mid-caps.
+* [`knowledge/regions/india/constituents.okf.json`](file:///d:/Dev/repos/gsp/knowledge/regions/india/constituents.okf.json): Nifty 50, Sensex, Nifty Bank, Nifty IT leaders.
+* [`knowledge/regions/uk/constituents.okf.json`](file:///d:/Dev/repos/gsp/knowledge/regions/uk/constituents.okf.json): FTSE 100, FTSE 250, FTSE All-Share, and FTSE AIM constituents.
+* [`knowledge/regions/japan/constituents.okf.json`](file:///d:/Dev/repos/gsp/knowledge/regions/japan/constituents.okf.json): Nikkei 225, TOPIX, JP Mothers, JASDAQ constituents.
 
 [`src/config/market_registry.py`](file:///d:/Dev/repos/gsp/src/config/market_registry.py#L39-L68) provides `load_region_constituents(region_code)` with memoized caching.
 
@@ -237,7 +237,7 @@ To eliminate OPEX/CAPEX waste (redundant inference costs and duplicate database 
 ---
 
 ### Layer 2: AI Inference & Knowledge Layer
-* **Source Files:** [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py), [`src/ai_engine/clm_client.py`](file:///d:/Dev/repos/gsp/src/ai_engine/clm_client.py), [`src/ai_engine/modal_app.py`](file:///d:/Dev/repos/gsp/src/ai_engine/modal_app.py), [`knowledge/*.okf.md`](file:///d:/Dev/repos/gsp/knowledge/)
+* **Source Files:** [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py), [`src/ai_engine/clm_client.py`](file:///d:/Dev/repos/gsp/src/ai_engine/clm_client.py), [`src/ai_engine/modal_app.py`](file:///d:/Dev/repos/gsp/src/ai_engine/modal_app.py), [`knowledge/regions/`](file:///d:/Dev/repos/gsp/knowledge/regions/)
 * **Runtime & Dependencies:** Modal Cloud (NVIDIA A10G), `vllm`, `contrastive-lm`, `requests>=2.31.0`, `torch`, `hf_transfer`
 
 #### 1. System-One CLM-8B Inference Architecture
@@ -306,7 +306,7 @@ In [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py#L22-L82), the native [`C
 This ensures high confidence is required to trigger strong bullish or bearish values, while ambiguous headlines naturally decay toward zero.
 
 #### 5. Objective Knowledge Framework (OKF) Integration
-Prior to sending headlines to the AI model, [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py) dynamically loads the corresponding region's macro rules from `knowledge/{region}_macro.okf.md`. These rules provide the macroeconomic domain constraints under which the CLM evaluates headline impact (e.g., treating rate hikes as bearish for equities but bullish for currency values).
+Prior to sending headlines to the AI model, [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py) dynamically loads the corresponding region's macro rules from `knowledge/regions/{region}/macro.okf.md`. These rules provide the macroeconomic domain constraints under which the CLM evaluates headline impact (e.g., treating rate hikes as bearish for equities but bullish for currency values).
 
 ---
 
@@ -603,13 +603,13 @@ Macroeconomic regimes evolve through interest rate cycles, inflation surprises, 
 ```mermaid
 flowchart LR
     A["Scheduled Daily Run<br/>(00:00 UTC)"] --> B["Google News Policy Search<br/>(Central Bank and Macro Queries)"]
-    B --> C["Read Current OKF Rules<br/>(knowledge/*.okf.md)"]
+    B --> C["Read Current OKF Rules<br/>(knowledge/regions/*/macro.okf.md)"]
     C --> D["Gemini Synthesis Prompt<br/>(Identify Policy Shifts)"]
     D --> E{"Primary Model<br/>Available?"}
     E -->|Yes| F["Generate Updated Markdown Rules"]
     E -->|503 or 404 Error| G["Cascade to Fallback Model Chain"]
     G --> F
-    F --> H["Write to knowledge/*.okf.md"]
+    F --> H["Write to knowledge/regions/*/macro.okf.md"]
     H --> I["Git Diff Check"]
     I -->|Diff Exists| J["Commit via github-actions bot<br/>and Trigger deploy.yml"]
     I -->|No Diff| K["Exit Cleanly"]
