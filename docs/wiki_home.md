@@ -1,19 +1,32 @@
-# Valence — Quantitative Macro-Sentiment Platform & Open Intelligence Terminal
-
 <p align="center">
   <img src="https://raw.githubusercontent.com/Shivam-Jha96/gsp/master/assets/valence_social_preview.png" alt="Valence Social Preview Banner" width="100%" style="border-radius: 8px;" />
 </p>
 
 
-Welcome to the official technical wiki for **Valence** (formerly Global Sentiment Platform of Share Markets / GSP). 
+Welcome to the official technical wiki for **Valence**. 
 
 Valence is an open-source quantitative macroeconomic sentiment and directional signal engine. It continuously ingests geopolitical and financial news events across four geopolitical hubs (United States, India, United Kingdom, and Japan), evaluates deterministic market sentiment using **Contrastive Language Models (CLM-8B System-One)**, stores vertically partitioned time-series signals in PostgreSQL, computes multi-period Exponential Moving Average (EMA) momentum indicators, evaluates directional stances for paper trading evaluation (order execution disabled in research MVP mode), and renders low-latency telemetry to a high-contrast dark Streamlit terminal.
 
 ---
+## Table of Contents
 
-## 🌟 At a Glance: Valence in Plain English (For Non-Technical Readers)
+- [🌟 At a Glance: Valence in Plain English](#-at-a-glance-valence-in-plain-english-for-non-technical-readers)
+  - [The Real-World Problem We Are Solving](#the-real-world-problem-we-are-solving)
+  - [What We Are Trying to Achieve with Valence](#what-we-are-trying-to-achieve-with-valence)
+  - [How Does Valence Help You?](#how-does-valence-help-you)
+1. [Executive Summary & Core Philosophy](#1-executive-summary--core-philosophy)
+2. [The System-One Paradigm: Tri-Level Architecture Comparison](#2-the-system-one-paradigm-tri-level-architecture-comparison)
+3. [8-Tier Operational Dataflow & Architecture](#3-8-tier-operational-dataflow--architecture)
+4. [Quantitative Research & Scoring Mathematics](#4-quantitative-research--scoring-mathematics)
+5. [Open Intelligence Terminal Guide (UI Telemetry)](#5-open-intelligence-terminal-guide-ui-telemetry)
+6. [Dynamic Objective Knowledge Framework (OKF)](#6-dynamic-objective-knowledge-framework-okf)
+7. [Empirical Benchmarking & LLM Comparison (USP Validation)](#7-empirical-benchmarking--llm-comparison-usp-validation)
+8. [Production Operations & Resiliency Matrix](#8-production-operations--resiliency-matrix)
+9. [Regulatory Disclaimers & Data Terms](#9-regulatory-disclaimers--data-terms)
 
-If you are an investor, researcher, or curious observer without a background in quantitative finance or AI engineering, this section explains in simple terms what Valence is, what we are trying to achieve, and how it helps you navigate the global financial landscape.
+---
+
+## 🌟 At a Glance: 
 
 ### The Real-World Problem We Are Solving
 Every day, financial markets are hit by an overwhelming flood of news: central bank interest rate announcements, inflation reports, geopolitical developments, earnings releases, and trade policy updates.
@@ -42,25 +55,6 @@ Think of Valence as an automated, tireless macroeconomic analyst that runs aroun
 - 🔍 **100% Transparent & Verifiable:** Unlike proprietary "black-box" Wall Street tools, Valence is completely open-source. You can click on any score to view the exact underlying news articles and verify its publicly recorded out-of-sample accuracy ledger for yourself.
 
 ---
-
-## Table of Contents
-
-- [🌟 At a Glance: Valence in Plain English](#-at-a-glance-valence-in-plain-english-for-non-technical-readers)
-  - [The Real-World Problem We Are Solving](#the-real-world-problem-we-are-solving)
-  - [What We Are Trying to Achieve with Valence](#what-we-are-trying-to-achieve-with-valence)
-  - [How Does Valence Help You?](#how-does-valence-help-you)
-1. [Executive Summary & Core Philosophy](#1-executive-summary--core-philosophy)
-2. [The System-One Paradigm: Tri-Level Architecture Comparison](#2-the-system-one-paradigm-tri-level-architecture-comparison)
-3. [8-Tier Operational Dataflow & Architecture](#3-8-tier-operational-dataflow--architecture)
-4. [Quantitative Research & Scoring Mathematics](#4-quantitative-research--scoring-mathematics)
-5. [Open Intelligence Terminal Guide (UI Telemetry)](#5-open-intelligence-terminal-guide-ui-telemetry)
-6. [Dynamic Objective Knowledge Framework (OKF)](#6-dynamic-objective-knowledge-framework-okf)
-7. [Empirical Benchmarking & LLM Comparison (USP Validation)](#7-empirical-benchmarking--llm-comparison-usp-validation)
-8. [Production Operations & Resiliency Matrix](#8-production-operations--resiliency-matrix)
-9. [Regulatory Disclaimers & Data Terms](#9-regulatory-disclaimers--data-terms)
-
----
-
 
 ## 1. Executive Summary & Core Philosophy
 
@@ -298,3 +292,4 @@ Evaluated on the **Macroeconomic Golden Benchmark Dataset** (`knowledge/benchmar
 ---
 
 *Valence Technical Documentation • Version 2.7.0 • Maintained for Open-Source Quantitative Research*
+
