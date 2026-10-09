@@ -10,7 +10,7 @@ Valence is an open-source quantitative macroeconomic sentiment and directional s
 ---
 ## Table of Contents
 
-- [🌟 At a Glance: Valence in Plain English](#-at-a-glance-valence-in-plain-english)
+- [🌟 At a Glance](#-at-a-glance)
     - [1. The Real-World Problem We Are Solving](#1-the-real-world-problem-we-are-solving)
     - [2. What We Are Trying to Achieve with Valence](#2-what-we-are-trying-to-achieve-with-valence)
     - [3. How Does Valence Help You?](#3-how-does-valence-help-you)
@@ -26,7 +26,7 @@ Valence is an open-source quantitative macroeconomic sentiment and directional s
 
 ---
 
-## 🌟 At a Glance: Valence in Plain English
+## 🌟 At a Glance
 
 > **Executive Overview:** Valence is an open-source "weather radar" for global financial markets. It replaces subjective financial news chatter and hallucinating chatbots with pure, deterministic mathematical sentiment scores calculated directly from breaking news events.
 
