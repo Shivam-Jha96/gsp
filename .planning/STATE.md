@@ -73,6 +73,8 @@ None. All 66 unit tests passing, working tree clean.
 | 261008-j18 | Enhance UI consistency of forward-test ledger and regulatory disclosures with institutional dark theme | 2026-10-08 | 70c289d | - |
 | 261008-j19 | Implement responsive 2-tier header and flex-order reorganized Quantitative Edge marquee for mobile screens | 2026-10-08 | 7ffb507 | - |
 | 261009-j20 | Resolve PyTest test fixture discovery collision on Granger causality metric | 2026-10-09 | 394acba | - |
+| 261009-j21 | Configure scheduled knowledge updates to push directly to master without PR bottlenecks | 2026-10-09 | 7a0206a | - |
+
 
 ## Session Continuity
 
