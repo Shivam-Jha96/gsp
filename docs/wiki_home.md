@@ -3,9 +3,9 @@
 </p>
 
 
-Welcome to the official technical wiki for **Valence**. 
+Welcome to the official technical wiki for **Valence** — explore the live interactive dashboard at [https://valence.streamlit.app/](https://valence.streamlit.app/). 
 
-Valence is an open-source quantitative macroeconomic sentiment and directional signal engine. It continuously ingests geopolitical and financial news events across four geopolitical hubs (United States, India, United Kingdom, and Japan), evaluates deterministic market sentiment using **Contrastive Language Models (CLM-8B System-One)**, stores vertically partitioned time-series signals in PostgreSQL, computes multi-period Exponential Moving Average (EMA) momentum indicators, evaluates directional stances for paper trading evaluation (order execution disabled in research MVP mode), and renders low-latency telemetry to a high-contrast dark Streamlit terminal.
+Valence is an open-source quantitative macroeconomic sentiment and directional signal engine. It continuously ingests geopolitical and financial news events across four geopolitical hubs (United States, India, United Kingdom, and Japan), evaluates deterministic market sentiment using **Contrastive Language Models (CLM-8B System-One)**, stores vertically partitioned time-series signals in PostgreSQL, computes multi-period Exponential Moving Average (EMA) momentum indicators, evaluates directional stances for paper trading evaluation (order execution disabled in research MVP mode), and renders low-latency telemetry to a high-contrast dark Streamlit terminal ([https://valence.streamlit.app/](https://valence.streamlit.app/)).
 
 ---
 ## Table of Contents
