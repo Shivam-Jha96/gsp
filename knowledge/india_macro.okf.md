@@ -5,7 +5,7 @@
 - **Action:** Bearish on long-duration sovereign bonds (G-Secs), duration-sensitive NBFC balance sheets, and high-multiple growth equities; Bullish on short-term money market paper (91-day/364-day T-Bills), 1-year Overnight Index Swaps (OIS) paying rates, and large commercial bank Net Interest Margins (NIMs).
 
 ## Rule 2: Food & Fuel CPI Acceleration & Consumer Margin Compression
-- **Condition:** Headline retail inflation prints consecutive monthly gains toward multi-month highs (reaching 4.82%), driven by persistent supply shocks in food baskets (sugar, staples) and fuel costs that outpace nominal wage growth.
+- **Condition:** Headline retail inflation prints consecutive monthly gains toward multi-month highs (reaching 4.82% across an 8-month consecutive rising streak), driven by persistent supply shocks in food baskets (sugar, chip prices, staples) and fuel costs that outpace nominal wage growth.
 - **Action:** Bearish on volume-dependent mass FMCG, entry-level two-wheelers, and low-ticket consumer durables; Bullish on domestic energy upstream exploration/refining firms and agricultural input suppliers (fertilizers, agrochemicals, sugar processors).
 
 ## Rule 3: Growth-FX Decoupling & Persistent Rupee Depreciation
@@ -17,9 +17,9 @@
 - **Action:** Bearish on systemic banking liquidity surpluses and short-tenor commercial paper yields; Bullish on onshore short-dated USD/INR forward premia and RBI foreign exchange reserve assets.
 
 ## Rule 5: FPI Inflow Inflection & Institutional Large-Cap Momentum
-- **Condition:** Foreign Portfolio Investors (FPIs) transition from multi-year cyclical lulls into sustained net monthly buying, complementing sticky Domestic Institutional Investor (DII) and retail Systematic Investment Plan (SIP) liquidity pools.
+- **Condition:** Foreign Portfolio Investors (FPIs) transition from multi-year cyclical lulls into sustained net monthly buying (positive flows across July, August, and September), complementing sticky Domestic Institutional Investor (DII) and retail Systematic Investment Plan (SIP) liquidity pools.
 - **Action:** Bullish on foreign-flow-sensitive benchmark indices (Nifty 50, Sensex large-cap constituents) and private banking heavyweights; Bearish on illiquid, lower-tier micro-caps vulnerable to retail speculative rotation.
 
 ## Rule 6: Trade Credential Formalization & Supply Chain Realignment
-- **Condition:** Upgraded international trade credentials, global supply chain diversification away from regional peers, and government production-linked incentives accelerate export orders and industrial FDI.
+- **Condition:** Upgraded international trade credentials, bilateral trade discussions (India-US trade talks), global supply chain diversification away from regional peers, and government production-linked incentives accelerate export orders and industrial FDI.
 - **Action:** Bullish on Electronics Manufacturing Services (EMS), contract industrial engineering exporters, and modern port/logistics operators; Bearish on uncompetitive, tariff-exposed basic textile manufacturers and unprotected secondary metal producers.
