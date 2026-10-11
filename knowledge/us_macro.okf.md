@@ -1,25 +1,25 @@
 # United States Macro Trading Rules
 
-## Rule 1: Federal Reserve Policy Lift-Off and Forward Tightening Uncertainty
-- **Condition:** The Federal Reserve delivers an initial interest rate hike—its first in three years—defying political calls for easing, while forward guidance diverges between hawkish baseline inflation-fighting and emerging official hesitation regarding subsequent rate increases.
+## Rule 1: Federal Reserve Rate Lift-Off and Sustained Tightening Guidance
+- **Condition:** The Federal Reserve delivers an initial interest rate hike—its first in three years—and signals at least one additional hike in the calendar year, defying executive political demands for monetary easing amid persistent price pressures.
 - **Action:** Bullish on the US Dollar (USD), Bullish on Front-End Treasury Yields (2Y Yield), Bearish on Long-Duration Fixed Income (TLT), and Bearish on Rate-Sensitive Small-Cap Equities (IWM).
 
-## Rule 2: Accelerating Headline CPI and Multi-Year High Inflation Prints
-- **Condition:** U.S. headline and core consumer price index (CPI) prints accelerate toward or exceed 3-year highs above 4.0%, driven by broad-based services persistence and rising input costs that solidify tighter monetary conditions.
-- **Action:** Bullish on Treasury Inflation-Protected Securities (TIPS), Bullish on the US Dollar (USD), Bearish on Long-Duration Treasuries (TLT), and Bearish on High-Multiple Growth Equities.
+## Rule 2: Energy-Driven CPI Re-Acceleration and Sticky Services Inflation
+- **Condition:** Headline CPI prints accelerate, propelled by surging retail gasoline and commodity prices while underlying core services remain persistent, cementing expectations for higher-for-longer policy rates.
+- **Action:** Bullish on Treasury Inflation-Protected Securities (TIPS), Bullish on the US Dollar (USD), Bearish on Intermediate and Long-Duration Treasuries (IEF/TLT), and Bearish on High-Multiple Growth Equities.
 
-## Rule 3: Sovereign Issuance Pressure and Term Premium Expansion
-- **Condition:** Escalating federal deficit financing and heavy Treasury coupon issuance outstrip private market duration demand, driving up long-end yields and term premiums regardless of near-term policy rate path expectations.
-- **Action:** Bearish on Core Aggregate Fixed Income (AGG), Bearish on Long-Duration Yield Spreads, and Bullish on Cash Equivalents and Ultra-Short T-Bills (BIL).
+## Rule 3: Sovereign Deficit Financing and Term Premium Expansion
+- **Condition:** Persistent federal fiscal deficit expansion and heavy Treasury coupon issuance outstrip institutional duration absorption during a restrictive monetary policy stance, driving up long-end yields and term premiums.
+- **Action:** Bearish on Core Aggregate Fixed Income (AGG), Bearish on 30-Year Treasuries, and Bullish on Ultra-Short T-Bills (BIL) and Cash Equivalents.
 
-## Rule 4: Secular AI Infrastructure Capex Concentration
-- **Condition:** Private sector capital expenditure heavily concentrates in artificial intelligence platforms, datacenters, and semiconductor supply chains, buoying aggregate GDP growth while traditional non-tech corporate capex stagnates.
-- **Action:** Bullish on Large-Cap Tech Equities (QQQ) and Semiconductor Equities (SMH), Bearish on Capital-Intensive Small-Caps (IWM), and Bearish on Traditional Non-Tech Defensive Value.
+## Rule 4: Concentrated AI Infrastructure Capex Driving Asymmetric GDP Growth
+- **Condition:** Domestic private fixed investment disproportionately concentrates in artificial intelligence hardware, datacenters, and semiconductor supply chains, bolstering headline GDP while broader non-tech corporate capex stagnates.
+- **Action:** Bullish on Mega-Cap Technology Equities (QQQ), Bullish on Semiconductor Equities (SMH), and Bearish on Broad Industrial Small-Caps (IWM).
 
-## Rule 5: Cross-Border Industrial Tariffs and Automotive Supply Chain Shock
-- **Condition:** Implementation or threat of U.S. tariffs targeting integrated North American manufacturing sectors, particularly the Canadian automotive supply chain, elevates input costs and disrupts cross-border production networks.
-- **Action:** Bullish on the US Dollar (USD), Bearish on the Canadian Dollar (CAD), and Bearish on Cyclical Industrials (XLI) and Automotive Manufacturers.
+## Rule 5: Cross-Border Industrial Tariffs and Automotive Supply Chain Disruption
+- **Condition:** Imposition or escalation of U.S. tariffs targeting integrated North American manufacturing partners, specifically Canadian automotive components and vehicle assembly, elevates manufacturing input costs and threatens industrial output.
+- **Action:** Bullish on the US Dollar against the Canadian Dollar (USD/CAD), Bearish on Cyclical Industrials (XLI), and Bearish on Automotive Original Equipment Manufacturers (OEMs).
 
-## Rule 6: Clean Energy Project Cancellations and Capital Retrenchment
-- **Condition:** High capital costs, regulatory uncertainty, and policy shifts cause widespread cancellations of large-scale clean energy and transition infrastructure projects, dampening renewable sector employment and fixed investment.
-- **Action:** Bearish on Clean Energy Equities (ICLN/QCLN), Bearish on Renewable Equipment Manufacturers, and Bullish on Traditional Energy and Fossil Fuel Infrastructure (XLE).
+## Rule 6: Clean Energy Capital Retrenchment and Traditional Energy Resilience
+- **Condition:** High financing costs, regulatory headwinds, and policy reversals trigger widespread cancellations of utility-scale renewable energy projects, curbing green sector capital expenditures and employment.
+- **Action:** Bearish on Clean Energy Equities (ICLN/QCLN), Bearish on Alternative Energy Equipment Providers, and Bullish on Traditional Oil, Gas, and Midstream Infrastructure (XLE/AMLP).

@@ -1,25 +1,25 @@
 # Japan Macro Trading Rules
 
-## Rule 1: BOJ Monetary Normalization, Ultra-Long Yield Spikes, and Fiscal Backstop Friction
-- **Condition:** The Bank of Japan advances policy rate hikes and quantitative tightening while yields on 20Y-40Y JGBs test multi-decade highs, stoking political and Ministry of Finance friction over sovereign debt-servicing costs and raising the probability of emergency unscheduled Rinban operations.
-- **Action:** Bullish on 10Y-30Y JGB yield-curve steepeners, short-tenor JGB discount paper, and Japanese mega-cap banking equities; Bearish on ultra-long JGB paper (30Y-40Y) and rate-sensitive J-REITs.
+## Rule 1: BOJ Monetary Normalization, Sovereign Debt Friction, and Rinban Intervention Overhang
+- **Condition:** The Bank of Japan pursues policy rate hikes and quantitative tightening amid multi-decade highs in 20Y-40Y JGB yields, triggering political pushback over ballooning sovereign debt-servicing costs and escalating the probability of emergency, unscheduled Rinban purchase operations.
+- **Action:** Bullish on 10Y-30Y JGB yield-curve steepeners, short-tenor JGB discount bills, and Japanese mega-cap banking equities; Bearish on ultra-long JGB paper (30Y-40Y) and rate-sensitive J-REITs.
 
-## Rule 2: FX Carry Divergence, Inflation Disconnect, and MoF Intervention Asymmetry
-- **Condition:** The Japanese yen hits multi-decade lows despite domestic policy rates reaching multi-decade highs and firmer domestic CPI prints, driven by wide absolute nominal yield differentials against the USD and triggering extreme bilateral MoF currency intervention risk.
-- **Action:** Bullish on tactical spot JPY, long JPY implied volatility (gamma), and short USD/JPY risk reversals; Bearish on unhedged export-dependent Nikkei momentum and yen-funded cross-currency carry trades.
+## Rule 2: Persistent FX Carry Disconnect and MoF Intervention Asymmetry
+- **Condition:** USD/JPY remains elevated or drifts higher despite firmer domestic Japanese CPI prints and BOJ rate hike signaling, driven by wide nominal policy rate differentials and unhedged foreign yield-seeking capital flows, raising the risk of unilateral Ministry of Finance currency intervention.
+- **Action:** Bullish on tactical spot JPY, long JPY implied volatility (gamma), and short USD/JPY risk reversals; Bearish on unhedged cross-currency JPY carry trades and export momentum equities vulnerable to sudden FX retracements.
 
-## Rule 3: Subsidy-Masked Headline CPI vs. Imported Commodity Cost-Push
-- **Condition:** Government utility and fuel subsidies artificially suppress headline CPI prints, while underlying core-core inflation and pipeline costs remain elevated due to weak-yen pass-through, crude oil spikes, and geopolitical shipping disruptions.
-- **Action:** Bullish on general trading companies (*sogo shosha*), domestic inflation-linked bonds (JGBi), and upstream resource plays; Bearish on import-reliant domestic consumer staples and electric utilities lacking full fuel-cost pass-through mechanisms.
+## Rule 3: Policy Subsidy Distortions vs. Imported Energy Cost-Push Inflation
+- **Condition:** Headline CPI prints are artificially suppressed by temporary government utility and fuel subsidies, while underlying pipeline inflation and core-core CPI accelerate due to commodity price spikes, shipping disruptions, and weak-yen import pass-through.
+- **Action:** Bullish on general trading companies (*sogo shosha*), domestic inflation-linked bonds (JGBi), and upstream resource distributors; Bearish on domestic electric utilities lacking dynamic fuel-cost adjustment mechanisms and margin-compressed consumer staples.
 
-## Rule 4: Capex-Led GDP Resilience vs. Real Household Consumption Drag
-- **Condition:** Real GDP growth prints rely almost entirely on upward revisions in business investment—specifically factory automation, semiconductor facilities, and supply-chain reshoring—while private household consumption remains suppressed by negative or stagnant real wage growth.
-- **Action:** Bullish on factory automation equipment manufacturers, specialized industrial machinery, and advanced engineering contractors; Bearish on domestic mass-market retailers, apparel chains, and consumer discretionary cyclicals.
+## Rule 4: Capex-Driven GDP Resilience vs. Household Real Wage Consumption Deficit
+- **Condition:** Headline real GDP growth is driven primarily by upward revisions in corporate capital expenditure (semiconductor infrastructure, factory automation, and reshoring), while private household consumption contracts or stagnates due to negative or weak real wage growth.
+- **Action:** Bullish on factory automation equipment manufacturers, specialized industrial machinery, and advanced engineering contractors; Bearish on domestic mass-market retailers, department store operators, and consumer discretionary cyclicals.
 
-## Rule 5: TSE Governance Directives and AI/Semiconductor Capex Allocations
-- **Condition:** The Tokyo Stock Exchange accelerates enforcement of capital efficiency reforms (unwinding cross-shareholdings, PBR < 1.0x remediation, and share buybacks) concurrently with heavy global institutional allocations into Japan's semiconductor infrastructure and AI supply chain.
+## Rule 5: TSE Corporate Governance Directives and Strategic Capex Allocations
+- **Condition:** The Tokyo Stock Exchange expands enforcement of capital-efficiency mandates (mandatory PBR < 1.0x remediation, cross-shareholding unwinds, and elevated share repurchases) concurrently with sustained foreign direct investment into Japan's semiconductor supply chain and AI infrastructure.
 - **Action:** Bullish on semiconductor manufacturing equipment (SME) leaders, advanced silicon materials suppliers, and cash-rich corporate restructuring beneficiaries; Bearish on low-governance corporate holdouts with entrenched cross-holdings and sub-1.0x book valuations.
 
-## Rule 6: Hawkish Policy Overhang, Rate-Hike Fears, and Growth Factor De-Rating
-- **Condition:** Upside surprises in economic growth or hawkish forward guidance from BOJ officials trigger immediate market repricing of accelerated rate hikes, inducing duration-driven equity multiple compression and intraday selloffs in benchmark equity indices despite positive macro data.
-- **Action:** Bullish on TOPIX Value relative to TOPIX Growth, short-duration corporate debt, and cash-rich balance sheets; Bearish on high-P/E Nikkei 225 growth equities and long-duration speculative technology shares.
+## Rule 6: Hawkish Policy Overhang, Rate-Hike Repricing, and Growth Factor Multiple Compression
+- **Condition:** Upside surprises in economic output or hawkish BOJ policy rhetoric prompt rapid short-end JGB yield spikes and forward-rate repricing, perversely triggering multiple compression and risk-off liquidations in benchmark equity indices despite positive underlying macro momentum.
+- **Action:** Bullish on TOPIX Value relative to TOPIX Growth, ultra-short corporate paper, and balance-sheet cash reserves; Bearish on high-P/E Nikkei 225 growth equities and long-duration speculative technology shares.
