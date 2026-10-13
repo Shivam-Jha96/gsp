@@ -6,11 +6,11 @@
 
 ## Rule 2: Energy-Driven CPI Re-Acceleration and Sticky Services Inflation
 - **Condition:** Headline CPI prints accelerate on the back of rising retail gasoline prices while core services inflation remains sticky, elevating terminal policy rate expectations and near-term inflation breakevens.
-- **Action:** Bullish on Treasury Inflation-Protected Securities (TIPS), Bullish on the US Dollar (USD), Bearish on Intermediate and Long-Duration Treasuries (IEF/TLT), and Bearish on High-Multiple Growth Equities.
+- **Action:** Bullish on Treasury Inflation-Protected Securities (TIPS), Bullish on the US Dollar (USD), Bearish on Intermediate and Long-Duration Treasuries (IEF/TLT), and Bearish on Gold (XAU/USD).
 
 ## Rule 3: Sovereign Deficit Financing and Term Premium Expansion
 - **Condition:** Persistent federal fiscal deficit expansion and elevated Treasury coupon issuance outpace institutional duration demand during an active monetary tightening regime, steepening the yield curve via term premium expansion.
-- **Action:** Bearish on Core Aggregate Fixed Income (AGG), Bearish on 30-Year Treasuries, and Bullish on Ultra-Short T-Bills (BIL) and Cash Equivalents.
+- **Action:** Bearish on Core Aggregate Fixed Income (AGG), Bearish on 30-Year Treasuries, Bullish on 10Y/2Y Yield Curve Steepeners, and Bullish on Ultra-Short T-Bills (BIL) and Cash Equivalents.
 
 ## Rule 4: Concentrated AI Infrastructure Capex Driving Asymmetric GDP Growth
 - **Condition:** Private fixed investment disproportionately concentrates in artificial intelligence hardware, datacenters, and semiconductor supply chains, supporting headline GDP expansion while broader non-tech corporate capex remains subdued.
@@ -21,9 +21,9 @@
 - **Action:** Bullish on the US Dollar against the Canadian Dollar (USD/CAD), Bearish on Cyclical Industrials (XLI), and Bearish on Automotive Original Equipment Manufacturers (OEMs).
 
 ## Rule 6: Clean Energy Capital Retrenchment and Traditional Energy Resilience
-- **Condition:** High financing costs, regulatory uncertainty, and policy shifts trigger widespread project cancellations and job losses in utility-scale renewables, shifting institutional capital back to conventional fossil fuels and infrastructure.
+- **Condition:** Elevated financing costs, regulatory uncertainty, and policy shifts trigger widespread project cancellations and job losses in utility-scale renewables, redirecting institutional capital back to conventional fossil fuels and infrastructure.
 - **Action:** Bearish on Clean Energy Equities (ICLN/QCLN), Bearish on Alternative Energy Equipment Providers, and Bullish on Traditional Oil, Gas, and Midstream Infrastructure (XLE/AMLP).
 
 ## Rule 7: Healthcare Cost Inflation and Structural Labor Cost Pressures
-- **Condition:** Sustained healthcare wage inflation and rising medical care delivery costs consume an increasing share of gross domestic output, compressing operating margins for service providers while reducing discretionary consumer spending power.
+- **Condition:** Sustained healthcare wage inflation and rising medical care delivery costs consume an increasing share of gross domestic output, compressing operating margins for service providers while eroding discretionary consumer spending power.
 - **Action:** Bullish on Large-Cap Pharmaceuticals and Defensive Healthcare (XLV), Bearish on Margin-Compressed Healthcare Facility Operators, and Bearish on Consumer Discretionary Equities (XLY).
