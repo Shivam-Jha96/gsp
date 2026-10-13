@@ -1171,6 +1171,17 @@ __THEME_VARS__
         .metric-value { font-size: 1.35rem; }
         .block-container { padding: 1rem !important; }
     }
+
+    @media (max-width: 960px) {
+        /* Responsive Ledger Micro-KPI Grid: 2x2 grid with full-width hero accuracy banner (eliminates asymmetric 5th-card void) */
+        .ledger-metrics-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 8px !important;
+        }
+        .ledger-metric-card.highlight {
+            grid-column: 1 / -1 !important;
+        }
+    }
     
     @media (max-width: 768px) {
         .metric-value { font-size: 1.2rem; }
@@ -1183,6 +1194,17 @@ __THEME_VARS__
             height: auto !important;
             justify-content: flex-start !important;
             flex: initial !important;
+        }
+
+        /* Responsive KPI column stack */
+        .kpi-column-container {
+            height: auto !important;
+            min-height: auto !important;
+        }
+        .kpi-column-container .kpi-card {
+            flex: initial !important;
+            height: auto !important;
+            margin-bottom: 8px !important;
         }
 
         /* Responsive Header Banner Card */
@@ -1254,6 +1276,53 @@ __THEME_VARS__
         .usp-ticker-item {
             font-size: 0.74rem !important;
         }
+
+        /* Responsive Forward-Test Ledger */
+        .ledger-content {
+            padding: 10px 12px !important;
+        }
+        .ledger-governance-strip {
+            grid-template-columns: 1fr !important;
+            gap: 8px !important;
+        }
+        .ledger-footer-bar {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 6px !important;
+        }
+        .ledger-summary-inner {
+            gap: 6px !important;
+        }
+
+        /* Responsive Regulatory Disclosures */
+        .regulatory-grid {
+            grid-template-columns: 1fr !important;
+            gap: 10px !important;
+        }
+        .regulatory-notice-header {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 8px !important;
+        }
+        .regulatory-notice-header-left,
+        .regulatory-notice-header-right {
+            width: 100% !important;
+        }
+        .regulatory-bullet-item {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 3px !important;
+        }
+        .reg-chip {
+            min-width: 0 !important;
+            margin-top: 0 !important;
+            margin-bottom: 2px !important;
+        }
+        .regulatory-bottom-bar {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 4px !important;
+        }
     }
 
     @media (max-width: 480px) {
@@ -1284,6 +1353,41 @@ __THEME_VARS__
         .usp-badge,
         .usp-expand-btn {
             font-size: 0.60rem !important;
+        }
+
+        /* Responsive Regulatory Disclosures on Mobile */
+        .regulatory-notice-card {
+            padding: 10px 12px 14px 12px !important;
+            margin-bottom: 48px !important;
+        }
+        .regulatory-subcard {
+            padding: 10px 10px !important;
+        }
+        .regulatory-callout-pill {
+            font-size: 0.60rem !important;
+            padding: 3px 6px !important;
+        }
+        .regulatory-bullet-item {
+            font-size: 0.72rem !important;
+        }
+        .regulatory-bottom-bar {
+            font-size: 0.64rem !important;
+        }
+        .regulatory-bottom-right {
+            font-size: 0.60rem !important;
+        }
+        .mini-kpi-grid {
+            grid-template-columns: repeat(auto-fit, minmax(95px, 1fr)) !important;
+            gap: 5px !important;
+        }
+    }
+
+    @media (max-width: 380px) {
+        .ledger-metrics-grid {
+            grid-template-columns: 1fr !important;
+        }
+        .ledger-metric-card.highlight {
+            grid-column: auto !important;
         }
     }
 
@@ -1529,10 +1633,10 @@ __THEME_VARS__
         border-radius: 3px;
     }
 
-    /* 5-Metric Responsive Micro-KPI Grid */
+    /* 5-Metric Responsive Micro-KPI Grid (Symmetrical 5-column default on desktop) */
     .ledger-metrics-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        grid-template-columns: repeat(5, minmax(0, 1fr));
         gap: 10px;
         margin-bottom: 12px;
     }
@@ -1578,6 +1682,8 @@ __THEME_VARS__
         padding: 2px 5px;
         border-radius: 3px;
         text-transform: uppercase;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
     }
     .ledger-tag.slate, .ledger-tag.obsidian {
         background: rgba(255, 255, 255, 0.05);
@@ -1691,9 +1797,9 @@ __THEME_VARS__
         border-radius: 8px !important;
         box-shadow: var(--card-shadow) !important;
         backdrop-filter: blur(12px);
-        padding: 14px 18px 12px 18px !important;
+        padding: 14px 18px 14px 18px !important;
         margin-top: 10px !important;
-        margin-bottom: 24px !important;
+        margin-bottom: 40px !important;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .regulatory-notice-card:hover {
@@ -1727,6 +1833,8 @@ __THEME_VARS__
         padding: 3px 8px;
         border-radius: 4px;
         text-transform: uppercase;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
     }
     .regulatory-title {
         font-family: 'Montserrat', sans-serif;
@@ -1749,6 +1857,8 @@ __THEME_VARS__
         padding: 2px 7px;
         border-radius: 4px;
         text-transform: uppercase;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
     }
     .regulatory-pill.green {
         background: rgba(16, 185, 129, 0.10);
@@ -1765,10 +1875,12 @@ __THEME_VARS__
         font-size: 0.66rem;
         color: #64748b;
         letter-spacing: 0.04em;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
     }
     .regulatory-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
         gap: 12px;
         margin-bottom: 12px;
     }
@@ -1796,17 +1908,19 @@ __THEME_VARS__
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
+        flex-wrap: wrap;
     }
     .regulatory-subcard-title {
         display: flex;
         align-items: center;
         gap: 6px;
         font-family: 'Montserrat', sans-serif;
-        font-size: 0.76rem;
+        font-size: clamp(0.72rem, 2.5vw, 0.76rem);
         font-weight: 700;
         color: #e2e8f0;
         letter-spacing: 0.02em;
+        min-width: 0;
     }
     .regulatory-subcard-badge {
         font-family: 'Montserrat', sans-serif;
@@ -1816,6 +1930,8 @@ __THEME_VARS__
         padding: 2px 6px;
         border-radius: 3px;
         text-transform: uppercase;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
     }
     .regulatory-subcard-badge.slate, .regulatory-subcard-badge.obsidian {
         background: rgba(255, 255, 255, 0.05);
@@ -1829,13 +1945,16 @@ __THEME_VARS__
     }
     .regulatory-callout-pill {
         font-family: 'Montserrat', sans-serif;
-        font-size: 0.65rem;
+        font-size: clamp(0.60rem, 1.8vw, 0.65rem);
         font-weight: 800;
         letter-spacing: 0.06em;
         text-transform: uppercase;
-        padding: 3px 8px;
+        padding: 4px 8px;
         border-radius: 4px;
-        width: fit-content;
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        text-align: center !important;
     }
     .regulatory-callout-pill.amber {
         background: rgba(245, 158, 11, 0.08);
@@ -1866,13 +1985,17 @@ __THEME_VARS__
         font-size: 0.60rem;
         font-weight: 800;
         letter-spacing: 0.05em;
-        padding: 1px 5px;
+        padding: 1px 6px;
         border-radius: 3px;
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.09);
         color: #cbd5e1;
-        flex-shrink: 0;
+        flex-shrink: 0 !important;
+        white-space: nowrap !important;
         margin-top: 2px;
+        min-width: 88px;
+        text-align: center;
+        box-sizing: border-box;
     }
     .regulatory-bullet-item strong {
         color: #e2e8f0;
