@@ -4,12 +4,12 @@
 - **Condition:** The Federal Reserve delivers an interest rate hike—its first in three years—and signals at least one additional hike within the calendar year, defying executive political pressure for monetary easing amid persistent inflation.
 - **Action:** Bullish on the US Dollar (USD), Bullish on Front-End Treasury Yields (2Y Yield), Bearish on Long-Duration Fixed Income (TLT), and Bearish on Rate-Sensitive Small-Cap Equities (IWM).
 
-## Rule 2: Energy-Driven CPI Re-Acceleration and Sticky Services Inflation
-- **Condition:** Headline CPI prints accelerate on the back of rising retail gasoline prices while core services inflation remains sticky, elevating terminal policy rate expectations and near-term inflation breakevens.
+## Rule 2: Inflation Re-Acceleration and Sticky Services Persistence
+- **Condition:** Headline CPI prints accelerate on energy input costs while core services inflation remains sticky, elevating terminal policy rate expectations and raising short-term inflation breakevens.
 - **Action:** Bullish on Treasury Inflation-Protected Securities (TIPS), Bullish on the US Dollar (USD), Bearish on Intermediate and Long-Duration Treasuries (IEF/TLT), and Bearish on Gold (XAU/USD).
 
 ## Rule 3: Sovereign Deficit Financing and Term Premium Expansion
-- **Condition:** Persistent federal fiscal deficit expansion and elevated Treasury coupon issuance outpace institutional duration demand during an active monetary tightening regime, steepening the yield curve via term premium expansion.
+- **Condition:** Persistent federal fiscal deficit expansion and heavy Treasury coupon issuance collide with quantitative tightening, expanding term premiums and forcing a bear steepening of the sovereign yield curve.
 - **Action:** Bearish on Core Aggregate Fixed Income (AGG), Bearish on 30-Year Treasuries, Bullish on 10Y/2Y Yield Curve Steepeners, and Bullish on Ultra-Short T-Bills (BIL) and Cash Equivalents.
 
 ## Rule 4: Concentrated AI Infrastructure Capex Driving Asymmetric GDP Growth
@@ -17,11 +17,11 @@
 - **Action:** Bullish on Mega-Cap Technology Equities (QQQ), Bullish on Semiconductor Equities (SMH), and Bearish on Broad Industrial Small-Caps (IWM).
 
 ## Rule 5: Cross-Border Industrial Tariffs and Automotive Supply Chain Disruption
-- **Condition:** Escalation or imposition of U.S. tariffs targeting integrated North American trading partners, particularly automotive component and assembly corridors, raises industrial input costs and disrupts cross-border manufacturing flows.
+- **Condition:** Escalation or imposition of U.S. tariffs targeting integrated North American trading partners raises industrial intermediate input costs and disrupts cross-border manufacturing flows.
 - **Action:** Bullish on the US Dollar against the Canadian Dollar (USD/CAD), Bearish on Cyclical Industrials (XLI), and Bearish on Automotive Original Equipment Manufacturers (OEMs).
 
 ## Rule 6: Clean Energy Capital Retrenchment and Traditional Energy Resilience
-- **Condition:** Elevated financing costs, regulatory uncertainty, and policy shifts trigger widespread project cancellations and job losses in utility-scale renewables, redirecting institutional capital back to conventional fossil fuels and infrastructure.
+- **Condition:** Elevated financing costs, policy uncertainty, and interconnection bottlenecks trigger widespread project cancellations and job losses in utility-scale renewables, redirecting institutional capital back to conventional fossil fuels and infrastructure.
 - **Action:** Bearish on Clean Energy Equities (ICLN/QCLN), Bearish on Alternative Energy Equipment Providers, and Bullish on Traditional Oil, Gas, and Midstream Infrastructure (XLE/AMLP).
 
 ## Rule 7: Healthcare Cost Inflation and Structural Labor Cost Pressures
