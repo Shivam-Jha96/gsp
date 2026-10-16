@@ -32,6 +32,6 @@ jobs:
           PYTHONPATH: .
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
-          MODAL_ENDPOINT: ${{ secrets.MODAL_ENDPOINT }}
+          MODAL_ENDPOINT: ${{ secrets.MODAL_ENDPOINT || secrets.CLM_SERVER_URL || 'https://shivam-jha96--clm-macro-engine-clm-server.modal.run' }}
         run: |
           python scripts/health_check.py

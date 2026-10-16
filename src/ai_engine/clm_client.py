@@ -54,7 +54,7 @@ class CLMClient:
         model: str = "clm-latest",
         timeout: float = 120.0
     ):
-        self.base_url = (base_url or os.environ.get("CLM_SERVER_URL") or DEFAULT_MODAL_CLM_URL).rstrip("/")
+        self.base_url = (base_url or os.environ.get("CLM_SERVER_URL") or os.environ.get("MODAL_ENDPOINT") or DEFAULT_MODAL_CLM_URL).rstrip("/")
         self.api_key = api_key or os.environ.get("TYPESAFE_API_KEY") or os.environ.get("CLM_API_KEY") or "sovereign_local_key"
         self.model = model
         self.timeout = timeout

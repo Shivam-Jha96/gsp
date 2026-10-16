@@ -128,11 +128,13 @@ def check_database() -> Dict[str, Any]:
 
 def check_inference_endpoint() -> Dict[str, Any]:
     """Probes the serverless Modal Contrastive Language Model endpoint."""
-    modal_url = os.environ.get("MODAL_ENDPOINT", "https://shivam-jha96--clm-macro-engine-clm-server.modal.run")
+    raw_endpoint = (os.environ.get("MODAL_ENDPOINT") or os.environ.get("CLM_SERVER_URL") or "").strip()
+    modal_url = (raw_endpoint or "https://shivam-jha96--clm-macro-engine-clm-server.modal.run").rstrip("/")
+    probe_url = modal_url if modal_url.endswith("/health") else f"{modal_url}/health"
     start_time = time.time()
     try:
-        # Send lightweight probe GET
-        resp = requests.get(modal_url, timeout=HTTP_TIMEOUT)
+        # Modal serverless GPU containers may take up to 45s during cold starts
+        resp = requests.get(probe_url, timeout=45.0)
         latency_ms = int((time.time() - start_time) * 1000)
         # Any non-5xx response indicates the Modal container server is routing traffic
         if resp.status_code < 500:
