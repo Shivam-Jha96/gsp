@@ -34,6 +34,8 @@ CREATE TABLE IF NOT EXISTS pipeline_runs (
 
 CREATE INDEX IF NOT EXISTS idx_pipeline_runs_lookup 
 ON pipeline_runs (pipeline_name, status, completed_at DESC);
+
+ALTER TABLE pipeline_runs ENABLE ROW LEVEL SECURITY;
 """
 
 class PipelineRunTracker:

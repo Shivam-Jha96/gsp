@@ -78,6 +78,18 @@ CREATE TABLE event_payloads_2026_11 PARTITION OF event_payloads FOR VALUES FROM 
 CREATE TABLE event_signals_2026_12 PARTITION OF event_signals FOR VALUES FROM ('2026-12-01') TO ('2027-01-01');
 CREATE TABLE event_payloads_2026_12 PARTITION OF event_payloads FOR VALUES FROM ('2026-12-01') TO ('2027-01-01');
 
+-- Enable Row Level Security (RLS) on parent tables and partitions
+ALTER TABLE event_signals ENABLE ROW LEVEL SECURITY;
+ALTER TABLE event_payloads ENABLE ROW LEVEL SECURITY;
+ALTER TABLE event_signals_history ENABLE ROW LEVEL SECURITY;
+ALTER TABLE event_payloads_history ENABLE ROW LEVEL SECURITY;
+ALTER TABLE event_signals_2026_10 ENABLE ROW LEVEL SECURITY;
+ALTER TABLE event_payloads_2026_10 ENABLE ROW LEVEL SECURITY;
+ALTER TABLE event_signals_2026_11 ENABLE ROW LEVEL SECURITY;
+ALTER TABLE event_payloads_2026_11 ENABLE ROW LEVEL SECURITY;
+ALTER TABLE event_signals_2026_12 ENABLE ROW LEVEL SECURITY;
+ALTER TABLE event_payloads_2026_12 ENABLE ROW LEVEL SECURITY;
+
 
 -- 5. Migrate Data from Old Tables to New Partitioned Tables
 INSERT INTO event_signals (id, index_ticker, market_region, timestamp, sentiment_score)

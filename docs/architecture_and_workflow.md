@@ -402,6 +402,12 @@ CREATE TABLE event_payloads (
 * **Failure Isolation:** Uncaught runtime exceptions mark `status = 'FAILED'`, preventing aborted runs from advancing the completion timestamp.
 * **Zero-OPEX Deduplication Handling:** When all incoming headlines are cached in Supabase (0 items scored), the run still logs `SUCCESS` and records `completed_at`, accurately demonstrating to dashboard users that the pipeline checked feeds on schedule.
 
+#### 5. Row Level Security (RLS) & Partition Defense (`scripts/enable_rls.sql`)
+To eliminate Supabase Security Advisor `CRITICAL` alerts regarding unshielded public tables, all core tables and child monthly partitions have Row Level Security enabled:
+* **PostgREST HTTP Isolation:** Supabase automatically exposes tables in the `public` schema via PostgREST. Enabling RLS without granting policies to `anon` and `authenticated` roles blocks unauthenticated HTTP requests from querying or tampering with database tables.
+* **Superuser Bypass (`BYPASSRLS`):** Valence application workflows (GitHub Actions workers, Streamlit UI, health probes) connect directly using `DATABASE_URL` as the `postgres` table owner. In PostgreSQL, table owners and superusers possess the `BYPASSRLS` attribute by default, guaranteeing zero interruption or performance impact on internal application operations.
+* **Automatic DDL Event Trigger:** Child partitions created in PostgreSQL do not automatically inherit `rowsecurity = true` from parent tables. An idempotent PostgreSQL event trigger (`trg_auto_enable_rls` on `ddl_command_end`) intercepts `CREATE TABLE` statements in `public`, ensuring that whenever new monthly partitions (e.g. `event_signals_2027_01`) are provisioned, RLS is applied automatically with zero manual maintenance.
+
 ---
 
 ### Layer 4: Signal & Quantitative Execution Engine

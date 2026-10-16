@@ -43,6 +43,12 @@ CREATE INDEX idx_event_payloads_fingerprint ON event_payloads (fingerprint_hash)
 CREATE TABLE event_signals_2026_10 PARTITION OF event_signals FOR VALUES FROM ('2026-10-01') TO ('2026-11-01');
 CREATE TABLE event_payloads_2026_10 PARTITION OF event_payloads FOR VALUES FROM ('2026-10-01') TO ('2026-11-01');
 
+-- Row Level Security (RLS) - Protect public schema from unauthorized PostgREST Data API exposure
+-- Note: Valence connects as database owner 'postgres' via DATABASE_URL, which bypasses RLS policies.
+ALTER TABLE event_signals ENABLE ROW LEVEL SECURITY;
+ALTER TABLE event_payloads ENABLE ROW LEVEL SECURITY;
+ALTER TABLE event_signals_2026_10 ENABLE ROW LEVEL SECURITY;
+ALTER TABLE event_payloads_2026_10 ENABLE ROW LEVEL SECURITY;
 
 -- The Telemetry Layer: Tracks execution lifecycle & completion freshness of background pipelines
 CREATE TABLE IF NOT EXISTS pipeline_runs (
@@ -56,6 +62,9 @@ CREATE TABLE IF NOT EXISTS pipeline_runs (
     items_scored INT DEFAULT 0,
     metadata JSONB DEFAULT '{}'::jsonb
 );
+
+-- Enable RLS on pipeline telemetry
+ALTER TABLE pipeline_runs ENABLE ROW LEVEL SECURITY;
 
 -- Index for instant lookup of latest successful pipeline execution
 CREATE INDEX IF NOT EXISTS idx_pipeline_runs_lookup 
