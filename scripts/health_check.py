@@ -133,8 +133,8 @@ def check_inference_endpoint() -> Dict[str, Any]:
     probe_url = modal_url if modal_url.endswith("/health") else f"{modal_url}/health"
     start_time = time.time()
     try:
-        # Modal serverless GPU containers may take up to 45s during cold starts
-        resp = requests.get(probe_url, timeout=45.0)
+        # Modal serverless GPU containers may take up to 45-60s during cold starts
+        resp = requests.get(probe_url, timeout=75.0)
         latency_ms = int((time.time() - start_time) * 1000)
         # Any non-5xx response indicates the Modal container server is routing traffic
         if resp.status_code < 500:
