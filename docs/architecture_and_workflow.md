@@ -405,8 +405,7 @@ CREATE TABLE event_payloads (
 #### 5. Row Level Security (RLS) & Partition Defense (`scripts/enable_rls.sql`)
 To eliminate Supabase Security Advisor `CRITICAL` alerts regarding unshielded public tables, all core tables and child monthly partitions have Row Level Security enabled:
 * **PostgREST HTTP Isolation:** Supabase automatically exposes tables in the `public` schema via PostgREST. Enabling RLS without granting policies to `anon` and `authenticated` roles blocks unauthenticated HTTP requests from querying or tampering with database tables.
-* **Superuser Bypass (`BYPASSRLS`):** Valence application workflows (GitHub Actions workers, Streamlit UI, health probes) connect directly using `DATABASE_URL` as the `postgres` table owner. In PostgreSQL, table owners and superusers possess the `BYPASSRLS` attribute by default, guaranteeing zero interruption or performance impact on internal application operations.
-* **Automatic DDL Event Trigger:** Child partitions created in PostgreSQL do not automatically inherit `rowsecurity = true` from parent tables. An idempotent PostgreSQL event trigger (`trg_auto_enable_rls` on `ddl_command_end`) intercepts `CREATE TABLE` statements in `public`, ensuring that whenever new monthly partitions (e.g. `event_signals_2027_01`) are provisioned, RLS is applied automatically with zero manual maintenance.
+* **Partition Security Coverage:** Child partitions created in PostgreSQL do not automatically inherit `rowsecurity = true` from parent tables in the system catalog. [`scripts/enable_rls.sql`](file:///d:/Dev/repos/gsp/scripts/enable_rls.sql) explicitly and dynamically activates RLS across all parent tables and child partitions (`event_signals_history`, `event_signals_2026_10`, `event_signals_2026_11`, etc.), ensuring complete catalog coverage. Future tables can also be automatically protected using Supabase's native "Auto-enable RLS on new tables" trigger.
 
 ---
 

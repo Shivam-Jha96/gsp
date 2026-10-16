@@ -1,10 +1,9 @@
 -- ==============================================================================
--- Valence Database Security Migration: Enable RLS & Auto-Protect Partitions
+-- Valence Database Security: Enable RLS Across Partitioned Tables
 -- File: scripts/enable_rls.sql
 -- Description:
 --   Resolves Supabase Security Advisor "RLS Disabled in Public" CRITICAL warnings.
---   Enables Row Level Security across all core tables and monthly partitions.
---   Installs an event trigger to automatically enable RLS on any future partition.
+--   Enables Row Level Security across all parent tables and monthly partitions.
 --
 -- Safety & Workflow Guarantee:
 --   Valence application workflows (GitHub Actions, Streamlit, Telemetry, Health Probe)
@@ -16,17 +15,34 @@
 --   Copy and paste this script into your Supabase Dashboard -> SQL Editor and Run.
 -- ==============================================================================
 
--- 1. Enable RLS on core tables if they exist
+-- 1. Clean up any event triggers from previous attempts
+DROP EVENT TRIGGER IF EXISTS trg_auto_enable_rls;
+DROP FUNCTION IF EXISTS public.auto_enable_rls_on_new_table();
+
+-- 2. Enable RLS on core parent tables and telemetry
 ALTER TABLE IF EXISTS public.event_signals ENABLE ROW LEVEL SECURITY;
 ALTER TABLE IF EXISTS public.event_payloads ENABLE ROW LEVEL SECURITY;
 ALTER TABLE IF EXISTS public.pipeline_runs ENABLE ROW LEVEL SECURITY;
 
--- 2. Dynamically enable RLS on all existing partitions and matching public tables
+-- 3. Enable RLS explicitly on all known child partitions
+ALTER TABLE IF EXISTS public.event_signals_history ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.event_payloads_history ENABLE ROW LEVEL SECURITY;
+
+ALTER TABLE IF EXISTS public.event_signals_2026_10 ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.event_payloads_2026_10 ENABLE ROW LEVEL SECURITY;
+
+ALTER TABLE IF EXISTS public.event_signals_2026_11 ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.event_payloads_2026_11 ENABLE ROW LEVEL SECURITY;
+
+ALTER TABLE IF EXISTS public.event_signals_2026_12 ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.event_payloads_2026_12 ENABLE ROW LEVEL SECURITY;
+
+-- 4. Dynamic safeguard: enable RLS on any other partitions or legacy tables in public schema
 DO $$
 DECLARE
-    tbl RECORD;
+    r RECORD;
 BEGIN
-    FOR tbl IN
+    FOR r IN (
         SELECT tablename 
         FROM pg_tables 
         WHERE schemaname = 'public' 
@@ -35,48 +51,13 @@ BEGIN
             OR tablename LIKE 'event_payloads%' 
             OR tablename = 'pipeline_runs'
           )
-    LOOP
-        EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY;', tbl.tablename);
-        RAISE NOTICE 'Row Level Security successfully enabled on: public.%', tbl.tablename;
+    ) LOOP
+        EXECUTE 'ALTER TABLE public.' || quote_ident(r.tablename) || ' ENABLE ROW LEVEL SECURITY;';
+        RAISE NOTICE 'Row Level Security verified on: public.%', r.tablename;
     END LOOP;
 END $$;
 
--- 3. Lock down PostgREST HTTP Data API: Revoke public access from anon and authenticated roles
--- This ensures unauthenticated/anon web traffic hitting Supabase PostgREST endpoints cannot read/write tables.
-REVOKE ALL ON ALL TABLES IN SCHEMA public FROM anon, authenticated;
-REVOKE ALL ON ALL SEQUENCES IN SCHEMA public FROM anon, authenticated;
-REVOKE ALL ON ALL ROUTINES IN SCHEMA public FROM anon, authenticated;
-
--- Ensure default privileges for future objects created in public do not grant access to anon/authenticated
-ALTER DEFAULT PRIVILEGES IN SCHEMA public REVOKE ALL ON TABLES FROM anon, authenticated;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public REVOKE ALL ON SEQUENCES FROM anon, authenticated;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public REVOKE ALL ON ROUTINES FROM anon, authenticated;
-
--- 4. Automatically enable RLS on all future tables and partitions created in schema public
--- Whenever new monthly partitions (e.g. event_signals_2027_01) are created, this trigger ensures RLS is active.
-CREATE OR REPLACE FUNCTION public.auto_enable_rls_on_new_table()
-RETURNS event_trigger AS $$
-DECLARE
-    obj record;
-BEGIN
-    FOR obj IN SELECT * FROM pg_event_trigger_ddl_commands() WHERE command_tag IN ('CREATE TABLE', 'CREATE TABLE AS')
-    LOOP
-        IF obj.schema_name = 'public' THEN
-            EXECUTE format('ALTER TABLE %s ENABLE ROW LEVEL SECURITY;', obj.object_identity);
-            RAISE NOTICE 'Auto-enabled Row Level Security on newly created table: %', obj.object_identity;
-        END IF;
-    END LOOP;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- Re-create the event trigger cleanly
-DROP EVENT TRIGGER IF EXISTS trg_auto_enable_rls;
-CREATE EVENT TRIGGER trg_auto_enable_rls
-ON ddl_command_end
-WHEN TAG IN ('CREATE TABLE', 'CREATE TABLE AS')
-EXECUTE FUNCTION public.auto_enable_rls_on_new_table();
-
--- Verification Query: Check that all public event tables have rowsecurity = true
+-- 5. Verification Query: Confirm all tables and partitions show rowsecurity = true
 SELECT tablename, rowsecurity 
 FROM pg_tables 
 WHERE schemaname = 'public' 
