@@ -5,15 +5,15 @@
 - **Action:** Bullish on 1-year and 2-year Overnight Index Swaps (OIS) paying positions, short-duration Treasury Bills (91-day/364-day), and well-capitalized Tier-1 commercial banks with high low-cost CASA deposit franchises; Bearish on benchmark 10-year G-Secs, long-duration bond funds, and wholesale-funded non-banking financial companies (NBFCs).
 
 ## Rule 2: Food & Headline CPI Surge Toward Tolerance Ceilings
-- **Condition:** Headline retail CPI accelerates past 5.50% (on the updated base) with projections threatening the RBI’s 6.00% upper tolerance band, driven by food price spikes, seasonal festive demand, and imported commodity inflation.
+- **Condition:** Headline retail CPI accelerates to 5.54% (and ongoing consecutive monthly increases) with projections threatening the RBI’s 6.00% upper tolerance band, driven by persistent food price spikes, energy price inflation, and domestic supply pressures.
 - **Action:** Bullish on domestic agrochemical producers, fertilizer manufacturers, upstream oil & gas exploration companies, and primary industrial materials producers with contractual pass-through pricing; Bearish on volume-sensitive mass-market FMCG manufacturers, margin-squeezed consumer durable assemblers, and entry-level automotive OEMs.
 
 ## Rule 3: Rupee Depreciation & External Account Deficit Pressures
-- **Condition:** Spot USD/INR exhibits persistent upward drift toward record highs amid multi-year lows in Foreign Direct Investment (FDI) inflows, widening trade deficits, and compressed cross-border real yield differentials.
+- **Condition:** Spot USD/INR exhibits persistent upward drift toward record highs amid slowing GDP growth (5-quarter low of 6.7%), capital outflows, and compressed cross-border real yield differentials.
 - **Action:** Bullish on Tier-1 IT services exporters, US-FDA compliant contract pharmaceutical manufacturers, and export-oriented automotive component makers; Bearish on state-owned Oil Marketing Companies (OMCs) subject to domestic retail fuel price caps, import-reliant electronics assemblers, and corporates with heavy unhedged External Commercial Borrowings (ECBs).
 
 ## Rule 4: Institutional FPI Outflow Whipsaws & Large-Cap Polarization
-- **Condition:** Volatile Foreign Portfolio Investor (FPI) equity flows trigger sudden, concentrated net foreign institutional liquidations exceeding short-term domestic systematic investment plan (SIP) absorption capacity.
+- **Condition:** Volatile Foreign Portfolio Investor (FPI) equity flows and currency depreciation trigger sudden, concentrated foreign institutional liquidations that outpace domestic systematic investment plan (SIP) absorption capacity.
 - **Action:** Bullish on defensive high-dividend public sector undertaking (PSU) enterprises, domestic Asset Management Companies (AMCs) capturing programmatic retail inflows, and index-heavy mega-cap private banks; Bearish on high-beta mid/small-cap growth equities, stretched-multiple consumer discretionary names, and illiquid thematic equities.
 
 ## Rule 5: Global Supply Chain Realignment & Industrial Capex Expansion

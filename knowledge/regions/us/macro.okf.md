@@ -17,7 +17,7 @@
 - **Action:** Bullish on Mega-Cap Technology Equities (QQQ), Bullish on Semiconductor Equities (SMH), and Bearish on Broad Industrial Small-Caps (IWM).
 
 ## Rule 5: Cross-Border Industrial Tariffs and Supply Chain Frictions
-- **Condition:** Escalation or imposition of U.S. tariffs targeting integrated North American trading partners raises industrial intermediate input costs and disrupts cross-border manufacturing flows.
+- **Condition:** Escalation or imposition of U.S. tariffs targeting integrated North American trading partners raises intermediate automotive and industrial input costs and disrupts cross-border manufacturing flows.
 - **Action:** Bullish on the US Dollar against the Canadian Dollar (USD/CAD), Bearish on Cyclical Industrials (XLI), and Bearish on Automotive Original Equipment Manufacturers (OEMs).
 
 ## Rule 6: Clean Energy Capital Retrenchment and Traditional Energy Resilience
