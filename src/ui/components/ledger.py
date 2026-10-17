@@ -163,7 +163,7 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
                         <span>IMMUTABLE LEDGER</span>
                     </div>
                     <div class="ledger-gov-desc">
-                        Directional calls and deadband states are committed to <code>reports/forward_test_ledger.csv</code> on GitHub.
+                        Directional calls and deadband states are recorded in the public out-of-sample forward evaluation ledger.
                     </div>
                 </div>
             </div>
@@ -223,7 +223,7 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
                     <span>Continuously updated per pipeline run • Ground-truth forward evaluation</span>
                 </div>
                 <div class="ledger-footer-right">
-                    <span>Source: <code>reports/forward_test_ledger.csv</code></span>
+                    <span>Public Forward Evaluation Ledger</span>
                 </div>
             </div>
         </div>
