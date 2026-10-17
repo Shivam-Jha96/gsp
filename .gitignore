@@ -43,3 +43,8 @@ htmlcov/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Temporary & Scratch
+scratch/
+*.tmp
+*.log

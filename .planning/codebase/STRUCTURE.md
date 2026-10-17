@@ -35,11 +35,6 @@ gsp/
 │       ├── japan/                # constituents.okf.json & macro.okf.md
 │       ├── uk/                   # constituents.okf.json & macro.okf.md
 │       └── us/                   # constituents.okf.json & macro.okf.md
-├── scratch/                      # Temporary prototyping and test scripts
-│   ├── query_db.py               # Ad-hoc database queries
-│   ├── query_st.py               # Local Streamlit testing probe
-│   ├── test_ai.py                # TypeSafe / Modal API smoke test
-│   └── test_score.py             # Offline scoring validation
 ├── scripts/                      # Operational database scripts
 │   ├── db_cleanup.py             # Database maintenance and noise pruning
 │   └── reclassify_database.py    # Database retroactive affinity correction
