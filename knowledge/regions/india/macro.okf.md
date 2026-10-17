@@ -1,21 +1,21 @@
 # India Macro Trading Rules
 
 ## Rule 1: RBI Calibrated Tightening & Yield Curve Bear-Flattening
-- **Condition:** The RBI MPC initiates a policy tightening cycle by raising the repo rate by 25 bps to 5.50% and adopting a "calibrated tightening" stance to counter persistent inflation risks and currency depreciation pressures.
-- **Action:** Bullish on 1-year and 2-year Overnight Index Swaps (OIS) paying positions, short-duration Treasury Bills (91-day/364-day), and well-capitalized Tier-1 commercial banks with high low-cost CASA deposit franchises; Bearish on benchmark 10-year G-Secs, long-duration bond funds, and wholesale-funded non-banking financial companies (NBFCs).
+- **Condition:** The RBI MPC initiates a rate-hiking cycle by raising the repo rate by 25 bps to 5.50% and shifting stance to "calibrated tightening" to anchor inflation expectations against global volatility and domestic price shocks.
+- **Action:** Bullish on 1-year and 2-year Overnight Index Swaps (OIS) paying positions, short-duration Treasury Bills (91-day/182-day), and Tier-1 private commercial banks with superior low-cost CASA ratios; Bearish on benchmark 10-year G-Secs, long-duration debt mutual funds, and wholesale-funded non-banking financial companies (NBFCs).
 
-## Rule 2: Food & Headline CPI Surge Toward Tolerance Ceilings
-- **Condition:** Headline retail CPI accelerates to 5.54% (and ongoing consecutive monthly increases) with projections threatening the RBI’s 6.00% upper tolerance band, driven by persistent food price spikes, energy price inflation, and domestic supply pressures.
-- **Action:** Bullish on domestic agrochemical producers, fertilizer manufacturers, upstream oil & gas exploration companies, and primary industrial materials producers with contractual pass-through pricing; Bearish on volume-sensitive mass-market FMCG manufacturers, margin-squeezed consumer durable assemblers, and entry-level automotive OEMs.
+## Rule 2: Food Shock & Headline CPI Drift Toward Tolerance Ceiling
+- **Condition:** Headline retail CPI accelerates sharply to 5.54%, driven by volatile food basket spikes (such as doubling vegetable and onion prices) that threaten the RBI's 6.00% upper tolerance threshold.
+- **Action:** Bullish on domestic agrochemical producers, fertilizer manufacturers, upstream oil & gas exploration entities, and primary commodity producers with contractual cost pass-through capabilities; Bearish on volume-sensitive mass-market FMCG manufacturers, entry-level automotive OEMs, and margin-compressed consumer durable fabricators.
 
 ## Rule 3: Rupee Depreciation & External Account Deficit Pressures
-- **Condition:** Spot USD/INR exhibits persistent upward drift toward record highs amid slowing GDP growth (5-quarter low of 6.7%), capital outflows, and compressed cross-border real yield differentials.
-- **Action:** Bullish on Tier-1 IT services exporters, US-FDA compliant contract pharmaceutical manufacturers, and export-oriented automotive component makers; Bearish on state-owned Oil Marketing Companies (OMCs) subject to domestic retail fuel price caps, import-reliant electronics assemblers, and corporates with heavy unhedged External Commercial Borrowings (ECBs).
+- **Condition:** Spot USD/INR exhibits persistent upward drift toward all-time highs amid moderating domestic GDP growth, geopolitical turmoil in West Asia, and elevated import bills.
+- **Action:** Bullish on Tier-1 IT services exporters, US-FDA compliant contract pharmaceutical manufacturers, and export-oriented auto ancillary producers; Bearish on state-owned Oil Marketing Companies (OMCs) burdened by unrecovered retail fuel margins, import-reliant electronics assemblers, and corporates with heavy unhedged External Commercial Borrowings (ECBs).
 
-## Rule 4: Institutional FPI Outflow Whipsaws & Large-Cap Polarization
-- **Condition:** Volatile Foreign Portfolio Investor (FPI) equity flows and currency depreciation trigger sudden, concentrated foreign institutional liquidations that outpace domestic systematic investment plan (SIP) absorption capacity.
-- **Action:** Bullish on defensive high-dividend public sector undertaking (PSU) enterprises, domestic Asset Management Companies (AMCs) capturing programmatic retail inflows, and index-heavy mega-cap private banks; Bearish on high-beta mid/small-cap growth equities, stretched-multiple consumer discretionary names, and illiquid thematic equities.
+## Rule 4: Institutional FPI Volatility & Domestic Liquidity Divergence
+- **Condition:** Foreign Portfolio Investor (FPI) equity flows turn erratic or track multi-year low structural trajectories, while resilient domestic Systematic Investment Plan (SIP) inflows provide programmatic downside absorption.
+- **Action:** Bullish on index-heavy mega-cap private banks, domestic Asset Management Companies (AMCs) capturing retail inflows, and cash-rich defensive Public Sector Undertakings (PSUs) offering high dividend yields; Bearish on high-beta mid-and-small-cap growth equities, stretched-multiple consumer discretionary names, and illiquid thematic equities.
 
-## Rule 5: Global Supply Chain Realignment & Industrial Capex Expansion
-- **Condition:** Multilateral trade agreements, strengthening sovereign export credentials, and multinational "China+1" corporate supply chain diversification accelerate capital expenditures into dedicated domestic industrial and logistics corridors.
-- **Action:** Bullish on Electronics Manufacturing Services (EMS) players, specialized industrial engineering exporters, multi-modal rail freight operators, and private commercial port operators; Bearish on unorganized low-value textile producers, traditional leather goods manufacturers, and secondary commoditized metal fabricators vulnerable to low-cost imports.
+## Rule 5: Trade Corridor Expansion & "China+1" Industrial Capex
+- **Condition:** Sovereign trade credential upgrades, bilateral trade pacts, and multinational corporate supply-chain diversification drive sustained capital expenditure into domestic manufacturing and dedicated logistics infrastructure.
+- **Action:** Bullish on Electronics Manufacturing Services (EMS) providers, specialized heavy engineering exporters, multi-modal rail freight operators, and private commercial port operators; Bearish on unorganized low-value textile producers, commodity chemical producers lacking scale, and secondary metal fabricators vulnerable to low-cost regional imports.
