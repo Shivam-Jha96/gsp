@@ -292,13 +292,17 @@ def clm_server():
 #### 4. Mathematical Sentiment Calibration
 In [`src/main.py`](file:///d:/Dev/repos/gsp/src/main.py#L22-L82), the native [`CLMClient`](file:///d:/Dev/repos/gsp/src/ai_engine/clm_client.py) queries the self-hosted CLM serverless endpoint. The probabilities $P(\text{Bullish})$, $P(\text{Bearish})$, and $P(\text{Neutral})$ are converted into a calibrated directional sentiment score $S \in [-1.0, 1.0]$:
 
-1. **Relative Directional Spread ($s_{\text{rel}}$):**
+1. **Epistemic Shannon Entropy Gating ($H_2$):**
+   Prior to directional spread evaluation, the information entropy of the probability simplex is evaluated:
+   $$H_2(P) = -\sum_{c \in \{\text{Bull}, \text{Bear}, \text{Neut}\}} P(c) \log_2 P(c)$$
+   If $H_2(P) > 0.96$ (indicating epistemic uncertainty exceeding institutional threshold bounds), the score is immediately clamped to `0.0` (Neutral), preventing ambiguous or contradictory events from driving directional trades.
+2. **Relative Directional Spread ($s_{\text{rel}}$):**
    $$s_{\text{rel}} = \frac{P(\text{Bullish}) - P(\text{Bearish})}{P(\text{Bullish}) + P(\text{Bearish}) + \epsilon} \quad \text{where } \epsilon = 10^{-5}$$
-2. **Neutrality Attenuation ($M$):**
+3. **Neutrality Attenuation ($M$):**
    $$M = |s_{\text{rel}}| \times \left(1.0 - 0.5 \times P(\text{Neutral})\right)$$
-3. **Directional Assignment & Clamping:**
+4. **Directional Assignment & Clamping:**
    $$S = \begin{cases} 
-      0.0 & \text{if Decision} = \text{Neutral or } |s_{\text{rel}}| < 0.05 \\
+      0.0 & \text{if Decision} = \text{Neutral, } |s_{\text{rel}}| < 0.05, \text{ or } H_2 > 0.96 \\
       -M & \text{if } P(\text{Bearish}) > P(\text{Bullish}) \\
       +M & \text{if } P(\text{Bullish}) > P(\text{Bearish})
    \end{cases}, \quad S = \max(-1.0, \min(1.0, S))$$
@@ -427,13 +431,27 @@ def calculate_ema(sentiment_data: pd.DataFrame, window: int = 4, column: str = '
     return sentiment_data[column].ewm(span=window, adjust=False).mean()
 ```
 
-#### 2. Public Out-of-Sample Forward-Testing Ledger (`forward_tester.py`)
+#### 2. Volatility-Adaptive Regime Deadband ($\theta_{\text{band}}(t)$) & Stance Resolution
+To prevent churn during sideways or volatile conditions, [`src/signal_engine/ema.py`](file:///d:/Dev/repos/gsp/src/signal_engine/ema.py) dynamically adjusts the regime hysteresis band based on rolling standard deviation $\sigma_t$:
+
+$$\theta_{\text{band}}(t) = \text{clamp}\left( \theta_{\min}, \ \theta_{\max}, \ \theta_{\text{base}} + \gamma \cdot \sigma_{\text{rolling}}(\text{EMA}, N) \right)$$
+
+where $\theta_{\text{base}} = 5.0$, $\gamma = 0.25$, $\theta_{\min} = 5.0$, $\theta_{\max} = 15.0$, and $N = 20$.
+- Directional stance is resolved via [`resolve_directional_stance(score, threshold)`](file:///d:/Dev/repos/gsp/src/signal_engine/ema.py):
+  $$\text{Stance} = \begin{cases}
+  \mathbf{BULLISH} & \text{if } \text{EMA}_t \ge +\theta_{\text{band}}(t) \\
+  \mathbf{BEARISH} & \text{if } \text{EMA}_t \le -\theta_{\text{band}}(t) \\
+  \mathbf{NEUTRAL} & \text{if } -\theta_{\text{band}}(t) < \text{EMA}_t < +\theta_{\text{band}}(t)
+  \end{cases}$$
+- **Dual-EMA Consensus Filter:** [`calculate_dual_ema_consensus()`](file:///d:/Dev/repos/gsp/src/signal_engine/ema.py) requires concordance between tactical (4-period) and trend (12-period) EMAs before confirming an institutional breakout.
+
+#### 3. Public Out-of-Sample Forward-Testing Ledger (`forward_tester.py`)
 To establish an unassailable, point-in-time public audit record without synthetic backtest leakage, every scheduled pipeline execution records directional signals to [`reports/forward_test_ledger.csv`](file:///d:/Dev/repos/gsp/reports/forward_test_ledger.csv):
 * **Point-in-Time Schema:** Records `timestamp_utc`, `region`, `index_ticker`, `raw_sentiment`, `ema_sentiment`, `directional_stance`, `model_version`, and `okf_commit`.
-* **Out-of-Sample Metrics Engine:** [`compute_metrics_from_dataframe()`](file:///d:/Dev/repos/gsp/src/signal_engine/forward_tester.py#L103) computes live directional hit rate, total trading days, and directional vs neutral call counts.
+* **Dual Out-of-Sample Metrics Engine:** [`compute_metrics_from_dataframe()`](file:///d:/Dev/repos/gsp/src/signal_engine/forward_tester.py#L103) computes both the static baseline hit rate (`directional_hit_rate_pct`) and dynamic volatility-adaptive hit rate (`adaptive_hit_rate_pct`), alongside total trading days, directional calls, neutral noise rejection counts, and average regime thresholds ($\bar{\theta}_{\text{band}}$).
 * **Resilient In-Memory Synchronization:** If the CSV ledger is not yet flushed or synced across ephemeral cloud instances, metrics compute dynamically from the live analytical DataFrame (`df_signals`).
 
-#### 3. Execution Lockout Protection
+#### 4. Execution Lockout Protection
 To focus the platform on macroeconomic directional intelligence and prevent unintentional capital exposure during forward evaluation, active broker order routing is governed by strict execution gating:
 * `ENABLE_TRADE_EXECUTION = os.getenv("ENABLE_TRADE_EXECUTION", "false").lower() == "true"`
 * When `ENABLE_TRADE_EXECUTION=false`, `execute_signal()` records directional signals for research logging and immediately aborts prior to order dispatch, ensuring complete protection.
@@ -578,15 +596,15 @@ To ensure long-term maintainability and eliminate monolithic script bloat, the 2
 
 #### 11. Public Forward-Testing Track Record & Verifiable Ledger Card
 [`src/ui/components/ledger.py`](file:///d:/Dev/repos/gsp/src/ui/components/ledger.py) renders a structured collapsible card (`details.ledger-collapsible`) documenting live out-of-sample predictive performance:
-* **Interactive Summary Bar:** Features a governance badge (`📊 VERIFIABLE TRACK RECORD`), summary title, quick-telemetry pills (`N SIGNALS`, `N% HIT RATE`, `OUT-OF-SAMPLE`), and toggle action (`DETAILS ▾` / `COLLAPSE ▴`).
-* **Governance Callout Banner:** Contextual notice with shield icon, cyan left accent border, and monospace source link emphasizing deterministic signal intelligence and automated execution lockout.
+* **Interactive Summary Bar:** Features a governance badge (`📊 VERIFIABLE TRACK RECORD`), summary title, quick-telemetry pills (`N SIGNALS`, `N% BASE`, `N% ADAPTIVE`, `OUT-OF-SAMPLE`), and toggle action (`DETAILS ▾` / `COLLAPSE ▴`).
+* **Governance Callout Banner:** Contextual notice with shield icon, cyan left accent border, and public verification notice emphasizing deterministic signal intelligence and automated execution lockout.
 * **5-Column Micro-KPI Grid:** Responsive grid presenting 5 dedicated metric cards styled consistently with the primary KPI cards:
   1. **Logged Signals:** Total immutable append-only events.
-  2. **Directional Calls:** Active non-neutral stance count (Emerald).
-  3. **Neutral Filtered:** Events filtered by the ±0.05 deadband threshold (Purple).
+  2. **Directional Calls:** Active high-conviction regime signals (Emerald).
+  3. **Neutral Filtered:** Events filtered by the adaptive volatility deadband (Purple), detailing whipsaws avoided (+N by avg $\bar{\theta}_{\text{band}}$).
   4. **Observed Days:** Point-in-time live forward tracking horizon (Amber).
-  5. **Directional Hit Rate:** Out-of-sample next-period predictive accuracy highlighted with dynamic green/red/amber efficacy styling.
-* **Telemetry Verification Bar:** Status beacon and direct link to the append-only `reports/forward_test_ledger.csv` source file.
+  5. **Directional Hit Rate:** Out-of-sample next-period predictive accuracy featuring the **Adaptive Hit Rate** as the primary headline value (`ADAPTIVE V-BAND` tag), with baseline accuracy ($71.4\%$ / $\pm5.0$ band) and quantitative lift ($+N\%$) displayed in the comparative subtext.
+* **Telemetry Verification Bar:** Status beacon with live institutional label (`Public Forward Evaluation Ledger`), omitting raw filesystem paths from the public user interface.
 
 #### 12. Regulatory Compliance & Governance Disclosures
 [`src/ui/components/header.py`](file:///d:/Dev/repos/gsp/src/ui/components/header.py) provides [`render_regulatory_disclaimer()`](file:///d:/Dev/repos/gsp/src/ui/components/header.py#L188) rendered as a formal footer disclosure card (`.regulatory-notice-card`):
@@ -925,7 +943,7 @@ Reports are automatically saved to `reports/benchmark_report.md` and `reports/be
 
 ### 6.3 Unit Testing & Invariant Verification Suite
 
-Valence enforces zero-regression quality through an automated unit test suite (`tests/unit/`) comprising **69 tests** across 13 modules:
+Valence enforces zero-regression quality through an automated unit test suite (`tests/unit/`) comprising **79 tests** across 15 modules:
 
 | Test Module | Coverage & Verification Invariants | Test Count |
 | :--- | :--- | :---: |
@@ -935,6 +953,8 @@ Valence enforces zero-regression quality through an automated unit test suite (`
 | [`test_classifier_and_registry.py`](file:///d:/Dev/repos/gsp/tests/unit/test_classifier_and_registry.py) | Regional affinity classifier, central bank feed ingestion, zero cross-region contaminant leakage. | 7 |
 | [`test_forward_tester.py`](file:///d:/Dev/repos/gsp/tests/unit/test_forward_tester.py) | Append-only public forward ledger, in-memory metric calculation fallback, sync from DataFrame. | 6 |
 | [`test_telemetry.py`](file:///d:/Dev/repos/gsp/tests/unit/test_telemetry.py) | Pipeline execution telemetry, duration tracking, error logging, and freshness timestamps. | 6 |
+| [`test_adaptive_deadband.py`](file:///d:/Dev/repos/gsp/tests/unit/test_adaptive_deadband.py) | Dynamic volatility deadband ($\theta_{\text{band}}$) clamping bounds ($[5.0, 15.0]$), volatility scaling, and regime noise rejection. | 5 |
+| [`test_entropy_filter.py`](file:///d:/Dev/repos/gsp/tests/unit/test_entropy_filter.py) | Epistemic Shannon entropy gating ($H_2 \le 0.96$), maximum entropy detection on uniform distributions, and zero-entropy confidence preservation. | 5 |
 | [`test_ui_fragment_isolation.py`](file:///d:/Dev/repos/gsp/tests/unit/test_ui_fragment_isolation.py) | Modular UI `@st.fragment` isolation decorators, scoped reruns (`rerun_scoped`), and sentiment pills. | 4 |
 | [`test_backtest_causality.py`](file:///d:/Dev/repos/gsp/tests/unit/test_backtest_causality.py) | Point-in-time causality, strictly preventing future price return look-ahead leakage. | 3 |
 | [`test_clm_client.py`](file:///d:/Dev/repos/gsp/tests/unit/test_clm_client.py) | Sovereign HTTP client payload formatting, choice probability parsing, and zero-SDK resilience. | 3 |

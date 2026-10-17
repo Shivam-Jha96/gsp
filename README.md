@@ -45,7 +45,7 @@ Conventional financial NLP platforms rely on generative Large Language Models (L
 
 ### 📐 Mathematical Scoring Engine
 
-Our quantitative sentiment pipeline transforms unstructured global headlines into high-precision trading signals across five mathematical stages:
+Our quantitative sentiment pipeline transforms unstructured global headlines into high-precision trading signals across calibrated mathematical stages:
 
 ```
 [Regional Headline + OKF Macro Context]
@@ -55,20 +55,27 @@ Our quantitative sentiment pipeline transforms unstructured global headlines int
      Extraction: P(Bullish), P(Bearish), P(Neutral)
                    │
                    ▼
-  2. Relative Directional Spread Calculation
+  2. Epistemic Shannon Entropy Gating
+     H_2 = - Σ P(c) log_2 P(c)
+     If H_2 > 0.96 ──► High Uncertainty: Clamp to Neutral (S = 0.0)
+                   │ (If H_2 ≤ 0.96)
+                   ▼
+  3. Relative Directional Spread Calculation
      S_rel = (P(Bullish) - P(Bearish)) / (P(Bullish) + P(Bearish))
                    │
                    ▼
-  3. Conviction Magnitude with Neutral Attenuation
+  4. Conviction Magnitude with Neutral Attenuation
      Magnitude = |S_rel| * (1.0 - 0.5 * P(Neutral))
                    │
                    ▼
-  4. Signed Directional Calibration
+  5. Signed Directional Calibration & Terminal Index
      Score = sign(S_rel) * Magnitude ∈ [-1.0, +1.0]
+     Index = Score * 100 ∈ [-100, +100]
                    │
                    ▼
-  5. Terminal Sentiment Index Scaling
-     Index = Score * 100 ∈ [-100, +100]
+  6. Volatility-Adaptive Regime Deadband (V-Band)
+     θ_band(t) = clamp(5.0, 15.0, 5.0 + 0.25 * σ_rolling(EMA, 20))
+     Filters low-conviction market churn & whipsaws
 ```
 
 #### 1. Ingestion with Open Knowledge Formulation (OKF)
@@ -79,25 +86,34 @@ $$\text{State} = \mathcal{T}(\text{Headline}, \text{Summary}) \oplus \text{OKF}_
 Rather than generating text, the CLM System-One engine evaluates the state against canonical hypotheses, outputting an exact probability distribution:
 $$P(\text{Bullish}), \quad P(\text{Bearish}), \quad P(\text{Neutral}) \quad \text{where} \quad \sum_{c \in C} P(c) = 1.0$$
 
-#### 3. Relative Directional Spread ($S_{\text{rel}}$)
+#### 3. Epistemic Shannon Entropy Gating ($H_2$)
+To safeguard against ambiguous or contradictory headlines generating false directional trades, the engine evaluates Shannon information entropy:
+$$H_2(P) = -\sum_{c \in \{\text{Bull}, \text{Bear}, \text{Neut}\}} P(c) \log_2 P(c)$$
+When $H_2(P) > 0.96$ (indicating epistemic uncertainty exceeding institutional conviction limits), the headline is gated to `Neutral` ($S = 0.0$), eliminating false signals on noisy events.
+
+#### 4. Relative Directional Spread ($S_{\text{rel}}$)
 To isolate directional market conviction from neutral mass, the engine calculates the normalized spread across active directional poles:
 $$S_{\text{rel}} = \frac{P(\text{Bullish}) - P(\text{Bearish})}{P(\text{Bullish}) + P(\text{Bearish})}$$
 *(When directional mass $P(\text{Bullish}) + P(\text{Bearish}) \le 10^{-5}$, $S_{\text{rel}}$ is set to $0.0$ to avoid numerical instability).*
 
-#### 4. Conviction Magnitude Weighted by Neutral Attenuation
+#### 5. Conviction Magnitude Weighted by Neutral Attenuation
 High neutral mass ($P(\text{Neutral}) \to 1.0$) indicates ambiguous or conflicting macro events. The conviction magnitude is attenuated accordingly:
 $$\text{Magnitude} = |S_{\text{rel}}| \times \left(1.0 - 0.5 \times P(\text{Neutral})\right)$$
 
-#### 5. Signed Directional Score & Terminal Sentiment Index
+#### 6. Signed Directional Score & Terminal Sentiment Index
 - **Signed Directional Score ($S \in [-1.0, +1.0]$)**:
   $$S = \begin{cases} 
-  0.0 & \text{if Choice} = \text{Neutral} \\
+  0.0 & \text{if Choice} = \text{Neutral or } H_2 > 0.96 \\
   +|S_{\text{rel}}| \times (1.0 - 0.5 \times P(\text{Neutral})) & \text{if Choice} = \text{Bullish} \\
   -|S_{\text{rel}}| \times (1.0 - 0.5 \times P(\text{Neutral})) & \text{if Choice} = \text{Bearish}
   \end{cases}$$
 - **Terminal Sentiment Index ($I \in [-100, +100]$)**:
   $$I = S \times 100$$
-  The resulting continuous index provides a high-resolution signal for real-time visualization and our 4-hour Exponential Moving Average (EMA) crossover trading strategy.
+
+#### 7. Volatility-Adaptive Regime Deadband ($\theta_{\text{band}}(t)$)
+Rather than a rigid static threshold of $\pm 5.0$, directional stance switches are conditioned by rolling volatility $\sigma_t$:
+$$\theta_{\text{band}}(t) = \text{clamp}\left(5.0, \ 15.0, \ 5.0 + 0.25 \cdot \sigma_{\text{rolling}}(\text{EMA}, 20)\right)$$
+Filtering low-conviction signals during volatile market regimes and avoiding whipsaws.
 
 ---
 
@@ -168,11 +184,11 @@ flowchart TD
 | Layer | Tech | Description |
 |-------|------|-------------|
 | **Ingestion** | `aiohttp`, Google News RSS, Classifier, Constituent OKF, Deduplicator | Async poller with declarative market registry, index constituent entity mapping, affinity classifier, and multi-stage deduplication |
-| **AI Engine** | `Contrastive-LM/CLM-v0.1-8B`, Modal A10G, Native HTTP Client | Grounded System-One mathematical scorer — focused state conditioning, explicit market criteria anchors, continuous probability vectors (-1.0 to +1.0) |
+| **AI Engine** | `Contrastive-LM/CLM-v0.1-8B`, Modal A10G, Native HTTP Client | Grounded System-One mathematical scorer — focused state conditioning, continuous probability vectors (-1.0 to +1.0), and Epistemic Shannon Entropy Gating ($H_2 \le 0.96$) |
 | **Knowledge** | Gemini Flash, Google News RSS, Declarative Constituents | Daily auto-updating OKF macro rules via Gemini PRs and curated regional index constituent registries |
 | **Database** | Supabase PostgreSQL | Vertical partitioning: `event_signals` (math layer) + `event_payloads` (document layer) |
-| **Signal Engine** | Pandas, Alpaca API | 4-hour EMA crossover strategy routing BUY/SELL orders to paper trading |
-| **Dashboard** | Streamlit, Plotly | Dark-mode terminal with dynamic regional filtering, deduplication, auto-scaling charts and live feed |
+| **Signal Engine** | Pandas, Alpaca API | 4-hour EMA crossover strategy, Volatility-Adaptive Regime Deadband ($\theta_{\text{band}}$), Dual-EMA consensus, and paper trading lockout |
+| **Dashboard** | Streamlit, Plotly | Dark-mode terminal with dynamic regional filtering, deduplication, auto-scaling charts, live feed, and Public Out-of-Sample Track Record telemetry card |
 
 ---
 
