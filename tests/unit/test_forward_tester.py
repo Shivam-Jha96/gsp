@@ -97,6 +97,9 @@ class TestForwardTester(unittest.TestCase):
         self.assertEqual(metrics["record_count"], 10)
         self.assertGreater(metrics["directional_calls"], 0)
         self.assertGreaterEqual(metrics["total_days"], 1)
+        self.assertIn("adaptive_hit_rate_pct", metrics)
+        self.assertIn("avg_adaptive_threshold", metrics)
+        self.assertGreaterEqual(metrics["avg_adaptive_threshold"], 5.0)
 
     def test_load_forward_test_metrics_with_df_signals_sync(self):
         # Empty ledger initially
@@ -111,6 +114,7 @@ class TestForwardTester(unittest.TestCase):
         self.assertEqual(metrics["status"], "ACTIVE_AUDIT")
         self.assertEqual(metrics["record_count"], 5)
         self.assertGreater(metrics["directional_calls"], 0)
+        self.assertIn("adaptive_hit_rate_pct", metrics)
 
 
 if __name__ == "__main__":

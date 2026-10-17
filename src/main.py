@@ -68,14 +68,28 @@ def score_sentiment(client, text: str, region_context: str = "", region_tag: str
         # Conviction Magnitude weighted by Neutral attenuation: M
         magnitude = abs(s_rel) * (1.0 - 0.5 * p_neut)
         
+        # Epistemic Shannon Entropy Gating: filter out conflicting / high-uncertainty events
+        try:
+            try:
+                from signal_engine.ema import calculate_shannon_entropy
+            except ImportError:
+                from src.signal_engine.ema import calculate_shannon_entropy
+            entropy = calculate_shannon_entropy(p_bull, p_bear)
+        except Exception:
+            entropy = 0.0
+
+        # High entropy (>0.96) reflects severe ambiguity (e.g. mixed earnings with lowered guidance)
+        if entropy > 0.96:
+            magnitude *= max(0.0, 1.0 - entropy)
+
         # Signed directional score [-1.0, 1.0]
         if s_rel > 0:
             directional_score = magnitude
         else:
             directional_score = -magnitude
             
-        # Categorical label assignment
-        if abs(directional_score) < 0.05 or p_neut > max(p_bull, p_bear):
+        # Categorical label assignment with entropy rejection
+        if abs(directional_score) < 0.05 or p_neut > max(p_bull, p_bear) or entropy > 0.96:
             choice_str = "Neutral"
         elif directional_score > 0:
             choice_str = "Bullish"
@@ -90,13 +104,14 @@ def score_sentiment(client, text: str, region_context: str = "", region_tag: str
             "Choice": choice_str,
             "Score": score_magnitude,
             "DirectionalScore": directional_score,
+            "Entropy": round(entropy, 4),
             "Probabilities": probs,
-            "Noul": f"Evaluated via CLM-8B System-One (P_bull={p_bull:.2f}, P_bear={p_bear:.2f})"
+            "Noul": f"Evaluated via CLM-8B System-One (P_bull={p_bull:.2f}, P_bear={p_bear:.2f}, H={entropy:.2f})"
         }
         
     except Exception as e:
         logging.error(f"Failed to reach CLM API: {e}")
-        return {"Choice": "Neutral", "Score": 0.0, "DirectionalScore": 0.0, "Noul": f"API Error: {e}"}
+        return {"Choice": "Neutral", "Score": 0.0, "DirectionalScore": 0.0, "Entropy": 1.0, "Noul": f"API Error: {e}"}
 
 # Database
 from database.client import get_db_client
@@ -269,9 +284,16 @@ async def run_ingestion_pipeline():
                 
         # Record into forward test evaluation ledger
         try:
-            from signal_engine.forward_tester import record_forward_signal
+            try:
+                from signal_engine.forward_tester import record_forward_signal
+                from signal_engine.ema import resolve_directional_stance
+            except ImportError:
+                from src.signal_engine.forward_tester import record_forward_signal
+                from src.signal_engine.ema import resolve_directional_stance
             raw_idx = directional_score * 100.0
-            stance = "BULLISH" if raw_idx >= 5.0 else ("BEARISH" if raw_idx <= -5.0 else "NEUTRAL")
+            sentiment_dict = sentiment if isinstance(sentiment, dict) else {}
+            h_entropy = float(sentiment_dict.get("Entropy", 0.0))
+            stance = resolve_directional_stance(raw_idx, entropy=h_entropy, threshold=5.0)
             git_hash = get_git_commit_hash()
             record_forward_signal(
                 region=region,

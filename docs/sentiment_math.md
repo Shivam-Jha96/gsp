@@ -335,6 +335,21 @@ This continuous formulation exhibits exceptional dynamic range across diverse re
 | *Mulberry global push turnaround...* | $0.659$ | $0.341$ | **+0.317** | Bullish | Moderate Corporate Growth |
 | *TCS steady Q2 revenue growth beat...* | $0.789$ | $0.211$ | **+0.579** | Bullish | Strong Corporate Earnings Outperformance |
 
+### 7.5 Normalized Epistemic Shannon Entropy Gating ($H_2$)
+
+When ambiguous or conflicted financial news arrives (e.g. strong corporate revenue beat accompanied by a severe guidance downgrade), raw probability mass splits evenly between directional hypotheses: $P(\text{Bullish}) \approx P(\text{Bearish})$. Under unconstrained continuous mapping, this produces small residual scores that can trigger false regime flips.
+
+To eliminate noise from mixed releases, Valence computes the **Normalized Binary Shannon Entropy**:
+
+$$p_b = \frac{P(\text{Bullish})}{P(\text{Bullish}) + P(\text{Bearish}) + \epsilon}, \quad p_s = \frac{P(\text{Bearish})}{P(\text{Bullish}) + P(\text{Bearish}) + \epsilon}$$
+
+$$H_2(\mathbf{p}) = -\left( p_b \log_2 p_b + p_s \log_2 p_s \right) \in [0.0, 1.0]$$
+
+#### Gating Criteria:
+- **$H_2(\mathbf{p}) \le 0.96$**: Decisive directional conviction. Directional score passes through unhindered.
+- **$H_2(\mathbf{p}) > 0.96$**: High epistemic conflict ($|p_b - p_s| < 0.10$). The signal is automatically routed to **`NEUTRAL`** and its magnitude is exponentially dampened:
+  $$M_{\text{damped}} = M \cdot \max(0.0, 1.0 - H_2(\mathbf{p}))$$
+
 ---
 
 ## 8. Cross-Sectional Aggregation & Time-Series EMA Vector Calculation
@@ -419,6 +434,29 @@ Automated order routing (via the Alpaca Execution Client) utilizes a trend-follo
 3. **Neutral / Deadband Position (`HOLD / CASH`)**:
    $$-5.0 \le \text{EMA}_t \le +5.0$$
    *Economic meaning*: Market sentiment is within the noise band; algorithmic execution is suppressed to avoid fee churn and slippage.
+
+### 8.4 Volatility-Adaptive Regime Deadband ($\theta_{\text{band}}(t)$)
+
+A static deadband of $\pm 5.0$ points is vulnerable to two failure modes:
+1. **In low-volatility regimes**: $\pm 5.0$ can be too wide, causing delayed entry on valid subtle trend formations.
+2. **In high-volatility / macroeconomic shock regimes**: $\pm 5.0$ is too narrow, admitting choppy false-starts during violent cross-asset swings.
+
+To solve this, Valence implements a **Dynamic Volatility-Adaptive Deadband (V-Band)**:
+
+$$\theta_{\text{band}}(t) = \text{clamp}\left( \theta_{\min}, \ \theta_{\max}, \ \theta_{\text{base}} + \gamma \cdot \sigma_{\text{rolling}}(\text{EMA}, N) \right)$$
+
+where:
+- $\theta_{\text{base}} = 5.0$ (baseline institutional threshold).
+- $\theta_{\min} = 5.0$, $\theta_{\max} = 15.0$ (clamping bounds).
+- $\gamma = 0.25$ (volatility sensitivity coefficient).
+- $\sigma_{\text{rolling}}(\text{EMA}, N=20)$ is the trailing standard deviation over a 20-observation rolling window.
+
+#### Regime Classification with Adaptive Gating:
+$$\text{Market Bias}(\text{EMA}_t, H_2) = \begin{cases}
+\mathbf{Bullish}, & \text{if } \text{EMA}_t \ge +\theta_{\text{band}}(t) \ \land \ H_2(\mathbf{p}) \le 0.96 \\
+\mathbf{Bearish}, & \text{if } \text{EMA}_t \le -\theta_{\text{band}}(t) \ \land \ H_2(\mathbf{p}) \le 0.96 \\
+\mathbf{Neutral}, & \text{otherwise (Deadband / Epistemic Filter)}
+\end{cases}$$
 
 ---
 

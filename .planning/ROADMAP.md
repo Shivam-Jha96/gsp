@@ -9,6 +9,7 @@ Valence provides real-time quantitative macroeconomic directional sentiment calc
 - [x] **Phase 1: Baseline Quantitative Platform & Permanent Dark Theme** - End-to-end ingestion, AI scoring, database pooling, and permanent dark terminal
 - [x] **Phase 2: Quantitative Engine Remediation, Governance & Public Forward Testing** - Eliminate look-ahead leakage, update Gemini model fallbacks, implement OKF PR safety gates, and launch append-only forward-test ledger
 - [x] **Phase 3: UI Component Modularization & Operational Hardening** - Modularize `app.py` into `src/ui/components/`, expand EMA test suites, and add pipeline monitoring
+- [x] **Phase 4: Adaptive Regime Deadband & Epistemic Entropy Filtering** - Implement Shannon entropy gating and rolling volatility-adaptive deadbands to optimize directional hit rate from 71.4% to 78–82%
 
 ## Phase Details
 
@@ -61,17 +62,32 @@ Plans:
 - [x] 03-01: Decompose `app.py` into `src/ui/components/` maintaining all CSS variables and fragment reactivity
 - [x] 03-02: Expand test coverage and add CI pipeline monitoring
 
+### Phase 4: Adaptive Regime Deadband & Epistemic Entropy Filtering
+**Goal**: Elevate directional hit rate from 71.4% to 78–82% via normalized Shannon entropy gating on mixed news and rolling volatility-adaptive deadbands.
+**Depends on**: Phase 2, Phase 3
+**Requirements**: OPT-01, OPT-02, OPT-03
+**Success Criteria**:
+  1. `calculate_shannon_entropy` rejects high-entropy news releases ($H_2 > 0.96$).
+  2. `calculate_adaptive_deadband` dynamically scales deadband within $[5.0, 15.0]$ based on rolling 20-period EMA volatility.
+  3. Directional hit rate metrics in `forward_tester.py` and UI display both baseline (71.4%) and adaptive (>78%) efficacy.
+  4. 100% test pass rate across new and existing unit tests.
+**Plans**: 1 plan
+
+Plans:
+- [x] 04-01: Implement Shannon entropy gating, volatility-adaptive deadband, forward tester telemetry, and Nyquist validation suite
+
 ## Progress
 
 **Execution Order:**
-Phase 1 (Complete) → Phase 2 (Complete) → Phase 3 (Complete)
+Phase 1 (Complete) → Phase 2 (Complete) → Phase 3 (Complete) → Phase 4 (Complete)
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Baseline Quantitative Platform & Permanent Dark Theme | 3/3 | Complete | 2026-10-05 |
 | 2. Quantitative Engine Remediation, Governance & Public Forward Testing | 3/3 | Complete | 2026-10-08 |
 | 3. UI Component Modularization & Operational Hardening | 2/2 | Complete | 2026-10-08 |
+| 4. Adaptive Regime Deadband & Epistemic Entropy Filtering | 1/1 | Complete | 2026-10-17 |
 
 ---
 *Roadmap defined: 2026-10-05*
-*Last updated: 2026-10-08 with review remediation milestone*
+*Last updated: 2026-10-17 with Phase 4 signal optimization*

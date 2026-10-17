@@ -85,24 +85,37 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
     neutral_filtered = metrics.get("neutral_filtered", 0)
     days = metrics.get("total_days", 0)
     hit_rate = metrics.get("directional_hit_rate_pct")
+    adapt_hit_rate = metrics.get("adaptive_hit_rate_pct")
+    adapt_calls = metrics.get("adaptive_calls", directional_calls)
+    adapt_neutral = metrics.get("adaptive_neutral_filtered", neutral_filtered)
+    avg_th = metrics.get("avg_adaptive_threshold", 5.0)
 
-    directional_pct = (directional_calls / rec_count * 100.0) if rec_count > 0 else 0.0
-    neutral_pct = (neutral_filtered / rec_count * 100.0) if rec_count > 0 else 0.0
+    whipsaws_saved = max(adapt_neutral - neutral_filtered, 0)
+    lift = (adapt_hit_rate - hit_rate) if (adapt_hit_rate is not None and hit_rate is not None) else 0.0
+    lift_str = f"+{lift:.1f}%" if lift >= 0 else f"{lift:.1f}%"
+
+    directional_pct = (adapt_calls / rec_count * 100.0) if rec_count > 0 else 0.0
+    neutral_pct = (adapt_neutral / rec_count * 100.0) if rec_count > 0 else 0.0
     day_label = "Day" if days == 1 else "Days"
 
     if hit_rate is not None:
         hit_rate_str = f"{hit_rate:.1f}%"
-        hit_rate_clamped = min(max(hit_rate, 0.0), 100.0)
-        hr_val_class = "green" if hit_rate >= 50.0 else "red"
-        hr_tag_class = "green" if hit_rate >= 50.0 else "red"
+        adapt_hit_rate_str = f"{adapt_hit_rate:.1f}%" if adapt_hit_rate is not None else hit_rate_str
+        primary_val = adapt_hit_rate if adapt_hit_rate is not None else hit_rate
+        hit_rate_clamped = min(max(primary_val, 0.0), 100.0)
+        hr_val_class = "green" if primary_val >= 50.0 else "red"
+        hr_tag_class = "green" if primary_val >= 50.0 else "red"
         hr_sub_text = "Out-of-sample directional efficacy"
         meter_markup = f'<div class="ledger-meter-container"><div class="ledger-meter-fill" style="width: {hit_rate_clamped:.1f}%;"></div></div>'
     else:
         hit_rate_str = "N/A (Warmup)"
+        adapt_hit_rate_str = "N/A"
         hr_val_class = "amber"
         hr_tag_class = "amber"
         hr_sub_text = "Calibrating next evaluation window"
         meter_markup = '<div class="ledger-meter-container"><div style="height: 100%; width: 100%; background: rgba(245, 158, 11, 0.2); border-radius: 999px;"></div></div>'
+
+    adaptive_pill = f'<span class="ledger-pill green" title="Volatility-Adaptive Regime Deadband"><strong style="color: #34d399;">{adapt_hit_rate_str}</strong> ADAPTIVE</span>' if adapt_hit_rate is not None else ''
 
     ledger_html = f"""
     <details class="ledger-collapsible" open>
@@ -114,7 +127,8 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
                 </div>
                 <div class="ledger-quick-stats">
                     <span class="ledger-pill"><strong style="color: #f8fafc;">{rec_count:,}</strong> SIGNALS</span>
-                    <span class="ledger-pill green"><strong style="color: #34d399;">{hit_rate_str}</strong> HIT RATE</span>
+                    <span class="ledger-pill slate"><strong style="color: #94a3b8;">{hit_rate_str}</strong> BASE</span>
+                    {adaptive_pill}
                     <span class="ledger-pill slate">OUT-OF-SAMPLE</span>
                 </div>
             </div>
@@ -171,18 +185,18 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
                         <span class="ledger-metric-title">Directional Calls</span>
                         <span class="ledger-tag green">{directional_pct:.0f}% VOL</span>
                     </div>
-                    <div class="ledger-metric-value green">{directional_calls:,}</div>
+                    <div class="ledger-metric-value green">{adapt_calls:,}</div>
                     <div style="height: 5px; margin: 5px 0 4px 0;"></div>
-                    <div class="ledger-metric-sub">Bullish & Bearish momentum</div>
+                    <div class="ledger-metric-sub">High-conviction regime signals</div>
                 </div>
                 <div class="ledger-metric-card">
                     <div class="ledger-metric-header">
                         <span class="ledger-metric-title">Neutral Filtered</span>
                         <span class="ledger-tag slate">{neutral_pct:.0f}% VOL</span>
                     </div>
-                    <div class="ledger-metric-value slate">{neutral_filtered:,}</div>
+                    <div class="ledger-metric-value slate">{adapt_neutral:,}</div>
                     <div style="height: 5px; margin: 5px 0 4px 0;"></div>
-                    <div class="ledger-metric-sub">Noise rejected by ±0.05 band</div>
+                    <div class="ledger-metric-sub">Noise rejected (+{whipsaws_saved} by avg θ=±{avg_th:.1f})</div>
                 </div>
                 <div class="ledger-metric-card">
                     <div class="ledger-metric-header">
@@ -196,11 +210,11 @@ def render_forward_test_ledger_section(df_signals: Optional[pd.DataFrame] = None
                 <div class="ledger-metric-card highlight">
                     <div class="ledger-metric-header">
                         <span class="ledger-metric-title">Directional Hit Rate</span>
-                        <span class="ledger-tag {hr_tag_class}">ACCURACY</span>
+                        <span class="ledger-tag {hr_tag_class}">ADAPTIVE V-BAND</span>
                     </div>
-                    <div class="ledger-metric-value {hr_val_class}">{hit_rate_str}</div>
+                    <div class="ledger-metric-value {hr_val_class}">{adapt_hit_rate_str}</div>
                     {meter_markup}
-                    <div class="ledger-metric-sub">{hr_sub_text}</div>
+                    <div class="ledger-metric-sub">Base: {hit_rate_str} (±5.0) • Lift: <strong style="color: #34d399;">{lift_str}</strong></div>
                 </div>
             </div>
             <div class="ledger-footer-bar">

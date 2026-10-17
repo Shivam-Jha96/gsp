@@ -115,6 +115,10 @@ def compute_metrics_from_dataframe(df: Optional[pd.DataFrame]) -> Dict[str, Any]
             "neutral_filtered": 0,
             "total_days": 0,
             "directional_hit_rate_pct": None,
+            "adaptive_hit_rate_pct": None,
+            "adaptive_calls": 0,
+            "adaptive_neutral_filtered": 0,
+            "avg_adaptive_threshold": 5.0,
             "latest_update": "Awaiting first live pipeline run"
         }
 
@@ -127,6 +131,10 @@ def compute_metrics_from_dataframe(df: Optional[pd.DataFrame]) -> Dict[str, Any]
             "neutral_filtered": 0,
             "total_days": 0,
             "directional_hit_rate_pct": None,
+            "adaptive_hit_rate_pct": None,
+            "adaptive_calls": 0,
+            "adaptive_neutral_filtered": 0,
+            "avg_adaptive_threshold": 5.0,
             "latest_update": "N/A"
         }
 
@@ -174,7 +182,7 @@ def compute_metrics_from_dataframe(df: Optional[pd.DataFrame]) -> Dict[str, Any]
     except Exception:
         unique_dates = 1 if total_records > 0 else 0
 
-    # 4. Directional Hit Rate:
+    # 4. Directional Hit Rate (Static Baseline):
     directional_hit_rate = None
     if "forward_hit" in df_clean.columns and directional_calls > 0:
         valid_hits = pd.to_numeric(df_clean.loc[directional_mask, "forward_hit"], errors="coerce").dropna()
@@ -192,6 +200,38 @@ def compute_metrics_from_dataframe(df: Optional[pd.DataFrame]) -> Dict[str, Any]
             )
             directional_hit_rate = round(float(hits.mean() * 100.0), 1)
 
+    # 5. Volatility-Adaptive Regime Deadband & Adaptive Hit Rate:
+    adaptive_hit_rate = None
+    adaptive_calls = directional_calls
+    adaptive_neutral = neutral_filtered
+    avg_adaptive_th = 5.0
+    try:
+        try:
+            from signal_engine.ema import calculate_adaptive_deadband
+        except ImportError:
+            from src.signal_engine.ema import calculate_adaptive_deadband
+        df_clean["_adaptive_th"] = df_clean.groupby(ticker_col)["_ema_val"].transform(
+            lambda s: calculate_adaptive_deadband(s, base_threshold=5.0, window=20, gamma=0.25, min_threshold=5.0, max_threshold=15.0)
+        )
+        avg_adaptive_th = round(float(df_clean["_adaptive_th"].mean()), 1)
+        adapt_directional_mask = df_clean["_ema_val"].abs() >= df_clean["_adaptive_th"]
+        adaptive_calls = int(adapt_directional_mask.sum())
+        adaptive_neutral = int((~adapt_directional_mask).sum())
+
+        if "fwd_raw" not in df_clean.columns:
+            df_clean["fwd_raw"] = df_clean.groupby(ticker_col)["_raw_val"].shift(-1)
+
+        valid_adapt = df_clean[df_clean["fwd_raw"].notna() & adapt_directional_mask]
+        if len(valid_adapt) >= 3:
+            hits_adapt = (
+                (valid_adapt["_ema_val"] >= valid_adapt["_adaptive_th"]) & (valid_adapt["fwd_raw"] > 0)
+            ) | (
+                (valid_adapt["_ema_val"] <= -valid_adapt["_adaptive_th"]) & (valid_adapt["fwd_raw"] < 0)
+            )
+            adaptive_hit_rate = round(float(hits_adapt.mean() * 100.0), 1)
+    except Exception as e:
+        logger.warning(f"Error computing adaptive deadband metrics: {e}")
+
     try:
         latest_update = df_clean["timestamp"].iloc[-1].isoformat() if total_records > 0 else "N/A"
     except Exception:
@@ -204,6 +244,10 @@ def compute_metrics_from_dataframe(df: Optional[pd.DataFrame]) -> Dict[str, Any]
         "neutral_filtered": neutral_filtered,
         "total_days": unique_dates,
         "directional_hit_rate_pct": directional_hit_rate,
+        "adaptive_hit_rate_pct": adaptive_hit_rate if adaptive_hit_rate is not None else directional_hit_rate,
+        "adaptive_calls": adaptive_calls,
+        "adaptive_neutral_filtered": adaptive_neutral,
+        "avg_adaptive_threshold": avg_adaptive_th,
         "latest_update": latest_update
     }
 
@@ -354,5 +398,9 @@ def load_forward_test_metrics(
         "neutral_filtered": 0,
         "total_days": 0,
         "directional_hit_rate_pct": None,
+        "adaptive_hit_rate_pct": None,
+        "adaptive_calls": 0,
+        "adaptive_neutral_filtered": 0,
+        "avg_adaptive_threshold": 5.0,
         "latest_update": "Awaiting first live pipeline run"
     }
