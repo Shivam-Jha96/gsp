@@ -17,11 +17,11 @@
 - **Action:** Bullish on front-end UK real yields and commercial bank net interest margins; bearish on duration-sensitive sovereign bonds.
 
 ## Rule 5: Sterling Yield Advantage and Bullish FX Continuation
-- **Condition:** Hawkish MPC forward guidance contrasts with active monetary easing cycles at the Federal Reserve and ECB, widening UK-US and UK-EZ front-end rate differentials and pushing spot GBP/USD above key technical resistance levels.
+- **Condition:** Hawkish MPC forward guidance contrasts with active monetary easing cycles at the Federal Reserve and ECB, widening UK-US and UK-EZ front-end rate differentials and pushing spot GBP/USD toward or through key technical resistance levels.
 - **Action:** Bullish on spot GBP/USD, GBP/EUR, and sterling call options; bearish on EUR/GBP.
 
 ## Rule 6: Mortgage Refinancing Friction and Domestic Credit Contraction
-- **Condition:** Elevated front-end Gilt yields and sustained restrictive policy rates keep 2-year and 5-year fixed mortgage rates elevated, accelerating household debt-servicing costs as fixed-term borrowing transitions to prevailing market rates.
+- **Condition:** Elevated front-end Gilt yields and sustained restrictive policy rates keep 2-year and 5-year fixed mortgage rates above the 5% threshold, accelerating household debt-servicing costs as fixed-term borrowing transitions to prevailing market rates.
 - **Action:** Bearish on UK residential homebuilders, domestic retail lenders, and commercial property REITs; bullish on defensive consumer staples and high-yielding utilities.
 
 ## Rule 7: Active Quantitative Tightening and Gilt Swap Spread Cheapening
