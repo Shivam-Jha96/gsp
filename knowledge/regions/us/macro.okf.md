@@ -1,37 +1,37 @@
 # United States Macro Trading Rules
 
 ## Rule 1: Federal Reserve Hawkish Re-Acceleration on Confusing Growth-Inflation Mix
-- **Condition:** Economic activity remains resilient while headline CPI re-accelerates to 3.7% YoY driven by energy costs, prompting the Federal Reserve to keep additional rate hikes on the table and maintain higher-for-longer policy rates despite tightening financial conditions.
+- **Condition:** Economic activity and labor markets remain resilient while headline CPI re-accelerates to 3.7% YoY, prompting the Federal Reserve to put additional benchmark interest rate hikes back on the table and push out monetary easing expectations.
 - **Action:** Bullish on the US Dollar Index (DXY), Bullish on Front-End Treasury Yields (2Y Yield), Bearish on Long-Duration Treasuries (TLT), and Bearish on Rate-Sensitive Small-Cap Equities (IWM).
 
-## Rule 2: Energy-Driven CPI Surge and Inflation Breakeven Widening
-- **Condition:** Headline Consumer Price Index prints at or above 3.7% YoY fueled by surging retail gasoline and crude oil benchmarks, pushing up short-term inflation breakevens and forcing markets to price out near-term Federal Reserve rate cuts.
-- **Action:** Bullish on Treasury Inflation-Protected Securities (TIPS), Bullish on the US Dollar (USD), Bearish on Intermediate Treasuries (IEF), and Bearish on Non-Yielding Precious Metals (Gold/XAU).
+## Rule 2: Energy-Driven CPI Surge and Real Yield Pressure on Non-Yielding Assets
+- **Condition:** Retail gasoline and global crude oil benchmark rallies drive headline CPI higher, widening near-term inflation breakevens while reinforcing higher-for-longer policy rates and elevating real cash yields.
+- **Action:** Bullish on Treasury Inflation-Protected Securities (TIPS), Bullish on High-Yield Cash and Short-Term Treasury Bills (BIL), Bearish on Non-Yielding Precious Metals (Gold/XAU), and Bearish on Intermediate Treasuries (IEF).
 
 ## Rule 3: Sovereign Fiscal Deficits and Term Premium Expansion
-- **Condition:** Expanded US Treasury coupon issuance to finance ballooning federal budget deficits intersects with ongoing quantitative tightening (QT), triggering term premium expansion and bear-steepening pressure on the long end of the yield curve.
-- **Action:** Bearish on 30-Year US Treasuries, Bearish on Broad Investment-Grade Fixed Income (AGG), Bullish on 10Y/2Y Yield Curve Steepener Trades, and Bullish on Ultra-Short Treasury Bills (BIL).
+- **Condition:** Heavy US Treasury coupon issuance to fund expanding federal fiscal deficits collides with ongoing quantitative tightening (QT), driving term premium repricing and bear-steepening along the yield curve.
+- **Action:** Bearish on 30-Year US Treasuries, Bearish on Broad Investment-Grade Fixed Income (AGG), Bullish on 10Y/2Y Yield Curve Steepener Trades, and Bullish on Ultra-Short Treasury Floating Rate Notes (USFR).
 
-## Rule 4: Geopolitical Energy Supply Chokepoints and Petroleum Risk Premium
-- **Condition:** Geopolitical tensions and maritime bottlenecks elevate crude supply disruption risks, driving sustained crude oil price rallies that strain energy-importing sectors and fuel cost-push inflation.
-- **Action:** Bullish on WTI and Brent Crude Oil Futures, Bullish on Energy Exploration & Production Equities (XOP), Bearish on Airlines and Transportation Equities (JETS), and Bearish on Broad Consumer Discretionary Equities (XLY).
+## Rule 4: Upstream Energy Supply Shocks and Refining Margin Pass-Through
+- **Condition:** Crude oil supply constraints and elevated refining margins drive sustained surges in wholesale and retail motor fuels, amplifying cost-push inflation across the economy.
+- **Action:** Bullish on WTI and Brent Crude Oil Futures, Bullish on Energy Exploration & Production Equities (XOP), Bearish on Airlines and Freight Transport Equities (JETS), and Bearish on Consumer Discretionary Equities (XLY).
 
 ## Rule 5: Concentrated Artificial Intelligence Infrastructure and Hyperscaler Capex
-- **Condition:** Corporate and hyperscaler capital expenditures concentrate disproportionately into artificial intelligence compute capacity, semiconductor chips, and advanced data center power infrastructure, insulating mega-cap tech earnings from broader economic softness.
-- **Action:** Bullish on Mega-Cap Technology Equities (QQQ), Bullish on Semiconductor Equities (SMH), Bullish on Data Center Real Estate Investment Trusts, and Bearish on Broad Industrial Small-Caps (IWM).
+- **Condition:** Corporate and hyperscaler capital expenditures accelerate into artificial intelligence hardware, semiconductor supply chains, and specialized power infrastructure, decoupling mega-cap tech earnings from macro growth uncertainty.
+- **Action:** Bullish on Mega-Cap Technology Equities (QQQ), Bullish on Semiconductor Equities (SMH), Bullish on Data Center Infrastructure Providers, and Bearish on Broad Industrial Small-Caps (IWM).
 
 ## Rule 6: Household Credit Deterioration and Real Disposable Income Squeeze
-- **Condition:** Cumulative rate hikes push variable credit card APRs and consumer borrowing costs to multi-decade highs alongside sticky headline inflation, driving loan delinquency spikes among lower- and middle-income cohorts and curtailing discretionary spend.
-- **Action:** Bullish on Consumer Staples Equities (XLP), Bullish on Quality Factor Equities (QUAL), Bearish on Subprime Consumer and Auto Lenders, and Bearish on Mid-Tier Cyclical Retailers (XRT).
+- **Condition:** Elevated borrowing rates push credit card APRs and auto loan financing costs to multi-decade highs, exacerbating debt-servicing burdens and delinquency rates among middle- and lower-income consumer cohorts.
+- **Action:** Bullish on Consumer Staples Equities (XLP), Bullish on Large-Cap Quality Factor Equities (QUAL), Bearish on Subprime Consumer and Auto Finance Lenders, and Bearish on Department Stores and Discretionary Retailers (XRT).
 
-## Rule 7: Renewable Energy Project Cancellations and Baseload Utility Realignment
-- **Condition:** Escalating financing costs, interconnection queues, and equipment inflation cause widespread contract terminations and cancellations of utility-scale wind and solar installations, shifting capital deployment toward regulated baseload power, nuclear generation, and natural gas infrastructure.
-- **Action:** Bearish on Global Clean Energy Equities (ICLN), Bearish on Solar Component Manufacturers (TAN), Bullish on Regulated Electric Utilities (XLU), and Bullish on Midstream Natural Gas Infrastructure (AMLP).
+## Rule 7: Clean Energy Capital Project Cancellations and Baseload Utility Realignment
+- **Condition:** High capital costs, grid interconnection delays, and component inflation force widespread cancellations and write-downs of utility-scale renewable wind and solar projects, shifting grid investments toward reliable baseload power and midstream gas.
+- **Action:** Bearish on Global Clean Energy Equities (ICLN), Bearish on Solar Component Manufacturers (TAN), Bullish on Regulated Electric and Nuclear Utilities (XLU), and Bullish on Midstream Natural Gas Infrastructure (AMLP).
 
-## Rule 8: Cross-Border Nearshoring and North American Integrated Supply Chains
-- **Condition:** Strategic supply-chain nearshoring within North America deepens trade integration (e.g., cross-border automotive, industrial, and agricultural trade with Mexico), buffering bilateral trade lanes against global trade disruptions while sustaining border logistical infrastructure demand.
-- **Action:** Bullish on the Mexican Peso against G10 Currencies (MXN/EUR, MXN/JPY), Bullish on North American Freight Rail and Border Logistics Equities, and Bearish on Traditional Long-Haul Trans-Pacific Ocean Freight.
+## Rule 8: Clinical Labor Cost Inflation and Inpatient Healthcare Margin Compression
+- **Condition:** Persistent shortages of specialized medical personnel and nursing staff drive elevated wage inflation that outpaces statutory insurer reimbursement rates, squeezing hospital operating margins.
+- **Action:** Bullish on Large-Cap Pharmaceuticals and Medical Devices (XLV), Bearish on Hospital Operators, and Bearish on Acute Inpatient Facility Networks.
 
-## Rule 9: Clinical Labor Cost Inflation and Healthcare Inpatient Margin Compression
-- **Condition:** Persistent shortages of specialized healthcare workers and clinical staff sustain high labor expenses that outstrip fixed statutory reimbursement rates, squeezing operational margins for hospital networks and inpatient medical facilities.
-- **Action:** Bullish on Large-Cap Pharmaceuticals and Medical Device Equities (XLV), Bearish on Hospital Operator Equities, and Bearish on Acute Care Facility Operators.
+## Rule 9: Cross-Border Nearshoring and North American Supply Chain Integration
+- **Condition:** Regional supply chain relocation and bilateral trade integration accelerate across the North American corridor, supporting cross-border industrial freight corridors and border logistics infrastructure.
+- **Action:** Bullish on the Mexican Peso against G10 Currencies (MXN/EUR, MXN/JPY), Bullish on North American Cross-Border Class I Rail Equities, and Bearish on Trans-Pacific Container Shipping Carriers.
