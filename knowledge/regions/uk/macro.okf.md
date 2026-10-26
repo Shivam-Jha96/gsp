@@ -1,7 +1,7 @@
 # United Kingdom Macro Trading Rules
 
 ## Rule 1: Imminent Monetary Tightening and Front-End Rate Repricing
-- **Condition:** Headline UK CPI jumps to 3.5% alongside above-consensus monthly GDP growth (0.1%), prompting the Bank of England to signal an imminent Q4 policy rate hike to quell persistent domestic price pressures.
+- **Condition:** Headline UK CPI jumps to 3.5% alongside above-consensus monthly GDP growth (0.1%), prompting the Bank of England to signal an imminent Q4 policy rate hike to curb cost-push price pressures.
 - **Action:** Bearish on short-dated (2Y) UK Gilts and front-quarter SONIA futures; bullish on front-end SONIA implied policy rates and 1Y Forward Rate Agreements (FRAs).
 
 ## Rule 2: Energy Price Shock and Inflation Breakeven Widening

@@ -1,11 +1,11 @@
 # United States Macro Trading Rules
 
-## Rule 1: Federal Reserve Hawkish Re-Acceleration on Confusing Growth-Inflation Mix
-- **Condition:** Economic activity and labor markets remain resilient while headline CPI re-accelerates to 3.7% YoY, prompting the Federal Reserve to put additional benchmark interest rate hikes back on the table and push out monetary easing expectations.
+## Rule 1: Federal Reserve Hawkish Re-Acceleration on Resilient Growth and Re-Accelerating CPI
+- **Condition:** US consumer price inflation re-accelerates to 3.7% YoY driven by skyrocketing energy and gasoline prices, prompting the Federal Reserve to put additional benchmark interest rate hikes back on the table and price out monetary easing expectations.
 - **Action:** Bullish on the US Dollar Index (DXY), Bullish on Front-End Treasury Yields (2Y Yield), Bearish on Long-Duration Treasuries (TLT), and Bearish on Rate-Sensitive Small-Cap Equities (IWM).
 
 ## Rule 2: Energy-Driven CPI Surge and Real Yield Pressure on Non-Yielding Assets
-- **Condition:** Retail gasoline and global crude oil benchmark rallies drive headline CPI higher, widening near-term inflation breakevens while reinforcing higher-for-longer policy rates and elevating real cash yields.
+- **Condition:** Spikes in retail gasoline and global crude oil benchmarks drive headline CPI higher, widening near-term inflation breakevens while reinforcing higher-for-longer policy rates and elevating real cash yields.
 - **Action:** Bullish on Treasury Inflation-Protected Securities (TIPS), Bullish on High-Yield Cash and Short-Term Treasury Bills (BIL), Bearish on Non-Yielding Precious Metals (Gold/XAU), and Bearish on Intermediate Treasuries (IEF).
 
 ## Rule 3: Sovereign Fiscal Deficits and Term Premium Expansion
@@ -33,5 +33,5 @@
 - **Action:** Bullish on Large-Cap Pharmaceuticals and Medical Devices (XLV), Bearish on Hospital Operators, and Bearish on Acute Inpatient Facility Networks.
 
 ## Rule 9: Cross-Border Nearshoring and North American Supply Chain Integration
-- **Condition:** Regional supply chain relocation and bilateral trade integration accelerate across the North American corridor, supporting cross-border industrial freight corridors and border logistics infrastructure.
+- **Condition:** Regional supply chain relocation and bilateral trade integration accelerate across the North American corridor, supporting cross-border industrial freight corridors, bilateral agricultural trade, and border logistics infrastructure.
 - **Action:** Bullish on the Mexican Peso against G10 Currencies (MXN/EUR, MXN/JPY), Bullish on North American Cross-Border Class I Rail Equities, and Bearish on Trans-Pacific Container Shipping Carriers.

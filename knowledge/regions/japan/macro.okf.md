@@ -1,19 +1,19 @@
 # Japan Macro Trading Rules
 
 ## Rule 1: Ultra-Long Sovereign Debt Stress, Fiscal Expansion Concerns, and Discretionary Rinban Interventions
-- **Condition:** Persistent BOJ rate hike pricing and escalating fiscal debt issuance push yields on 20Y–40Y Japanese Government Bonds (JGBs) to multi-decade highs, steepening the sovereign curve and forcing market anticipation of ad-hoc BOJ bond-buying operations (*Rinban*) to contain disorderly auction tails and yield volatility.
+- **Condition:** Persistent BOJ rate hike pricing and escalating fiscal debt issuance push yields on 20Y–40Y Japanese Government Bonds (JGBs) to record levels, steepening the sovereign curve and forcing market anticipation of ad-hoc BOJ bond-buying operations (*Rinban*) to contain disorderly auction tails and yield volatility.
 - **Action:** Bullish on front-end JGB discount bills, domestic money center commercial banks, and tactical 10Y-30Y curve flattener unwinds; Bearish on ultra-long sovereign paper (30Y–40Y JGBs), long-duration domestic bond index trackers, and interest-rate-sensitive J-REITs.
 
 ## Rule 2: Domestic Core CPI Overshoots, Hawkish BOJ Re-Pricing, and Systematic FX Carry Unwinds
-- **Condition:** Core CPI prints consistently hold above the 2% target propelled by resurgent energy import costs and broader service-sector price pass-through, narrowing cross-currency yield differentials and unleashing aggressive short-covering rallies in the Japanese Yen alongside rapid liquidations of global short-JPY carry trades.
+- **Condition:** Core CPI prints consistently hold above the 2% target propelled by resurgent energy import costs and a weak Yen, narrowing cross-currency yield differentials and unleashing aggressive short-covering rallies in the Japanese Yen alongside rapid liquidations of global short-JPY carry trades.
 - **Action:** Bullish on spot JPY, long JPY implied volatility (gamma), and short USD/JPY risk reversals; Bearish on high-beta cross-yen carry pairs (AUD/JPY, NZD/JPY, MXN/JPY) and unhedged export-dependent automotive manufacturers.
 
 ## Rule 3: Resurgent Energy Cost-Push Shocks vs. Government Utility Subsidy Distortion
-- **Condition:** Rebounding international crude oil and LNG prices amplify Japan's import bill, driving headline and core inflation off cyclical lows while volatile municipal and national utility tariff subsidies mask underlying wholesale power cost pressures.
+- **Condition:** Rebounding international crude oil and LNG prices amplify Japan's import bill while a weak Yen drives headline and core inflation off cyclical lows, putting pressure on the Bank of Japan to move faster on rate hikes.
 - **Action:** Bullish on diversified Japanese trading conglomerates (*sogo shosha*), domestic inflation-linked bonds (JGBi), and upstream petroleum refiners; Bearish on regulated regional electric and gas utilities facing fuel-cost pass-through caps and domestic packaged food producers facing unhedged ingredient inflation.
 
 ## Rule 4: Sluggish Private Household Consumption vs. Resilient Enterprise Capex Divergence
-- **Condition:** Quarterly real GDP prints miss consensus due to persistent negative real wage drag and anemic private household consumption, even as corporate capital expenditure is revised upward on domestic semiconductor manufacturing capacity, factory automation upgrades, and digital transformation investments.
+- **Condition:** Quarterly real GDP prints miss consensus due to persistent negative real wage drag and anemic private household consumption (growing at an annualized 1.1%), even as corporate capital expenditure is revised upward on domestic manufacturing capacity and facility upgrades.
 - **Action:** Bullish on domestic semiconductor manufacturing equipment (SPE) producers, factory automation robotics makers, and enterprise software systems integrators; Bearish on mass-market apparel retailers, department store operators, and domestic consumer discretionary cyclicals.
 
 ## Rule 5: Tokyo Stock Exchange Governance Reforms and Balance-Sheet Optimization
@@ -29,5 +29,5 @@
 - **Action:** Bullish on high-grade yen-denominated corporate credit spreads, primary 10Y–20Y domestic sovereign bond auctions, and domestic fixed-income mutual fund inflows; Bearish on FX-hedged US Treasuries, European core sovereign debt, and offshore fixed-income investment trusts (*toshin*).
 
 ## Rule 8: Intra-Asian Intermediate Export Momentum vs. Domestic Fabrication Margin Squeeze
-- **Condition:** Resilient manufacturing activity and export resilience across East Asia sustain order books for Japanese high-spec chemicals, electronic components, and industrial inputs, while domestic-bound downstream fabricators face severe margin erosion from imported raw material inflation.
-- **Action:** Bullish on high-performance electronic materials producers, specialized fine chemical exporters, and intra-Asia container shipping operators; Bearish on domestic low-margin intermediate fabricators and unhedged raw-materials-dependent domestic packaging suppliers.
+- **Condition:** Resilient manufacturing activity and trade recovery across East Asia sustain order books for Japanese high-spec chemicals, electronic components, and industrial inputs, while domestic-bound downstream fabricators face severe margin erosion from imported raw material inflation.
+- **Action:** Bullish on high-performance electronic materials producers, specialized fine chemical exporters, and intra-Asia container shipping operators; Bearish on domestic low-margin intermediate fabricator plays and unhedged raw-materials-dependent domestic packaging suppliers.
