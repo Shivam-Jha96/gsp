@@ -5,23 +5,23 @@
 - **Action:** Bullish on the US Dollar Index (DXY), Bullish on Front-End Treasury Yields (2Y Yield), Bearish on Long-Duration Treasuries (TLT), and Bearish on Rate-Sensitive Small-Cap Equities (IWM).
 
 ## Rule 2: Energy-Driven CPI Surge and Real Yield Pressure on Non-Yielding Assets
-- **Condition:** Spikes in retail gasoline and global crude oil benchmarks drive headline CPI higher, widening near-term inflation breakevens while reinforcing higher-for-longer policy rates and elevating real cash yields.
-- **Action:** Bullish on Treasury Inflation-Protected Securities (TIPS), Bullish on High-Yield Cash and Short-Term Treasury Bills (BIL), Bearish on Non-Yielding Precious Metals (Gold/XAU), and Bearish on Intermediate Treasuries (IEF).
+- **Condition:** Spikes in retail gasoline and global crude oil benchmarks drive headline CPI higher, widening near-term inflation breakevens while reinforcing higher-for-longer policy rates and elevating real cash yields, even as gold maintains historical safe-haven bids above $4,000 per ounce.
+- **Action:** Bullish on Treasury Inflation-Protected Securities (TIPS), Bullish on High-Yield Cash and Short-Term Treasury Bills (BIL), Bullish on Precious Metals (Gold/XAU) via safe-haven hedging, and Bearish on Intermediate Treasuries (IEF).
 
 ## Rule 3: Sovereign Fiscal Deficits and Term Premium Expansion
-- **Condition:** Heavy US Treasury coupon issuance to fund expanding federal fiscal deficits collides with ongoing quantitative tightening (QT), driving term premium repricing and bear-steepening along the yield curve.
+- **Condition:** Heavy US Treasury coupon issuance to fund expanding federal fiscal deficits collides with ongoing quantitative tightening (QT), driving term premium repricing and bear-steepening along the yield curve ahead of major Federal Reserve policy decisions.
 - **Action:** Bearish on 30-Year US Treasuries, Bearish on Broad Investment-Grade Fixed Income (AGG), Bullish on 10Y/2Y Yield Curve Steepener Trades, and Bullish on Ultra-Short Treasury Floating Rate Notes (USFR).
 
 ## Rule 4: Upstream Energy Supply Shocks and Refining Margin Pass-Through
-- **Condition:** Crude oil supply constraints and elevated refining margins drive sustained surges in wholesale and retail motor fuels, amplifying cost-push inflation across the economy.
+- **Condition:** Crude oil supply constraints and elevated refining margins drive sustained surges in wholesale and retail motor fuels, amplifying cost-push inflation across the economy and triggering broader headline pricing pressures.
 - **Action:** Bullish on WTI and Brent Crude Oil Futures, Bullish on Energy Exploration & Production Equities (XOP), Bearish on Airlines and Freight Transport Equities (JETS), and Bearish on Consumer Discretionary Equities (XLY).
 
 ## Rule 5: Concentrated Artificial Intelligence Infrastructure and Hyperscaler Capex
-- **Condition:** Corporate and hyperscaler capital expenditures accelerate into artificial intelligence hardware, semiconductor supply chains, and specialized power infrastructure, decoupling mega-cap tech earnings from macro growth uncertainty.
+- **Condition:** Corporate and hyperscaler capital expenditures accelerate into artificial intelligence hardware, semiconductor supply chains, and specialized power infrastructure, decoupling mega-cap tech earnings from macro growth uncertainty and maintaining economic resilience.
 - **Action:** Bullish on Mega-Cap Technology Equities (QQQ), Bullish on Semiconductor Equities (SMH), Bullish on Data Center Infrastructure Providers, and Bearish on Broad Industrial Small-Caps (IWM).
 
 ## Rule 6: Household Credit Deterioration and Real Disposable Income Squeeze
-- **Condition:** Elevated borrowing rates push credit card APRs and auto loan financing costs to multi-decade highs, exacerbating debt-servicing burdens and delinquency rates among middle- and lower-income consumer cohorts.
+- **Condition:** Elevated borrowing rates push credit card APRs and auto loan financing costs to multi-decade highs, exacerbating debt-servicing burdens and delinquency rates among middle- and lower-income consumer cohorts against a backdrop of sticky headline inflation.
 - **Action:** Bullish on Consumer Staples Equities (XLP), Bullish on Large-Cap Quality Factor Equities (QUAL), Bearish on Subprime Consumer and Auto Finance Lenders, and Bearish on Department Stores and Discretionary Retailers (XRT).
 
 ## Rule 7: Clean Energy Capital Project Cancellations and Baseload Utility Realignment
@@ -29,7 +29,7 @@
 - **Action:** Bearish on Global Clean Energy Equities (ICLN), Bearish on Solar Component Manufacturers (TAN), Bullish on Regulated Electric and Nuclear Utilities (XLU), and Bullish on Midstream Natural Gas Infrastructure (AMLP).
 
 ## Rule 8: Clinical Labor Cost Inflation and Inpatient Healthcare Margin Compression
-- **Condition:** Persistent shortages of specialized medical personnel and nursing staff drive elevated wage inflation that outpaces statutory insurer reimbursement rates, squeezing hospital operating margins.
+- **Condition:** Persistent shortages of specialized medical personnel and nursing staff drive elevated wage inflation that outpaces statutory insurer reimbursement rates, squeezing hospital operating margins within the broader healthcare economy.
 - **Action:** Bullish on Large-Cap Pharmaceuticals and Medical Devices (XLV), Bearish on Hospital Operators, and Bearish on Acute Inpatient Facility Networks.
 
 ## Rule 9: Cross-Border Nearshoring and North American Supply Chain Integration
