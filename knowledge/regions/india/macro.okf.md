@@ -5,7 +5,7 @@
 - **Action:** Bullish on 1-year Overnight Index Swaps (OIS) paying positions, ultra-short duration liquidity funds, and high-CASA Tier-1 commercial banks; Bearish on benchmark 10-year G-Secs, corporate bond duration funds, and wholesale-funded non-banking financial companies (NBFCs).
 
 ## Rule 2: Food Basket Inflation Surge & Tolerance Band Breaches
-- **Condition:** Headline retail CPI accelerates for multiple consecutive months—surging through 5.54%–5.60% toward a projected 6.3% peak—propelled by doubling vegetable and onion prices alongside domestic agricultural supply bottlenecks.
+- **Condition:** Headline retail CPI accelerates for multiple consecutive months—surging through tolerance ceilings toward a projected 6.3% peak—propelled by volatile food, vegetable, and energy supply pressures.
 - **Action:** Bullish on domestic agrochemical producers, fertilizer distributors, gold loan NBFCs, and short-duration sovereign treasury bills; Bearish on volume-sensitive mass-market FMCG manufacturers, entry-level passenger vehicle OEMs, and price-sensitive consumer durable fabricators.
 
 ## Rule 3: EBLR Rate Reset Transmission & Deposit Repricing Lag
@@ -17,7 +17,7 @@
 - **Action:** Bullish on upstream domestic oil and gas exploration and production (E&P) firms with unhedged realization upside, domestic coal extractors, and commercial renewable independent power producers (IPPs); Bearish on state-owned downstream Oil Marketing Companies (OMCs), commercial aviation carriers, and synthetic specialty chemical and paint manufacturers.
 
 ## Rule 5: FPI Multi-Year Flow Fatigue vs. Domestic SIP Absorption
-- **Condition:** Foreign Portfolio Investors (FPIs) reduce equity allocations toward multi-year lows driven by valuation fatigue and global risk premia, while domestic systemic investment plan (SIP) inflows and institutional capital provide continuous counter-cyclical liquidity.
+- **Condition:** Foreign Portfolio Investors (FPIs) reduce equity allocations toward multi-year lows driven by valuation fatigue, currency depreciation pressures, and global risk premia, while domestic systemic investment plan (SIP) inflows and institutional capital provide selective counter-cyclical liquidity.
 - **Action:** Bullish on Nifty 50 large-cap bellwethers, domestic equity exchange operators, central securities depositories, and high-dividend public sector enterprises (PSEs); Bearish on richly valued small-and-mid-cap (SMID) equities trading at extreme valuation multiples and unprofitable growth technology firms.
 
 ## Rule 6: Currency Depreciation Pressure & FX Reserve Interventions
