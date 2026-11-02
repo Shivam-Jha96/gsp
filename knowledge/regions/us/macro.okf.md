@@ -9,7 +9,7 @@
 - **Action:** Bullish on Treasury Inflation-Protected Securities (TIPS), Bullish on Ultra-Short Treasury Bills (BIL), Bearish on Spot Gold (XAU/USD), and Bearish on Intermediate Treasuries (IEF).
 
 ## Rule 3: Deficit-Driven Treasury Supply and Term Premium Bear Steepening
-- **Condition:** Unprecedented sovereign coupon supply to fund persistent federal deficits intersects with ongoing Federal Reserve balance sheet runoff (QT), driving term premium expansion and curve divergence on long-dated sovereign debt.
+- **Condition:** Unprecedented sovereign coupon supply to fund persistent federal deficits intersects with rising debt-service costs that risk topping nominal GDP growth, driving term premium expansion and curve divergence on long-dated sovereign debt.
 - **Action:** Bullish on 10Y/2Y Yield Curve Steepener Trades, Bullish on Floating Rate Notes (USFR), Bearish on 30-Year US Treasuries, and Bearish on Broad Investment-Grade Fixed Income (AGG).
 
 ## Rule 4: Upstream Energy Cost Pressures and Downstream Margin Squeeze
@@ -17,15 +17,15 @@
 - **Action:** Bullish on WTI and Brent Crude Oil Futures, Bullish on Energy Exploration & Production Equities (XOP), Bearish on Airlines and Freight Transport Equities (JETS), and Bearish on Consumer Discretionary Equities (XLY).
 
 ## Rule 5: AI Hyperscaler Revenue Disappointments Amid Capital Expenditure Anchors
-- **Condition:** Massive private capital deployment into artificial intelligence infrastructure continues, yet mega-cap technology stalwarts face sharp equity pullbacks following high-profile quarterly revenue misses.
+- **Condition:** Massive private capital deployment into artificial intelligence infrastructure continues to support economic growth, yet mega-cap technology stalwarts face sharp equity pullbacks following high-profile quarterly revenue misses.
 - **Action:** Bullish on Power Infrastructure Providers, Bullish on Semiconductor Equities (SMH), Bearish on Lagging Mega-Cap Technology Equities (Alphabet/GOOGL), and Bearish on Broad Industrial Small-Caps (IWM).
 
 ## Rule 6: Resilient Aggregate Output with Labor Market Friction
-- **Condition:** Aggregate US real GDP growth accelerates into the second half of the year driven by investment and consumption, even as labor market indicators flash mixed signals with monthly job losses.
+- **Condition:** Aggregate US real GDP growth accelerates into the second half of the year driven by investment and consumption, even as labor market indicators flash mixed signals with monthly job pickups that keep Federal Reserve rate hike expectations active.
 - **Action:** Bullish on Large-Cap Quality Factor Equities (QUAL), Bullish on Consumer Staples Equities (XLP), Bearish on Subprime Consumer and Auto Lenders, and Bearish on Broad Discretionary Retailers (XRT).
 
 ## Rule 7: Clean Energy Project Attrition and Baseload Utility Demand
-- **Condition:** Persistent financing costs, grid interconnection delays, and project cancellations stall utility-scale renewables, redirecting institutional capital toward regulated baseload power generation, nuclear utilities, and midstream natural gas networks.
+- **Condition:** Persistent financing costs, regulatory friction, and project cancellations stall utility-scale renewables—costing hundreds of thousands of jobs and billions in GDP—redirecting institutional capital toward regulated baseload power generation, nuclear utilities, and midstream natural gas networks.
 - **Action:** Bearish on Global Clean Energy Equities (ICLN), Bearish on Solar Component Manufacturers (TAN), Bullish on Regulated Electric and Nuclear Utilities (XLU), and Bullish on Midstream Energy Infrastructure (AMLP).
 
 ## Rule 8: Healthcare Clinical Wage Inflation and Inpatient Margin Compression

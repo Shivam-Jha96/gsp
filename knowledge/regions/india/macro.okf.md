@@ -5,7 +5,7 @@
 - **Action:** Bullish on 1-year Overnight Index Swaps (OIS) paying positions, ultra-short duration liquidity funds, and high-CASA Tier-1 commercial banks; Bearish on benchmark 10-year G-Secs, corporate bond duration funds, and wholesale-funded non-banking financial companies (NBFCs).
 
 ## Rule 2: Food Basket Inflation Surge & Tolerance Band Breaches
-- **Condition:** Headline retail CPI accelerates for multiple consecutive months—surging through tolerance ceilings toward a projected 6.3% peak—propelled by volatile food, vegetable, and energy supply pressures.
+- **Condition:** Headline retail CPI accelerates for multiple consecutive months—surging through tolerance ceilings toward a projected 5.6% to 6.3% peak under escalating food, vegetable, and energy supply pressures.
 - **Action:** Bullish on domestic agrochemical producers, fertilizer distributors, gold loan NBFCs, and short-duration sovereign treasury bills; Bearish on volume-sensitive mass-market FMCG manufacturers, entry-level passenger vehicle OEMs, and price-sensitive consumer durable fabricators.
 
 ## Rule 3: EBLR Rate Reset Transmission & Deposit Repricing Lag
