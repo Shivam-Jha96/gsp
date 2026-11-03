@@ -5,7 +5,7 @@
 - **Action:** Bullish on front-end short-duration JGB bills, domestic money center commercial banks, and tactical curve-flattener positions; Bearish on ultra-long sovereign paper (20Y–40Y JGBs), long-duration domestic bond index funds, and interest-rate-sensitive J-REITs.
 
 ## Rule 2: Above-Target Core CPI, Hawkish Normalization, and Systematic JPY Carry Unwinds
-- **Condition:** Japan’s core CPI prints persistently above the 2.0% price stability target—accelerating on food and imported energy cost pass-through—reinforcing market pricing for consecutive BOJ policy rate hikes and triggering disorderly short-covering across global short-JPY carry trades.
+- **Condition:** Japan’s core and wholesale CPI prints persistently above the 2.0% price stability target—accelerating on food and imported energy cost pass-through—reinforcing market pricing for consecutive BOJ policy rate hikes and triggering disorderly short-covering across global short-JPY carry trades and risk-off episodes.
 - **Action:** Bullish on spot JPY, long JPY implied volatility (gamma), and short USD/JPY risk reversals; Bearish on high-beta cross-yen carry pairs (AUD/JPY, NZD/JPY, MXN/JPY) and unhedged export-dependent automotive manufacturers.
 
 ## Rule 3: Commodity Cost-Push Shocks, Weak Yen Pass-Through, and Utility Margin Compression
@@ -13,7 +13,7 @@
 - **Action:** Bullish on diversified Japanese trading houses (*sogo shosha*), domestic inflation-linked bonds (JGBi), and upstream petroleum refiners; Bearish on regulated regional electric and gas utilities constrained by retail tariff revision delays, and domestic food processors unable to pass through raw input price spikes.
 
 ## Rule 4: Two-Speed Macro Divergence: Sub-Consensus Private Consumption vs. Resilient Modernization Capex
-- **Condition:** Headline real GDP prints sub-consensus annualized growth (~1.1%) as persistent real wage erosion suppresses household consumer expenditure, while aggregate capex is upwardly revised on robust corporate investment in semiconductor manufacturing, automation robotics, and digital infrastructure.
+- **Condition:** Headline real GDP prints sub-consensus annualized growth (~1.1%) as persistent real wage erosion and slowing capital metrics suppress household consumer expenditure, while corporate investments provide selective upgrades in semiconductor manufacturing and digital infrastructure.
 - **Action:** Bullish on domestic semiconductor manufacturing equipment (SPE) makers, industrial robotics producers, and enterprise systems integrators; Bearish on mass-market apparel retailers, department store operators, and domestic consumer discretionary cyclicals.
 
 ## Rule 5: Tokyo Stock Exchange Governance Mandates and Balance-Sheet Optimization

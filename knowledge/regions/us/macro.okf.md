@@ -35,3 +35,7 @@
 ## Rule 9: Nearshoring Reorientation and North American Cross-Border Trade
 - **Condition:** Ongoing reshoring and friend-shoring initiatives reconfigure industrial supply chains toward North American land corridors, boosting bilateral trade volumes over trans-oceanic routes.
 - **Action:** Bullish on the Mexican Peso against G10 Currencies (MXN/EUR, MXN/JPY), Bullish on North American Cross-Border Class I Rail Equities, and Bearish on Trans-Pacific Container Shipping Carriers.
+
+## Rule 10: FOMC Policy Calibration and Structural Yield Curve Adjustments
+- **Condition:** Shifting monetary policy horizons—including proposals for less frequent FOMC rate-setting votes—coincide with volatile energy-driven inflation prints and dynamic Treasury supply responses.
+- **Action:** Bullish on Short-Term Certificate of Deposit Yields, Bullish on the US Dollar Index (DXY) following dovish/hawkish policy holds, and Bearish on Long-End Duration Vulnerable to Inflation Re-pricing.
