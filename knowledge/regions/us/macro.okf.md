@@ -9,7 +9,7 @@
 - **Action:** Bullish on Treasury Inflation-Protected Securities (TIPS), Bullish on Ultra-Short Treasury Bills (BIL), Bearish on Spot Gold and Silver (XAU/USD, XAG/USD), and Bearish on Intermediate Treasuries (IEF).
 
 ## Rule 3: Deficit-Driven Treasury Supply and Term Premium Bear Steepening
-- **Condition:** Unprecedented sovereign coupon supply to fund persistent federal deficits intersects with rising debt-service costs that risk topping nominal GDP growth under debt managers like Kevin Warsh, driving term premium expansion and curve divergence on long-dated sovereign debt.
+- **Condition:** Unprecedented sovereign coupon supply to fund persistent federal deficits intersects with rising debt-service costs that risk topping nominal GDP growth under debt managers and central bank leadership like Kevin Warsh, driving term premium expansion and curve divergence on long-dated sovereign debt.
 - **Action:** Bullish on 10Y/2Y Yield Curve Steepener Trades, Bullish on Floating Rate Notes (USFR), Bearish on 30-Year US Treasuries, and Bearish on Broad Investment-Grade Fixed Income (AGG).
 
 ## Rule 4: Upstream Energy Cost Pressures and Downstream Margin Squeeze
@@ -17,7 +17,7 @@
 - **Action:** Bullish on WTI and Brent Crude Oil Futures, Bullish on Energy Exploration & Production Equities (XOP), Bearish on Airlines and Freight Transport Equities (JETS), and Bearish on Consumer Discretionary Equities (XLY).
 
 ## Rule 5: AI Hyperscaler Revenue Disappointments Amid Capital Expenditure Anchors
-- **Condition:** Massive private capital deployment into artificial intelligence infrastructure continues to support economic growth, yet mega-cap technology stalwarts face sharp equity pullbacks following high-profile commentary and revenue misses catalyzed by tightening policy conditions.
+- **Condition:** Massive private capital deployment into artificial intelligence infrastructure continues to support economic growth, yet mega-cap technology stalwarts face sharp equity pullbacks following high-profile commentary from Federal Reserve leadership like Kevin Warsh and revenue misses catalyzed by tightening policy conditions.
 - **Action:** Bullish on Power Infrastructure Providers, Bullish on Semiconductor Equities (SMH), Bearish on Lagging Mega-Cap Technology Equities (Alphabet/GOOGL), and Bearish on Broad Industrial Small-Caps (IWM).
 
 ## Rule 6: Resilient Aggregate Output with Labor Market Friction
@@ -37,5 +37,5 @@
 - **Action:** Bullish on the Mexican Peso against G10 Currencies (MXN/EUR, MXN/JPY), Bullish on North American Cross-Border Class I Rail Equities, and Bearish on Trans-Pacific Container Shipping Carriers.
 
 ## Rule 10: FOMC Policy Calibration and Structural Yield Curve Adjustments
-- **Condition:** Shifting monetary policy horizons—including proposals for less frequent FOMC rate-setting votes under central bank leadership shifts—coincide with volatile energy-driven inflation prints and dynamic Treasury supply responses.
+- **Condition:** Shifting monetary policy horizons—including evolving communication frameworks under central bank leadership shifts—coincide with volatile energy-driven inflation prints, steady mortgage rates, and dynamic Treasury supply responses.
 - **Action:** Bullish on Short-Term Certificate of Deposit Yields, Bullish on the US Dollar Index (DXY) following policy calibration holds, and Bearish on Long-End Duration Vulnerable to Inflation Re-pricing.

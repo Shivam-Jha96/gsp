@@ -5,7 +5,7 @@
 - **Action:** Bullish on 1-year Overnight Index Swaps (OIS) paying positions, ultra-short duration liquidity funds, and high-CASA Tier-1 commercial banks; Bearish on benchmark 10-year G-Secs, corporate bond duration funds, and wholesale-funded non-banking financial companies (NBFCs).
 
 ## Rule 2: Food Basket Inflation Surge & Tolerance Band Breaches
-- **Condition:** Headline retail CPI accelerates for multiple consecutive months—surging through tolerance ceilings toward a projected 5.6% to 6.3% peak under escalating food, vegetable, and energy supply pressures, even as revisions to the CPI series introduce structural index adjustments.
+- **Condition:** Headline retail CPI accelerates toward September 2025/2026 prints near 5.54% and near the RBI tolerance ceiling under escalating food, vegetable, and energy supply pressures, even as revisions to the CPI series introduce structural index adjustments.
 - **Action:** Bullish on domestic agrochemical producers, fertilizer distributors, gold loan NBFCs, and short-duration sovereign treasury bills; Bearish on volume-sensitive mass-market FMCG manufacturers, entry-level passenger vehicle OEMs, and price-sensitive consumer durable fabricators.
 
 ## Rule 3: EBLR Rate Reset Transmission & Deposit Repricing Lag
@@ -17,7 +17,7 @@
 - **Action:** Bullish on upstream domestic oil and gas exploration and production (E&P) firms with unhedged realization upside, domestic coal extractors, and commercial renewable independent power producers (IPPs); Bearish on state-owned downstream Oil Marketing Companies (OMCs), commercial aviation carriers, and synthetic specialty chemical and paint manufacturers.
 
 ## Rule 5: FPI Multi-Year Flow Fatigue vs. Domestic SIP Absorption
-- **Condition:** Foreign Portfolio Investors (FPIs) reduce equity allocations and face valuation fatigue driven by global risk premia and structural reallocation, while domestic systemic investment plan (SIP) inflows and institutional capital provide selective counter-cyclical liquidity.
+- **Condition:** Foreign Portfolio Investors (FPIs) face valuation fatigue and mixed momentum alongside persistent domestic systematic investment plan (SIP) inflows and institutional capital providing selective counter-cyclical liquidity.
 - **Action:** Bullish on Nifty 50 large-cap bellwethers, domestic equity exchange operators, central securities depositories, and high-dividend public sector enterprises (PSEs); Bearish on richly valued small-and-mid-cap (SMID) equities trading at extreme valuation multiples and unprofitable growth technology firms.
 
 ## Rule 6: Currency Depreciation Pressure & FX Reserve Interventions
@@ -27,3 +27,7 @@
 ## Rule 7: "China+1" Greenfield Capex & Institutional Trade Credentialing
 - **Condition:** Multilateral industrial trade credentialing and performance-linked incentive (PLI) disbursements accelerate structural supply-chain relocation, cross-border joint ventures, and greenfield manufacturing capacity across India.
 - **Action:** Bullish on Electronics Manufacturing Services (EMS) providers, precision heavy engineering exporters, multi-modal container rail logistics operators, and private deep-water port operators; Bearish on unorganized low-value textile mills, sub-scale bulk commodity chemical producers, and secondary metal fabricators facing regional dumping.
+
+## Rule 8: Sovereign Yield Curve Bear Steepening & Term Premium Expansion
+- **Condition:** Persistent policy rate tightening and supply pressures push 10-year G-Sec yields toward 7.44%, steepening the domestic sovereign yield curve as term premiums expand to absorb higher gross fiscal borrowing.
+- **Action:** Bullish on floating-rate government bonds (FRBs), primary dealer desks with robust trading books, and short-term debt mutual funds; Bearish on long-duration sovereign bond exchange-traded funds (ETFs) and fixed-rate corporate infrastructure bonds.
