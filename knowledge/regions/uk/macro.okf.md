@@ -2,7 +2,7 @@
 
 ## Rule 1: BoE Hawkish Pivot and Front-End Rate Repricing
 - **Condition:** The Bank of England pivots toward policy rate increases—marking the first rate hike cycle since 2023 and pushing rates to 4.0%—as inflation pressures force markets to reprice higher terminal rates.
-- **Action:** Bullish on 2Y UK Gilt yields and clearing bank net interest margins; bearish on 3M SONIA interest rate futures and front-end (2Y) nominal Gilts.
+- **Action:** Bullish on clearing bank net interest margins; bearish on 3M SONIA interest rate futures and front-end (2Y) nominal Gilts.
 
 ## Rule 2: Energy and Food-Driven CPI Resurgence
 - **Condition:** Elevated food inflation and volatile retail energy costs push headline CPI toward and above 3.5% with ongoing upside risks, structurally elevating near-term inflation expectations.
@@ -16,7 +16,7 @@
 - **Condition:** Monthly and quarterly GDP prints demonstrate underlying resilience, dispelling severe stagflationary recession scenarios and supporting the transmission of higher-for-longer real interest rates.
 - **Action:** Bullish on UK 5Y real yields and the British Pound; bearish on long-duration UK infrastructure debt and interest-rate-sensitive utilities.
 
-## Rule 5: Hawkish Policy Divergence Driving Sterling Outperformances
+## Rule 5: Hawkish Policy Divergence Driving Sterling Outperformance
 - **Condition:** The Bank of England initiates a rate hike cycle to 4% in response to persistent inflation while major international central banks pause or pivot toward rate-cutting cycles.
 - **Action:** Bullish on spot GBP/USD and GBP/EUR; bearish on EUR/GBP forward contracts and foreign currency sovereign debt unhedged against sterling.
 

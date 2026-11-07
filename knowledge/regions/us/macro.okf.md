@@ -1,41 +1,41 @@
 # United States Macro Trading Rules
 
-## Rule 1: Re-accelerating Headline Inflation and Renewed Rate Hike Pricing
-- **Condition:** Headline CPI inflation surges to 3.7% YoY driven by skyrocketing gas prices and accelerating consumer price prints ahead of FOMC policy decisions, placing a rate hike back squarely on the table.
-- **Action:** Bullish on the US Dollar Index (DXY), Bullish on Front-End Treasury Yields (2Y Yield), Bearish on Long-Duration Treasuries (TLT), and Bearish on Rate-Sensitive Small-Cap Equities (IWM).
+## Rule 1: Fed Rate Hike Resumption and Front-End Rate Repricing
+- **Condition:** The Federal Reserve resumes monetary tightening with its first interest rate hike since 2023 amid accelerating headline CPI prints and hawkish central bank guidance, resetting terminal policy rate expectations higher.
+- **Action:** Bullish on Front-End Treasury Yields (2Y Yield), Bullish on the US Dollar Index (DXY), Bearish on Short-Duration Fixed Income (SHY), and Bearish on Rate-Sensitive Small-Cap Equities (IWM).
 
-## Rule 2: Sticky Core Inflation and Real Yield Headwinds on Precious Metals
-- **Condition:** Core CPI inflation beats consensus estimates and short-term inflation breakevens widen ahead of FOMC policy meetings, elevating front-end nominal yields and real discount rates, while December rate risks weigh on precious metals like silver.
-- **Action:** Bullish on Treasury Inflation-Protected Securities (TIPS), Bullish on Ultra-Short Treasury Bills (BIL), Bearish on Spot Gold and Silver (XAU/USD, XAG/USD), and Bearish on Intermediate Treasuries (IEF).
+## Rule 2: Energy-Driven CPI Surge and Precious Metals Real Yield Compression
+- **Condition:** Headline CPI accelerates to 3.7% YoY driven by soaring retail gasoline and refined fuel prices, pushing short-term breakevens and real discount rates higher ahead of sequential FOMC meetings.
+- **Action:** Bullish on Treasury Inflation-Protected Securities (TIPS), Bullish on Ultra-Short Treasury Bills (BIL), Bearish on Spot Gold (XAU/USD), and Bearish on Spot Silver (XAG/USD).
 
-## Rule 3: Deficit-Driven Treasury Supply and Term Premium Bear Steepening
-- **Condition:** Unprecedented sovereign coupon supply to fund persistent federal deficits intersects with rising debt-service costs that risk topping nominal GDP growth under debt managers and central bank leadership like Kevin Warsh, driving term premium expansion and curve divergence on long-dated sovereign debt.
-- **Action:** Bullish on 10Y/2Y Yield Curve Steepener Trades, Bullish on Floating Rate Notes (USFR), Bearish on 30-Year US Treasuries, and Bearish on Broad Investment-Grade Fixed Income (AGG).
+## Rule 3: Sovereign Deficit Issuance and Term Premium Bear Steepening
+- **Condition:** Massive federal deficit funding requirements expand Treasury coupon auction sizes alongside mounting debt-service obligations, driving structural term premium expansion across long-dated sovereign debt.
+- **Action:** Bullish on 10Y/2Y Yield Curve Steepener Trades, Bullish on Floating Rate Notes (USFR), Bearish on 30-Year Treasury Bonds, and Bearish on Broad Investment-Grade Bond Indices (AGG).
 
-## Rule 4: Upstream Energy Cost Pressures and Downstream Margin Squeeze
-- **Condition:** Crude oil and refined fuel costs rebound sharply, exerting cost-push pressure across logistics, air transport, and non-essential consumer services.
-- **Action:** Bullish on WTI and Brent Crude Oil Futures, Bullish on Energy Exploration & Production Equities (XOP), Bearish on Airlines and Freight Transport Equities (JETS), and Bearish on Consumer Discretionary Equities (XLY).
+## Rule 4: Upstream Energy Shock and Transport Margin Compression
+- **Condition:** Skyrocketing wholesale and retail gasoline prices generate intense cost-push inflation across domestic supply chains, compressing operating margins for fuel-intensive logistics, freight, and travel sectors.
+- **Action:** Bullish on WTI and Brent Crude Oil Futures, Bullish on Energy Exploration & Production Equities (XOP), Bearish on Airline Equities (JETS), and Bearish on Freight and Ground Logistics Operators.
 
-## Rule 5: AI Hyperscaler Revenue Disappointments Amid Capital Expenditure Anchors
-- **Condition:** Massive private capital deployment into artificial intelligence infrastructure continues to support economic growth, yet mega-cap technology stalwarts face sharp equity pullbacks following high-profile commentary from Federal Reserve leadership like Kevin Warsh and revenue misses catalyzed by tightening policy conditions.
-- **Action:** Bullish on Power Infrastructure Providers, Bullish on Semiconductor Equities (SMH), Bearish on Lagging Mega-Cap Technology Equities (Alphabet/GOOGL), and Bearish on Broad Industrial Small-Caps (IWM).
+## Rule 5: Policy-Driven Discount Rate Expansion and Mega-Cap Tech Valuation Swoon
+- **Condition:** Higher risk-free benchmark yields triggered by resumed policy rate hikes trigger broad valuation compression and multiple derating across mega-cap technology and high-multiple growth equities.
+- **Action:** Bearish on Mega-Cap Technology Equities (QQQ), Bearish on Semiconductor Multiples (SMH), Bullish on Cash-Flow Yield and Low-Beta Value Factors (USMV), and Bullish on Ultra-Short Cash Equivalents.
 
-## Rule 6: Resilient Aggregate Output with Labor Market Friction
-- **Condition:** Aggregate US real GDP growth accelerates into the second half of the year driven by investment and consumption, even as labor market indicators flash mixed signals with slower hiring and labor share compression that keep Federal Reserve rate hike expectations active.
-- **Action:** Bullish on Large-Cap Quality Factor Equities (QUAL), Bullish on Consumer Staples Equities (XLP), Bearish on Subprime Consumer and Auto Lenders, and Bearish on Broad Discretionary Retailers (XRT).
+## Rule 6: Tight Labor Market Resilience and Subprime Credit Vulnerability
+- **Condition:** Nonfarm payrolls and employment indicators beat consensus while aggregate GDP remains resilient, sustaining tight labor markets that fuel core service inflation while rising borrowing costs strain leveraged consumers.
+- **Action:** Bullish on Large-Cap Quality Factor Equities (QUAL), Bullish on Consumer Staples Equities (XLP), Bearish on Subprime Auto Lenders and Consumer Credit Providers, and Bearish on Broad Discretionary Retailers (XRT).
 
-## Rule 7: Clean Energy Project Attrition and Baseload Utility Demand
-- **Condition:** Persistent financing costs, regulatory friction, and project cancellations stall utility-scale renewables—costing hundreds of thousands of jobs and billions in GDP—redirecting institutional capital toward regulated baseload power generation, nuclear utilities, and midstream natural gas networks.
-- **Action:** Bearish on Global Clean Energy Equities (ICLN), Bearish on Solar Component Manufacturers (TAN), Bullish on Regulated Electric and Nuclear Utilities (XLU), and Bullish on Midstream Energy Infrastructure (AMLP).
+## Rule 7: US-Mexico Cross-Border Supply Chain Integration
+- **Condition:** Deepening North American agricultural and industrial supply chain integration reinforces robust bilateral freight throughput and capital investment along southern cross-border trade corridors.
+- **Action:** Bullish on the Mexican Peso against G10 Crosses (MXN/EUR, MXN/JPY), Bullish on North American Cross-Border Class I Railroads, and Bearish on Trans-Pacific Container Freight Rates.
 
-## Rule 8: Healthcare Clinical Wage Inflation and Inpatient Margin Compression
-- **Condition:** Persistent shortages of specialized healthcare labor drive clinical wage inflation that exceeds statutory reimbursement rates, compressing operating margins for hospital operators.
-- **Action:** Bullish on Large-Cap Pharmaceuticals and Medical Devices (XLV), Bearish on Hospital Operators, and Bearish on Acute Inpatient Facility Networks.
+## Rule 8: High Capital Cost Friction in Renewables vs. Baseload Power Expansion
+- **Condition:** Elevated financing costs and balance-sheet constraints delay utility-scale renewable development, shifting institutional allocations and utility capex toward regulated electric baseload, midstream natural gas, and nuclear power infrastructure.
+- **Action:** Bullish on Regulated Electric and Nuclear Utilities (XLU), Bullish on Midstream Energy MLPs (AMLP), Bearish on Clean Energy ETFs (ICLN), and Bearish on Solar Equipment Manufacturers (TAN).
 
-## Rule 9: Nearshoring Reorientation and North American Cross-Border Trade
-- **Condition:** Ongoing reshoring and friend-shoring initiatives reconfigure industrial supply chains toward North American land corridors, boosting bilateral trade volumes over trans-oceanic routes.
-- **Action:** Bullish on the Mexican Peso against G10 Currencies (MXN/EUR, MXN/JPY), Bullish on North American Cross-Border Class I Rail Equities, and Bearish on Trans-Pacific Container Shipping Carriers.
+## Rule 9: Healthcare Clinical Wage Inflation and Inpatient Margin Squeeze
+- **Condition:** Specialized clinical labor shortages sustain elevated institutional wage growth that outpaces fixed medical reimbursement rates, driving severe operating margin compression across acute care hospital systems.
+- **Action:** Bullish on Large-Cap Medical Device and Pharmaceutical Equities (XLV), Bearish on Acute Hospital Facility Operators, and Bearish on Inpatient Healthcare Facilities.
 
-## Rule 10: FOMC Policy Calibration and Structural Yield Curve Adjustments
-- **Condition:** Shifting monetary policy horizons—including evolving communication frameworks under central bank leadership shifts—coincide with volatile energy-driven inflation prints, steady mortgage rates, and dynamic Treasury supply responses.
-- **Action:** Bullish on Short-Term Certificate of Deposit Yields, Bullish on the US Dollar Index (DXY) following policy calibration holds, and Bearish on Long-End Duration Vulnerable to Inflation Re-pricing.
+## Rule 10: Policy Divergence and Cross-Currency Dollar Dominance
+- **Condition:** The Federal Reserve's active rate-hike posture diverges from foreign central banks confronting sluggish domestic growth, amplifying short-term interest rate differentials in favor of the greenback.
+- **Action:** Bullish on USD against the Euro (EUR/USD Short), Bullish on USD against the Japanese Yen (USD/JPY Long), and Bearish on Unhedged Emerging Market Local Currency Debt (EMLC).

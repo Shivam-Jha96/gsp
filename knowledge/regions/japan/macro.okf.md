@@ -5,15 +5,15 @@
 - **Action:** Bullish on front-end short-duration JGB bills, domestic money center commercial banks, and tactical curve-flattener positions; Bearish on ultra-long sovereign paper (20Y–40Y JGBs), long-duration domestic bond index funds, and interest-rate-sensitive J-REITs.
 
 ## Rule 2: Above-Target Core CPI, Hawkish Normalization, and Systematic JPY Carry Unwinds
-- **Condition:** Japan’s core and wholesale CPI prints persistently above the 2.0% price stability target—accelerating on food and imported energy cost pass-through—reinforcing market pricing for consecutive BOJ policy rate hikes and triggering disorderly short-covering across global short-JPY carry trades and risk-off episodes.
+- **Condition:** Japan’s core and Tokyo-area CPI print near or persistently above the 2.0% price stability target—accelerating on imported energy cost pass-through and a weak yen—reinforcing market pricing for consecutive BOJ policy rate hikes and triggering disorderly short-covering across global short-JPY carry trades and risk-off episodes.
 - **Action:** Bullish on spot JPY, long JPY implied volatility (gamma), and short USD/JPY risk reversals; Bearish on high-beta cross-yen carry pairs (AUD/JPY, NZD/JPY, MXN/JPY) and unhedged export-dependent automotive manufacturers.
 
 ## Rule 3: Commodity Cost-Push Shocks, Weak Yen Pass-Through, and Utility Margin Compression
-- **Condition:** Surging global crude oil and LNG prices compound yen-denominated imported inflation, while the phased expiration or tapering of government utility subsidies creates retail tariff lag that severely compresses power and gas provider margins.
+- **Condition:** Surging global crude oil and energy prices compound yen-denominated imported inflation, while retail tariff lags and price distortions constrain providers and fail to fully offset soaring raw input costs.
 - **Action:** Bullish on diversified Japanese trading houses (*sogo shosha*), domestic inflation-linked bonds (JGBi), and upstream petroleum refiners; Bearish on regulated regional electric and gas utilities constrained by retail tariff revision delays, and domestic food processors unable to pass through raw input price spikes.
 
 ## Rule 4: Two-Speed Macro Divergence: Sub-Consensus Private Consumption vs. Resilient Modernization Capex
-- **Condition:** Headline real GDP prints sub-consensus annualized growth (~1.1%) as persistent real wage erosion and slowing capital metrics suppress household consumer expenditure, while corporate investments provide selective upgrades in semiconductor manufacturing and digital infrastructure.
+- **Condition:** Headline real GDP prints sub-consensus annualized growth (~1.1%) as persistent real wage erosion and softening consumer metrics suppress household expenditure, while corporate investments provide selective upgrades in capital expenditure and modernization.
 - **Action:** Bullish on domestic semiconductor manufacturing equipment (SPE) makers, industrial robotics producers, and enterprise systems integrators; Bearish on mass-market apparel retailers, department store operators, and domestic consumer discretionary cyclicals.
 
 ## Rule 5: Tokyo Stock Exchange Governance Mandates and Balance-Sheet Optimization
@@ -29,5 +29,5 @@
 - **Action:** Bullish on 10Y–20Y primary JGB auctions, yen-denominated investment-grade corporate credit spreads, and domestic institutional fixed-income funds; Bearish on FX-hedged US Treasuries, European core sovereign debt, and offshore fixed-income foreign investment trusts (*toshin*).
 
 ## Rule 8: Intra-Asian Advanced Intermediate Exports vs. Domestic Fabrication Margin Squeeze
-- **Condition:** Robust East Asian semiconductor and manufacturing cycles sustain elevated export demand for Japan’s high-purity chemicals and advanced electronic components, while domestic-oriented intermediate fabricators absorb severe margin compression from unhedged raw material imports.
+- **Condition:** Robust East Asian semiconductor and manufacturing cycles sustain elevated export demand for Japan’s high-purity chemicals and advanced electronic components, while domestic-oriented intermediate fabricators absorb severe margin compression from unhedged raw material imports and immigration/labor cost pressures.
 - **Action:** Bullish on advanced electronic materials producers, specialized fine chemical exporters, and intra-Asia container shipping operators; Bearish on low-margin domestic intermediate fabricators and unhedged raw-materials-dependent domestic packaging manufacturers.
