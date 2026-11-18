@@ -1,45 +1,49 @@
 # United States Macro Trading Rules
 
-## Rule 1: Fed Monetary Reacceleration and Front-End Rate Repricing
-- **Condition:** Federal Reserve policymakers signal accelerated rate hikes—including potential 50 bps increments—in response to upside surprises in monthly headline/core CPI prints and resilient nonfarm employment data that push terminal rate expectations higher.
+## Rule 1: Fed Rate Hike Reacceleration and Terminal Rate Extension
+- **Condition:** Federal Reserve officials signal renewed rate hikes extending through forward cycles to counter persistent inflation, pushing terminal policy rate projections materially higher and repricing market expectations away from rate cuts.
 - **Action:** Bullish on Front-End Treasury Yields (2Y Yield), Bullish on the US Dollar Index (DXY), Bearish on Short-Duration Fixed Income (SHY), and Bearish on Rate-Sensitive Small-Cap Equities (IWM).
 
-## Rule 2: Persistent Core and Headline CPI Acceleration
-- **Condition:** Headline and core CPI prints consistently exceed consensus forecasts driven by stubborn services inflation and energy price rebounds, elevating short-term inflation breakevens and forcing real discount rates higher.
-- **Action:** Bullish on Treasury Inflation-Protected Securities (TIPS), Bullish on Ultra-Short Treasury Bills (BIL), Bearish on Spot Gold (XAU/USD), and Bearish on Long-Duration Investment-Grade Corporate Debt (LQD).
+## Rule 2: Energy-Led CPI Resurgence and Real Rate Discounting
+- **Condition:** Headline CPI prints print above consensus targets driven by surging retail gasoline and wholesale energy prices alongside sticky core services, elevating short-term breakevens while forcing real policy yields higher.
+- **Action:** Bullish on Treasury Inflation-Protected Securities (TIPS), Bullish on Cash and Ultra-Short T-Bills (BIL), Bearish on Spot Gold (XAU/USD), and Bearish on Long-Duration Investment-Grade Corporate Debt (LQD).
 
-## Rule 3: Sovereign Deficit Issuance and Term Premium Bear Steepening
-- **Condition:** Structural federal budget deficits force the US Treasury to materially increase coupon auction sizing across intermediate and long maturities, driving sovereign term premiums wider.
-- **Action:** Bullish on 10Y/2Y Yield Curve Steepener Trades, Bullish on Floating Rate Notes (USFR), Bearish on 30-Year Treasury Bonds, and Bearish on Broad Investment-Grade Bond Indices (AGG).
+## Rule 3: Late-Cycle Stagflationary Decoupling
+- **Condition:** Real GDP growth slows toward stall speed (sub-2%) while headline inflation remains elevated above target and corporate hiring forecasts soften, compressing operating margins across cyclical industries.
+- **Action:** Bullish on Large-Cap Defensive Quality Equities (QUAL), Bullish on Consumer Staples (XLP), Bearish on Broad Cyclical Industrials (XLI), and Bearish on High-Yield Credit (HYG).
 
-## Rule 4: Upstream Energy Cost-Push and Transportation Margin Compression
-- **Condition:** Tight crude and refined petroleum supplies lift wholesale fuel and diesel costs, transmitting cost-push inflation into domestic freight carriers, industrial supply chains, and passenger airlines.
-- **Action:** Bullish on WTI and Brent Crude Oil Futures, Bullish on Energy Exploration & Production Equities (XOP), Bearish on Airline Equities (JETS), and Bearish on Freight and Trucking Logistics Operators.
+## Rule 4: Sovereign Deficit Financing and Term Premium Bear Steepening
+- **Condition:** Elevated federal fiscal deficits and heavy Treasury debt auction schedules increase supply indigestion across intermediate and long durations, expanding term premiums across benchmark tenors.
+- **Action:** Bullish on 10Y/2Y Yield Curve Steepener Structures, Bullish on Floating Rate Notes (USFR), Bearish on 30-Year Treasury Bonds (TLT), and Bearish on Aggregate US Bond Indices (AGG).
 
-## Rule 5: Discount Rate Expansion and High-Multiple Valuation Derating
-- **Condition:** Surging benchmark real risk-free yields and hawkish terminal policy expectations increase the equity cost of capital, triggering severe multiple derating across unprofitable tech, speculative growth, and high-P/E software assets.
-- **Action:** Bearish on Unprofitable Tech and High-Multiple Software Equities, Bearish on Broad Mega-Cap Growth (QQQ), Bullish on Cash-Flow Yield and Low-Beta Value Factors (USMV), and Bullish on Ultra-Short Cash Equivalents.
+## Rule 5: Upstream Energy Cost-Push and Transportation Margin Compression
+- **Condition:** Acute supply constraints and refined product drawdowns spark retail and wholesale fuel cost spikes, transmitting operating margin pressure directly into logistics, trucking, and airline networks.
+- **Action:** Bullish on WTI and Brent Crude Oil Futures, Bullish on Energy Exploration & Production Equities (XOP), Bearish on Passenger Airlines (JETS), and Bearish on Freight and Trucking Logistics Equities.
 
-## Rule 6: Resilient Aggregate Employment and Subprime Credit Deterioration
-- **Condition:** Robust aggregate payrolls and top-line GDP growth mask rising borrowing costs and liquidity depletion among lower-tier households, driving severe credit delinquency divergence between prime and subprime borrowers.
-- **Action:** Bullish on Large-Cap Quality Factor Equities (QUAL), Bullish on Consumer Staples Equities (XLP), Bearish on Subprime Auto Lenders and Consumer Finance Providers, and Bearish on Broad Discretionary Retailers (XRT).
+## Rule 6: Discount Rate Elevation and Speculative Multiple Derating
+- **Condition:** Sustained upward drift in long-term risk-free discount rates and hawkish policy guidance drive valuation contraction across unprofitable technology, high-multiple SaaS, and speculative non-earning growth assets.
+- **Action:** Bearish on Unprofitable Tech and High-Multiple Software Equities, Bearish on Non-Profitable Biotech (XBI), Bullish on High-Free-Cash-Flow Yield Factors (COWZ), and Bullish on Ultra-Short Duration Cash Equivalents.
 
-## Rule 7: US-Mexico Cross-Border Supply Chain Integration
-- **Condition:** Sustained nearshoring momentum and bilateral manufacturing alignment support elevated freight throughput and trade integration along southern cross-border industrial corridors.
-- **Action:** Bullish on the Mexican Peso against G10 Crosses (MXN/EUR, MXN/JPY), Bullish on North American Cross-Border Class I Railroads, and Bearish on Trans-Pacific Container Freight Rates.
+## Rule 7: Enterprise AI Capex Supercycle and Power Grid Bottlenecks
+- **Condition:** Massive multi-year hyperscaler capital commitments to artificial intelligence, compute clusters, and data centers create severe capacity bottlenecks across electrical grid interconnection, cooling hardware, and power transmission infrastructure.
+- **Action:** Bullish on AI Semiconductor Accelerators and Fab Equities (SMH), Bullish on Electrical Grid Equipment and Heavy Industrial Power Suppliers, Bearish on Legacy Enterprise IT On-Premises Hardware, and Bearish on Traditional Commercial Office REITs.
 
-## Rule 8: Renewable Capital Impairment and Baseload Utility Expansion
-- **Condition:** Elevated financing costs, equipment bottlenecks, and regulatory delays cause cancellations in utility-scale renewable projects, driving capital reallocation toward regulated nuclear power, midstream gas infrastructure, and conventional baseload utilities.
-- **Action:** Bullish on Regulated Electric and Nuclear Utilities (XLU), Bullish on Midstream Energy MLPs (AMLP), Bearish on Clean Energy ETFs (ICLN), and Bearish on Solar Equipment Manufacturers (TAN).
+## Rule 8: Baseload Nuclear and Utility Power Repricing
+- **Condition:** Soaring industrial and data-center electricity load demands collide with intermittent clean energy transition hurdles, accelerating commercial re-contracting for nuclear power generation, natural gas peakers, and regulated utilities.
+- **Action:** Bullish on Regulated Baseload Electric and Nuclear Utilities (XLU), Bullish on Uranium and Nuclear Fuel Providers (URA), Bullish on Natural Gas Pipeline MLPs (AMLP), and Bearish on Pure-Play Residential Solar Equipment Providers (TAN).
 
-## Rule 9: Healthcare Clinical Wage Inflation and Hospital Operating Margin Squeeze
-- **Condition:** Persistent shortages in specialized clinical and nursing staff sustain elevated hospital operating wage expenses that exceed rigid annual commercial and public reimbursement rate adjustments.
-- **Action:** Bullish on Large-Cap Medical Device and Pharmaceutical Equities (XLV), Bearish on Acute Hospital Facility Operators, and Bearish on Inpatient Healthcare REITs.
+## Rule 9: US-Mexico Cross-Border Supply Chain Integration
+- **Condition:** Structural nearshoring investments and sustained manufacturing realignments sustain heavy bilateral trade throughput along North American cross-border transportation and industrial corridors.
+- **Action:** Bullish on North American Cross-Border Class I Railroads, Bullish on Mexican Peso against G10 Crosses (MXN/EUR, MXN/JPY), and Bearish on Trans-Pacific Spot Container Shipping Rates.
 
-## Rule 10: Global Central Bank Policy Divergence and Broad Dollar Dominance
-- **Condition:** Renewed Federal Reserve hawkishness and superior US domestic economic resilience diverge from foreign central banks confronting industrial stagnation or disinflation, widening sovereign yield differentials in favor of the US.
-- **Action:** Bullish on USD against the Euro (EUR/USD Short), Bullish on USD against the Japanese Yen (USD/JPY Long), and Bearish on Emerging Market Local Currency Debt (EMLC).
+## Rule 10: Global Central Bank Policy Divergence and USD Dominance
+- **Condition:** Federal Reserve rate-hiking signals and superior domestic nominal growth momentum diverge sharply from European and Asian central banks facing industrial stagnation, widening real sovereign yield spreads in favor of the US.
+- **Action:** Bullish on USD against the Euro (EUR/USD Short), Bullish on USD against the Japanese Yen (USD/JPY Long), and Bearish on Emerging Market Local-Currency Sovereign Debt (EMLC).
 
-## Rule 11: Enterprise AI Capex Boom and Grid Power Infrastructure Demand
-- **Condition:** Hyperscaler and enterprise capital expenditures in artificial intelligence data centers remain counter-cyclically robust, generating sustained commercial demand for electrical transmission gear, backup generation, and semiconductor hardware.
-- **Action:** Bullish on AI Semiconductor and Accelerator Manufacturers (SMH), Bullish on Electrical Grid Equipment and Industrial Power Providers, Bearish on Legacy Enterprise IT Hardware, and Bearish on Traditional Commercial Office REITs.
+## Rule 11: Household Liquidity Depletion and Consumer Credit Divergence
+- **Condition:** Restrictive borrowing rates, persistent non-discretionary inflation, and softening employment hiring exhaust lower-income savings buffers, triggering severe delinquency spikes in subprime credit relative to prime consumer balances.
+- **Action:** Bullish on Low-Beta Consumer Staples (XLP), Bullish on Large-Cap Prime-Exposed Financials, Bearish on Subprime Auto Lenders and Buy-Now-Pay-Later (BNPL) Providers, and Bearish on Discretionary Retailers (XRT).
+
+## Rule 12: Healthcare Labor Cost Inelasticity and Hospital Margin Squeeze
+- **Condition:** Persistent shortages in specialized medical and clinical personnel sustain high operational wage expenses that outpace rigid multi-year reimbursement schedules set by commercial insurers and government programs.
+- **Action:** Bullish on Large-Cap Medical Device and Diversified Pharmaceutical Equities (XLV), Bearish on Acute-Care Hospital Operators, and Bearish on Skilled Nursing and Inpatient Healthcare REITs.

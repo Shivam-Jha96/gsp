@@ -1,37 +1,37 @@
 # India Macro Trading Rules
 
-## Rule 1: Calibrated Policy Rate Tightening & Systemic Liquidity Drainage
-- **Condition:** The RBI accelerates or sustains a repo rate hiking cycle to combat persistent headline inflation and anchor expectations, accompanying rate hikes with systemic liquidity withdrawal via Variable Rate Reverse Repo (VRRR) auctions and regulatory reserve requirements.
-- **Action:** Bullish on 1-year Overnight Index Swaps (OIS) paying positions, ultra-short duration liquidity funds, and high-CASA Tier-1 commercial banks; Bearish on benchmark 10-year G-Secs, long-duration debt mutual funds, and wholesale-funded non-banking financial companies (NBFCs).
+## Rule 1: Policy Rate Tightening & Systemic Liquidity Absorption
+- **Condition:** The RBI accelerates or re-initiates repo rate hikes by 50–75 basis points as headline CPI breaches the 6.0% upper tolerance threshold, actively draining systemic liquidity via Variable Rate Reverse Repo (VRRR) operations and regulatory reserve requirements.
+- **Action:** Bullish on 1-year and 2-year Overnight Index Swaps (OIS) paying positions, 91-day sovereign T-bills, and ultra-short duration liquidity funds; Bearish on 10-year benchmark G-Secs, long-duration sovereign bond funds, and wholesale credit-dependent NBFCs.
 
-## Rule 2: Food & Energy CPI Tolerance Ceiling Breaches
-- **Condition:** Headline retail CPI breaches the RBI's 4.0% medium-term target and approaches or exceeds the 6.0% upper tolerance ceiling, driven by perishable food supply shocks, agricultural monsoon distortions, or imported energy pass-through.
-- **Action:** Bullish on domestic agrochemical producers, fertilizer distributors, gold-loan NBFCs, and 91-day sovereign T-bills; Bearish on mass-market volume-sensitive FMCG manufacturers, entry-level two-wheeler OEMs, and rate-sensitive consumer discretionary durable makers.
+## Rule 2: Food Shock Spillover & Generalized Core Inflation Propagation
+- **Condition:** Headline retail CPI breaches the 6.0% statutory upper tolerance limit (e.g., crossing 6.09%) and price pressures broaden beyond perishable food into core manufacturing, transport, and consumer services baskets.
+- **Action:** Bullish on agrochemical producers, domestic fertilizer distributors, gold-loan NBFCs, and FMCG manufacturers with dominant rural distribution and inelastic pricing power; Bearish on mass-market volume-sensitive consumer durables, entry-level two-wheeler OEMs, and sub-scale restaurant/quick-service retail chains.
 
-## Rule 3: EBLR Transmission & Bank Deposit Repricing Lag
-- **Condition:** Policy rate increases transmit rapidly into floating-rate retail, personal, and MSME credit tied to External Benchmark Lending Rates (EBLRs), while term deposit repricing lags, driving temporary net interest margin (NIM) expansion before deposit mobilization competition intensifies.
-- **Action:** Bullish on Tier-1 mega-cap private and public commercial banks with low-cost retail liability franchises, asset management companies (AMCs), and wealth platforms; Bearish on standalone retail housing finance companies (HFCs), unhedged vehicle financiers, and deposit-constrained regional private banks.
+## Rule 3: Deposit Competition Surge & Banking NIM Compression
+- **Condition:** Commercial banks aggressively hike term deposit rates by 25–50 bps (pushing peak retail fixed deposit yields above 7.50%) to bridge structural credit-deposit growth gaps, causing funding costs to catch up with and outpace EBLR-linked loan yields.
+- **Action:** Bullish on low-credit-to-deposit ratio (CDR) public sector banks with dominant low-cost CASA franchises, wealth management platforms, and short-tenor commercial paper; Bearish on high-CDR private banks, standalone housing finance companies (HFCs), and unhedged vehicle financiers.
 
-## Rule 4: Sovereign Yield Curve Bear Steepening & Fiscal Supply Pressure
-- **Condition:** Heavy central and State Development Loan (SDL) market borrowing schedules collide with RBI policy tightening and normalized statutory liquidity ratio (SLR) bank demand, driving term premiums higher across the long end of the sovereign curve.
-- **Action:** Bullish on floating-rate government bonds (FRBs), primary dealer fixed-income market-making desks, and short-term debt mutual funds; Bearish on 10-year/30-year/40-year benchmark sovereign paper, long-duration sovereign bond ETFs, and long-dated fixed-rate corporate infrastructure bonds.
+## Rule 4: Sovereign Yield Curve Bear Flattening & Fiscal Supply Absorption
+- **Condition:** Elevated Central and State Development Loan (SDL) market borrowing quotas converge with RBI monetary tightening and muted statutory liquidity ratio (SLR) portfolio absorption by commercial banks.
+- **Action:** Bullish on floating-rate government bonds (FRBs), primary dealer short-term trading desks, and low-duration debt mutual funds; Bearish on 10-year, 30-year, and 40-year nominal sovereign paper, long-dated corporate infrastructure bonds, and duration debt ETFs.
 
-## Rule 5: Balance of Payments Strain & Multi-Market Rupee FX Interventions
-- **Condition:** Widening merchandise trade deficits, elevated crude import bills, and broad US dollar strength drive USD/INR toward record resistance levels, prompting aggressive RBI spot market intervention, forward book rollovers, and offshore non-deliverable forward (NDF) liquidity deployment.
-- **Action:** Bullish on USD/INR carry trades via short offshore forward points, Tier-1 IT services exporters, and contract active pharmaceutical ingredient (API) manufacturers; Bearish on corporate issuers with unhedged External Commercial Borrowings (ECBs) and import-dependent consumer electronics hardware assemblers.
+## Rule 5: Balance of Payments Strain & Rupee Depreciation Interventions
+- **Condition:** Merchandise trade deficits widen and foreign portfolio outflows mount, driving USD/INR toward record resistance and triggering multi-market RBI interventions across spot, forward, and offshore non-deliverable forward (NDF) liquidity channels.
+- **Action:** Bullish on Tier-1 IT services exporters, contract active pharmaceutical ingredient (API) manufacturers, and USD/INR long carry positions via offshore forward points; Bearish on corporate issuers with unhedged External Commercial Borrowings (ECBs), domestic commercial aviation carriers, and import-dependent electronics assembly hardware makers.
 
-## Rule 6: Global Energy Price Spikes & Regulated Downstream Margin Compression
-- **Condition:** International Brent crude and imported LNG spot prices surge due to global geopolitical frictions, while domestic administrative interventions or excise adjustments constrain retail fuel price pass-through.
-- **Action:** Bullish on upstream domestic oil and gas exploration and production (E&P) firms with unhedged realization upside, domestic coal extractors, and renewable independent power producers (IPPs); Bearish on downstream Oil Marketing Companies (OMCs), commercial aviation carriers, and synthetic specialty chemical and paint manufacturers.
+## Rule 6: FPI Capital Flight vs. Structural Domestic SIP Liquidity
+- **Condition:** Foreign Portfolio Investors (FPIs) trigger heavy equity liquidations due to elevated domestic valuation multiples or global risk-off events, while domestic retail Systematic Investment Plan (SIP) mutual fund inflows provide counter-cyclical absorption.
+- **Action:** Bullish on defensive Nifty 50 mega-cap bellwethers, domestic stock exchanges, central depositories (CDSL), and asset management companies (AMCs); Bearish on high-beta small-and-mid-cap (SMID) equities trading at steep valuation premia and unprofitable high-multiple consumer technology platforms.
 
-## Rule 7: FPI Capital Flow Volatility vs. Domestic Institutional SIP Absorption
-- **Condition:** Foreign Portfolio Investors (FPIs) trigger heavy equity outflows driven by global risk aversion or domestic valuation premia, while domestic retail Systematic Investment Plan (SIP) mutual fund inflows provide counter-cyclical liquidity support.
-- **Action:** Bullish on Nifty 50 large-cap bellwethers, domestic equity stock exchange operators, central securities depositories, and high-dividend public sector enterprises (PSEs); Bearish on richly valued small-and-mid-cap (SMID) equities trading at historical valuation premiums and unprofitable consumer internet firms.
+## Rule 7: Global Hydrocarbon Volatility & Regulated Downstream Margin Compression
+- **Condition:** International Brent crude and imported LNG spot prices surge amidst global geopolitical frictions while domestic state-directed administrative controls restrict retail transport fuel price pass-through.
+- **Action:** Bullish on upstream domestic oil and gas exploration and production (E&P) firms with uncapped realization formulas, domestic coal miners, and renewable independent power producers (IPPs); Bearish on downstream Oil Marketing Companies (OMCs), synthetic chemical and paint manufacturers, and industrial ceramic producers.
 
-## Rule 8: "China+1" Industrial Relocation & PLI Capex Execution
-- **Condition:** Global supply-chain diversification policies and accelerated central government Production Linked Incentive (PLI) disbursements trigger greenfield manufacturing capacity, technology transfers, and non-commodity industrial exports.
-- **Action:** Bullish on Electronics Manufacturing Services (EMS) providers, precision industrial engineering exporters, multi-modal container rail logistics operators, and private deep-water port operators; Bearish on unorganized low-tech textile fabricators, sub-scale bulk commodity chemical producers, and secondary steel producers facing regional import dumping.
+## Rule 8: "China+1" Manufacturing Re-Shoring & PLI Capex Scale
+- **Condition:** Global supply chain diversification coincides with central government Production Linked Incentive (PLI) tranche disbursements, driving domestic greenfield manufacturing capacity and non-commodity industrial merchandise exports.
+- **Action:** Bullish on Electronics Manufacturing Services (EMS) contractors, precision engineering exporters, industrial automation providers, and private container port operators; Bearish on unorganized low-tech textile fabricators and secondary steel producers facing regional import dumping.
 
-## Rule 9: Sovereign Capex Push & Domestic Fixed Capital Formation
-- **Condition:** Central and state capital expenditure budgets expand substantially to drive infrastructure-led GDP growth, generating robust order book visibility across transport corridors, defense indigenization, and power grid modernization despite elevated borrowing costs.
-- **Action:** Bullish on domestic EPC infrastructure contractors, electrical grid transmission and substation equipment manufacturers, heavy commercial vehicle OEMs, and domestic defense equipment contractors; Bearish on low-margin civil sub-contractors burdened by municipal working-capital delays and highly leveraged urban private real estate developers.
+## Rule 9: Sovereign Infrastructure Capex & Fixed Capital Formation
+- **Condition:** Union and state capital outlays expand double-digits to support transport corridors, power grid modernization, and defense indigenization programs despite elevated borrowing costs.
+- **Action:** Bullish on domestic EPC infrastructure conglomerates, power transmission and distribution equipment manufacturers, heavy commercial vehicle (HCV) makers, and domestic defense electronics contractors; Bearish on municipal sub-contractors burdened by elongated working-capital cycles and highly leveraged commercial real estate developers.
