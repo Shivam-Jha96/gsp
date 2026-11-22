@@ -5,11 +5,11 @@
 - **Action:** Bullish on Front-End Treasury Yields (2Y Yield), Bullish on the US Dollar Index (DXY), Bearish on Short-Duration Fixed Income (SHY), and Bearish on Rate-Sensitive Small-Cap Equities (IWM).
 
 ## Rule 2: Sequential CPI Acceleration and Real Rate Repricing
-- **Condition:** Consumer price indices expand briskly at or above 0.4% month-over-month for multiple consecutive months, exceeding consensus expectations and driving short-term inflation breakevens and real discount rates higher.
+- **Condition:** Consumer price indices expand briskly driven by surging energy costs and sticky core components, exceeding consensus expectations and driving short-term inflation breakevens and real discount rates higher.
 - **Action:** Bullish on Treasury Inflation-Protected Securities (TIPS), Bullish on Ultra-Short T-Bills and Cash (BIL), Bearish on Spot Gold (XAU/USD), and Bearish on Long-Duration Investment-Grade Corporate Debt (LQD).
 
 ## Rule 3: Acute Late-Cycle Stagflationary Decoupling
-- **Condition:** Real GDP growth downshifts to stall speed (sub-1.0% annualized) while core and headline inflation reaccelerate above target, severely compressing non-financial corporate operating margins.
+- **Condition:** Real GDP growth downshifts to stall speed (sub-1.0% annualized) while inflation reaccelerates above target, severely compressing non-financial corporate operating margins.
 - **Action:** Bullish on Large-Cap Defensive Quality Equities (QUAL), Bullish on Consumer Staples (XLP), Bearish on Cyclical Industrials (XLI), and Bearish on High-Yield Credit (HYG).
 
 ## Rule 4: Transatlantic Inflation Divergence and USD Dominance
@@ -25,7 +25,7 @@
 - **Action:** Bullish on High-Free-Cash-Flow Yield Equities (COWZ), Bullish on Ultra-Short Cash Equivalents, Bearish on Non-Profitable Biotech (XBI), and Bearish on High-Multiple Cloud Software Equities.
 
 ## Rule 7: Clean Energy Retrenchment and Baseload Nuclear Repricing
-- **Condition:** Widespread project cancellations and political or regulatory rollbacks across renewable energy assets collide with surging electrical load growth, accelerating commercial re-contracting for nuclear power, natural gas peakers, and traditional grid utilities.
+- **Condition:** Widespread clean energy project cancellations and job losses collide with surging electrical load growth, accelerating commercial re-contracting for nuclear power, natural gas peakers, and traditional grid utilities.
 - **Action:** Bullish on Regulated Electric and Nuclear Utilities (XLU), Bullish on Uranium and Nuclear Fuel Providers (URA), Bullish on Natural Gas Pipeline MLPs (AMLP), and Bearish on Clean Energy and Residential Solar Providers (TAN, ICLN).
 
 ## Rule 8: Enterprise AI Capex Supercycle and Grid Infrastructure Bottlenecks
@@ -33,7 +33,7 @@
 - **Action:** Bullish on AI Semiconductor Accelerators and Fab Equities (SMH), Bullish on Electrical Grid Hardware and Transformer Manufacturers, Bearish on Legacy Enterprise IT On-Premises Hardware, and Bearish on Commercial Office REITs (VNQ).
 
 ## Rule 9: Upstream Energy Cost-Push and Transportation Margin Compression
-- **Condition:** Crude supply constraints and refined product inventory drawdowns elevate wholesale fuel and diesel crack spreads, transmitting operating cost increases directly into logistics and transportation networks.
+- **Condition:** Crude supply constraints and soaring energy prices elevate wholesale fuel and diesel crack spreads, transmitting operating cost increases directly into logistics and transportation networks.
 - **Action:** Bullish on WTI and Brent Crude Oil Futures, Bullish on Energy Exploration & Production Equities (XOP), Bearish on Passenger Airlines (JETS), and Bearish on Freight and Trucking Logistics Equities.
 
 ## Rule 10: Household Savings Exhaustion and Consumer Credit Bifurcation
