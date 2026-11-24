@@ -1,19 +1,19 @@
 # United States Macro Trading Rules
 
 ## Rule 1: Hawkish Fed Rate Hike Reacceleration and Terminal Rate Extension
-- **Condition:** Federal Reserve policymakers signal renewed 50-basis-point "shock" rate hikes and extended terminal policy rates to counter persistent inflation, driving market-implied rate hike odds above 75% and repricing rate cuts completely out of the curve.
+- **Condition:** Federal Reserve policymakers (including officials like John Williams) signal renewed rate hikes and extended terminal policy rates to counter persistent inflation, driving market repricing of tightening cycles back onto the table.
 - **Action:** Bullish on Front-End Treasury Yields (2Y Yield), Bullish on the US Dollar Index (DXY), Bearish on Short-Duration Fixed Income (SHY), and Bearish on Rate-Sensitive Small-Cap Equities (IWM).
 
 ## Rule 2: Sequential CPI Acceleration and Real Rate Repricing
-- **Condition:** Consumer price indices expand briskly driven by surging energy costs and sticky core components, exceeding consensus expectations and driving short-term inflation breakevens and real discount rates higher.
+- **Condition:** Consumer price indices expand briskly driven by surging energy costs and sticky components, exceeding consensus expectations (such as headline CPI printing at 3.7% YoY) and driving short-term inflation breakevens and real discount rates higher.
 - **Action:** Bullish on Treasury Inflation-Protected Securities (TIPS), Bullish on Ultra-Short T-Bills and Cash (BIL), Bearish on Spot Gold (XAU/USD), and Bearish on Long-Duration Investment-Grade Corporate Debt (LQD).
 
 ## Rule 3: Acute Late-Cycle Stagflationary Decoupling
-- **Condition:** Real GDP growth downshifts to stall speed (sub-1.0% annualized) while inflation reaccelerates above target, severely compressing non-financial corporate operating margins.
+- **Condition:** Real GDP growth downshifts to stall speed while inflation reaccelerates above target, raising concerns from market participants and economists that overtightening risks stalling the real economy while prices remain sticky.
 - **Action:** Bullish on Large-Cap Defensive Quality Equities (QUAL), Bullish on Consumer Staples (XLP), Bearish on Cyclical Industrials (XLI), and Bearish on High-Yield Credit (HYG).
 
 ## Rule 4: Transatlantic Inflation Divergence and USD Dominance
-- **Condition:** Persistent US inflation pressures and hawkish Federal Reserve forward guidance contrast sharply with disinflation and economic stagnation in the Eurozone and Asia, widening real sovereign yield differentials in favor of the United States.
+- **Condition:** Persistent US inflation pressures and hawkish Federal Reserve forward guidance contrast sharply with disinflation and economic stagnation abroad, widening real sovereign yield differentials in favor of the United States.
 - **Action:** Bullish on USD against the Euro (EUR/USD Short), Bullish on USD against the Japanese Yen (USD/JPY Long), Bearish on Emerging Market Local-Currency Debt (EMLC), and Bearish on European Cyclical Equities.
 
 ## Rule 5: Sovereign Fiscal Deficit Expansion and Term Premium Steepening
