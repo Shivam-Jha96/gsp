@@ -5,7 +5,7 @@
 - **Action:** Bullish on Front-End Treasury Yields (2Y Yield), Bullish on the US Dollar Index (DXY), Bearish on Short-Duration Fixed Income (SHY), and Bearish on Rate-Sensitive Small-Cap Equities (IWM).
 
 ## Rule 2: Sequential CPI Acceleration and Real Rate Repricing
-- **Condition:** Consumer price indices expand briskly driven by surging energy costs and sticky components, exceeding consensus expectations (such as headline CPI printing at 3.7% YoY) and driving short-term inflation breakevens and real discount rates higher.
+- **Condition:** Consumer price indices expand briskly driven by surging energy costs and sticky components (such as October CPI printing a higher-than-expected 0.4% MoM rise alongside elevated food and rent costs), exceeding consensus expectations and driving short-term inflation breakevens and real discount rates higher.
 - **Action:** Bullish on Treasury Inflation-Protected Securities (TIPS), Bullish on Ultra-Short T-Bills and Cash (BIL), Bearish on Spot Gold (XAU/USD), and Bearish on Long-Duration Investment-Grade Corporate Debt (LQD).
 
 ## Rule 3: Acute Late-Cycle Stagflationary Decoupling
@@ -25,11 +25,11 @@
 - **Action:** Bullish on High-Free-Cash-Flow Yield Equities (COWZ), Bullish on Ultra-Short Cash Equivalents, Bearish on Non-Profitable Biotech (XBI), and Bearish on High-Multiple Cloud Software Equities.
 
 ## Rule 7: Clean Energy Retrenchment and Baseload Nuclear Repricing
-- **Condition:** Widespread clean energy project cancellations and job losses collide with surging electrical load growth, accelerating commercial re-contracting for nuclear power, natural gas peakers, and traditional grid utilities.
+- **Condition:** Widespread clean energy project cancellations and job losses (such as hundreds of thousands of job losses and hundreds of billions in GDP impacts) collide with surging electrical load growth, accelerating commercial re-contracting for nuclear power, natural gas peakers, and traditional grid utilities.
 - **Action:** Bullish on Regulated Electric and Nuclear Utilities (XLU), Bullish on Uranium and Nuclear Fuel Providers (URA), Bullish on Natural Gas Pipeline MLPs (AMLP), and Bearish on Clean Energy and Residential Solar Providers (TAN, ICLN).
 
 ## Rule 8: Enterprise AI Capex Supercycle and Grid Infrastructure Bottlenecks
-- **Condition:** Multi-year hyperscaler capital expenditures into frontier artificial intelligence clusters accelerate despite broader economic slowing, creating acute capacity deficits across high-voltage grid equipment, power transformers, and thermal management.
+- **Condition:** Multi-year hyperscaler capital investments into frontier artificial intelligence clusters continue to drive economic growth and productivity metrics despite broader macroeconomic headwinds, creating acute capacity deficits across high-voltage grid equipment, power transformers, and thermal management.
 - **Action:** Bullish on AI Semiconductor Accelerators and Fab Equities (SMH), Bullish on Electrical Grid Hardware and Transformer Manufacturers, Bearish on Legacy Enterprise IT On-Premises Hardware, and Bearish on Commercial Office REITs (VNQ).
 
 ## Rule 9: Upstream Energy Cost-Push and Transportation Margin Compression

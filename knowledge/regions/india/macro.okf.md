@@ -1,7 +1,7 @@
 # India Macro Trading Rules
 
 ## Rule 1: Policy Rate Tightening & Systemic Liquidity Absorption
-- **Condition:** Headline retail CPI breaches the RBI's 6.0% statutory upper tolerance band on the rebasing (2024=100) series as price pressures diffuse beyond food, prompting the Monetary Policy Committee (MPC) to execute consecutive 25–50 bps repo rate hikes toward a terminal rate of 6.25% or higher while draining liquidity via Variable Rate Reverse Repo (VRRR) operations.
+- **Condition:** Headline retail CPI breaches the RBI's 6.0% statutory upper tolerance band on the rebased (2024=100) series, prompting the Monetary Policy Committee (MPC) to execute consecutive 25–50 bps repo rate hikes toward a terminal rate of 6.25% or higher while draining banking system liquidity via Variable Rate Reverse Repo (VRRR) auctions.
 - **Action:** Bullish on 1-year and 2-year Overnight Index Swaps (OIS) paying positions, 91-day sovereign T-bills, and ultra-short duration liquidity funds; Bearish on 10-year benchmark G-Secs, long-duration debt mutual funds, and wholesale credit-dependent Non-Banking Financial Companies (NBFCs).
 
 ## Rule 2: Food Inflation Spikes & Core "Shrinkflation" Propagation
@@ -17,7 +17,7 @@
 - **Action:** Bullish on sovereign floating-rate bonds (FRBs), primary dealer short-end trading books, and low-duration liquid debt instruments; Bearish on 10-year, 30-year, and 40-year nominal sovereign paper, long-dated corporate infrastructure bonds, and duration bond ETFs.
 
 ## Rule 5: Balance of Payments Imbalance & Rupee Defense Interventions
-- **Condition:** Merchandise trade deficits widen and external portfolio flows wobble, pushing the Indian Rupee toward historical lows despite record structural private remittance inflows exceeding USD 135 billion, triggering multi-pronged RBI interventions across spot, onshore forward, and offshore non-deliverable forward (NDF) markets.
+- **Condition:** Merchandise trade deficits widen and external portfolio flows wobble, pushing the Indian Rupee toward historical lows despite structural private remittance inflows exceeding USD 135 billion, triggering multi-pronged RBI interventions across spot, onshore forward, and offshore non-deliverable forward (NDF) markets.
 - **Action:** Bullish on Tier-1 IT services exporters, contract Active Pharmaceutical Ingredient (API) manufacturers, and USD/INR long carry positions via offshore forward points; Bearish on domestic commercial aviation carriers, corporate issuers with unhedged External Commercial Borrowings (ECBs), and import-dependent consumer electronics assemblers.
 
 ## Rule 6: FPI Capital Volatility vs. Counter-Cyclical Domestic SIP Inflows
