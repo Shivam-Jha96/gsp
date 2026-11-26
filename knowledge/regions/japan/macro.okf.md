@@ -5,7 +5,7 @@
 - **Action:** Bullish on front-end short-duration sovereign paper (1Y–2Y JGBs), money center megabanks, and tactical 10Y–30Y JGB curve-flattener swaps upon intervention announcements; Bearish on ultra-long sovereign debt (20Y–40Y JGBs), domestic aggregate bond indices, and interest-rate-sensitive J-REITs.
 
 ## Rule 2: Core Inflation Acceleration, Hawkish BOJ Pricing, and Global Carry Unwinds
-- **Condition:** Core CPI prints reach multi-year highs and remain persistently above the 2.0% price stability target, solidifying market consensus for near-term BOJ benchmark rate increases (e.g., December rate hikes) and triggering rapid short-covering across global low-yielding JPY carry trades.
+- **Condition:** Core CPI prints reach multi-year highs and remain persistently above the 2.0% price stability target, solidifying market consensus for near-term BOJ benchmark rate increases and triggering rapid short-covering across global low-yielding JPY carry trades amid surging risk aversion.
 - **Action:** Bullish on spot JPY, long JPY implied volatility (front-month gamma), and short USD/JPY risk reversals; Bearish on high-beta cross-yen carry pairs (AUD/JPY, NZD/JPY, MXN/JPY), emerging market local currency assets funded in yen, and export-sensitive automotive OEMs.
 
 ## Rule 3: Fed-BOJ Policy Divergence, FX Intervention Triggers, and Dollar-Yen Momentum
