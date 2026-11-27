@@ -1,16 +1,16 @@
 # United States Macro Trading Rules
 
 ## Rule 1: Hawkish Fed Rate Hike Reacceleration and Terminal Rate Extension
-- **Condition:** Federal Reserve policymakers signal renewed rate hikes (such as potential December actions) and extended terminal policy rates to counter persistent inflation (with headline gauges climbing to 3.8%), driving market repricing of tightening cycles back onto the table.
+- **Condition:** Federal Reserve policymakers signal renewed rate hikes (such as potential December actions) and extended terminal policy rates to counter persistent inflation (with headline gauges climbing to 3.7%-3.8%), driving market repricing of tightening cycles back onto the table.
 - **Action:** Bullish on Front-End Treasury Yields (2Y Yield), Bullish on the US Dollar Index (DXY), Bearish on Short-Duration Fixed Income (SHY), and Bearish on Rate-Sensitive Small-Cap Equities (IWM).
 
 ## Rule 2: Sequential CPI Acceleration and Real Rate Repricing
-- **Condition:** Consumer price indices expand briskly driven by sticky components and broadening price pressures reported in the Fed's Beige Book, exceeding consensus expectations and driving short-term inflation breakevens and real discount rates higher.
+- **Condition:** Consumer price indices expand briskly driven by sticky components (such as food and rent costs rising, leading to a 0.4% monthly increase) and broadening price pressures, exceeding expectations and driving short-term inflation breakevens and real discount rates higher.
 - **Action:** Bullish on Treasury Inflation-Protected Securities (TIPS), Bullish on Ultra-Short T-Bills and Cash (BIL), Bearish on Spot Gold (XAU/USD), and Bearish on Long-Duration Investment-Grade Corporate Debt (LQD).
 
 ## Rule 3: Acute Late-Cycle Stagflationary Decoupling
 - **Condition:** Real GDP growth downshifts or shows divergence while inflation reaccelerates above target, raising concerns from market participants and economists that overtightening risks stalling the real economy while prices remain sticky.
-- **Action:** Bullish on Large-Cap Defensive Quality Equities (QUAL), Bullish on Consumer Staples (XLP), Bearish on Cyclical Industrials (XLI), and Bearish on High-Yield Credit (HYG).
+- **Action:** Bullish on Large-Asset Defensive Quality Equities (QUAL), Bullish on Consumer Staples (XLP), Bearish on Cyclical Industrials (XLI), and Bearish on High-Yield Credit (HYG).
 
 ## Rule 4: Transatlantic Inflation Divergence and USD Dominance
 - **Condition:** Persistent US inflation pressures and hawkish Federal Reserve forward guidance contrast sharply with disinflation and economic stagnation abroad, widening real sovereign yield differentials in favor of the United States.
@@ -47,3 +47,7 @@
 ## Rule 12: Healthcare Clinical Wage Inelasticity and Inpatient Margin Squeeze
 - **Condition:** Structural shortages in specialized medical and clinical personnel sustain elevated operating wage expenses that exceed rigid multi-year reimbursement schedules set by commercial insurers and federal healthcare programs.
 - **Action:** Bullish on Diversified Pharmaceutical and Medical Device Equities (XLV), Bearish on Acute-Care Hospital Operators, and Bearish on Skilled Nursing and Long-Term Care Healthcare REITs.
+
+## Rule 13: Protectionist Tariff Escalation and Import-Sensitive Margin Compression
+- **Condition:** Implementation and impending expansion of fresh US tariffs weigh heavily on market sentiment and supply chain inputs, increasing operational friction and cost bases for domestic entities reliant on foreign manufacturing components.
+- **Action:** Bullish on Domestic-Centric Small-Cap Manufacturers with Protected Moats, Bullish on US Customs Compliance and Trade Advisory Services, Bearish on Consumer Electronics Importers, and Bearish on Import-Heavy Apparel Retailers.

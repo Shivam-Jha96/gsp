@@ -5,7 +5,7 @@
 - **Action:** Bullish on 3M SONIA interest rate futures and front-end (2Y) swap yields; bearish on short-term nominal Gilts and aggressive rate-cut positioning.
 
 ## Rule 2: Sticky CPI Resurgence and Inflation Breakeven Widening
-- **Condition:** UK headline Consumer Prices Index (CPI) inflation ticks higher to 3.6% alongside official Bank of England warnings that inflation will rise further in upcoming prints, maintaining structural cost-push pressures.
+- **Condition:** UK headline Consumer Prices Index (CPI) inflation ticks higher alongside official Bank of England warnings that inflation will rise further in upcoming prints, maintaining structural cost-push pressures.
 - **Action:** Bullish on UK 5Y and 10Y Gilt breakeven inflation rates and short-dated index-linked Gilts (linkers); bearish on intermediate nominal Gilts and sterling investment-grade corporate credit.
 
 ## Rule 3: Sovereign Fiscal Deficit Pressures and Term Premium Steepening
@@ -17,7 +17,7 @@
 - **Action:** Bullish on USD/GBP (bearish spot GBP/USD) and EUR/GBP; bearish on sterling cross-currency basis swaps.
 
 ## Rule 5: Remortgage Cliff and Consumer Housing Sector Contraction
-- **Condition:** Millions in the UK brace to remortgage on significantly worse deals as elevated base rates filter through to consumer lending, compressing household disposable income and cooling transaction volumes.
+- **Condition:** Hundreds of thousands of UK homeowners face severe monthly mortgage payment jumps as elevated base rates filter through to consumer lending, compressing household disposable income and cooling transaction volumes.
 - **Action:** Bullish on UK private residential rental yields and prime money market fund assets; bearish on UK residential housebuilder equities, domestic mortgage lenders, and residential REITs.
 
 ## Rule 6: Stagflationary Wedge and FTSE 100 vs. FTSE 250 Divergence
